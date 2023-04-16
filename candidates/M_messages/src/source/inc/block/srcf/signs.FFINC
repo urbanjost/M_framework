@@ -1,0 +1,400 @@
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+$BLOCK COMMENT -file signs.3m_messages.man
+NAME
+    signs(3f) - [M_messages] write out string in large block letters
+    (LICENSE:PD)
+
+SYNOPSIS
+    subroutine signs(string,iounit)
+
+     character(len=*),intent(in)          :: string
+     integer,intent(in)                   :: iounit
+     character(len=1),intent(in),optional :: letter
+
+DESCRIPTION
+    SIGNS(2f) writes out the string left-justified in large (13 lines
+    x 8 columns) block letters starting in column 2.
+
+    This can be used to make banners in program output files; it is also handy
+    for making attention-catching notices in interactive programs.
+
+EXAMPLE
+    The program:
+
+       program demo_signs
+       use M_messages, only : signs
+       call signs('NOTICE',6)
+       end program demo_signs
+
+    would produce:
+
+     > XX  XXX   XXX   XXXXXXX  XXXXX    XXXX  XXXXXXX
+     >  X   X   X   X  X  X  X    X     X    X  X    X
+     >  XX  X  X     X    X       X    X        X
+     >  XX  X  X     X    X       X    X        X  X
+     >  X X X  X     X    X       X    X        XXXX
+     >  X  XX  X     X    X       X    X        X  X
+     >  X  XX  X     X    X       X    X        X
+     >  X   X   X   X     X       X     X    X  X    X
+     > XXX  X    XXX     XXX    XXXXX    XXXX  XXXXXXX
+
+AUTHOR
+   John S. Urban
+LICENSE
+   Public License
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$BLOCK COMMENT 
+REFERENCES        : none
+DEPENDENCIES      : none
+LEGAL RESTRICTIONS: Copyright (c) 1984, 1996, John S. Urban
+QA                : banner.f03
+AUTHORS           : John S. Urban
+VERSION           : 1.0, 20110101
+$BLOCK END
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+subroutine signs(str,iout,letter)
+use M_strings, only : replace, atleast
+implicit none
+
+$@(#) M_messages::signs(3f):write large block letters"
+
+character(len=*),intent(in)          :: str         ! string to write
+integer,intent(in)                   :: iout        ! unit number to write to
+character(len=1),intent(in),optional :: letter
+!     ******************************************************************
+character(len=8),save       :: alf(13,95)  ! store block letters
+integer                     :: l(len(str)) ! alphabet
+integer                     :: i30, k, mm  ! loop counters
+integer                     :: ip
+integer                     :: lstr
+integer                     :: irow, ilet
+!     ******************************************************************
+      DATA ((ALF(IROW,ILET),ILET=1,5),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '   XX   ' , ' XXXXXX ' , '   XXXX ' , ' XXXXX  ' , ' XXXXXXX', &
+     & '    X   ' , '  X    X' , '  X    X' , '  X   X ' , '  X    X', &
+     & '    X   ' , '  X    X' , ' X      ' , '  X    X' , '  X     ', &
+     & '   X X  ' , '  X    X' , ' X      ' , '  X    X' , '  X  X  ', &
+     & '   X X  ' , '  XXXXX ' , ' X      ' , '  X    X' , '  XXXX  ', &
+     & '  X   X ' , '  X    X' , ' X      ' , '  X    X' , '  X  X  ', &
+     & '  XXXXX ' , '  X    X' , ' X      ' , '  X    X' , '  X     ', &
+     & '  X   X ' , '  X    X' , '  X    X' , '  X   X ' , '  X    X', &
+     & ' XXX XXX' , ' XXXXXX ' , '   XXXX ' , ' XXXXX  ' , ' XXXXXXX', &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        '/
+
+      DATA ((ALF(IROW,ILET),ILET=6,10),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & ' XXXXXXX' , '   XXXX ' , ' XXX XXX' , '  XXXXX ' , '   XXXX ', &
+     & '  X    X' , '  X    X' , '  X   X ' , '    X   ' , '     X  ', &
+     & '  X     ' , ' X      ' , '  X   X ' , '    X   ' , '     X  ', &
+     & '  X  X  ' , ' X      ' , '  X   X ' , '    X   ' , '     X  ', &
+     & '  XXXX  ' , ' X      ' , '  XXXXX ' , '    X   ' , '     X  ', &
+     & '  X  X  ' , ' X   XXX' , '  X   X ' , '    X   ' , '     X  ', &
+     & '  X     ' , ' X     X' , '  X   X ' , '    X   ' , ' X   X  ', &
+     & '  X     ' , '  X    X' , '  X   X ' , '    X   ' , ' X   X  ', &
+     & ' XXXX   ' , '   XXXX ' , ' XXX XXX' , '  XXXXX ' , '  XXX   ', &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        '/
+
+      DATA ((ALF(IROW,ILET),ILET=11,15),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & ' XXX  XX' , ' XXXXX  ' , ' XX   XX' , ' XX  XXX' , '   XXX  ', &
+     & '  X   X ' , '   X    ' , '  X   X ' , '  X   X ' , '  X   X ', &
+     & '  X  X  ' , '   X    ' , '  XX XX ' , '  XX  X ' , ' X     X', &
+     & '  X  X  ' , '   X    ' , '  XX XX ' , '  XX  X ' , ' X     X', &
+     & '  X X   ' , '   X    ' , '  X X X ' , '  X X X ' , ' X     X', &
+     & '  XXX   ' , '   X    ' , '  X X X ' , '  X  XX ' , ' X     X', &
+     & '  X  X  ' , '   X    ' , '  X   X ' , '  X  XX ' , ' X     X', &
+     & '  X   X ' , '   X   X' , '  X   X ' , '  X   X ' , '  X   X ', &
+     & ' XXX  XX' , ' XXXXXXX' , ' XXX XXX' , ' XXX  X ' , '   XXX  ', &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        '/
+
+      DATA ((ALF(IROW,ILET),ILET=16,20),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & ' XXXXXX ' , '   XXX  ' , ' XXXXXX ' , '  XXXXX ' , ' XXXXXXX', &
+     & '  X    X' , '  X   X ' , '  X    X' , ' X     X' , ' X  X  X', &
+     & '  X    X' , ' X     X' , '  X    X' , ' X      ' , '    X   ', &
+     & '  X    X' , ' X     X' , '  X    X' , ' X      ' , '    X   ', &
+     & '  XXXXX ' , ' X     X' , '  XXXXX ' , '  XXXXX ' , '    X   ', &
+     & '  X     ' , ' X     X' , '  X  X  ' , '       X' , '    X   ', &
+     & '  X     ' , ' X     X' , '  X  X  ' , '       X' , '    X   ', &
+     & '  X     ' , '  X   X ' , '  X   X ' , ' X     X' , '    X   ', &
+     & ' XXXX   ' , '   XXX  ' , ' XXX  XX' , '  XXXXX ' , '   XXX  ', &
+     & '        ' , '   XX XX' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        '/
+
+      DATA ((ALF(IROW,ILET),ILET=21,25),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & ' XXX XXX' , ' XXX XXX' , ' XXX XXX' , ' XXX XXX' , ' XXX XXX', &
+     & '  X   X ' , '  X   X ' , '  X   X ' , '  X   X ' , '  X   X ', &
+     & '  X   X ' , '  X   X ' , '  X   X ' , '   X X  ' , '  X   X ', &
+     & '  X   X ' , '  X   X ' , '  X   X ' , '   X X  ' , '   X X  ', &
+     & '  X   X ' , '   X X  ' , '  X X X ' , '    X   ' , '   X X  ', &
+     & '  X   X ' , '   X X  ' , '  X X X ' , '   X X  ' , '    X   ', &
+     & '  X   X ' , '   X X  ' , '  X X X ' , '   X X  ' , '    X   ', &
+     & '  X   X ' , '    X   ' , '   X X  ' , '  X   X ' , '    X   ', &
+     & '   XXX  ' , '    X   ' , '   X X  ' , ' XXX XXX' , '   XXX  ', &
+     & '        ' , '        ' , '        ' , '        ' , '        ', &
+     & '        ' , '        ' , '        ' , '        ' , '        '/
+
+      DATA ((ALF(IROW,ILET),ILET=26,30),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & ' XXXXXXX' , '   XXX  ' , '    X   ' , '   XXX  ' , '   XXX  ' , &
+     & ' X    X ' , '  X   X ' , '  XXX   ' , '  X   X ' , '  X   X ' , &
+     & '     X  ' , '  X   X ' , '    X   ' , '      X ' , '      X ' , &
+     & '     X  ' , '  X   X ' , '    X   ' , '      X ' , '      X ' , &
+     & '    X   ' , '  X   X ' , '    X   ' , '     X  ' , '    XX  ' , &
+     & '   X    ' , '  X   X ' , '    X   ' , '    X   ' , '      X ' , &
+     & '   X    ' , '  X   X ' , '    X   ' , '   X    ' , '      X ' , &
+     & '  X    X' , '  X   X ' , '    X   ' , '  X     ' , '  X   X ' , &
+     & ' XXXXXXX' , '   XXX  ' , '  XXXXX ' , '  XXXXX ' , '   XXX  ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=31,35),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '     X  ' , '  XXXXX ' , '    XX  ' , '   XXXX ' , '    X   ' , &
+     & '    XX  ' , '  X     ' , '   X    ' , '  X    X' , '   XXX  ' , &
+     & '    XX  ' , '  X     ' , '  X     ' , ' X  XX X' , '  X   X ' , &
+     & '   X X  ' , '  X     ' , '  X     ' , ' X X X X' , '  X     ' , &
+     & '   X X  ' , '  XXXX  ' , '  XXXX  ' , ' X X X X' , '   XXX  ' , &
+     & '  X  X  ' , '      X ' , '  X   X ' , ' X X X X' , '      X ' , &
+     & '  XXXXX ' , '      X ' , '  X   X ' , ' X  XXX ' , '  X   X ' , &
+     & '     X  ' , '  X   X ' , '  X   X ' , '  X     ' , '   XXX  ' , &
+     & '    XXX ' , '   XXX  ' , '   XXX  ' , '   XXX  ' , '    X   ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=36,40),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '  X     ' , '   XX   ' , '        ' , '     X  ' , '   X    ' , &
+     & ' X X   X' , '  X     ' , '        ' , '    X   ' , '    X   ' , &
+     & '  X   X ' , '  X     ' , '  XX XX ' , '    X   ' , '    X   ' , &
+     & '     X  ' , '   X    ' , '   XXX  ' , '   X    ' , '     X  ' , &
+     & '    X   ' , '  XX    ' , ' XXXXXXX' , '   X    ' , '     X  ' , &
+     & '   X    ' , ' X  X  X' , '   XXX  ' , '   X    ' , '     X  ' , &
+     & '  X   X ' , ' X  X X ' , '  XX XX ' , '   X    ' , '     X  ' , &
+     & ' X   X X' , ' X   X  ' , '        ' , '   X    ' , '     X  ' , &
+     & '      X ' , '  XXX XX' , '        ' , '    X   ' , '    X   ' , &
+     & '        ' , '        ' , '        ' , '    X   ' , '    X   ' , &
+     & '        ' , '        ' , '        ' , '     X  ' , '   X    ' /
+
+      DATA ((ALF(IROW,ILET),ILET=41,44),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '    X   ' , &
+     & '        ' , '        ' , '  XXXXX ' , '    X   ' , &
+     & '        ' , '        ' , '        ' , '    X   ' , &
+     & ' XXXXXXX' , '        ' , '  XXXXX ' , ' XXXXXXX' , &
+     & '        ' , '        ' , '        ' , '    X   ' , &
+     & '        ' , '        ' , '        ' , '    X   ' , &
+     & '        ' , '        ' , '        ' , '    X   ' , &
+     & '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , 'XXXXXXXX' , '        ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=45,45),IROW=1,13) / &
+     & '        ' , &
+     & '        ' , &
+     & '        ' , &
+     & ' X      ' , &
+     & '  X     ' , &
+     & '   X    ' , &
+     & '    X   ' , &
+     & '     X  ' , &
+     & '      X ' , &
+     & '       X' , &
+     & '        ' , &
+     & '        ' , &
+     & '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=46,50),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '   XXX  ' , '   XXX  ' , '        ' , '        ' , '        ' , &
+     & '     X  ' , '   X    ' , '        ' , '        ' , '        ' , &
+     & '     X  ' , '   X    ' , '   X    ' , '        ' , '     X  ' , &
+     & '     X  ' , '   X    ' , '    X   ' , '        ' , '    X   ' , &
+     & '     X  ' , '   X    ' , '     X  ' , '        ' , '   X    ' , &
+     & '     X  ' , '   X    ' , '      X ' , '        ' , '  X     ' , &
+     & '     X  ' , '   X    ' , '     X  ' , '        ' , '   X    ' , &
+     & '     X  ' , '   X    ' , '    X   ' , '        ' , '    X   ' , &
+     & '     X  ' , '   X    ' , '   X    ' , '    X   ' , '     X  ' , &
+     & '     X  ' , '   X    ' , '        ' , '        ' , '        ' , &
+     & '   XXX  ' , '   XXX  ' , '        ' , '        ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=51,55),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '   XXX  ' , '        ' , '    X   ' , '        ' , &
+     & '        ' , '  X   X ' , '       X' , '    X   ' , '        ' , &
+     & '        ' , '      X ' , '      X ' , '    X   ' , '        ' , &
+     & '        ' , '      X ' , '     X  ' , '    X   ' , '    X   ' , &
+     & '        ' , '     X  ' , '    X   ' , '    X   ' , '        ' , &
+     & '        ' , '    X   ' , '   X    ' , '    X   ' , '        ' , &
+     & '        ' , '    X   ' , '  X     ' , '    X   ' , '        ' , &
+     & '        ' , '        ' , ' X      ' , '        ' , '        ' , &
+     & '    X   ' , '    X   ' , '        ' , '    X   ' , '    X   ' , &
+     & '   X    ' , '        ' , '        ' , '        ' , '   X    ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=56,60),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '    X   ' , &
+     & '    X   ' , '   X X  ' , '        ' , '    X X ' , '   X X  ' , &
+     & '    X   ' , '   X X  ' , '        ' , '    X X ' , '  X   X ' , &
+     & '    X   ' , '   X X  ' , '        ' , '  XXXXXX' , '        ' , &
+     & '        ' , '        ' , '    X   ' , '   X X  ' , '        ' , &
+     & '        ' , '        ' , '        ' , '   X X  ' , '        ' , &
+     & '        ' , '        ' , '        ' , '   X X  ' , '        ' , &
+     & '        ' , '        ' , '        ' , ' XXXXXX ' , '        ' , &
+     & '        ' , '        ' , '        ' , '  X X   ' , '        ' , &
+     & '        ' , '        ' , '    X   ' , '  X X   ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=61,65),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '  XXXXX ' , '   XXX  ' , '   XXX  ' , '        ' , '        ' , &
+     & '  X   X ' , '  X   X ' , '  X   X ' , '        ' , '        ' , &
+     & '      X ' , '  X   X ' , '  X   X ' , '        ' , '        ' , &
+     & '     X  ' , '  X   X ' , '  X   X ' , '        ' , '  XXXX  ' , &
+     & '     X  ' , '   XXX  ' , '   XXXX ' , '        ' , '      X ' , &
+     & '    X   ' , '  X   X ' , '      X ' , '        ' , '  XXXXX ' , &
+     & '    X   ' , '  X   X ' , '      X ' , '        ' , ' X    X ' , &
+     & '   X    ' , '  X   X ' , '     X  ' , '        ' , ' X    X ' , &
+     & '   X    ' , '   XXX  ' , '   XX   ' , '        ' , '  XXXX X' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=66,70),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & ' XX     ' , '        ' , '     XX ' , '        ' , '    XX  ' , &
+     & '  X     ' , '        ' , '      X ' , '        ' , '   X    ' , &
+     & '  X     ' , '        ' , '      X ' , '        ' , '   X    ' , &
+     & '  XXXXX ' , '  XXXXX ' , '  XXXXX ' , '  XXXXX ' , '  XXXX  ' , &
+     & '  X    X' , ' X     X' , ' X    X ' , ' X     X' , '   X    ' , &
+     & '  X    X' , ' X      ' , ' X    X ' , ' XXXXXXX' , '   X    ' , &
+     & '  X    X' , ' X      ' , ' X    X ' , ' X      ' , '   X    ' , &
+     & '  X    X' , ' X     X' , ' X    X ' , ' X     X' , '   X    ' , &
+     & ' XXXXXX ' , '  XXXXX ' , '  XXXXXX' , '  XXXXX ' , '  XXXX  ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=71,75),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , ' XX     ' , '    X   ' , '     X  ' , ' XX     ' , &
+     & '        ' , '  X     ' , '        ' , '        ' , '  X     ' , &
+     & '        ' , '  X     ' , '        ' , '        ' , '  X     ' , &
+     & '  XXXXXX' , '  X XX  ' , '  XXX   ' , '  XXXX  ' , '  X  XX ' , &
+     & ' X    X ' , '  XX  X ' , '    X   ' , '     X  ' , '  X  X  ' , &
+     & ' X    X ' , '  X   X ' , '    X   ' , '     X  ' , '  X X   ' , &
+     & ' X    X ' , '  X   X ' , '    X   ' , '     X  ' , '  XXX   ' , &
+     & '  XXXXX ' , '  X   X ' , '    X   ' , '     X  ' , '  X  X  ' , &
+     & '      X ' , ' XXX XXX' , '  XXXXX ' , '     X  ' , ' XX   XX' , &
+     & '      X ' , '        ' , '        ' , '     X  ' , '        ' , &
+     & '  XXXX  ' , '        ' , '        ' , '  XXX   ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=76,80),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '   XX   ' , '        ' , '        ' , '        ' , '        ' , &
+     & '    X   ' , '        ' , '        ' , '        ' , '        ' , &
+     & '    X   ' , '        ' , '        ' , '        ' , '        ' , &
+     & '    X   ' , ' XXX X  ' , ' XX XX  ' , '  XXXXX ' , ' XXXXXX ' , &
+     & '    X   ' , '  X X X ' , '  XX  X ' , ' X     X' , '  X    X' , &
+     & '    X   ' , '  X X X ' , '  X   X ' , ' X     X' , '  X    X' , &
+     & '    X   ' , '  X X X ' , '  X   X ' , ' X     X' , '  X    X' , &
+     & '    X   ' , '  X X X ' , '  X   X ' , ' X     X' , '  X    X' , &
+     & '  XXXXX ' , ' XX X XX' , ' XXX XXX' , '  XXXXX ' , '  XXXXX ' , &
+     & '        ' , '        ' , '        ' , '        ' , '  X     ' , &
+     & '        ' , '        ' , '        ' , '        ' , ' XXX    ' /
+
+      DATA ((ALF(IROW,ILET),ILET=81,85),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '   X    ' , '        ' , &
+     & '        ' , '        ' , '        ' , '   X    ' , '        ' , &
+     & '  XXXXXX' , ' XXX XX ' , '  XXXXX ' , '  XXXX  ' , ' XX  XX ' , &
+     & ' X    X ' , '   XX  X' , ' X     X' , '   X    ' , '  X   X ' , &
+     & ' X    X ' , '   X    ' , '  XXX   ' , '   X    ' , '  X   X ' , &
+     & ' X    X ' , '   X    ' , '     XX ' , '   X    ' , '  X   X ' , &
+     & ' X    X ' , '   X    ' , ' X     X' , '   X  X ' , '  X  XX ' , &
+     & '  XXXXX ' , ' XXXXX  ' , '  XXXXX ' , '    XX  ' , '   XX XX' , &
+     & '      X ' , '        ' , '        ' , '        ' , '        ' , &
+     & '     XXX' , '        ' , '        ' , '        ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=86,90),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & ' XXX XXX' , ' XXX XXX' , ' XXX XXX' , ' XXX XXX' , ' XXXXXX ' , &
+     & '  X   X ' , '  X   X ' , '  X   X ' , '  X   X ' , ' X   X  ' , &
+     & '  X   X ' , '  X X X ' , '   XXX  ' , '  X   X ' , '    X   ' , &
+     & '   X X  ' , '  X X X ' , '   XXX  ' , '   X X  ' , '   X    ' , &
+     & '   X X  ' , '   X X  ' , '  X   X ' , '   X X  ' , '  X   X ' , &
+     & '    X   ' , '   X X  ' , ' XXX XXX' , '    X   ' , ' XXXXXX ' , &
+     & '        ' , '        ' , '        ' , '    X   ' , '        ' , &
+     & '        ' , '        ' , '        ' , '  XX    ' , '        ' /
+
+      DATA ((ALF(IROW,ILET),ILET=91,95),IROW=1,13) / &
+     & '        ' , '        ' , '        ' , '        ' , '        ' , &
+     & '    X   ' , '        ' , '        ' , '        ' , '        ' , &
+     & '    X   ' , '     XX ' , '  XX    ' , '        ' , '   X    ' , &
+     & '    X   ' , '    X   ' , '    X   ' , '  XX   X' , '    X   ' , &
+     & '    X   ' , '    X   ' , '    X   ' , ' X  X  X' , '        ' , &
+     & '    X   ' , '    X   ' , '    X   ' , ' X   XX ' , '        ' , &
+     & '    X   ' , '    X   ' , '    X   ' , '        ' , '        ' , &
+     & '    X   ' , '  XX    ' , '     XX ' , '        ' , '        ' , &
+     & '    X   ' , '    X   ' , '    X   ' , '        ' , '        ' , &
+     & '    X   ' , '    X   ' , '    X   ' , '        ' , '        ' , &
+     & '    X   ' , '    X   ' , '    X   ' , '        ' , '        ' , &
+     & '    X   ' , '    X   ' , '    X   ' , '        ' , '        ' , &
+     & '    X   ' , '     XX ' , '  XX    ' , '        ' , '        ' /
+!-----------------------------------------------------------------------------------------------------------------------------------
+!!   NOTE:
+!!   rearrange the character definitions in their ASCII decimal equivalent
+!!   order and the INDEX() call could be replaced with a simple ICHAR()
+!!   call.
+
+   lstr=len_trim(str)
+   do i30 = 1, lstr     ! find column number for this letter
+      ip=index('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456@$%&*()-_=+\][>.<,?/!;''":#^789 abcdefghijklmnopqrstuvwxyz|{}~`',str(i30:i30))
+      if (ip .eq. 0) then  ! if not found, letter is not supported
+         l(i30) = 64
+         write(*,*)'*signs* UNSUPPORTED CHARACTER, ADE=',ichar(str(i30:i30)) ! print ASCII Decimal Equivalent
+     else
+         l(i30) = ip
+     endif
+   enddo 
+!-----------------------------------------------------------------------------------------------------------------------------------
+   if(present(letter))then
+      do k = 1, 13
+         write(iout,'(1x,*(a8:))') (atleast(replace(alf(k,l(mm)),'X',letter),8), mm = 1, lstr)
+      enddo
+   else
+      do k = 1, 13
+         write(iout,'(1x,*(a8:))') (alf(k,l(mm)), mm = 1, lstr)
+      enddo
+   endif
+end subroutine signs
+!===================================================================================================================================

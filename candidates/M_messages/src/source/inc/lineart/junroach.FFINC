@@ -1,0 +1,166 @@
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$IFDEF TESTPRG90
+program demo_junroach
+use M_messages, only : junroach
+implicit none
+   call junroach('s')
+end program demo_junroach
+$ENDIF
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$IFDEF F90
+$BLOCK COMMENT -file junroach.3m_messages.man
+NAME
+     junroach(3f) - [M_messages] print an eye-catching image of a roach.
+     (LICENSE:PD)
+
+SYNOPSIS
+   SUBROUTINE junroach(where)
+
+    integer,intent(in) :: where 
+
+DESCRIPTION
+   Prints an eye-catching image of a roach. Typically used to mark 
+   an error has occurred in an output file.
+
+OPTIONS
+   where  the I/O flag to pass on to JOURNAL().
+          To write to stdout use 's'.
+          See the description of JOURNAL() for a meaning for the I/O flag.
+
+EXAMPLE
+   Typical Usage:
+
+     program demo_junroach
+     use M_messages, only : junroach
+     implicit none
+     logical :: error=.true.
+        if (error)then
+           write(*,*)'ERROR:'
+           call junroach('s')
+           write(*,*)'   explanation of error.'
+        endif
+     end program demo_junroach
+
+   Results:
+
+    >ERROR:
+    >      ,--.     .--.        
+    >     /    \. ./    \       
+    >    /  /\ / " \ /\  \      
+    >   / _/  {~~v~~}  \_ \     
+    >  /     {   |   }     \    
+    > ;   /\{    |    }/\   \   
+    > | _/  {    |    }  \_  :  
+    > |     {    |    }      |  
+    > |    /{    |    }\     |  
+    > |   / {    |    } \    |  
+    > |  /  {    |    }  \   |  
+    > |  \  \    |    /  /   |  
+    > |   \  \   |   /  /    |  
+    >  \   \  \  |  /  /    /   
+    >   \  /   ~~~~~   \   /    
+    >   explanation of error.
+
+AUTHOR
+   John S. Urban
+LICENSE
+   Public License
+$BLOCK END
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$BLOCK COMMENT
+DESCRIPTION:  junroach(3f):print eye-catching ASCII graphic (roach)"
+REFERENCES:   none
+DEPENDENCIES: none
+RESTRICTIONS: none
+QA:
+AUTHOR:       John S. Urban
+$BLOCK END
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine junroach(where)
+use M_journal, only: journal
+character(len=*),parameter :: ident="@(#)M_messages::junroach(3f):print eye-catching ASCII graphic (roach)"
+character(len=*),intent(in)   :: where  ! the I/O flag to pass on to JOURNAL()
+call journal(where,'       ,--.     .--.        ')
+call journal(where,'      /    \. ./    \       ')
+call journal(where,'     /  /\ / " \ /\  \      ')
+call journal(where,'    / _/  {~~v~~}  \_ \     ')
+call journal(where,'   /     {   |   }     \    ')
+call journal(where,'  ;   /\{    |    }/\   \   ')
+call journal(where,'  | _/  {    |    }  \_  :  ')
+call journal(where,'  |     {    |    }      |  ')
+call journal(where,'  |    /{    |    }\     |  ')
+call journal(where,'  |   / {    |    } \    |  ')
+call journal(where,'  |  /  {    |    }  \   |  ')
+call journal(where,'  |  \  \    |    /  /   |  ')
+call journal(where,'  |   \  \   |   /  /    |  ')
+call journal(where,'   \   \  \  |  /  /    /   ')
+call journal(where,'    \  /   ~~~~~   \   /    ')
+end subroutine junroach
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+$ENDIF
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$IFDEF UFPP_TEST
+ This begins the section that will be processed by ufpp. Typically it is called by
+   ufpp UFPP_TEST -system -i FILENAME
+ if $SYSTEM commands are trusted
+
+        ---------------------
+        UNIT TEST OF junroach
+        ---------------------
+
+$!----------------------------------------------------------------------------------------------------------------------------------
+        Initialize database status
+$SYSTEM goodbad junroach start --section 3 
+$!----------------------------------------------------------------------------------------------------------------------------------
+        Make sure scratch directory exists
+$SYSTEM mkdir -p tmp/
+$!----------------------------------------------------------------------------------------------------------------------------------
+        Build test program in standard location
+$OUTPUT tmp/__junroach.f90
+   program seepic
+   use M_messages, only : junroach
+      call junroach('s')
+   end program seepic
+$OUTPUT
+$!----------------------------------------------------------------------------------------------------------------------------------
+$SYSTEM ccall tmp/__junroach.f90
+$!----------------------------------------------------------------------------------------------------------------------------------
+        Execute test program
+$SYSTEM __junroach >tmp/junroach.out
+$!----------------------------------------------------------------------------------------------------------------------------------
+        Create expected output
+$OUTPUT tmp/junroach.expected
+       ,--.     .--.        
+      /    \. ./    \       
+     /  /\ / " \ /\  \      
+    / _/  {~~v~~}  \_ \     
+   /     {   |   }     \    
+  ;   /\{    |    }/\   \   
+  | _/  {    |    }  \_  :  
+  |     {    |    }      |  
+  |    /{    |    }\     |  
+  |   / {    |    } \    |  
+  |  /  {    |    }  \   |  
+  |  \  \    |    /  /   |  
+  |   \  \   |   /  /    |  
+   \   \  \  |  /  /    /   
+    \  /   ~~~~~   \   /    
+$OUTPUT
+$!----------------------------------------------------------------------------------------------------------------------------------
+        Compare expected output and generated output
+
+$SYSTEM diff tmp/junroach.expected tmp/junroach.out
+$!----------------------------------------------------------------------------------------------------------------------------------
+        Clean up
+$SYSTEM rm -f  tmp/junroach.expected tmp/junroach.out `which __junroach` tmp/__junroach.f90
+$!----------------------------------------------------------------------------------------------------------------------------------
+        Reaching here implies database status should be set to successful.
+$SYSTEM goodbad junroach good --section 3 
+$!----------------------------------------------------------------------------------------------------------------------------------
+$ENDIF
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -1,0 +1,67 @@
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+$BLOCK COMMENT -file percent_done.3m_messages.man
+NAME
+   percent_done(3f) - [M_messages] non-advancing status counter displays percentage done on terminal displays
+   (LICENSE:PD)
+
+SYNOPSIS
+  subroutine percent_done(part,whole)
+
+   class(*),intent(in) :: part
+   class(*),intent(in) :: whole
+
+DESCRIPTION
+   For interactive terminal sessions display the message
+
+     " Percent Complete: NNN.NN%"
+
+OPTIONS
+   part   number of elements completed. Should take any
+          scalar numeric value.
+   whole  total number of elements to be completed. Should take any
+          scalar numeric value.
+
+EXAMPLE
+
+  Sample program:
+
+   program demo_percent_done
+   use m_time, only : system_sleep
+   use m_messages, only : percent_done
+   implicit none
+   integer :: i, nr=10 
+
+   do i=1,nr 
+      call percent_done(i,nr)
+      call system_sleep(1)  !give a delay in seconds 
+   enddo 
+
+   end program demo_percent_done
+
+  Results:
+
+   Percent Complete: 100.00%
+
+AUTHOR
+   John S. Urban
+LICENSE
+   Public License
+$BLOCK END
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+subroutine percent_done(part,whole)
+use M_anything, only : anyscalar_to_real
+implicit none
+$@(#) place a non-advancing status counter on terminal display (not redirected)
+class(*),intent(in)  :: part
+class(*),intent(in)  :: whole
+real                 :: part_local
+real                 :: whole_local
+   part_local=anyscalar_to_real(part)
+   whole_local=anyscalar_to_real(whole)
+   write(*,fmt="(a1,' Percent Complete: ',t21,f0.2,'%')",ADVANCE="NO") achar(13), (part_local/whole_local)*100.0
+end subroutine percent_done
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================

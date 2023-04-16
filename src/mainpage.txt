@@ -1,0 +1,9 @@
+'mainpage.txt
+/**
+         @mainpage M_framework Fortran Library
+
+         @section Introduction
+      logging, journaling, testing and debugging
+
+         @image html html/images/swirl.gif
+*/'

@@ -1,0 +1,19 @@
+name = "M_units"
+version = "0.1.0"
+license = "license"
+author = "John S. Urban"
+maintainer = "urbanjost@comcast.net"
+copyright = "Copyright 2022, John S. Urban"
+[build]
+auto-executables = true
+auto-tests = true
+auto-examples = true
+[install]
+library = false
+
+[dependencies]
+M_anything               =  {git   =  "https://github.com/urbanjost/M_anything"  }
+M_msg                    =  {git   =  "https://github.com/urbanjost/M_msg"       }
+M_Compare_Float_Numbers  =  {path  =  "M_Compare_Float_Numbers"                  }
+
+#M_strings    = {git = "https://github.com/urbanjost/M_strings"}

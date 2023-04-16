@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="M_units module">
+    
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>M_constants &ndash; M_units</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">M_units </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+        
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>M_constants 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 4.1% of total for modules and submodules.">27 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/M_constants.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/m_constants.f90.html'>M_constants.f90</a></li>
+    
+  
+     <li class="active">M_constants</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-0">Variables</a></h3></div>
+  <div id="vars-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/m_constants.html#variable-f">f</a>
+      
+      <a class="list-group-item" href="../module/m_constants.html#variable-uc">uc</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">M_constants</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span> <span class="o">-</span> <span class="p">[</span><span class="n">M_constants</span><span class="p">:</span><span class="n">INTRO</span><span class="p">]</span> <span class="n">Useful</span> <span class="n">constants</span>
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">use</span> <span class="n">M_constants</span><span class="p">,</span>  <span class="n">only</span> <span class="p">:</span> <span class="n">uc</span>
+
+   <span class="o">!</span> <span class="n">real128</span> <span class="n">constants</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">qp</span><span class="o">%</span><span class="n">pi</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">qp</span><span class="o">%</span><span class="n">gamma</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">qp</span><span class="o">%</span><span class="n">e</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">qp</span><span class="o">%</span><span class="n">golden_ratio</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">qp</span><span class="o">%</span><span class="n">euler</span>
+
+   <span class="o">!</span> <span class="n">real64</span> <span class="n">constants</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">dp</span><span class="o">%</span><span class="n">pi</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">dp</span><span class="o">%</span><span class="n">gamma</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">dp</span><span class="o">%</span><span class="n">e</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">dp</span><span class="o">%</span><span class="n">golden_ratio</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">dp</span><span class="o">%</span><span class="n">euler</span>
+
+   <span class="o">!</span> <span class="n">real32</span> <span class="n">constants</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">sp</span><span class="o">%</span><span class="n">pi</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">sp</span><span class="o">%</span><span class="n">gamma</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">sp</span><span class="o">%</span><span class="n">e</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">sp</span><span class="o">%</span><span class="n">golden_ratio</span>
+   <span class="n">uc</span><span class="o">%</span><span class="n">sp</span><span class="o">%</span><span class="n">euler</span>
+
+<span class="n">use</span> <span class="n">M_constants</span><span class="p">,</span>  <span class="n">only</span> <span class="p">:</span> <span class="n">f</span>
+   <span class="o">!</span> <span class="n">formats</span>
+
+   <span class="n">f</span><span class="o">%</span><span class="n">all</span>
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<p>Useful universal constants, physical constants, formats, &hellip;</p>
+<p>UNIVERSAL CONSTANTS</p>
+<div class="codehilite"><pre><span></span><code>  <span class="s2">&quot;e&quot;</span>              <span class="n">The</span> <span class="n">base</span> <span class="n">of</span> <span class="n">the</span> <span class="n">natural</span> <span class="n">logarithm</span> <span class="n">system</span><span class="o">.</span> <span class="s2">&quot;e&quot;</span>
+                   <span class="n">was</span> <span class="n">named</span> <span class="ow">in</span> <span class="n">honor</span> <span class="n">of</span> <span class="n">Euler</span><span class="p">,</span> <span class="n">but</span> <span class="k">is</span> <span class="n">known</span> <span class="k">as</span>
+                   <span class="n">Napier</span><span class="s1">&#39;s constant.</span>
+  <span class="s2">&quot;euler&quot;</span>
+  <span class="s2">&quot;gamma&quot;</span>          <span class="n">The</span> <span class="n">Euler</span><span class="o">-</span><span class="n">Mascheroni</span> <span class="n">constant</span> <span class="k">is</span> <span class="n">often</span> <span class="n">denoted</span> <span class="n">by</span>
+                   <span class="n">a</span> <span class="n">lower</span><span class="o">-</span><span class="n">case</span> <span class="n">Gamma</span><span class="o">.</span>
+  <span class="s2">&quot;golden_ratio&quot;</span>
+
+  <span class="s2">&quot;pi&quot;</span>             <span class="n">The</span> <span class="n">ratio</span> <span class="n">of</span> <span class="n">the</span> <span class="n">circumference</span> <span class="n">of</span> <span class="n">a</span> <span class="n">circle</span> <span class="n">to</span> <span class="n">the</span>
+                   <span class="n">diameter</span> <span class="n">of</span> <span class="n">the</span> <span class="n">circle</span>
+</code></pre></div>
+
+<p>PHYSICAL CONSTANTS</p>
+<div class="codehilite"><pre><span></span><code>  &quot;deg_per_rad&quot;
+  &quot;rad_per_deg&quot;
+  &quot;c__m_per_sec&quot;   Speed of light in a vacuum
+  &quot;c__ft_per_sec&quot;  Speed of light in a vacuum
+</code></pre></div>
+
+<h2 id="notes">NOTES</h2>
+<p>Gamma is defined as</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Gamma</span> <span class="o">=</span> <span class="kr">limit</span> <span class="p">(</span> <span class="n">M</span> <span class="o">-&gt;</span> <span class="n">Infinity</span> <span class="p">)</span> <span class="p">(</span> <span class="nf">Sum</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">N</span> <span class="o">&lt;=</span> <span class="n">M</span> <span class="p">)</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">N</span> <span class="p">)</span> <span class="o">-</span> <span class="nf">Log</span> <span class="p">(</span> <span class="n">M</span> <span class="p">)</span>
+</code></pre></div>
+
+<h2 id="example">EXAMPLE</h2>
+<p>Sample program:</p>
+<div class="codehilite"><pre><span></span><code> <span class="n">program</span> <span class="n">test_universal_constants</span>
+ <span class="n">use</span> <span class="n">M_constants</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">uc</span><span class="p">,</span> <span class="n">f</span>
+ <span class="o">!</span> <span class="n">give</span> <span class="n">a</span> <span class="n">local</span> <span class="n">name</span> <span class="n">to</span> <span class="n">a</span> <span class="n">constant</span>
+ <span class="n">real</span><span class="p">,</span><span class="n">parameter</span> <span class="p">::</span> <span class="n">e</span><span class="o">=</span><span class="n">uc</span><span class="o">%</span><span class="n">sp</span><span class="o">%</span><span class="n">e</span> <span class="o">!</span> <span class="n">universal</span> <span class="n">constant</span><span class="p">,</span> <span class="n">single</span><span class="o">-</span><span class="n">precision</span><span class="p">,</span> <span class="n">e</span>
+ <span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=*</span><span class="p">),</span><span class="n">parameter</span> <span class="p">::</span> <span class="n">all</span><span class="o">=</span><span class="n">f</span><span class="o">%</span><span class="n">all</span>
+
+ <span class="o">!</span> <span class="n">use</span> <span class="n">just</span> <span class="n">use</span> <span class="n">it</span>
+ <span class="nb">print</span> <span class="n">f</span><span class="o">%</span><span class="n">all</span><span class="p">,</span> <span class="s1">&#39;gamma=&#39;</span><span class="p">,</span><span class="n">uc</span><span class="o">%</span><span class="n">qp</span><span class="o">%</span><span class="n">gamma</span>    <span class="o">!</span> <span class="n">universal</span> <span class="n">constant</span><span class="p">,</span> <span class="n">quad</span><span class="o">-</span><span class="n">precision</span><span class="p">,</span> <span class="n">gamma</span>
+ <span class="nb">print</span> <span class="n">all</span><span class="p">,</span> <span class="s1">&#39;e=&#39;</span><span class="p">,</span><span class="n">e</span>
+
+ <span class="o">!</span> <span class="ow">or</span> <span class="n">rename</span> <span class="n">it</span> <span class="n">with</span> <span class="n">ASSOCIATE</span>
+ <span class="n">associate</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">=&gt;</span> <span class="n">uc</span><span class="o">%</span><span class="n">dp</span><span class="o">%</span><span class="n">gamma</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">all</span><span class="p">,</span><span class="s1">&#39;gamma=&#39;</span><span class="p">,</span><span class="n">gamma</span>
+ <span class="n">end</span> <span class="n">associate</span>
+
+ <span class="n">end</span> <span class="n">program</span> <span class="n">test_universal_constants</span>
+</code></pre></div>
+
+<p>integer, public, parameter :: DP = selected_real_kind(15)</p>
+      <br>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html">iso_fortran_env</a></li>
+    
+    <li><a href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html">iso_fortran_env</a></li>
+    
+    <li><a href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html">iso_fortran_env</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      </ul>
+    </div>
+    
+
+    
+    
+
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-1">Variables</a></h3></div>
+  <div id="vars-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/m_constants.html#variable-f">f</a>
+      
+      <a class="list-group-item" href="../module/m_constants.html#variable-uc">uc</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f"></span>type(fmt),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>f</strong></td><td> =</td><td>fmt()</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-uc"></span>type(rall),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>uc</strong></td><td> =</td><td>rall(r128(pi=pi, gamma=gamma, e=e, golden_ratio=golden_ratio, euler=euler), r64(pi=real(pi, r8), gamma=real(gamma, r8), e=real(e, r8), golden_ratio=real(golden_ratio, r8), euler=real(euler, r8)), r32(pi=real(pi, r4), gamma=real(gamma, r4), e=real(e, r4), golden_ratio=real(golden_ratio, r4), euler=real(euler, r4)))</td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2022-05-04 21:45  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> M_units was developed by John S. Urban</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,120 @@
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$IFDEF F90
+$BLOCK COMMENT -file juntrolls.3m_messages.man
+NAME
+     juntrolls(3f) - [M_messages] print an eye-catching bulletin
+     (LICENSE:PD)
+
+SYNOPSIS/USAGE
+
+     SUBROUTINE juntrolls(where,a)
+
+      character(len=*)  :: where  ! the I/O flag to pass on to JOURNAL()
+      character(len=21) :: a(4)
+
+DESCRIPTION
+ Sample output:
+
+    >          \|||/
+    >          (o o)
+    > ;~~~~ooO~~(_)~~~~~~~~~;
+    > |                     |
+    > |                     |
+    > |                     |
+    > |_____________________|
+    > '~~~~~~~~~~~~~~~~Ooo~~'
+    >         |  |  |
+    >         ~~~ ~~~
+    >          || ||
+    >         ooO Ooo
+
+ See the description of JOURNAL() for a meaning for the I/O flag.
+
+EXAMPLE
+
+ Sample program:
+
+   program demo_juntrolls
+   use M_messages, only : juntrolls
+      call juntrolls('s',[         &
+         'Please ...           ',  &
+         "   don't feed        ",  &
+         '   the               ',  &
+         '   TROLLS!           '   &
+         ])
+   end program demo_juntrolls
+
+AUTHOR
+   John S. Urban
+LICENSE
+   Public License
+$BLOCK END
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$BLOCK COMMENT
+DESCRIPTION: print eye-catching ASCII graphic (trolls) with message
+AUTHOR:      John S. Urban
+VERSION:     1,0, 201130401
+$BLOCK END
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine juntrolls(where,a)
+use M_journal, only: journal
+implicit none
+character(len=*),parameter :: ident="@(#)M_messages::juntrolls(3f):print eye-catching ASCII graphic (trolls) with message"
+character(len=*),intent(in)      :: where
+character(len=*),intent(in)      :: a(*)
+integer                          :: i
+character(len=25),save           :: sign,trolls(12)=[&
+'          \|||/          ', &
+'          (o o)          ', &
+' ;~~~~ooO~~(_)~~~~~~~~~; ', &
+' |XXXXXXXXXXXXXXXXXXXXX| ', &
+' |XXXXXXXXXXXXXXXXXXXXX| ', &
+' |XXXXXXXXXXXXXXXXXXXXX| ', &
+' |XXXXXXXXXXXXXXXXXXXXX| ', &
+" '~~~~~~~~~~~~~~~~Ooo~~' ", &
+'         |  |  |         ', &
+'         ~~~ ~~~         ', &
+'          || ||          ', &
+'         ooO Ooo         ']
+
+do i=1,3 
+   call journal(where,trolls(i))
+enddo
+
+!do i=1,ubound(a,dim=1)
+do i=1,4
+   sign=trolls(4)
+   sign(3:23)=a(i)
+   call journal(where,sign)
+enddo
+
+do i=8,size(trolls)
+   call journal(where,trolls(i))
+enddo
+
+end subroutine juntrolls
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+$ENDIF
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$IFDEF UFPP_TEST
+ This begins the section that will be processed by ufpp. Typically it is called by
+   ufpp -system -html -i FILENAME
+ if $SYSTEM commands are trusted
+
+ UNIT TEST OF juntrolls
+$SYSTEM goodbad juntrolls start --section 3 
+$SYSTEM mkdir -p tmp/
+        Build test program in standard location
+
+$SYSTEM ccall juntrolls.HTML
+
+$SYSTEM goodbad juntrolls good --section 3 
+        Execute test program
+$SYSTEM __juntrolls >tmp/juntrolls.out
+$ENDIF
+$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
