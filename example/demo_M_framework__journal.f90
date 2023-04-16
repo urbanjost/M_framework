@@ -1,6 +1,6 @@
        program demo_journal
        !! showing creating debug messages
-       use M_journal, only : journal
+       use M_framework__journal, only : journal
        implicit none
        !! produces no output because trail is not on
        call journal('D','*demo* DEBUG MESSAGE 001 IGNORED')

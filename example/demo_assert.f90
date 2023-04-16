@@ -1,5 +1,5 @@
      program demo_assert
-     use M_verify, only : assert
+     use M_framework__verify, only : assert
      implicit none
      real :: a, toobig=1024
      a=2000

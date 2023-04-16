@@ -1,5 +1,5 @@
 program main
-use M_msg, only: str
+use M_framework__msg, only: str
 
 implicit none
 logical             :: allpassed=.true.

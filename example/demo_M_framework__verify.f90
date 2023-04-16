@@ -1,5 +1,5 @@
       !!program demo_unit_tests
-      module M_demo
+      module M_framework__demo
       private
       public one !! regular routines
       public two !! regular routines
@@ -15,9 +15,9 @@
 
       !! unit test
       subroutine test_suite_M_demo
-      use M_verify, only: unit_check_start, unit_check
-      use M_verify, only: unit_check_good, unit_check_bad, unit_check_done
-      use M_verify, only: unit_check_msg, unit_check_stop
+      use M_framework__verify, only: unit_check_start, unit_check
+      use M_framework__verify, only: unit_check_good, unit_check_bad, unit_check_done
+      use M_framework__verify, only: unit_check_msg, unit_check_stop
       implicit none
       integer :: i, j, k
       integer,allocatable :: array(:)
@@ -77,13 +77,13 @@
 
       end subroutine test_suite_M_demo
 
-      end module M_demo
+      end module M_framework__demo
 
-      program demo_M_verify
-      use M_demo,  only: test_suite_M_demo
-      use M_verify, only: unit_check_command, unit_check_keep_going,unit_check_level
+      program demo_M_framework__verify
+      use M_framework__demo,  only: test_suite_M_demo
+      use M_framework__verify, only: unit_check_command, unit_check_keep_going,unit_check_level
       unit_check_command=''
       unit_check_keep_going=.true.
       unit_check_level=0
         call test_suite_M_demo
-      end program demo_M_verify
+      end program demo_M_framework__verify

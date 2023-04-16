@@ -1,5 +1,5 @@
      program demo_journal
-     use M_journal, only : journal
+     use M_framework__journal, only : journal
      !! BASIC USAGE
      call journal('write to standard output as-is, and trail file as a comment if open')
      ! since we have not opened a trail file yet, only stdout will display output

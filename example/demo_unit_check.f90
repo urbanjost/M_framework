@@ -1,12 +1,12 @@
      program demo_unit_check
-     use M_verify, only: unit_check
-     use M_verify, only: unit_check_start
-     use M_verify, only: unit_check_done
-     use M_verify,  only: almost
+     use M_framework__verify, only: unit_check
+     use M_framework__verify, only: unit_check_start
+     use M_framework__verify, only: unit_check_done
+     use M_framework__verify,  only: almost
 
-     !!use M_verify, only: unit_check_keep_going         ! default is unit_check_keep_going=.false.
-     !!use M_verify, only: debug              ! default is .false.
-     !!use M_verify, only: unit_check_command ! default is unit_check_command=''; was 'goodbad'
+     !!use M_framework__verify, only: unit_check_keep_going         ! default is unit_check_keep_going=.false.
+     !!use M_framework__verify, only: debug              ! default is .false.
+     !!use M_framework__verify, only: unit_check_command ! default is unit_check_command=''; was 'goodbad'
 
      implicit none
      integer :: i

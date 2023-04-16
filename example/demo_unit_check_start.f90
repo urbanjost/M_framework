@@ -1,7 +1,7 @@
       program demo_unit_check_start
-      use M_verify, only: unit_check_start
-      use M_verify, only: unit_check
-      use M_verify, only: unit_check_done
+      use M_framework__verify, only: unit_check_start
+      use M_framework__verify, only: unit_check
+      use M_framework__verify, only: unit_check_done
 
       implicit none
       integer :: ival
@@ -11,7 +11,7 @@
       call unit_check_start('myroutine_long',' &
         & -section        3                    &
         & -library        libGPF               &
-        & -filename       `pwd`/M_verify.FF     &
+        & -filename       `pwd`/M_framework__verify.FF     &
         & -documentation  y                    &
         & -prep           y                    &
         & -ccall          n                    &

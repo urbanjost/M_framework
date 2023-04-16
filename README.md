@@ -2,22 +2,33 @@
 M_framework
 
 ## Description
-M_framework(3f)  is a aggregate  of modules useful for creating messages, comparing
-expected values to results, logfiles and performing unit tests. It is composed of
-the following individual modules:
+M_framework(3f)  is a aggregate of modules useful for creating messages,
+comparing expected values to results, logfiles and performing unit
+tests. It is composed of the following individual modules:
 
- + **M\_framework\_\_msg** is a small module that can convert a list of variables of any of
-   the most common default types to a string.
+ + **M\_framework\_\_msg** is a small module that can convert a list of
+   variables of any of the most common default types to a string.
 
    It performs low-level operations that are often used by other larger
    modules so it is in its own module to prevent circular dependencies.
 
- + **M\_framework\_\_verify__** contains procedures useful for generating unit tests
+ + **M\_framework\_\_verify__** contains procedures useful for generating
+   unit tests
 
  + **M\_framework\_\_journal__** allows for creating log and journal files
 
- + **M\_framework\_\_help** provides for creating a standard simple interactive help facility
+ + **M\_framework\_\_help** provides for creating a standard simple
+   interactive help facility
 
+These components are used so heavily in the testing of the other modules
+that it significantly simplifies creating an fpm(1) project that has no
+dependencies that do not follow the rules for registered projects; as at
+least currently a registered package requires all it's dependencies to
+follow the rules of a registered package, even if just used for examples
+and testing and not needed by the distributed package. That may change,
+or the modules might be put out as individual packages again, but that
+would currently create a dependency circle or require the testing and
+examples be removed from the packages if and when registered.
 
 ## Building the Module
 A conventional GNU/Linux or Unix install:
@@ -85,9 +96,8 @@ or just list it as a dependency in your fpm.toml project file.
    [BOOK_M_framework](https://urbanjost.github.io/M_framework/BOOK_M_framework.html).
 
 ## Additional Directory Descriptions
-There are 
 
    - src/ is where the source for the M_framework(3f) modules resides 
    - docs/ contains HTML documentation and the manpage archives 
-   - test/ contains a simple test program 
+   - test/ contains simple test programs
    - example/ has demos

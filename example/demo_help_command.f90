@@ -1,5 +1,5 @@
      program demo_help_command
-     use M_help, only : help_command
+     use M_framework__help, only : help_command
      character(len=:),allocatable :: help_text(:)
      integer                      :: position(2)
      position=[0,23]

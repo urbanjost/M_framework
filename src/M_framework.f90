@@ -1,7 +1,10 @@
 module M_framework
-implicit none
-use M_help
-use M_journal
-use M_msg
-use M_verify
+use M_framework__help
+use M_framework__journal
+use M_framework__msg
+use M_framework__verify
+implicit none(type,external)
+!private
+! public ...
 end module M_framework
+

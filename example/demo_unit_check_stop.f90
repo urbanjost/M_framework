@@ -1,8 +1,8 @@
       program demo_unit_check_stop
-      use M_verify, only: unit_check_start, unit_check_done
-      use M_verify, only: unit_check
-      use M_verify, only: unit_check_good, unit_check_stop, unit_check_bad
-      use M_verify, only: unit_check_command, unit_check_keep_going, unit_check_level
+      use M_framework__verify, only: unit_check_start, unit_check_done
+      use M_framework__verify, only: unit_check
+      use M_framework__verify, only: unit_check_good, unit_check_stop, unit_check_bad
+      use M_framework__verify, only: unit_check_command, unit_check_keep_going, unit_check_level
 
       implicit none
       integer :: x

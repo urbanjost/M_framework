@@ -3,7 +3,7 @@
       & stdin=>input_unit, &
       & stdout=>output_unit, &
       & stderr=>error_unit
-     use M_msg, only: wrt, fmt
+     use M_framework__msg, only: wrt, fmt
      implicit none
      integer,allocatable :: luns(:)
      integer :: iostat=0

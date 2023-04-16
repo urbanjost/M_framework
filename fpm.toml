@@ -11,7 +11,7 @@ keywords = ["fortran", "unit testing"]
 homepage = "https://github.com/urbanjost/M_framework.git"
 
 [build]
-auto-executables = true
+#auto-executables = true
 auto-tests = true
 auto-examples = true
 # UNIQUE NAMESPACE  (required for registered projects) 
@@ -38,10 +38,10 @@ source-form = "free"
 [install]
 library=true
 
-[[executable]]
-name = "hlp"
-source-dir = "app"
-main = "hlp.f90"
-#link = "z"
-[executable.dependencies]
-M_io   = { git = "https://github.com/urbanjost/M_io.git" }
+#[[executable]]
+#name = "hlp"
+#source-dir = "app"
+#main = "hlp.f90"
+##link = "z"
+#[executable.dependencies]
+#M_io   = { git = "https://github.com/urbanjost/M_io.git" }

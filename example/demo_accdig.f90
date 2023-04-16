@@ -1,5 +1,5 @@
      program demo_accdig ! fortran 90 example
-     use M_verify, only : accdig
+     use M_framework__verify, only : accdig
      implicit none
      integer :: digi
      integer :: i10, i20, i30

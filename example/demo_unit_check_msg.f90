@@ -1,5 +1,5 @@
      program demo_unit_check_msg
-     use M_verify, only : unit_check_start,unit_check_msg,unit_check_done
+     use M_framework__verify, only : unit_check_start,unit_check_msg,unit_check_done
      implicit none
 
      call unit_check_start('myroutine')

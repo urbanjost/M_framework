@@ -1,7 +1,7 @@
 program runtest
-use M_msg
-use M_verify
-use M_journal
+use M_framework__msg
+use M_framework__verify
+use M_framework__journal
    unit_check_command=''
    unit_check_keep_going=.true.
    unit_check_level=0

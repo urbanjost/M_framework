@@ -1,5 +1,5 @@
       program demo_fmt
-      use :: M_msg, only : fmt
+      use :: M_framework__msg, only : fmt
       implicit none
       character(len=:),allocatable :: output
 

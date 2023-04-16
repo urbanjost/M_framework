@@ -9,7 +9,7 @@ PROGFILES = \
  ../example/demo_str.f90 \
  ../example/demo_assert.f90 \
  ../example/demo_fstop.f90 \
- ../example/demo_M_framework_verify.f90 \
+ ../example/demo_M_framework__verify.f90 \
  ../example/demo_pdec.f90 \
  ../example/demo_wrt.f90 \
  ../example/demo_stderr.f90 \
@@ -20,22 +20,21 @@ PROGFILES = \
  ../example/demo_unit_check_msg.f90 \
  ../example/demo_unit_check_start.f90 \
  ../example/demo_journal.f90 \
- ../example/demo_M_framework_journal.f90 \
+ ../example/demo_M_framework__journal.f90 \
  ../example/demo_help_command.f90 \
- ../example/demo_jux.f90 \
 $(NULL)
 
 CPROGFILES = 
 PROG = ${PROGFILES:.f90=}
 CPROG = ${CPROGFILES:.c=}
 TPROG = ${TESTPROGFILES:.f90=}
-SRCS =  M_framework.f90 M_framework_msg.F90 M_framework_journal.f90 M_framework_verify.F90 M_framework_help.f90
-OBJS =  M_framework.o M_framework_msg.o M_framework_journal.o M_framework_verify.o M_framework_help.o
-LIBRARY = libM_framework.a
+SRCS =  M_framework.f90 M_framework__msg.F90 M_framework__journal.f90 M_framework__verify.F90 M_framework__help.f90
+OBJS =  M_framework.o M_framework__msg.o M_framework__journal.o M_framework__verify.o M_framework__help.o
+LIBRARY = libM__framework.a
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # platform-specific values you will probably change
 # 
-LIBS := -L. -lM_framework
+LIBS := -L. -lM__framework
 CC := cc
 CFLAGS := -O
 FC := gfortran
@@ -87,9 +86,9 @@ $(LIBRARY): $(OBJS)
 .F90.o:
 	$(FC) $(FFLAGS) -c $<
 #=================================================================================
-M_framework_verify.o: M_framework_journal.o M_framework_msg.o 
-M__frameworkjournal.o: M_framework_msg.o 
-M_framework.o: M_framework_journal.o M_framework_msg.o M_framework_verify.o M_framework_help.o
+M_framework__verify.o: M_framework__journal.o M_framework__msg.o 
+M__frameworkjournal.o: M_framework__msg.o 
+M_framework.o: M_framework__journal.o M_framework__msg.o M_framework__verify.o M_framework__help.o
 #=================================================================================
 clean:
 	-rm -f $(PROG) $(TPROG) $(CPROG) $(OBJS) *.mod $(LIBRARY) *.o
@@ -97,7 +96,7 @@ clean:
 #=================================================================================
 .PHONY: help
 help:
-	: make    '-- build M_time module'
+	: make    '-- build M_framework modules'
 	: run     '-- run manpage demo programs and test program'
 	: test    '-- run test program'
 	: man     '-- show all manpages as text'
@@ -126,3 +125,4 @@ man:
 doxygen: 
 	doxygen dox.in
 #=================================================================================
+M_framework__journal.o: M_framework__msg.o

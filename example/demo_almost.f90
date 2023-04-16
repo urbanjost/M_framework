@@ -1,5 +1,5 @@
      program demo_almost
-     use M_verify, only : almost
+     use M_framework__verify, only : almost
      implicit none
      real    :: x, y
      logical :: z

@@ -1,5 +1,5 @@
      program demo_fstop
-     use M_verify, only: fstop
+     use M_framework__verify, only: fstop
      implicit none
      integer :: int
      !*!write(*,*)'Enter stop value'

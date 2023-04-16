@@ -1,5 +1,5 @@
      program demo_msg
-     use M_msg, only : str
+     use M_framework__msg, only : str
      implicit none
      character(len=:),allocatable :: pr
      character(len=:),allocatable :: frmt
