@@ -89,7 +89,7 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junbad(where)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::junbad(3f):print eye-catching ASCII graphic (skull)"
 character(len=*),intent(in) :: where
@@ -177,7 +177,7 @@ end subroutine junbad
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junbat(where)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 character(len=*),parameter :: ident="@(#)M_messages::junbat(3f):print eye-catching ASCII graphic (bat)"
 character(len=*),intent(in)   :: where ! the I/O flag to pass on to journal()
 call journal(where,"                      .-                    .-                       ")
@@ -256,7 +256,7 @@ end subroutine junbat
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junbuster(where)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::junbuster(3f):print eye-catching ASCII graphic (ghostbuster)"
 character(len=*),intent(in)   :: where
@@ -346,7 +346,7 @@ end subroutine junbuster
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine jundragon(where,a)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::jundragon(3f):print eye-catching ASCII graphic (dragon) with message"
 character(len=*),intent(in)   :: where ! the I/O flag to pass on to JUN()
@@ -442,7 +442,7 @@ end subroutine jundragon
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junroach(where)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 character(len=*),parameter :: ident="@(#)M_messages::junroach(3f):print eye-catching ASCII graphic (roach)"
 character(len=*),intent(in)   :: where  ! the I/O flag to pass on to JOURNAL()
 call journal(where,'       ,--.     .--.        ')
@@ -526,7 +526,7 @@ end subroutine junroach
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junsun(where)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 character(len=*),parameter :: ident="@(#)M_messages::junsun(3f):print eye-catching ASCII graphic (sunshine)"
 character(len=*),intent(in)   :: where
 call journal(where,'#####################                  #####################                   ')
@@ -613,7 +613,7 @@ end subroutine junsun
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine juntrolls(where,a)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::juntrolls(3f):print eye-catching ASCII graphic (trolls) with message"
 character(len=*),intent(in)      :: where
@@ -868,7 +868,7 @@ end subroutine juntrolls
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine tabgraph(cc,array,ivalues0,rmin,rmax,fill,ilen0)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 
 character(len=*),parameter :: ident="@(#)M_messages::tabgraph(3f): write columns of numbers with a text scale to the right"
@@ -1022,7 +1022,7 @@ subroutine blocks(str,iout)
 !      o  make an option to print a bitmap-like string for use by atobm(1)
 !      o  if bothered to order data in ASCII collating sequence could use ichar(letter) instead of slower index(string,key)
 !===================================================================================================================================
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 character(len=*),parameter      :: ident="@(#)M_messages::blocks(3f): write out 132-character string in large block letters"
 character(len=*),intent(in)     :: str

@@ -2130,9 +2130,9 @@ end function is_nan
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_units()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-use M_msg,   only : str
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
+use M_framework__msg,   only : str
 
 !! test constants
    call testit_p('pi',      real(PI)      ,  real(3.141592653589793238462643383279500d0)  ,message='')
@@ -2175,8 +2175,8 @@ contains
 subroutine testit_p(label,value1,value2,message)
 use M_anything,only : anyscalar_to_real, anyscalar_to_double
 USE M_Compare_Float_Numbers
-use M_verify, only : accdig
-use M_verify, only : unit_check
+use M_framework__verify, only : accdig
+use M_framework__verify, only : unit_check
 class(*),intent(in) :: value1, value2
 real                :: v1, v2
 character(len=*)    :: label
@@ -2305,7 +2305,7 @@ end subroutine test_cartesian_to_polar
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_cartesian_to_spherical()
 
-use M_verify,  only : accdig
+use M_framework__verify,  only : accdig
 implicit none
 real    :: x=10.0,y=10.0,z=10.0
 real    :: radius,inclination,azimuth
@@ -2366,8 +2366,8 @@ end subroutine test_d2r
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_f2c()
 
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
    call unit_check_start('f2c',msg='')
    call testit_p('f2c',     f2c(32.0)  ,   0.0,message='')
    call testit_p('f2c',     f2c(212.0) , 100.0,message='')
@@ -2489,7 +2489,7 @@ integer           :: i
 end subroutine test_sind
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_spherical_to_cartesian()
-use M_verify,  only : accdig
+use M_framework__verify,  only : accdig
 implicit none
 real    :: x,y,z
 real    :: radius,inclination,azimuth

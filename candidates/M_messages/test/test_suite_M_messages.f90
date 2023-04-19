@@ -1,8 +1,8 @@
 module M_test_suite_M_messages
 use, intrinsic :: ISO_FORTRAN_ENV, only : INT8, INT16, INT32, INT64       !  1           2           4           8
 use, intrinsic :: ISO_FORTRAN_ENV, only : REAL32, REAL64, REAL128         !  4           8          10
-use M_msg
-use M_verify,   only : unit_check_command, unit_check_keep_going, unit_check_level
+use M_framework__msg
+use M_framework__verify,   only : unit_check_command, unit_check_keep_going, unit_check_level
 private
 public test_suite_M_messages
 contains
@@ -10,8 +10,8 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_messages()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
 !*! setup
    call test_blocks()
    call test_junbad()
@@ -179,8 +179,8 @@ end module M_test_suite_M_messages
 !==================================================================================================================================!
 program runtest
 use M_messages
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
+use M_framework__msg
+use M_framework__verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
 use M_test_suite_M_messages
 implicit none
    unit_check_command=''

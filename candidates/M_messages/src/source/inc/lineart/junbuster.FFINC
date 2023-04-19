@@ -9,7 +9,7 @@ SYNOPSIS
 
       SUBROUTINE junbuster(where)
 
-       character(len=*),intent(in) :: where 
+       character(len=*),intent(in) :: where
 
 DESCRIPTION
 
@@ -19,10 +19,7 @@ DESCRIPTION
   >                     _-       _--______
   >                __--( /     \ )XXXXXXXXXXXXX_
   >              --XXX(   O   O  )XXXXXXXXXXXXXXX-
-  >             /XXX(       U     )        XXXXXXX\
-  >           /XXXXX(              )--_  XXXXXXXXXXX\
-  >          /XXXXX/ (      O     )   XXXXXX   \XXXXX\
-  >          XXXXX/   /            XXXXXX   \__ \XXXXX----
+  >             /XXX(       U     )        XXXXXXX  >           /XXXXX(              )--_  XXXXXXXXXXX  >          /XXXXX/ (      O     )   XXXXXX   \XXXXX  >          XXXXX/   /            XXXXXX   \__ \XXXXX----
   >          XXXXXX__/          XXXXXX         \__----  -
   >  ---___  XXX__/          XXXXXX      \__         ---
   >    --  --__/   ___/\  XXXXXX            /  ___---=
@@ -50,19 +47,19 @@ AUTHOR
    John S. Urban
 LICENSE
    Public License
-$BLOCK END 
+$BLOCK END
 $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-$BLOCK COMMENT 
+$BLOCK COMMENT
 AUTHORS:     John S. Urban
 VERSION:     1.0, 20001130
 DESCRIPTION: print eye-catching ASCII graphic (ghostbuster)
-$BLOCK END 
+$BLOCK END
 $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junbuster(where)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::junbuster(3f):print eye-catching ASCII graphic (ghostbuster)"
 character(len=*),intent(in)   :: where
@@ -106,7 +103,7 @@ $IFDEF UFPP_TEST
 
  UNIT TEST OF junbuster(3f)
 
-$SYSTEM goodbad junbuster start --section 3 
+$SYSTEM goodbad junbuster start --section 3
 $SYSTEM mkdir -p tmp/
         Build test program in standard location
 $!----------------------------------------------------------------------------------------------------------------------------------
@@ -120,6 +117,6 @@ $!------------------------------------------------------------------------------
 $SYSTEM ccall tmp/__junbuster.f90
         Execute test program
 $SYSTEM __junbuster >tmp/junbuster.out
-$SYSTEM goodbad junbuster good --section 3 
+$SYSTEM goodbad junbuster good --section 3
 $ENDIF
 $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

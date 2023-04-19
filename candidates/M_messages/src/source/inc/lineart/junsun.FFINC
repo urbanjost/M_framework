@@ -64,7 +64,7 @@ $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junsun(where)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 character(len=*),parameter :: ident="@(#)M_messages::junsun(3f):print eye-catching ASCII graphic (sunshine)"
 character(len=*),intent(in)   :: where
 call journal(where,'#####################                  #####################                   ')
@@ -104,7 +104,7 @@ $IFDEF UFPP_TEST
 
  UNIT TEST OF junsun
 
-$SYSTEM goodbad junsun start --section 3 
+$SYSTEM goodbad junsun start --section 3
 $SYSTEM mkdir -p tmp/
 
         Build test program in standard location
@@ -122,6 +122,6 @@ $SYSTEM ccall tmp/__junsun.f90
         Execute test program
 
 $SYSTEM __junsun >tmp/junsun.out
-$SYSTEM goodbad junsun good --section 3 
+$SYSTEM goodbad junsun good --section 3
 $ENDIF
 $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

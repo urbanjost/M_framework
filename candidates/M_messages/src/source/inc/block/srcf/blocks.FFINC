@@ -38,12 +38,12 @@ EXAMPLE
 
     >nn      nn    oooooooo    tttttttttt   iiiiiiiiii    cccccccc    eeeeeeeeee
     >nnn     nn   oooooooooo   tttttttttt   iiiiiiiiii   cccccccccc   eeeeeeeeee
-    >nnnn    nn   oo     ooo       tt           ii       cc       c   ee        
-    >nn nn   nn   oo    o oo       tt           ii       cc           ee        
-    >nn  nn  nn   oo   o  oo       tt           ii       cc           eeeee     
-    >nn  nn  nn   oo  o   oo       tt           ii       cc           eeeee     
-    >nn   nn nn   oo o    oo       tt           ii       cc           ee        
-    >nn    nnnn   ooo     oo       tt           ii       cc       c   ee        
+    >nnnn    nn   oo     ooo       tt           ii       cc       c   ee
+    >nn nn   nn   oo    o oo       tt           ii       cc           ee
+    >nn  nn  nn   oo   o  oo       tt           ii       cc           eeeee
+    >nn  nn  nn   oo  o   oo       tt           ii       cc           eeeee
+    >nn   nn nn   oo o    oo       tt           ii       cc           ee
+    >nn    nnnn   ooo     oo       tt           ii       cc       c   ee
     >nn     nnn   oooooooooo       tt       iiiiiiiiii   cccccccccc   eeeeeeeeee
     >nn      nn    oooooooo        tt       iiiiiiiiii    cccccccc    eeeeeeeeee
 
@@ -87,7 +87,7 @@ subroutine blocks(str,iout)
 !      o  make an option to print a bitmap-like string for use by atobm(1)
 !      o  if bothered to order data in ASCII collating sequence could use ichar(letter) instead of slower index(string,key)
 !===================================================================================================================================
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 character(len=*),parameter      :: ident="@(#)M_messages::blocks(3f): write out 132-character string in large block letters"
 character(len=*),intent(in)     :: str

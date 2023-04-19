@@ -60,7 +60,7 @@ $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine juntrolls(where,a)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::juntrolls(3f):print eye-catching ASCII graphic (trolls) with message"
 character(len=*),intent(in)      :: where
@@ -80,7 +80,7 @@ character(len=25),save           :: sign,trolls(12)=[&
 '          || ||          ', &
 '         ooO Ooo         ']
 
-do i=1,3 
+do i=1,3
    call journal(where,trolls(i))
 enddo
 
@@ -107,13 +107,13 @@ $IFDEF UFPP_TEST
  if $SYSTEM commands are trusted
 
  UNIT TEST OF juntrolls
-$SYSTEM goodbad juntrolls start --section 3 
+$SYSTEM goodbad juntrolls start --section 3
 $SYSTEM mkdir -p tmp/
         Build test program in standard location
 
 $SYSTEM ccall juntrolls.HTML
 
-$SYSTEM goodbad juntrolls good --section 3 
+$SYSTEM goodbad juntrolls good --section 3
         Execute test program
 $SYSTEM __juntrolls >tmp/juntrolls.out
 $ENDIF

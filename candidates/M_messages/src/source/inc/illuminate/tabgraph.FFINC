@@ -217,7 +217,7 @@ $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine tabgraph(cc,array,ivalues0,rmin,rmax,fill,ilen0)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 
 character(len=*),parameter :: ident="@(#)M_messages::tabgraph(3f): write columns of numbers with a text scale to the right"

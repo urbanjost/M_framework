@@ -57,7 +57,7 @@ $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine jundragon(where,a)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::jundragon(3f):print eye-catching ASCII graphic (dragon) with message"
 character(len=*),intent(in)   :: where ! the I/O flag to pass on to JUN()

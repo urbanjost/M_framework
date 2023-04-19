@@ -16,10 +16,10 @@ NAME
 SYNOPSIS
    SUBROUTINE junroach(where)
 
-    integer,intent(in) :: where 
+    integer,intent(in) :: where
 
 DESCRIPTION
-   Prints an eye-catching image of a roach. Typically used to mark 
+   Prints an eye-catching image of a roach. Typically used to mark
    an error has occurred in an output file.
 
 OPTIONS
@@ -44,21 +44,21 @@ EXAMPLE
    Results:
 
     >ERROR:
-    >      ,--.     .--.        
-    >     /    \. ./    \       
-    >    /  /\ / " \ /\  \      
-    >   / _/  {~~v~~}  \_ \     
-    >  /     {   |   }     \    
-    > ;   /\{    |    }/\   \   
-    > | _/  {    |    }  \_  :  
-    > |     {    |    }      |  
-    > |    /{    |    }\     |  
-    > |   / {    |    } \    |  
-    > |  /  {    |    }  \   |  
-    > |  \  \    |    /  /   |  
-    > |   \  \   |   /  /    |  
-    >  \   \  \  |  /  /    /   
-    >   \  /   ~~~~~   \   /    
+    >      ,--.     .--.
+    >     /    \. ./    \
+    >    /  /\ / " \ /\  \
+    >   / _/  {~~v~~}  \_ \
+    >  /     {   |   }     \
+    > ;   /\{    |    }/\   \
+    > | _/  {    |    }  \_  :
+    > |     {    |    }      |
+    > |    /{    |    }\     |
+    > |   / {    |    } \    |
+    > |  /  {    |    }  \   |
+    > |  \  \    |    /  /   |
+    > |   \  \   |   /  /    |
+    >  \   \  \  |  /  /    /
+    >   \  /   ~~~~~   \   /
     >   explanation of error.
 
 AUTHOR
@@ -80,7 +80,7 @@ $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junroach(where)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 character(len=*),parameter :: ident="@(#)M_messages::junroach(3f):print eye-catching ASCII graphic (roach)"
 character(len=*),intent(in)   :: where  ! the I/O flag to pass on to JOURNAL()
 call journal(where,'       ,--.     .--.        ')
@@ -115,7 +115,7 @@ $IFDEF UFPP_TEST
 
 $!----------------------------------------------------------------------------------------------------------------------------------
         Initialize database status
-$SYSTEM goodbad junroach start --section 3 
+$SYSTEM goodbad junroach start --section 3
 $!----------------------------------------------------------------------------------------------------------------------------------
         Make sure scratch directory exists
 $SYSTEM mkdir -p tmp/
@@ -135,21 +135,21 @@ $SYSTEM __junroach >tmp/junroach.out
 $!----------------------------------------------------------------------------------------------------------------------------------
         Create expected output
 $OUTPUT tmp/junroach.expected
-       ,--.     .--.        
-      /    \. ./    \       
-     /  /\ / " \ /\  \      
-    / _/  {~~v~~}  \_ \     
-   /     {   |   }     \    
-  ;   /\{    |    }/\   \   
-  | _/  {    |    }  \_  :  
-  |     {    |    }      |  
-  |    /{    |    }\     |  
-  |   / {    |    } \    |  
-  |  /  {    |    }  \   |  
-  |  \  \    |    /  /   |  
-  |   \  \   |   /  /    |  
-   \   \  \  |  /  /    /   
-    \  /   ~~~~~   \   /    
+       ,--.     .--.
+      /    \. ./    \
+     /  /\ / " \ /\  \
+    / _/  {~~v~~}  \_ \
+   /     {   |   }     \
+  ;   /\{    |    }/\   \
+  | _/  {    |    }  \_  :
+  |     {    |    }      |
+  |    /{    |    }\     |
+  |   / {    |    } \    |
+  |  /  {    |    }  \   |
+  |  \  \    |    /  /   |
+  |   \  \   |   /  /    |
+   \   \  \  |  /  /    /
+    \  /   ~~~~~   \   /
 $OUTPUT
 $!----------------------------------------------------------------------------------------------------------------------------------
         Compare expected output and generated output
@@ -160,7 +160,7 @@ $!------------------------------------------------------------------------------
 $SYSTEM rm -f  tmp/junroach.expected tmp/junroach.out `which __junroach` tmp/__junroach.f90
 $!----------------------------------------------------------------------------------------------------------------------------------
         Reaching here implies database status should be set to successful.
-$SYSTEM goodbad junroach good --section 3 
+$SYSTEM goodbad junroach good --section 3
 $!----------------------------------------------------------------------------------------------------------------------------------
 $ENDIF
 $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

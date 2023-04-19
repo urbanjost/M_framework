@@ -12,4 +12,4 @@ auto-examples = true
 library = false
 
 [dependencies]
-M_msg = { git = "https://github.com/urbanjost/M_msg.git" }
+M_framework = { git = "https://github.com/urbanjost/M_framework.git" }

@@ -19,8 +19,7 @@ DESCRIPTION
   >          ./'.|'.'||||\\|..    )o o(    ..|//||||`.`|.`\.
   >       ./'..|'.|| |||||\`````` '`"'` ''''''/||||| ||.`|..`\.
   >     ./'.||'.|||| ||||||||||||.     .|||||||||||| ||||.`||.`\.
-  >    /'|||'.|||||| ||||||||||||{     }|||||||||||| ||||||.`|||`\
-  >   '.|||'.||||||| ||||||||||||{     }|||||||||||| |||||||.`|||.`
+  >    /'|||'.|||||| ||||||||||||{     }|||||||||||| ||||||.`|||`  >   '.|||'.||||||| ||||||||||||{     }|||||||||||| |||||||.`|||.`
   >  '.||| ||||||||| |/'   ``\||``     ''||/''   `\| ||||||||| |||.`
   >  |/' \./'     `\./         \!|\   /|!/         \./'     `\./ `\|
   >  V    V         V          }' `\ /' `{          V         V    V
@@ -53,7 +52,7 @@ $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junbat(where)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 character(len=*),parameter :: ident="@(#)M_messages::junbat(3f):print eye-catching ASCII graphic (bat)"
 character(len=*),intent(in)   :: where ! the I/O flag to pass on to journal()
 call journal(where,"                      .-                    .-                       ")
@@ -80,7 +79,7 @@ $IFDEF UFPP_TEST
  if $SYSTEM commands are trusted
 
  UNIT TEST OF junbat
-$SYSTEM goodbad junbat start --section 3 
+$SYSTEM goodbad junbat start --section 3
 $SYSTEM mkdir -p tmp/
         Build test program in standard location
 $!----------------------------------------------------------------------------------------------------------------------------------
@@ -92,7 +91,7 @@ $OUTPUT tmp/__junbat.f90
 $OUTPUT
 $!----------------------------------------------------------------------------------------------------------------------------------
 $SYSTEM ccall tmp/__junbat.f90
-$SYSTEM goodbad junbat good --section 3 
+$SYSTEM goodbad junbat good --section 3
         Execute test program
 $SYSTEM __junbat >tmp/junbat.out
 $ENDIF

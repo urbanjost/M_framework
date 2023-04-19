@@ -13,7 +13,7 @@ library = false
 
 [dependencies]
 M_anything               =  {git   =  "https://github.com/urbanjost/M_anything"  }
-M_msg                    =  {git   =  "https://github.com/urbanjost/M_msg"       }
+M_framework              =  {git   =  "https://github.com/urbanjost/M_framework" }
 M_Compare_Float_Numbers  =  {path  =  "M_Compare_Float_Numbers"                  }
 
 #M_strings    = {git = "https://github.com/urbanjost/M_strings"}
