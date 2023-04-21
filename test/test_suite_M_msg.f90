@@ -17,10 +17,10 @@ logical,allocatable :: tests(:)
        & '10 100.0000 string (11.00000,22.00000) F')
   write(*,'(*(g0,1x))')tests
   if (allpassed)then
-     write(*,'(*(g0,1x))')"*M_msg::str* Passed",size(tests),"tests"
+     write(*,'(*(g0,1x))')"*M_framework__msg::str* Passed",size(tests),"tests"
      stop 0
   else
-     write(*,'(*(g0,1x))')"*M_msg::str* Failed",count(.not.tests),"Passed",count(tests)
+     write(*,'(*(g0,1x))')"*M_framework__msg::str* Failed",count(.not.tests),"Passed",count(tests)
      stop 1
   endif
 
