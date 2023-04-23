@@ -57,7 +57,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-unit_check(3f) - [M_framework__verify] if logical expression is false, call command "goodbad NAME bad" and stop program by default
+unit_check(3f) - [M_framework__verify] report if logical expression is true or false,
+and optionally call command "goodbad NAME good|bad" and stop program if false
 (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
@@ -91,15 +92,36 @@ subroutine unit_check(name,expression,msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg
 
 </A>
 <BLOCKQUOTE>
-unit_check(3f) tests the expression and if it is false, calls the
+unit_check(3f) tests the expression and displays a message composed of the generic
+<TABLE cellpadding=3><!-- tsb: unit_check(3f) tests the expression and displays a message composed of the generic
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>intrinsic values msg1 thorough msg9.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Additionally, if the expression  is false
+</TD></TR>
+<TR></TR></TABLE><TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if unit_check_mode(command) is not blank optionally calls the
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>specified</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 shell command
-<P>
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
 <PRE>
-        goodbad NAME bad
+        $COMMAND NAME "bad"
 <P>
 </PRE>
-and stops the program.
-</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if keep_going = .false. stop the program on a failed test
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
 
      <H3>OPTIONS</H3>
@@ -107,21 +129,21 @@ and stops the program.
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>NAME</B> </TD><TD valign=bottom>
+<TR valign=top><TD colspan=2>
+<B>NAME</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 the unit test name passed on to the goodbad(1)
 command
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>EXPRESSION</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>EXPRESSION</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 the logical expression to evaluate
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>MSG,MSG1&#46;&#46;&#46;MSG9</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>MSG,MSG1&#46;&#46;&#46;MSG9</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 optional message to display when performing test,
 composed of any scalar intrinsics of type INTEGER,
 REAL, DOUBLEPRECISION, COMPLEX, LOGICAL, or
-CHARACTER, with a space placed between each value.
+CHARACTER. A space is placed between each value.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -134,14 +156,9 @@ Sample program:
 <P>
 <PRE>
    program demo_unit_check
-   use M_framework__verify, only: unit_check
-   use M_framework__verify, only: unit_check_start
-   use M_framework__verify, only: unit_check_done
-   use M_framework__verify,  only: almost
-<P>
-   !!use M_framework__verify, only: unit_check_keep_going         ! default is unit_check_keep_going=.false.
-   !!use M_framework__verify, only: debug              ! default is .false.
-   !!use M_framework__verify, only: unit_check_command ! default is unit_check_command=&#146;&#146;; was &#146;goodbad&#146;
+   use M_framework__verify, only: unit_check_start, unit_check, unit_check_done
+   use M_framework__verify, only: unit_check_mode
+   use M_framework__approx, only: almost
 <P>
    implicit none
    integer :: i
@@ -150,7 +167,8 @@ Sample program:
    real,allocatable :: arr1(:)
    real,allocatable :: arr2(:)
 <P>
-      !!unit_check_command=&#146;&#146;
+      call unit_check_mode(keep_going=.true.,debug=.false.,command=&#146;&#146;)
+<P>
       x=10
       arr1=[1.0,10.0,100.0]
       arr2=[1.0001,10.001,100.01]
@@ -164,8 +182,8 @@ Sample program:
       enddo
 <P>
       arr=[10,20,30]
-      call unit_check(&#146;myroutine&#146;, .not.any(arr &lt; 0) ,&#146;test if any negative values in array ARR&#146;)
-      call unit_check(&#146;myroutine&#146;, all(arr &lt; 100) ,&#146;test if all values less than 100 in array ARR&#146;)
+      call unit_check(&#146;myroutine&#146;, .not.any(arr &lt; 0) ,&#146;fail if any negative values in array ARR&#146;)
+      call unit_check(&#146;myroutine&#146;, all(arr &lt; 100) ,&#146;fail unless all values are less than 100 in array ARR&#146;)
 <P>
       call unit_check_done(&#146;myroutine&#146;,msg=&#146;checks on "myroutine" all passed&#146;)
 <P>
@@ -183,7 +201,6 @@ Sample output (varies with what goodbad(1) command is used):
     *almost* for values 10.0000000 10.0010004 agreement of 3.99986792 digits out of requested 3.90000010
     *almost* for values 100.000000 100.010002 agreement of 3.99995065 digits out of requested 3.90000010
    unit_check_good: myroutine        PASSED:checks on "myroutine" all passed
-<P>
 <P>
 <P>
 </PRE>
@@ -205,7 +222,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_check (3m_framework__verify)</TD> <TD align=right width=33%><I>April 16, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2e307c05-4cc1-4735-821e-7e1748a304d2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_check (3m_framework__verify)</TD> <TD align=right width=33%><I>April 23, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bc068305-890c-49a9-89ae-6e2922c963db using man macros.</FONT>
 <br><br><center><img src="images/unit_check.gif"></center>
 </div>
 </div>

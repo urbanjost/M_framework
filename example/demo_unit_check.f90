@@ -1,12 +1,7 @@
      program demo_unit_check
-     use M_framework__verify, only: unit_check
-     use M_framework__verify, only: unit_check_start
-     use M_framework__verify, only: unit_check_done
-     use M_framework__verify,  only: almost
-
-     !!use M_framework__verify, only: unit_check_keep_going         ! default is unit_check_keep_going=.false.
-     !!use M_framework__verify, only: debug              ! default is .false.
-     !!use M_framework__verify, only: unit_check_command ! default is unit_check_command=''; was 'goodbad'
+     use M_framework__verify, only: unit_check_start, unit_check, unit_check_done
+     use M_framework__verify, only: unit_check_mode
+     use M_framework__approx, only: almost
 
      implicit none
      integer :: i
@@ -15,7 +10,8 @@
      real,allocatable :: arr1(:)
      real,allocatable :: arr2(:)
 
-        !!unit_check_command=''
+        call unit_check_mode(keep_going=.true.,debug=.false.,command='')
+
         x=10
         arr1=[1.0,10.0,100.0]
         arr2=[1.0001,10.001,100.01]
@@ -29,8 +25,8 @@
         enddo
 
         arr=[10,20,30]
-        call unit_check('myroutine', .not.any(arr < 0) ,'test if any negative values in array ARR')
-        call unit_check('myroutine', all(arr < 100) ,'test if all values less than 100 in array ARR')
+        call unit_check('myroutine', .not.any(arr < 0) ,'fail if any negative values in array ARR')
+        call unit_check('myroutine', all(arr < 100) ,'fail unless all values are less than 100 in array ARR')
 
         call unit_check_done('myroutine',msg='checks on "myroutine" all passed')
 

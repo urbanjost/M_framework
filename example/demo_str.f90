@@ -1,4 +1,4 @@
-     program demo_msg
+     program demo_str
      use M_framework__msg, only : str
      implicit none
      character(len=:),allocatable :: pr
@@ -17,7 +17,8 @@
 
      ! create a format on the fly
      biggest=huge(0)
-     frmt=str('(*(i',int(log10(real(biggest))),':,1x))',sep='')
+     ! +0 for gfortran-11 bug
+     frmt=str('(*(i',int(log10(real(biggest)))+0,':,1x))',sep='')
      write(*,*)'format=',frmt
 
      ! although it will often work, using str(3f)
@@ -27,4 +28,4 @@
      ! which not all compilers can handle and is currently non-standard
      write(*,*)str('program will now stop')
 
-     end program demo_msg
+     end program demo_str

@@ -3,10 +3,8 @@ program runtest
 use M_framework__msg
 use M_framework__verify
 use M_framework__journal
+use M_framework__approx
 implicit none
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
 !! setup
    call test_flush_trail()
    call test_set_stdout_lun()

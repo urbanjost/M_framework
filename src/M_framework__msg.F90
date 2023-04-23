@@ -14,6 +14,8 @@ public stderr
 public wrt
 public fmt
 public set
+public pdec
+public assert
 !!public :: a,i,f,g
 
 interface str
@@ -66,7 +68,7 @@ contains
 !!
 !!   Sample program:
 !!
-!!    program demo_msg
+!!    program demo_str
 !!    use M_framework__msg, only : str
 !!    implicit none
 !!    character(len=:),allocatable :: pr
@@ -85,7 +87,8 @@ contains
 !!
 !!    ! create a format on the fly
 !!    biggest=huge(0)
-!!    frmt=str('(*(i',int(log10(real(biggest))),':,1x))',sep='')
+!!    ! +0 for gfortran-11 bug
+!!    frmt=str('(*(i',int(log10(real(biggest)))+0,':,1x))',sep='')
 !!    write(*,*)'format=',frmt
 !!
 !!    ! although it will often work, using str(3f)
@@ -95,7 +98,7 @@ contains
 !!    ! which not all compilers can handle and is currently non-standard
 !!    write(*,*)str('program will now stop')
 !!
-!!    end program demo_msg
+!!    end program demo_str
 !!
 !!  Output
 !!
@@ -410,17 +413,19 @@ end function fmt
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    subroutine stderr(msg,[generic])
+!!    subroutine stderr(msg,[generic(s)])
 !!
 !!     class(*),intent(in),optional :: msg
 !!     class(*),intent(in),optional :: generic0,generic1,generic2,generic3,generic4
 !!     class(*),intent(in),optional :: generic5,generic6,generic7,generic8,generic9
+!!     class(*),intent(in),optional :: generica,genericb,genericc,genericd,generice
+!!     class(*),intent(in),optional :: genericf,genericg,generich,generici,genericj
 !!##DESCRIPTION
 !!    STDERR(3f) writes a message to standard error using a standard f2003 method.
-!!    Up to ten generic options are available.
+!!    Up to twenty generic options are available.
 !!##OPTIONS
 !!    msg           - description to print
-!!    generic[0-9]  - optional value to print the value of after the message. May
+!!    generic[0-j]  - optional value to print the value of after the message. May
 !!                    be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
 !!                    or CHARACTER.
 !!##EXAMPLES
@@ -915,7 +920,144 @@ end subroutine set_scalar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-end module M_framework__msg
+!>
+!!##NAME
+!!      pdec(3f) - [M_framework__msg] write out string with ASCII decimal equivalent vertically under it
+!!      (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    Usage:
+!!
+!!     subroutine pdec(string)
+!!     character(len=*),intent(in) :: string
+!!
+!!##DESCRIPTION
+!!
+!!    Given a string to print, PDEC() writes out the ASCII Decimal equivalent
+!!    of the string directly underneath it. This can help you to locate
+!!    unprintable characters or non-standard white-space such as a backspace
+!!    character or tab character in input strings that your program could
+!!    not interpret. On output, non-printable characters are replaced with
+!!    a space, and trailing spaces are ignored.
+!!
+!!    You read the numbers vertically.
+!!
+!!    1. ignore trailing spaces
+!!    2. print the character if it has an ADE of 32 on up
+!!    3. print a space if it has an ADE of less than 32
+!!    4. underneath each character print the ADE value vertically
+!!    5. strings are assumed under 32767 characters in length.
+!!       Format integer constants > 32767 are not supported on HP-UX
+!!       when newer compilers are available use unlimited
+!!
+!!##EXAMPLES
+!!
+!!
+!!    Sample program:
+!!
+!!       program demo_pdec
+!!       use M_framework__msg, only : pdec
+!!       call pdec(' ABCDEFG abcdefg    ')
+!!       end program demo_pdec
+!!
+!!    would produce (notice trailing space is trimmed):
+!!
+!!      > ABCDEFG abcdefg
+!!      >0000000000001111
+!!      >3666667739990000
+!!      >2567890127890123
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+subroutine pdec(string)
+
+! ident_7="@(#) M_framework__msg pdec(3f) write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
+
+character(len=*),intent(in) :: string   ! the string to print
+integer                     :: ilen     ! number of characters in string to print
+integer                     :: i        ! counter used to step thru string
+
+   ilen=len_trim(string(:len(string)))  ! get trimmed length of input string
+
+   write(*,101)(char(max(32,ichar(string(i:i)))),i=1,ilen) ! replace lower unprintable characters with spaces
+
+   ! print ADE value of character underneath it
+   write(*,202)     (ichar(string(i:i))/100,    i=1,ilen)
+   write(*,202)(mod( ichar(string(i:i)),100)/10,i=1,ilen)
+   write(*,202)(mod((ichar(string(i:i))),10),   i=1,ilen)
+101   format(32767a1:)  ! format for printing string characters
+202   format(32767i1:)  ! format for printing ADE values
+end subroutine pdec
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    assert(3f) - [M_framework__msg] print filename, linenumber, and message to stderr and stop program
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    function assert(file,linenum,expr,g1,g2g3,g4,g5,g6,g7,g8,g9)
+!!
+!!     character(len=*),intent(in)  :: file
+!!     character(len=*),intent(in)  :: linenum
+!!     logical,intent(in)           :: expr
+!!     class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
+!!##DESCRIPTION
+!!    assert(3f) prints strings to stderr and then stops program with exit
+!!    code 1 It labels the first string as the filename, the next integer
+!!    parameter as the linenumber, and then up to nine scalar values.
+!!
+!!    It is primarily intended for use by the prep(1) preprocessor $ASSERT
+!!    directive
+!!
+!!##OPTIONS
+!!
+!!    filename   a string assumed to be the current filename when compiling
+!!    linenum    assumed to be the line number of the source code the ASSERT(3f)
+!!               procedure was called at.
+!!    expr       logical value
+!!    g[1-9]  optional value(s) to print as a message before stopping. May
+!!            be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
+!!            or CHARACTER.
+!!
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!    program demo_assert
+!!    use M_framework__msg, only : assert
+!!    implicit none
+!!    real :: a, toobig=1024
+!!    a=2000
+!!    call assert('myroutine', 101, a > toobig, 'The value is too large', a, ' > ', toobig)
+!!    end program demo_assert
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+subroutine assert(filename, linen, expr, g1, g2, g3, g4, g5, g6, g7, g8, g9)
+implicit none
+
+! ident_8="@(#) M_framework__msg assert(3f) writes a message to a string composed of any standard scalar types"
+
+character(len=*), intent(in)   :: filename
+integer, intent(in)            :: linen
+logical, intent(in)            :: expr
+class(*), intent(in), optional  :: g1, g2, g3, g4, g5, g6, g7, g8, g9
+
+   ! write message to standard error
+   if (.not. expr) then
+      call stderr('ERROR:filename:', filename, ':line number:', linen, ':', str(g1, g2, g3, g4, g5, g6, g7, g8, g9))
+      stop 1
+   endif
+
+end subroutine assert
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+end module M_framework__msg

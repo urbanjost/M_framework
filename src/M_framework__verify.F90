@@ -9,17 +9,13 @@
 !!
 !!  Module procedures
 !!
-!!    use M_framework__verify, only : unit_check, unit_check_start, unit_check_done, unit_check_stop
-!!    use M_framework__verify, only : unit_check_good, unit_check_bad
-!!    use M_framework__verify, only : unit_check_msg
-!!    use M_framework__verify, only : debug
-!!    use M_framework__verify, only : fstop
-!!    use M_framework__verify, only : assert
-!!
+!!    use M_framework__verify, only : unit_check, unit_check_start,     &
+!!                                    unit_check_done, unit_check_stop, &
+!!                                    unit_check_good, unit_check_bad,  &
+!!                                    unit_check_msg, unit_check_mode,  &
 !!  Module values
 !!
-!!    use M_framework__verify, only : unit_check_limit, unit_check_keep_going
-!!    use M_framework__verify, only : unit_check_command
+!!    use M_framework__verify, only : unit_check_level
 !!
 !!##QUOTE
 !!    Do not let your victories go to your head, nor let your failures go
@@ -38,12 +34,15 @@
 !!     o provides for a non-zero exit code if any tests fail
 !!
 !!    SET MODES
-!!    unit_check_keep_going  logical variable that can be used to turn off
-!!                           program termination on errors.
-!!    unit_check_level       An integer that can be used to specify
-!!                           different debug levels
-!!    unit_check_command     name of command to execute. Defaults to the name
-!!                           "".
+!!
+!!       call unit_check_mode(command,keep_going,level)
+!!
+!!        command     name of command to execute. Defaults to the name
+!!        keep_going  logical variable that can be used to turn off
+!!                    program termination on errors.
+!!        level       An integer that can be used to specify
+!!                    different debug levels
+!!
 !!    UNIT TESTS
 !!    unit_check_start(3f)   start tests of a procedure and optionally call
 !!
@@ -74,14 +73,6 @@
 !!
 !!                           and stop program by default
 !!    unit_check_msg(3f)     write message
-!!
-!!    BASIC DEBUGGING
-!!    fstop(3f)             calls 'STOP VALUE' passing in a value (1-32),
-!!                          with optional message
-!!    pdec(3f)              write ASCII Decimal Equivalent (ADE) numbers
-!!                          vertically beneath string
-!!    debug                 logical variable that can be tested by routines
-!!                          as a flag to process debug statements.
 !!
 !!    For unit testing, the existence of a command called "goodbad" is
 !!    initially assumed. This is generally a script that makes entries
@@ -192,12 +183,10 @@
 !!     end module M_framework__demo
 !!
 !!     program demo_M_framework__verify
-!!     use M_framework__demo,  only: test_suite_M_demo
-!!     use M_framework__verify, only: unit_check_command, unit_check_keep_going,unit_check_level
-!!     unit_check_command=''
-!!     unit_check_keep_going=.true.
-!!     unit_check_level=0
-!!       call test_suite_M_demo
+!!     use M_framework__demo,   only: test_suite_M_demo
+!!     use M_framework__verify, only: unit_check_mode
+!!        call unit_check_mode(command='',level=0,keep_going=.true.)
+!!        call test_suite_M_demo()
 !!     end program demo_M_framework__verify
 !!
 !!   Expected output:
@@ -218,24 +207,26 @@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 module M_framework__verify
-use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64 !  1           2           4           8
-use, intrinsic :: iso_fortran_env, only : real32, real64, real128   !  4           8          10
-use, intrinsic :: iso_fortran_env, only : ERROR_UNIT,OUTPUT_UNIT    ! access computing environment
-use            :: M_framework__msg,           only : str
+use, intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64 !  1           2           4           8
+use, intrinsic :: iso_fortran_env,  only : real32, real64, real128   !  4           8          10
+use, intrinsic :: iso_fortran_env,  only : ERROR_UNIT,OUTPUT_UNIT    ! access computing environment
+use            :: M_framework__msg, only : str, stderr
 implicit none
 private
 
-integer,save,public :: io_debug=ERROR_UNIT            ! mutable copy of ERROR_UNIT, but initialized to the unit used for stderr
-integer,save,public :: unit_check_lun=ERROR_UNIT      ! mutable copy of ERROR_UNIT, but initialized to the unit used for stderr
-logical,save,public :: debug=.false.
-character(len=20),save,public :: unit_check_prefix=''
+logical,save                 :: G_virgin = .true.
 
-logical,save,public :: unit_check_keep_going=.false.  ! logical variable that can be used to turn off program termination on errors.
-integer,save,public :: unit_check_level=0             ! a level that can be used to select different debug levels
-character(len=4096),public ::  unit_check_command=''  ! name of command to execute. Defaults to the name "goodbad".
-public no_news_is_good_news
+character(len=20),save,public :: G_prefix=''
+integer,save,public :: G_unit_check_lun=ERROR_UNIT      ! mutable copy of ERROR_UNIT, but initialized to the unit used for stderr
+logical,save,public :: G_debug=.false.
 
-integer,parameter,public   :: realtime=kind(0.0d0)            ! type for julian days
+integer,save,public          :: unit_check_level=0      ! a level that can be used to select different debug levels
+logical,save                 :: G_keep_going=.false.    ! logical variable that can be used to turn off program termination on errors.
+logical,save                 :: G_interactive=.false.
+character(len=:),allocatable :: G_command               ! name of command to execute. Defaults to the name
+logical,save                 :: G_no_news_is_good_news=.false.    ! flag on whether to display SUCCESS: messages
+
+integer,parameter,public   :: realtime=kind(0.0d0)      ! type for julian days
 integer,parameter,public   :: EXIT_SUCCESS=0
 integer,parameter,public   :: EXIT_FAILURE=1
 real(kind=realtime),save   :: duration=0.0d0
@@ -243,19 +234,14 @@ real(kind=realtime),save   :: duration_all=0.0d0
 integer,save               :: clicks=0.0d0
 integer,save               :: clicks_all=0.0d0
 
-logical,save ::  STOP_G=.true.                       ! global value indicating whether failed unit checks should stop program or not
-integer,save :: IPASSED_G=0                          ! counter of successes initialized by unit_check_start(3f)
-integer,save :: IFAILED_G=0                          ! counter of failures  initialized by unit_check_start(3f)
-integer,save :: IUNTESTED=0                          ! counter of untested  initialized by unit_check_start(3f)
-integer,save :: IPASSED_ALL_G=0                      ! counter of successes initialized at program start
-integer,save :: IFAILED_ALL_G=0                      ! counter of failures  initialized at program start
-integer,save :: IUNTESTED_ALL=0                      ! counter of untested  initialized at program start
-logical,save :: no_news_is_good_news=.false.         ! flag on whether to display SUCCESS: messages
+logical,save ::  STOP_G=.true.                    ! global value indicating whether failed unit checks should stop program or not
+integer,save :: IPASSED_G=0                       ! counter of successes initialized by unit_check_start(3f)
+integer,save :: IFAILED_G=0                       ! counter of failures  initialized by unit_check_start(3f)
+integer,save :: IUNTESTED=0                       ! counter of untested  initialized by unit_check_start(3f)
+integer,save :: IPASSED_ALL_G=0                   ! counter of successes initialized at program start
+integer,save :: IFAILED_ALL_G=0                   ! counter of failures  initialized at program start
+integer,save :: IUNTESTED_ALL=0                   ! counter of untested  initialized at program start
 
-public stderr
-public assert
-public pdec
-public fstop
 public unit_check_start
 public unit_check
 public unit_check_good
@@ -263,15 +249,8 @@ public unit_check_bad
 public unit_check_done
 public unit_check_stop
 public unit_check_msg
-! COMPARING AND ROUNDING FLOATING POINT VALUES
-public accdig         ! compare two real numbers only up to a specified number of digits
-public almost         ! function compares two numbers only up to a specified number of digits
-public dp_accdig      ! compare two double numbers only up to a specified number of digits
-public in_margin      ! check if two reals are approximately equal using a relative margin
-public round          ! round val to specified number of significant digits
-public round_to_power ! round val to specified number of digits after the decimal point
-public significant    ! round val to specified number of significant digits
-!-----------------------------------------------------------------------------------------------------------------------------------
+public unit_check_mode
+
 contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -326,236 +305,20 @@ character(len=*),intent(in)   :: name
 class(*),intent(in),optional  :: g1 ,g2 ,g3 ,g4 ,g5
 class(*),intent(in),optional  :: g6 ,g7 ,g8 ,g9
 
+   if(G_virgin)call cmdline_()
+
    ! write message to standard error
-   call stderr(trim(unit_check_prefix)//'check_msg:   '//atleast(name,20)//' INFO    : '//str(g1,g2,g3,g4,g5,g6,g7,g8,g9))
+   call stderr(trim(G_prefix)//'check_msg:   '//atleast_(name,20)//' INFO    : '//str(g1,g2,g3,g4,g5,g6,g7,g8,g9))
 
 end subroutine unit_check_msg
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine stderr(msg, gen0, gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9)
-implicit none
-
-! ident_2="@(#) M_framework__verify stderr(3f) writes a message to standard error using a standard f2003 method"
-
-class(*),intent(in),optional :: msg
-class(*),intent(in),optional :: gen0, gen1, gen2, gen3, gen4
-class(*),intent(in),optional :: gen5, gen6, gen7, gen8, gen9
-integer                      :: ios
-
-   write(error_unit,'(a)',iostat=ios) str(msg, gen0, gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9)
-   flush(unit=output_unit,iostat=ios)
-   flush(unit=error_unit,iostat=ios)
-end subroutine stderr
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-!>
-!!##NAME
-!!    fstop(3f) - [M_framework__verify] call stop with both a number and a message
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!    subroutine fstop(ierr,stdout,stderr)
-!!
-!!     integer,intent(in)                   :: ierr
-!!     character(len=*),intent(in),optional :: stdout
-!!     character(len=*),intent(in),optional :: stderr
-!!##DESCRIPTION
-!!    FSTOP(3f) call STOP(3f). What a call to STOP does is very system
-!!    dependent, so using an abstraction layer is useful, as it allows just
-!!    the fstop() routine to be changed; and STOP does not allow a variable
-!!    to be used on the numeric access status (this has changed at f2015).
-!!
-!!##OPTIONS
-!!    ierr    - value in range 0 to 32
-!!    stdout  - description to be printed to standard output
-!!    stderr  - description to be printed to standard error
-!!##EXAMPLES
-!!
-!!   Sample program:
-!!
-!!    program demo_fstop
-!!    use M_framework__verify, only: fstop
-!!    implicit none
-!!    integer :: int
-!!    !*!write(*,*)'Enter stop value'
-!!    !*!read(*,*) int
-!!    int=25
-!!    select case(int)
-!!    case(10) ; call fstop(int)
-!!    case(20) ; call fstop(int,stderr='error: program will now stop')
-!!    case(25) ; call fstop(int,stdout='stdout message',stderr='stderr message')
-!!    case(30) ; call fstop(int,stdout='error: program will now stop')
-!!    case default
-!!               call fstop(int)
-!!    endselect
-!!
-!!    end program demo_fstop
-!!
-!!   Results:
-!!
-!!##SEE ALSO
-!!   Look for common extensions, such as abort(3f), backtrace(3f)
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
-subroutine fstop(ierr,stdout,stderr)
-
-! ident_3="@(#) M_framework__verify fstop(3f) calls 'STOP VALUE' passing in a value (1-32) with optional message"
-
-integer,intent(in)                   :: ierr
-character(len=*),optional,intent(in) :: stdout
-character(len=*),optional,intent(in) :: stderr
-character(len=132)                   :: message
-! The standard states:
-!   If the stop-code is an integer, it is recommended that the value also be used as the process exit status, if the
-!   processor supports that concept. If the integer stop-code is used as the process exit status, the processor
-!   might be able to interpret only values within a limited range, or only a limited portion of the integer value
-!   (for example, only the least-significant 8 bits).
-
-!   If the stop-code is of type character or does not appear, or if an END PROGRAM statement is executed,
-!   it is recommended that the value zero be supplied as the process exit status, if the processor supports that
-!   concept.
-!   A STOP statement or ALL STOP statement shall not be executed during execution of an input/output statement.
-!
-! Conforming variants I have encountered include
-!    o printing a message such as 'STOP nnn' when the integer value is called
-!    o having a limit on the length of the message string passed
-!    o prefixing the message with the string 'STOP '
-!    o different ranges on allowed integer values, and/or not having a one-to-one correspondence between the argument
-!      value and what the system is given (usually encountered with large values, which are masked or run thru modulo math, ...)
-!    o whether messages appear on stdout or stderr.
-!    o no value being returned to the system at all.
-!
-!  So it is best to test (csh/tcsh sets $status, sh/ksh/bash/... sets $?) to verify what exit codes are supported.
-!  What happens with negative values, values above 256; how long of a message is supported? Are messages line-terminated?
-!
-!  And for some reason STOP only takes constant values. I sometimes want to be able to pass a variable value.
-!  Only allowing constants would have the advantage of letting the compiler detect values invalid for a particular system,
-!  but I sometimes want to return variables.
-!
-!  So, using STOP with an argument is not as straight-forward as one might guess, especially if you do not want a message
-!  to appear when using integer values
-!
-!  In practice the C exit(int signal) routine seems to work successfully when called from Fortran but I consider it risky
-!  as it seems reasonable to assume Fortran cleanup operations such as removing scratch files and closing and flushing Fortran
-!  files may not be properly performed. So it is tempting to call the C function, especially on systems where C returns a
-!  value to the system and Fortran does not, but I do not recommend it.
-!
-!  Note that the C function "exit(int signal)" not only works more consistently but that the global values EXIT_SUCCESS and
-!  EXIT_FAILURE are defined for portability, and that the signal value can be a variable instead of a constant.
-!
-!  If the system supports calls to produce a traceback on demand, that is a useful option to add to this procedure.
-!-----------------------------------------------------------------------------------------------------------------------------------
-!STOP       'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&
-!&aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&
-!&aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&
-!&aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&
-!&aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&
-!&aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&
-!&aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&
-!&aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&
-!&aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab'
-!-----------------------------------------------------------------------------------------------------------------------------------
-if(present(stderr))then       ! write message to stderr, assuming string length is allowed
-   if(stderr /= '')then
-      write(error_unit,'(a)')trim(stderr)
-   endif
-!f2015!   select case(ierr)             ! have executable return an exit status to the system (IF SUPPORTED)
-!f2015!      case(0); allstop 0
-!f2015!      case(1); allstop 1
-!f2015!      case(2); allstop 2
-!f2015!      case(3); allstop 3
-!f2015!      case(4); allstop 4
-!f2015!      case(5); allstop 5
-!f2015!      case(6); allstop 6
-!f2015!      case(7); allstop 7
-!f2015!      case(8); allstop 8
-!f2015!      case(9); allstop 8
-!f2015!      case(10); allstop 10
-!f2015!      case(11); allstop 11
-!f2015!      case(12); allstop 12
-!f2015!      case(13); allstop 13
-!f2015!      case(14); allstop 14
-!f2015!      case(15); allstop 15
-!f2015!      case(16); allstop 16
-!f2015!      case(17); allstop 17
-!f2015!      case(18); allstop 18
-!f2015!      case(19); allstop 19
-!f2015!      case(20); allstop 20
-!f2015!      case(21); allstop 21
-!f2015!      case(22); allstop 22
-!f2015!      case(23); allstop 23
-!f2015!      case(24); allstop 24
-!f2015!      case(25); allstop 25
-!f2015!      case(26); allstop 26
-!f2015!      case(27); allstop 27
-!f2015!      case(28); allstop 28
-!f2015!      case(29); allstop 29
-!f2015!      case(30); allstop 30
-!f2015!      case(31); allstop 31
-!f2015!      case(32); allstop 32
-!f2015!   case default
-!f2015!      write(message,'(a,i0,a)')'*fstop*: stop value of ',ierr,' returning 1 to system'
-!f2015!      write(error_unit,'(a)')trim(message) ! write message to standard error
-!f2015!      allstop 1
-!f2015!   end select
-endif
-if(present(stdout))then       ! write message to stdout, assuming string length is allowed
-   if(stdout /= '')then
-      write(*,'(a)')trim(stdout)
-   endif
-endif
-select case(ierr)             ! have executable return an exit status to the system (IF SUPPORTED)
-   case(0); stop 0
-   case(1); stop 1
-   case(2); stop 2
-   case(3); stop 3
-   case(4); stop 4
-   case(5); stop 5
-   case(6); stop 6
-   case(7); stop 7
-   case(8); stop 8
-   case(9); stop 8
-   case(10); stop 10
-   case(11); stop 11
-   case(12); stop 12
-   case(13); stop 13
-   case(14); stop 14
-   case(15); stop 15
-   case(16); stop 16
-   case(17); stop 17
-   case(18); stop 18
-   case(19); stop 19
-   case(20); stop 20
-   case(21); stop 21
-   case(22); stop 22
-   case(23); stop 23
-   case(24); stop 24
-   case(25); stop 25
-   case(26); stop 26
-   case(27); stop 27
-   case(28); stop 28
-   case(29); stop 29
-   case(30); stop 30
-   case(31); stop 31
-   case(32); stop 32
-case default
-   write(message,'(a,i0,a)')'*fstop*: stop value of ',ierr,' returning 1 to system'
-   write(error_unit,'(a)')trim(message) ! write message to standard error
-   stop 1
-end select
-end subroutine fstop
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 !>
 !!
 !!##NAME
-!!    unit_check(3f) - [M_framework__verify] if logical expression is false, call command "goodbad NAME bad" and stop program by default
+!! unit_check(3f) - [M_framework__verify] report if logical expression is true or false,
+!!   and optionally call command "goodbad NAME good|bad" and stop program if false
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -567,12 +330,16 @@ end subroutine fstop
 !!     class(*),intent(in),optional :: msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9
 !!
 !!##DESCRIPTION
-!!    unit_check(3f) tests the expression and if it is false, calls the
-!!    shell command
+!!    unit_check(3f) tests the expression and displays a message composed of the generic
+!!    intrinsic values msg1 thorough msg9.  Additionally, if the expression  is false
 !!
-!!         goodbad NAME bad
+!!    o if unit_check_mode(command) is not blank optionally calls the
+!!    specified  shell command
 !!
-!!    and stops the program.
+!!         $COMMAND NAME "bad"
+!!
+!!    o if keep_going = .false. stop the program on a failed test
+!!
 !!##OPTIONS
 !!     NAME             the unit test name passed on to the goodbad(1)
 !!                      command
@@ -580,21 +347,16 @@ end subroutine fstop
 !!     MSG,MSG1...MSG9  optional message to display when performing test,
 !!                      composed of any scalar intrinsics of type INTEGER,
 !!                      REAL, DOUBLEPRECISION, COMPLEX, LOGICAL, or
-!!                      CHARACTER, with a space placed between each value.
+!!                      CHARACTER. A space is placed between each value.
 !!
 !!##EXAMPLES
 !!
 !!   Sample program:
 !!
 !!    program demo_unit_check
-!!    use M_framework__verify, only: unit_check
-!!    use M_framework__verify, only: unit_check_start
-!!    use M_framework__verify, only: unit_check_done
-!!    use M_framework__verify,  only: almost
-!!
-!!    !!use M_framework__verify, only: unit_check_keep_going         ! default is unit_check_keep_going=.false.
-!!    !!use M_framework__verify, only: debug              ! default is .false.
-!!    !!use M_framework__verify, only: unit_check_command ! default is unit_check_command=''; was 'goodbad'
+!!    use M_framework__verify, only: unit_check_start, unit_check, unit_check_done
+!!    use M_framework__verify, only: unit_check_mode
+!!    use M_framework__approx, only: almost
 !!
 !!    implicit none
 !!    integer :: i
@@ -603,7 +365,8 @@ end subroutine fstop
 !!    real,allocatable :: arr1(:)
 !!    real,allocatable :: arr2(:)
 !!
-!!       !!unit_check_command=''
+!!       call unit_check_mode(keep_going=.true.,debug=.false.,command='')
+!!
 !!       x=10
 !!       arr1=[1.0,10.0,100.0]
 !!       arr2=[1.0001,10.001,100.01]
@@ -617,8 +380,8 @@ end subroutine fstop
 !!       enddo
 !!
 !!       arr=[10,20,30]
-!!       call unit_check('myroutine', .not.any(arr < 0) ,'test if any negative values in array ARR')
-!!       call unit_check('myroutine', all(arr < 100) ,'test if all values less than 100 in array ARR')
+!!       call unit_check('myroutine', .not.any(arr < 0) ,'fail if any negative values in array ARR')
+!!       call unit_check('myroutine', all(arr < 100) ,'fail unless all values are less than 100 in array ARR')
 !!
 !!       call unit_check_done('myroutine',msg='checks on "myroutine" all passed')
 !!
@@ -636,41 +399,41 @@ end subroutine fstop
 !!    unit_check_good: myroutine        PASSED:checks on "myroutine" all passed
 !!
 !!
-!!
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
 subroutine unit_check(name,logical_expression,msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
 
-! ident_4="@(#) M_framework__verify unit_check(3f) if .not.expression call 'goodbad NAME bad' & stop program"
+! ident_2="@(#) M_framework__verify unit_check(3f) if .not.expression call 'goodbad NAME bad' & stop program"
 
 character(len=*),intent(in)          :: name
 logical,intent(in)                   :: logical_expression
 class(*),intent(in),optional         :: msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9
 character(len=:),allocatable         :: msg_local
-!-----------------------------------------------------------------------------------------------------------------------------------
-msg_local=str(msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
-!-----------------------------------------------------------------------------------------------------------------------------------
+
+   if(G_virgin)call cmdline_()
+   msg_local=str(msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
+
    if(.not.logical_expression)then
-      call stderr(trim(unit_check_prefix)//'check:       '//atleast(name,20)//' FAILURE : '//trim(msg_local))
-      if(unit_check_command /= '')then
-         call execute_command_line(unit_check_command//' '//trim(name)//' bad')
+      call stderr(trim(G_prefix)//'check:       '//atleast_(name,20)//' FAILURE : '//trim(msg_local))
+      if(G_command /= '')then
+         call execute_command_line(G_command//' '//trim(name)//' bad')
       endif
-      if(.not.unit_check_keep_going) then
-         call stderr(trim(unit_check_prefix)//'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
-         call fstop(1)
+      if(.not.G_keep_going) then
+         call stderr(trim(G_prefix)//'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
+         stop 1
       endif
       IFAILED_G=IFAILED_G+1
       IFAILED_ALL_G=IFAILED_ALL_G+1
    else
-      if(.not.no_news_is_good_news)then
-         call stderr(trim(unit_check_prefix)//'check:       '//atleast(name,20)//' SUCCESS : '//trim(msg_local))
+      if(.not.G_no_news_is_good_news)then
+         call stderr(trim(G_prefix)//'check:       '//atleast_(name,20)//' SUCCESS : '//trim(msg_local))
       endif
       IPASSED_G=IPASSED_G+1
       IPASSED_ALL_G=IPASSED_ALL_G+1
    endif
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 end subroutine unit_check
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -695,16 +458,17 @@ end subroutine unit_check
 !!       goodbad NAME start [options]
 !!
 !!    The command can be changed by setting the environment variable
-!!    UNIT_CHECK_COMMAND or the global module variable UNIT_CHECK_COMMAND.
-!!    The environment variable overrides the global module variable.
+!!    UNIT_CHECK_COMMAND or the global module variable COMMAND via "CALL
+!!    UNIT_CHECK_MODE(3f)" The environment variable overrides the global
+!!    module variable.
 !!
 !!    By default if a unit_check(3f) logical expression is false or the
 !!    unit_check_bad(3f) procedure is called the program will be stopped.
 !!
 !!    This has the same effect as setting the environment variable
 !!    M_framework__verify_STOP to "FALSE" or the global module variable
-!!    UNIT_CHECK_KEEP_GOING to .FALSE. . Set the value to .true. and the
-!!    program will continue even when tests fail.
+!!    KEEP_GOING to .FALSE. using "unit_check_mode(3f)". Set the value to
+!!    .true. and the program will continue even when tests fail.
 !!
 !!##OPTIONS
 !!       NAME  name of the shell command to execute. If blank, no command
@@ -718,10 +482,7 @@ end subroutine unit_check
 !!   Sample program:
 !!
 !!     program demo_unit_check_start
-!!     use M_framework__verify, only: unit_check_start
-!!     use M_framework__verify, only: unit_check
-!!     use M_framework__verify, only: unit_check_done
-!!
+!!     use M_framework__verify, only: unit_check_start, unit_check, unit_check_done
 !!     implicit none
 !!     integer :: ival
 !!     call unit_check_start('myroutine')
@@ -751,27 +512,28 @@ end subroutine unit_check
 !!    Public Domain
 subroutine unit_check_start(name,options,msg)
 
-! ident_5="@(#) M_framework__verify unit_check_start(3f) call 'goodbad NAME start'"
+! ident_3="@(#) M_framework__verify unit_check_start(3f) call 'goodbad NAME start'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: options
 character(len=*),intent(in),optional :: msg
 character(len=4096)                  :: var
 logical,save                         :: called=.false.
-!-----------------------------------------------------------------------------------------------------------------------------------
+
+   if(G_virgin)call cmdline_()
    call get_environment_variable('UNIT_CHECK_COMMAND',var)
-   if(var /= '')unit_check_command=var
-!-----------------------------------------------------------------------------------------------------------------------------------
+   if(var /= '')G_command=var
+
    if(present(options))then
-      if(unit_check_command /= '')then
-         call execute_command_line(unit_check_command//' '//trim(name)//' start '//trim(options))
+      if(G_command /= '')then
+         call execute_command_line(G_command//' '//trim(name)//' start '//trim(options))
       endif
    else
-      if(unit_check_command /= '')then
-         call execute_command_line(unit_check_command//' '//trim(name)//' start')
+      if(G_command /= '')then
+         call execute_command_line(G_command//' '//trim(name)//' start')
       endif
    endif
-!-----------------------------------------------------------------------------------------------------------------------------------
+
    call system_clock(clicks)
    duration=julian()
    if(.not.called)then
@@ -781,19 +543,19 @@ logical,save                         :: called=.false.
    endif
    if(present(msg))then
      if(msg /= '')then
-        call stderr(trim(unit_check_prefix)//'check_start: '//atleast(name,20)//' START   : '//trim(msg))
+        call stderr(trim(G_prefix)//'check_start: '//atleast_(name,20)//' START   : '//trim(msg))
      endif
    endif
    call get_environment_variable('M_framework__verify_STOP',var)
    select case(var)
    case('FALSE','false','1','no','NO')
-         unit_check_keep_going=.false.
+         G_keep_going=.false.
    end select
-!-----------------------------------------------------------------------------------------------------------------------------------
+
    IPASSED_G=0
    IFAILED_G=0
    IUNTESTED=0
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 end subroutine unit_check_start
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -822,17 +584,13 @@ end subroutine unit_check_start
 !!   Sample program:
 !!
 !!     program demo_unit_check_stop
-!!     use M_framework__verify, only: unit_check_start, unit_check_done
-!!     use M_framework__verify, only: unit_check
+!!     use M_framework__verify, only: unit_check_start, unit_check_done, unit_check
 !!     use M_framework__verify, only: unit_check_good, unit_check_stop, unit_check_bad
-!!     use M_framework__verify, only: unit_check_command, unit_check_keep_going, unit_check_level
-!!
+!!     use M_framework__verify, only: unit_check_mode
 !!     implicit none
 !!     integer :: x
 !!
-!!     unit_check_command=''
-!!     unit_check_keep_going=.true.
-!!     unit_check_level=0
+!!     call unit_check_mode(keep_going=.true.,debug=.false.,command='')
 !!
 !!     x=10
 !!     call unit_check_start('myroutine')
@@ -855,7 +613,7 @@ end subroutine unit_check_start
 subroutine unit_check_stop(msg)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
-! ident_6="@(#) M_framework__verify unit_check_stop(3f) stop program with report on calls to unit_check(3f)"
+! ident_4="@(#) M_framework__verify unit_check_stop(3f) stop program with report on calls to unit_check(3f)"
 
 character(len=*),intent(in),optional :: msg
 character(len=:),allocatable         :: msg_local
@@ -863,6 +621,9 @@ character(len=4096)                  :: out
 character(len=:),allocatable         :: PF
 integer(kind=int64)                  :: milliseconds
 integer                              :: clicks_now
+
+   if(G_virgin)call cmdline_()
+
    if(present(msg))then
       msg_local=msg
    else
@@ -881,7 +642,7 @@ integer                              :: clicks_now
        & " BAD:",i9,                            &
        & " DURATION:",i14.14                    &
        & )')                                    &
-       & trim(unit_check_prefix),               &
+       & trim(G_prefix),                        &
        & PF,                                    &
        & IPASSED_ALL_G,                         &
        & IFAILED_ALL_G,                         &
@@ -956,7 +717,7 @@ end subroutine unit_check_stop
 subroutine unit_check_done(name,opts,msg)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
-! ident_7="@(#) M_framework__verify unit_check_done(3f) call 'goodbad NAME bad'"
+! ident_5="@(#) M_framework__verify unit_check_done(3f) call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -967,26 +728,30 @@ character(len=4096)                  :: out
 character(len=9)                     :: pf
 integer(kind=int64)                  :: milliseconds
 integer                              :: clicks_now
+
+   if(G_virgin)call cmdline_()
+
    if(present(msg))then
       msg_local=msg
    else
       msg_local=''
    endif
+
    if(present(opts))then
       opts_local=opts
    else
       opts_local=''
    endif
-!-----------------------------------------------------------------------------------------------------------------------------------
-   if(unit_check_command /= '')then                           ! if system command name is not blank call system command
+
+   if(G_command /= '')then                           ! if system command name is not blank call system command
       if(ifailed_g == 0)then
-         call execute_command_line(unit_check_command//' '//trim(name)//' bad '//trim(opts))
-         if(.not.unit_check_keep_going) call fstop(1)            ! stop program depending on mode
+         call execute_command_line(G_command//' '//trim(name)//' bad '//trim(opts))
+         if(.not.G_keep_going) stop 1             ! stop program depending on mode
       else
-         call execute_command_line(unit_check_command//' '//trim(name)//' good '//trim(opts))
+         call execute_command_line(G_command//' '//trim(name)//' good '//trim(opts))
       endif
    endif
-!-----------------------------------------------------------------------------------------------------------------------------------
+
    PF=merge('PASSED  :','FAILED  :',ifailed_G == 0)
    if(PF == 'PASSED  :'.and.ipassed_G == 0)then
       PF='UNTESTED:'
@@ -1001,27 +766,27 @@ integer                              :: clicks_now
        & " BAD:",i9,                      &
        & " DURATION:",i14.14              &
        & )')                              &
-       & trim(unit_check_prefix),         &
-       & atleast(name,20),                &
+       & trim(G_prefix),                  &
+       & atleast_(name,20),                &
        & PF,                              &
        & IPASSED_G,                       &
        & IFAILED_G,                       &
        & milliseconds
    else
       write(out,'(a,"check_done:  ",a,1x,a," GOOD:",i0,1x," BAD:",i0)') &
-       & trim(unit_check_prefix),atleast(name,20),PF,IPASSED_G,IFAILED_G
+       & trim(G_prefix),atleast_(name,20),PF,IPASSED_G,IFAILED_G
    endif
    if(present(msg))then
       call stderr(trim(out)//': '//trim(msg))
    else
       call stderr(out)
    endif
-!-----------------------------------------------------------------------------------------------------------------------------------
+
    IPASSED_G=0
    IFAILED_G=0
    IUNTESTED=0
    duration=0.0d0
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 end subroutine unit_check_done
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -1080,25 +845,31 @@ end subroutine unit_check_done
 !!    Public Domain
 subroutine unit_check_bad(name,opts,msg)
 
-! ident_8="@(#) M_framework__verify unit_check_bad(3f) call 'goodbad NAME bad'"
+! ident_6="@(#) M_framework__verify unit_check_bad(3f) call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
 character(len=*),intent(in),optional :: msg
 character(len=:),allocatable         :: msg_local
 character(len=:),allocatable         :: opts_local
+
+   if(G_virgin)call cmdline_()
+
    if(present(msg))then
       msg_local=msg
    else
       msg_local=''
    endif
+
    if(present(opts))then
       opts_local=opts
    else
       opts_local=''
    endif
+
    call unit_check(name,.false.)
    call unit_check_done(name,opts_local,msg_local)
+
 end subroutine unit_check_bad
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -1150,187 +921,51 @@ end subroutine unit_check_bad
 !!    Public Domain
 subroutine unit_check_good(name,opts,msg)
 
-! ident_9="@(#) M_framework__verify unit_check_good(3f) call 'goodbad NAME good'"
+! ident_7="@(#) M_framework__verify unit_check_good(3f) call 'goodbad NAME good'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
 character(len=*),intent(in),optional :: msg
 character(len=:),allocatable         :: msg_local
 character(len=:),allocatable         :: opts_local
+
+   if(G_virgin)call cmdline_()
+
    if(present(msg))then
       msg_local=msg
    else
       msg_local=''
    endif
+
    if(present(opts))then
       opts_local=opts
    else
       opts_local=''
    endif
+
    call unit_check(name,.true.,msg=msg_local)
    call unit_check_done(name,opts_local)
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 end subroutine unit_check_good
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-!>
-!!##NAME
-!!      pdec(3f) - [M_framework__verify] write out string with ASCII decimal equivalent vertically under it
-!!      (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    Usage:
-!!
-!!     subroutine pdec(string)
-!!     character(len=*),intent(in) :: string
-!!
-!!##DESCRIPTION
-!!
-!!    Given a string to print, PDEC() writes out the ASCII Decimal equivalent
-!!    of the string directly underneath it. This can help you to locate
-!!    unprintable characters or non-standard white-space such as a backspace
-!!    character or tab character in input strings that your program could
-!!    not interpret. On output, non-printable characters are replaced with
-!!    a space, and trailing spaces are ignored.
-!!
-!!    You read the numbers vertically.
-!!
-!!    1. ignore trailing spaces
-!!    2. print the character if it has an ADE of 32 on up
-!!    3. print a space if it has an ADE of less than 32
-!!    4. underneath each character print the ADE value vertically
-!!    5. strings are assumed under 32767 characters in length.
-!!       Format integer constants > 32767 are not supported on HP-UX
-!!       when newer compilers are available use unlimited
-!!
-!!##EXAMPLES
-!!
-!!
-!!    Sample program:
-!!
-!!       program demo_pdec
-!!       use M_framework__verify, only : pdec
-!!       call pdec(' ABCDEFG abcdefg    ')
-!!       end program demo_pdec
-!!
-!!    would produce (notice trailing space is trimmed):
-!!
-!!      > ABCDEFG abcdefg
-!!      >0000000000001111
-!!      >3666667739990000
-!!      >2567890127890123
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
-subroutine pdec(string)
+function atleast_(line,length) result(strout)
 
-! ident_10="@(#) M_framework__verify pdec(3f) write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
-
-character(len=*),intent(in) :: string   ! the string to print
-integer                     :: ilen     ! number of characters in string to print
-integer                     :: i        ! counter used to step thru string
-!-----------------------------------------------------------------------------------------------------------------------------------
-   ilen=len_trim(string(:len(string)))  ! get trimmed length of input string
-
-   write(*,101)(char(max(32,ichar(string(i:i)))),i=1,ilen) ! replace lower unprintable characters with spaces
-
-   ! print ADE value of character underneath it
-   write(*,202)     (ichar(string(i:i))/100,    i=1,ilen)
-   write(*,202)(mod( ichar(string(i:i)),100)/10,i=1,ilen)
-   write(*,202)(mod((ichar(string(i:i))),10),   i=1,ilen)
-101   format(32767a1:)  ! format for printing string characters
-202   format(32767i1:)  ! format for printing ADE values
-end subroutine pdec
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-function atleast(line,length) result(strout)
-
-! ident_11="@(#) M_framework__verify atleast(3fp) return string padded to at least specified length"
+! ident_8="@(#) M_framework__verify atleast_(3fp) return string padded to at least specified length"
 
 character(len=*),intent(in)  ::  line
 integer,intent(in)           ::  length
 character(len=max(length,len(trim(line)))) ::  strout
    strout=line
-end function atleast
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-!>
-!!##NAME
-!!    assert(3f) - [M_framework__verify] print filename, linenumber, and message to stderr and stop program
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!    function assert(file,linenum,expr,g1,g2g3,g4,g5,g6,g7,g8,g9)
-!!
-!!     character(len=*),intent(in)  :: file
-!!     character(len=*),intent(in)  :: linenum
-!!     logical,intent(in)           :: expr
-!!     class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
-!!##DESCRIPTION
-!!    assert(3f) prints strings to stderr and then stops program with exit
-!!    code 1 It labels the first string as the filename, the next integer
-!!    parameter as the linenumber, and then up to nine scalar values.
-!!
-!!    It is primarily intended for use by the prep(1) preprocessor $ASSERT
-!!    directive
-!!
-!!##OPTIONS
-!!
-!!    filename   a string assumed to be the current filename when compiling
-!!    linenum    assumed to be the line number of the source code the ASSERT(3f)
-!!               procedure was called at.
-!!    expr       logical value
-!!    g[1-9]  optional value(s) to print as a message before stopping. May
-!!            be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
-!!            or CHARACTER.
-!!
-!!##EXAMPLES
-!!
-!!   Sample program:
-!!
-!!    program demo_assert
-!!    use M_framework__verify, only : assert
-!!    implicit none
-!!    real :: a, toobig=1024
-!!    a=2000
-!!    call assert('myroutine', 101, a > toobig, 'The value is too large', a, ' > ', toobig)
-!!    end program demo_assert
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
-subroutine assert(filename,linen,expr,g1, g2, g3, g4, g5, g6, g7, g8, g9)
-implicit none
-
-! ident_12="@(#) M_framework__verify assert(3f) writes a message to a string composed of any standard scalar types"
-
-character(len=*),intent(in)   :: filename
-integer,intent(in)            :: linen
-logical,intent(in)            :: expr
-class(*),intent(in),optional  :: g1 ,g2 ,g3 ,g4 ,g5
-class(*),intent(in),optional  :: g6 ,g7 ,g8 ,g9
-
-   ! write message to standard error
-   if(.not.expr)then
-      call stderr('ERROR:filename:',filename,':line number:',linen,':',str(g1,g2,g3,g4,g5,g6,g7,g8,g9))
-      stop 1
-   endif
-
-end subroutine assert
+end function atleast_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function julian()
 ! REFERENCE: From Wikipedia, the free encyclopedia 2015-12-19
 
-! ident_13="@(#) M_framework__verify julian(3f) Converts proleptic Gregorian DAT date-time array to Julian Date"
+! ident_9="@(#) M_framework__verify julian(3f) Converts proleptic Gregorian DAT date-time array to Julian Date"
 
 real(kind=realtime)              :: julian   ! Julian Date (non-negative, but may be non-integer)
 integer                          :: dat(8)   ! array like returned by DATE_AND_TIME(3f)
@@ -1361,812 +996,103 @@ end function julian
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-!>
-!!##NAME
-!!    almost(3f) - [M_framework__verify] return true or false if two numbers agree up to specified number of digits
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!    function almost(x,y,digits)
-!!
-!!     class(*),intent(in)         :: x,y
-!!     class(*),intent(in)         :: rdigits
-!!     logical,intent(in),optional :: verbose
-!!     logical                     :: almost
-!!
-!!##DESCRIPTION
-!!    Returns true or false depending on whether the two numbers given agree
-!!    to within the specified number of digits as calculated by ACCDIG(3f).
-!!##OPTIONS
-!!    x,y      expected and calculated values to be compared. May be of
-!!             type REAL, INTEGER, or DOUBLEPRECISION.
-!!    rdigits  real number representing number of digits of precision
-!!             to compare
-!!    verbose  optional value that specifies to print the results of the
-!!             comparison when set to .TRUE..
-!!##RETURNS
-!!    almost   TRUE if the input values compare up to the specified number
-!!             of values
-!!##EXAMPLE
-!!
-!!   sample:
-!!
-!!    program demo_almost
-!!    use M_framework__verify, only : almost
-!!    implicit none
-!!    real    :: x, y
-!!    logical :: z
-!!    integer :: i
-!!    x=1.2345678
-!!    y=1.2300000
-!!    do i=1,8
-!!       z=almost(x,y,real(i),verbose=.true.)
-!!       write(*,*)i,z
-!!    enddo
-!!    end program demo_almost
-!!
-!!   output:
-!!
-!!     *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 1.0
-!!            1   T
-!!     *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 2.0
-!!            2   T
-!!     *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 3.0
-!!            3   F
-!!     *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 4.0
-!!            4   F
-!!     *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 5.0
-!!            5   F
-!!     *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 6.0
-!!            6   F
-!!     *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 7.0
-!!            7   F
-!!     *accdig* significant digit request too high= 8.00000000
-!!     *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 8.0
-!!            8   F
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
-function almost(x,y,digits,verbose)
-use M_framework__journal,  only : journal
+subroutine cmdline_()
+use,intrinsic :: iso_fortran_env, only: compiler_version, compiler_options
+use,intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdin=>INPUT_UNIT, stdout=>OUTPUT_UNIT
+! define arguments and their default values
+logical :: interactive                    ; namelist /args/ interactive
+logical :: help                           ; namelist /args/ help
 
-! ident_14="@(#) M_framework__verify almost(3f) function compares two real numbers up to specified number of digits by calling DP_ACCDIG(3f)"
+namelist /args/ G_debug                   ! debug mode
+namelist /args/ unit_check_level          ! a level that can be used to select different debug levels
+namelist /args/ G_keep_going              ! logical variable that can be used to turn off program termination on errors.
+namelist /args/ G_command                 ! name of command to execute. Defaults to " ".
+namelist /args/ G_no_news_is_good_news
 
-class(*),intent(in)         :: x,y
-class(*),intent(in)         :: digits
-logical,intent(in),optional :: verbose
-logical                     :: almost
+!    Report the beginning and end of execution of each test case or suite
+!    Only run cases or collections whose description contains the given string
+!    Don't colorize the output
 
-logical                     :: verbose_local
-real                        :: acurcy
-real                        :: digits_local
-integer                     :: ind
+character(len=256),save :: input(3)=[character(len=256) :: '&args','','/']
+character(len=256) :: message1, message2
+integer :: i, j, ios, equal_pos
 
-   if(present(verbose))then
-      verbose_local=verbose
-   else
-      verbose_local=.false.
-   endif
+if(G_virgin)then
+   G_virgin=.false.
+   G_interactive=.false.
+   G_command=repeat(' ',4096)
+else
+   G_command = G_command//repeat(' ',4096)
+endif
 
-   digits_local=anyscalar_to_realbig(digits)
-   acurcy=0.0
-   select type(x)
-   type is(real)
-      select type(y)
-      type is(real)
-         call accdig(x,y,digits_local,acurcy,ind)
-         if(verbose_local)then
-            call journal('sc','*almost*','for values',x,y,'agreement of',acurcy,'digits out of requested',digits_local)
+! read arguments from command line
+do i=1,command_argument_count()
+   call get_command_argument(i,input(2))
+   do j=1,len_trim(input(2)) ! blank out leading - or / so "--name=value" or "/name=value" works
+      if(index('/- ',input(2)(j:j)).eq.0)exit
+      input(2)(j:j)=' '
+   enddo
+   read(input,nml=args,iostat=ios,iomsg=message1)
+   ! assume first failure might be because of missing quotes
+   if(ios.ne.0)then
+      equal_pos=index(input(2),'=')
+      if(equal_pos.ne.0)then
+         ! requote and try again
+         input(2)=input(2)(:equal_pos)//'"'//input(2)(equal_pos+1:len_trim(input(2)))//'"'
+         read(input,nml=args,iostat=ios,iomsg=message2)
+         if(ios.ne.0)then
+            write(*,*)'ERROR UNQUOTED:'//trim(message1)//': when reading '//trim(input(2))
+            write(*,*)'ERROR QUOTED  :'//trim(message2)//': when reading '//trim(input(2))
+            stop 2
          endif
-      class default
-         call dp_accdig(x,y,digits_local,acurcy,ind)
-         if(verbose_local)then
-            call journal('sc','*almost*','for values',x,y,'agreement of',acurcy,'digits out of requested',digits_local)
-         endif
-      end select
-   class default
-      call dp_accdig(x,y,digits,acurcy,ind)
-      if(verbose_local)then
-         call journal('sc','*almost*','for values',x,y,'agreement of',acurcy,'digits out of requested',digits_local)
+      else
+         write(*,*)'ERROR:'//trim(message1)//': when reading '//trim(input(2))
+         stop 4
       endif
-   end select
-
-   if(ind == 0)then
-      almost=.true.
-   else
-      almost=.false.
    endif
+enddo
 
-end function almost
-!-----------------------------------------------------------------------------------------------------------------------------------
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!-----------------------------------------------------------------------------------------------------------------------------------
-!>
-!!##NAME
-!!      accdig(3f) - [M_framework__verify] compare two real numbers only up to a specified number of digits
-!!      (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!       subroutine accdig(x,y,digio,acurcy,ind)
-!!
-!!        real,intent(in)     :: X
-!!        real,intent(in)     :: Y
-!!        real,intent(in)     :: DIGI0
-!!        real,intent(out)    :: acurcy
-!!        integer,intent(out) :: ind
-!!
-!!##DESCRIPTION
-!!    This procedure is used to check how closely two numbers agree.
-!!
-!!       call accdig(X,Y,DIGI0,ACURCY,IND)
-!!
-!!    The values X and Y are the numbers to compare, and DIGI0 is the
-!!    threshold number of digits to consider significant in returning IND.
-!!
-!!    If X and Y are considered equal within DIGI0 relative tolerance,
-!!
-!!        IND    = 0, if tolerance is     satisfied.
-!!               = 1, if tolerance is not satisfied.
-!!
-!!    The result ACURCY gives a measure of the number of leading digits in X
-!!    which are the same as the number of leading digits in Y.
-!!
-!!            ACURCY=-log10((X-Y)/Y)   if X != Y and Y != 0
-!!            ACURCY=-log10(X-Y)       if X != Y and Y = 0
-!!            ACURCY=8                 if X=Y
-!!
-!!            ACURCY is never less than -8 or greater than 8
-!!
-!!    TOLERANCE ...
-!!         X and Y are considered equal within DIGI0 relative tolerance,
-!!         if ACURCY is greater than DIGI0.
-!!
-!!    For example, Take some numbers and compare then  to 1.2345678 ...
-!!
-!!       ================================================
-!!       A number     |    ACURCY       |   ACURCY
-!!                    |    1.2345678=Y  |   1.2345678=X
-!!       ================================================
-!!        1.234680    |    3.7900571    |   3.7901275
-!!        1.2345378   |    4.6144510    |   4.6144404
-!!        2.2234568   |    0.096367393  |   0.35188114
-!!        1.2345678   |    8.0000000    |   8.0000000
-!!        1.2345679   |    7.0732967    |   7.0731968
-!!       -1.2345678   |   -0.30103000   |  -0.30103000
-!!       76.234567    |   -1.7835463    |   0.0070906729
-!!        2.4691356   |    0.0          |   0.3010300
-!!        0.0         |    0.0          |  -0.91514942.
-!!
-!!    Due to the typical limits of the log function, the number of
-!!    significant digits in the result is best considered to be three.
-!!
-!!    Notice that 1.2345678=Y produces different values than 1.2345678=X
-!!
-!!    A negative result indicates the two values being compared either do
-!!    not agree in the first digit or they differ with respect to sign. An
-!!    example of two numbers which do not agree in their leading digit (and
-!!    actually differ in order of magnitude) is given above by X=76.234567
-!!    and Y=1.2345678; the accuracy reported is -1.7835463. An example of
-!!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
-!!    here the accuracy reported is -0.30103000.
-!!
-!!##EXAMPLE
-!!
-!!
-!!   Example program:
-!!
-!!    program demo_accdig ! fortran 90 example
-!!    use M_framework__verify, only : accdig
-!!    implicit none
-!!    integer :: digi
-!!    integer :: i10, i20, i30
-!!    integer :: ind, ind1, ind2
-!!    real    :: acurcy, acurcy1, acurcy2
-!!    real    :: a, b
-!!    real    :: vals(9)
-!!    data vals/ &
-!!      &1.234680,   1.2345378,  2.2234568, 1.2345678, &
-!!      &1.2345679, -1.2345678, 76.234567,  2.4691356, &
-!!      &0.0/
-!!       write(*,*)'========================='
-!!       do i10=0,16
-!!          a=1.0
-!!          b=a+1.0/(10**i10)
-!!          call accdig(a,b,8.0,acurcy,ind)
-!!          write(*,*)i10,a,b,acurcy,ind
-!!       enddo
-!!       write(*,*)'========================='
-!!       digi=16
-!!       do i20=0,digi
-!!          a=1.0
-!!          b=a+1.0/(10**i20)
-!!          call accdig(a,b,real(digi),acurcy,ind)
-!!          write(*,*)i20,a,b,acurcy,ind
-!!       enddo
-!!       write(*,*)'========================='
-!!       do i30=1,9
-!!          call accdig(1.2345678,vals(i30),8.0,acurcy1,ind1)
-!!          call accdig(vals(i30),1.2345678,8.0,acurcy2,ind2)
-!!          write(*,*)i30,vals(i30),acurcy1,acurcy2,ind1,ind2
-!!       enddo
-!!    end program demo_accdig
-!!
-!!##REFERENCES
-!!
-!!   based on ...
-!!
-!!    NBS OMNITAB 1980 VERSION 6.01  1/ 1/81. accdig V 7.00  2/14/90. **
-!!       David Hogben,
-!!       Statistical Engineering Division,
-!!       Center for Computing and Applied Mathematics,
-!!       A337 Administration Building,
-!!       National Institute of Standards and Technology,
-!!       Gaithersburg, MD 20899
-!!                      TELEPHONE 301-975-2845
-!!           ORIGINAL VERSION -  October, 1969.
-!!            CURRENT VERSION - February, 1990.
-!!            JSU     VERSION - February, 1991.
-!!
-!!##DEPENDENCIES
-!!    o M_framework__journal(),log10(), abs(1)
-!!
-!!##AUTHOR
-!!    David Hogben, John S. Urban
-!!
-!!##LICENSE
-!!    Public Domain
-!-----------------------------------------------------------------------------------------------------------------------------------
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!-----------------------------------------------------------------------------------------------------------------------------------
-SUBROUTINE accdig(X,Y,digi0,ACURCY,IND)
-use M_framework__journal, only : journal
-implicit none
+G_command=trim(G_command)
+write(*,nml=args,delim='quote')
 
-! ident_15="@(#) M_framework__verify accdig(3f) compare two real numbers only up to a specified number of digits"
-
-!     INPUT ...
-real,intent(in) :: x           ! First  of two real numbers to be compared.
-real,intent(in) :: y           ! Second of two real numbers to be compared.
-real,intent(in) :: digi0       ! Number of digits to be satisfied in relative tolerance.
-!     OUTPUT ...
-integer,intent(out) :: ind     ! = 0, If tolerance is     satisfied.
-! = 1, If tolerance is not satisfied.
-real,intent(out)    :: acurcy  ! = - LOG10(ABS((X-Y)/Y)))
-
-real     :: diff
-real     :: digi
-integer  :: ireal_significant_digits
-!-----------------------------------------------------------------------------------------------------------------------------------
-   ireal_significant_digits=int(log10(2.**digits(0.0))) ! maximum number of significant digits in a real number.
-   digi=digi0
-   if(digi <= 0)then
-      call journal('sc','*accdig* bad number of significant digits=',digi)
-      digi=ireal_significant_digits
-   elseif(digi  >  ireal_significant_digits)then
-      call journal('sc','*accdig* significant digit request too high=',digi)
-      digi=min(digi,real(ireal_significant_digits))
-   endif
-!-----------------------------------------------------------------------------------------------------------------------------------
-   diff = x - y
-   if(diff  ==  0.0) then
-      acurcy = digi
-   elseif(y  ==  0.0) then
-      acurcy = - log10(abs(x))
-   else
-      acurcy = - log10(abs(diff)) + log10(abs(y))
-   endif
-!-----------------------------------------------------------------------------------------------------------------------------------
-   if(acurcy  <  digi ) then
-      ind = 1
-   else
-      ind = 0
-   endif
-!-----------------------------------------------------------------------------------------------------------------------------------
-END SUBROUTINE accdig
-!-----------------------------------------------------------------------------------------------------------------------------------
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!-----------------------------------------------------------------------------------------------------------------------------------
-!>
-!!##NAME
-!!      dp_accdig(3f) - [M_framework__verify] compare two numbers only up to a specified number of digits
-!!      (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!       subroutine dp_accdig(x,y,digio,acurcy,ind)
-!!
-!!        class(*),intent(in)  :: X
-!!        class(*),intent(in)  :: Y
-!!        class(*),intent(in)  :: DIGI0
-!!        real,intent(out)     :: acurcy
-!!        integer,intent(out)  :: ind
-!!
-!!##DESCRIPTION
-!!
-!!    This procedure is used to check how closely two numbers agree.
-!!
-!!       call dp_accdig(X,Y,DIGI0,ACURCY,IND)
-!!
-!!    The values X and Y are the numbers to compare, and DIGI0 is the
-!!    threshold number of digits to consider significant in returning IND.
-!!
-!!    If X and Y are considered equal within DIGI0 relative tolerance,
-!!
-!!        IND    = 0, if tolerance is     satisfied.
-!!               = 1, if tolerance is not satisfied.
-!!
-!!    The result ACURCY gives a measure of the number of leading digits in X
-!!    which are the same as the number of leading digits in Y.
-!!
-!!         ACURCY=-log10((X-Y)/Y)   if X != Y and Y != 0
-!!         ACURCY=-log10(X-Y)       if X != Y and Y = 0
-!!         ACURCY=8                 if X=Y
-!!
-!!         ACURCY is never less than -8 or greater than 8 for REAL values
-!!
-!!    TOLERANCE ...
-!!         X and Y are considered equal within DIGI0 relative tolerance,
-!!         if ACURCY is greater than DIGI0.
-!!
-!!    For example, Take some numbers and compare then  to 1.2345678 ...
-!!
-!!       ================================================
-!!       A number     |    ACURCY       |   ACURCY
-!!                    |    1.2345678=Y  |   1.2345678=X
-!!       ================================================
-!!        1.234680    |    3.7900571    |   3.7901275
-!!        1.2345378   |    4.6144510    |   4.6144404
-!!        2.2234568   |    0.096367393  |   0.35188114
-!!        1.2345678   |    8.0000000    |   8.0000000
-!!        1.2345679   |    7.0732967    |   7.0731968
-!!       -1.2345678   |   -0.30103000   |  -0.30103000
-!!       76.234567    |   -1.7835463    |   0.0070906729
-!!        2.4691356   |    0.0          |   0.3010300
-!!        0.0         |    0.0          |  -0.91514942.
-!!
-!!    Due to the typical limits of the log function, the number of
-!!    significant digits in the result is best considered to be three.
-!!
-!!    Notice that 1.2345678=Y produces different values than 1.2345678=X
-!!
-!!    A negative result indicates the two values being compared either do
-!!    not agree in the first digit or they differ with respect to sign. An
-!!    example of two numbers which do not agree in their leading digit (and
-!!    actually differ in order of magnitude) is given above by X=76.234567
-!!    and Y=1.2345678; the accuracy reported is -1.7835463. An example of
-!!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
-!!    here the accuracy reported is -0.30103000.
-!!
-!!##EXAMPLE
-!!
-!!
-!!   Example program:
-!!
-!!    program demo_dp_accdig ! fortran 90 example
-!!    use M_framework__verify, only : dp_accdig
-!!    implicit none
-!!    integer         :: digi
-!!    doubleprecision :: a, b
-!!    integer         :: i10, i20, i30
-!!    integer         :: ind, ind1, ind2
-!!    real            :: acurcy, acurcy1, acurcy2
-!!    doubleprecision :: vals(9)
-!!    data vals/ &
-!!      &1.234680d0,   1.2345378d0,  2.2234568d0, 1.2345678d0, &
-!!      &1.2345679d0, -1.2345678d0, 76.234567d0,  2.4691356d0, &
-!!      &0.0d0/
-!!       write(*,*)'========================='
-!!       do i10=0,16
-!!          a=1.0d0
-!!          b=a+1.0d0/(10**i10)
-!!          call dp_accdig(a,b,8.0,acurcy,ind)
-!!          write(*,*)i10,a,b,acurcy,ind
-!!       enddo
-!!       write(*,*)'========================='
-!!       digi=16
-!!       do i20=0,digi
-!!          a=1.0d0
-!!          b=a+1.0d0/(10**i20)
-!!          call dp_accdig(a,b,dble(digi),acurcy,ind)
-!!          write(*,*)i20,a,b,acurcy,ind
-!!       enddo
-!!       write(*,*)'========================='
-!!       do i30=1,9
-!!          call dp_accdig(1.2345678d0,vals(i30),8.0,acurcy1,ind1)
-!!          call dp_accdig(vals(i30),1.2345678d0,8.0,acurcy2,ind2)
-!!          write(*,*)i30,vals(i30),acurcy1,acurcy2,ind1,ind2
-!!       enddo
-!!    end program demo_dp_accdig
-!!
-!!##NOTES
-!!##REFERENCES
-!!
-!!   based on ...
-!!
-!!    NBS OMNITAB 1980 VERSION 6.01  1/ 1/81. dp_accdig V 7.00  2/14/90. **
-!!       David Hogben,
-!!       Statistical Engineering Division,
-!!       Center for Computing and Applied Mathematics,
-!!       A337 Administration Building,
-!!       National Institute of Standards and Technology,
-!!       Gaithersburg, MD 20899
-!!                      TELEPHONE 301-975-2845
-!!           ORIGINAL VERSION -  October, 1969.
-!!            CURRENT VERSION - February, 1990.
-!!            JSU     VERSION - February, 1991.
-!!
-!!##DEPENDENCIES
-!!         o M_framework__journal(), log10(), abs(1)
-!!
-!!##AUTHORS
-!!      David Hogben, John S. Urban
-!!
-!!##LICENSE
-!!      Public Domain
-!-----------------------------------------------------------------------------------------------------------------------------------
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!-----------------------------------------------------------------------------------------------------------------------------------
-SUBROUTINE dp_accdig(x,y,digi0,ACURCY,IND)
-#ifdef __NVCOMPILER
-use,intrinsic :: iso_fortran_env, only : wp=>real64
-#else
-use,intrinsic :: iso_fortran_env, only : wp=>real128
-#endif
-use M_framework__journal,  only : journal
-implicit none
-
-! ident_16="@(#) M_framework__verify dp_accdig(3f) compare two values only up to a specified number of digits"
-
-!  INPUT ...
-class(*),intent(in)  :: x           ! FIRST  OF TWO NUMBERS TO BE COMPARED.
-class(*),intent(in)  :: y           ! SECOND OF TWO NUMBERS TO BE COMPARED.
-class(*),intent(in)  :: digi0       ! NUMBER OF DIGITS TO BE SATISFIED IN RELATIVE TOLERANCE.
-
-real(kind=wp)   :: x_local
-real(kind=wp)   :: y_local
-
-!  OUTPUT ...
-integer,intent(out)  :: ind         ! = 0, IF TOLERANCE IS     SATISFIED.
-                                              ! = 1, IF TOLERANCE IS NOT SATISFIED.
-real,intent(out)     :: acurcy      ! = - LOG10(ABS((x_local-y_local)/y_local)))
-real(kind=wp)   :: diff
-real(kind=wp)   :: digi
-integer              :: idble_significant_digits
-!-----------------------------------------------------------------------------------------------------------------------------------
-   x_local=anyscalar_to_realbig(x)
-   y_local=anyscalar_to_realbig(y)
-   digi=anyscalar_to_realbig(digi0)
-!-----------------------------------------------------------------------------------------------------------------------------------
-   idble_significant_digits=int(log10(2.0_wp**digits(0.0_wp))) ! MAXIMUM NUMBER OF SIGNIFICANT DIGITS IN A REAL128 NUMBER.
-   if(digi <= 0)then
-      call journal('sc','*dp_accdig* bad number of significant digits=',real(digi,kind=wp))
-      digi=idble_significant_digits
-   elseif(digi  >  idble_significant_digits)then
-      call journal('sc','*dp_accdig* significant digit request too high=',real(digi,kind=wp))
-      digi=min(digi,real(idble_significant_digits,kind=wp))
-   endif
-   diff = x_local - y_local
-   if(diff  ==  0.0_wp) then
-      acurcy = digi
-   elseif(y_local  ==  0.0_wp) then
-      acurcy = - log10(abs(x_local))
-   else
-      acurcy = - log10(abs(diff)) + log10(abs(y_local))
-   endif
-   if(acurcy  <  digi ) then
-      ind = 1
-   else
-      ind = 0
-   endif
-end subroutine dp_accdig
-!-----------------------------------------------------------------------------------------------------------------------------------
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!-----------------------------------------------------------------------------------------------------------------------------------
-!>
-!!##NAME
-!!   in_margin(3f) - [M_framework__verify] check if two reals are approximately equal using a relative margin
-!!
-!!##SYNOPSIS
-!!
-!!     elemental pure function in_margin( expected_value, measured_value, allowed_margin )
-!!
-!!      real, intent(in)    :: expected_value
-!!      real, intent(in)    :: measured_value
-!!      real, intent(in)    :: allowed_margin
-!!      class(*),intent(in) :: invalue
-!!
-!!##DESCRIPTION
-!!   Compare two values to see if they are relatively equal using the
-!!   specified allowed margin. That is, see if VALUE_MEASURED is in
-!!   the range VALUE_EXPECTED +- ALLOWED_ERROR where the allowed error
-!!   varies with the magnitude of the values, such that the allowed error
-!!   is margin * average magnitude of measured and expected).
-!!
-!!   So the allowed error is smaller when the magnitudes are smaller.
-!!
-!!##OPTIONS
-!!   expected_value   First value
-!!   measured_value   Second value
-!!   allowed_margin   Allowed relative margin
-!!
-!!##EXAMPLE
-!!
-!!   Sample program:
-!!
-!!    program demo_in_margin
-!!    use :: M_framework__verify, only : in_margin
-!!    implicit none
-!!    write(*,*) in_margin(4.00000,3.99999,0.000000001)
-!!    write(*,*) in_margin(4.00000,3.99999,0.00000001)
-!!    write(*,*) in_margin(4.00000,3.99999,0.0000001)
-!!    write(*,*) in_margin(4.00000,3.99999,0.000001)
-!!
-!!    write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], [3.9,39.9,399.9,3999.9,39999.9] ,0.000001)
-!!    write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], [3.9,39.9,399.9,3999.9,39999.9] ,0.00001)
-!!
-!!    write(*,*) in_margin(4.00000,3.99999,0.00001)
-!!    write(*,*) in_margin(4.00000,3.99999,0.0001)
-!!    write(*,*) in_margin(4.00000,3.99999,0.001)
-!!    write(*,*) in_margin(4.00000,3.99999,0.01)
-!!
-!!    end program demo_in_margin
-!!
-!!   Results:
-!!
-!!     F
-!!     F
-!!     F
-!!     F
-!!     F F F F F
-!!     F F F F T
-!!     T
-!!     T
-!!     T
-!!     T
-!===================================================================================================================================
-elemental impure function in_margin(expected_value, measured_value, allowed_margin)
-implicit none
-
-! ident_17="@(#) M_framework__verify in_margin(3f) check if two reals are approximately equal using a relative margin"
-
-class(*),intent(in) :: expected_value, measured_value, allowed_margin
-logical             :: in_margin
-
-   doubleprecision     :: expected, measured, margin
-
-   expected=anyscalar_to_double(expected_value)
-   measured=anyscalar_to_double(measured_value)
-   margin=anyscalar_to_double(allowed_margin)
-
-   if ( abs(expected-measured) > 0.50d0 * margin * (abs(expected)+abs(measured)) ) then
-      in_margin=.false.  ! values not comparable
-   else
-      in_margin=.true.   ! values comparable
-   endif
-
-end function in_margin
+end subroutine cmdline_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-pure elemental function round_to_power(val,n)
+subroutine unit_check_mode(debug, prefix, keep_going, level, command, no_news_is_good_news)
+logical,optional, intent(in)          :: debug
+logical,optional, intent(in)          :: keep_going
+logical,optional, intent(in)          :: no_news_is_good_news
+character(len=*),optional, intent(in) :: command
+character(len=*),optional, intent(in) :: prefix
+integer,optional, intent(in)          :: level
 
-! ident_18="@(#) M_framework__verify round_to_power(3f) round val to specified given decimal (power) position"
+!integer,optional,intent(in) :: unit_check_lun
 
-real,intent(in) :: val
-integer,intent(in) :: n
-real :: round_to_power
-   round_to_power = anint(val*10.0**n)/10.0**n
-end function round_to_power
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-function round(val,idigits0)
-implicit none
-
-! ident_19="@(#) M_framework__verify round(3f) round val to specified number of significant digits"
-
-integer,parameter          :: dp=kind(0.0d0)
-real(kind=dp),intent(in)   :: val
-integer,intent(in)         :: idigits0
-   integer                 :: idigits,ipow
-   real(kind=dp)           :: aval,rnormal
-   real(kind=dp)           :: round
-!  this does not work very well because of round-off errors.
-!  Make a better one, probably have to use machine-dependent bit shifting
-   ! make sure a reasonable number of digits has been requested
-   idigits=max(1,idigits0)
-   aval=abs(val)
-!  select a power that will normalize the number
-!  (put it in the range 1 > abs(val) <= 0)
-   if(aval >= 1)then
-      ipow=int(log10(aval)+1)
-   else
-      ipow=int(log10(aval))
+   if(G_virgin)then
+      G_command=repeat(' ',4096)
+      G_debug=.false.
+      G_prefix=''
+      G_keep_going=.true.
+      unit_check_level=0
+      G_virgin=.false.
+      G_interactive=.false.
    endif
-   rnormal=val/(10.0d0**ipow)
-   if(rnormal == 1)then
-      ipow=ipow+1
-   endif
-   !normalize, multiply by 10*idigits to an integer, and so on
-   round=real(anint(val*10.d0**(idigits-ipow)))*10.d0**(ipow-idigits)
-end function round
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-!>
-!!##NAME
-!!   significant(3f) - [M_framework__verify] round val to specified number of significant digits
-!!
-!!##SYNOPSIS
-!!
-!!     pure elemental function significant(val,digits,round)
-!!
-!!      real,intent(in)                      :: val
-!!      integer,intent(in)                   :: digits
-!!      character(len=*),intent(in),optional :: round
-!!      real                                 :: significant
-!!
-!!##DESCRIPTION
-!!
-!! Round real value to specified number of significant digits
-!!
-!! val     value to round
-!! digits  number of significant digits to produce
-!! round   Use the round edit descriptor
-!!
-!!           RU  UP : the value resulting from conversion shall be the
-!!                    smallest representable value that is greater than or
-!!                    equal to the original value
-!!           RD  DOWN : the value resulting from conversion shall be the
-!!                    largest representable value that is less than or
-!!                    equal to the original value
-!!           RZ  ZERO : the value resulting from conversion shall be the value
-!!                    closest to the original value and no greater in
-!!                    magnitude than the original value.
-!!           RN  NEAREST : modeis NEAREST,thevalueresulting from conversion
-!!                        shall be the closer of the two nearest
-!!                        representable values if one is closer than the
-!!                        other. If the two nearest representable values
-!!                        are equidistant from the original value, it is
-!!                        processor dependent which one of them is chosen.
-!!           RC  COMPATIBLE : the value resulting from conversion shall be
-!!                          the closer of the two nearest representable
-!!                          values or the value away from zero if halfway
-!!                          between them.
-!!           RP  PROCESSOR_DEFINED : rounding during conversion shall be
-!!                                   a processor-dependent default mode,
-!!                                   which may correspond to one of the
-!!                                   other modes.
-!!
-!!##EXAMPLE
-!!
-!!  Sample program
-!!
-!!    program demo_significant
-!!    use M_framework__verify, only : significant
-!!    implicit none
-!!    integer :: i
-!!    real :: r, v
-!!    character(len=*),parameter :: g='(*(g0.7,1x))'
-!!
-!!       write(*,g)significant([8765.43210,0.1234567890],5)
-!!
-!!       write(*,*)'default:',1.23456789012345
-!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9])
-!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RU'),'RU'
-!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RD'),'RD'
-!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RZ'),'RZ'
-!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RN'),'RN'
-!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RC'),'RC'
-!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RP'),'RP'
-!!    end program demo_significant
-!!
-!!   Results:
-!!
-!!    8765.400 .1234600
-!!     default:   1.234568
-!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568
-!!    2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RU
-!!    1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 1.234567 1.234568 1.234568 RD
-!!    1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 1.234567 1.234568 1.234568 RZ
-!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RN
-!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RC
-!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RP
-pure elemental function significant(val,digits,round)
 
-! ident_20="@(#) M_framework__verify significant(3f) round val to specified number of significant digits"
+   if (present(command))              G_command=command
+   if (present(debug))                G_debug=debug
+   if (present(prefix))               G_prefix=prefix
 
-real,intent(in)                      :: val
-integer,intent(in)                   :: digits
-character(len=*),intent(in),optional :: round
-real                                 :: significant
-character(len=80)                    :: line,fmt
-   if(present(round))then
-      write(fmt,'("(",a,",e0.",i0,")")')trim(round),digits ! build e0.N format to write specified number of digits as 0.NNNNN+EE
-   else
-      write(fmt,'("(e0.",i0,")")')digits ! build e0.N format to write specified number of digits as 0.NNNNN+EE
-   endif
-   write(line,fmt)val                  ! write with specified number of significant diguts
-   read(line,'(e50.20)')significant    ! read back into a value
-end function significant
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-pure elemental function anyscalar_to_realbig(valuein) result(d_out)
-use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
-#ifdef __NVCOMPILER
-use,intrinsic :: iso_fortran_env, only : wp=>real64
-#else
-use,intrinsic :: iso_fortran_env, only : wp=>real128
-#endif
-implicit none
+   if (present(keep_going))           G_keep_going=keep_going
+   if (present(level))                unit_check_level=level
+   if (present(no_news_is_good_news)) G_no_news_is_good_news=no_news_is_good_news
 
-! ident_21="@(#) M_framework__verify anyscalar_to_realbig(3f) convert integer or real parameter of any kind to real128 or biggest available"
+   G_virgin=.false.
 
-class(*),intent(in)          :: valuein
-real(kind=wp)           :: d_out
-character(len=3)             :: readable
-   select type(valuein)
-   type is (integer(kind=int8));   d_out=real(valuein,kind=wp)
-   type is (integer(kind=int16));  d_out=real(valuein,kind=wp)
-   type is (integer(kind=int32));  d_out=real(valuein,kind=wp)
-   type is (integer(kind=int64));  d_out=real(valuein,kind=wp)
-   type is (real(kind=real32));    d_out=real(valuein,kind=wp)
-   type is (real(kind=real64));    d_out=real(valuein,kind=wp)
-#ifdef __NVCOMPILER
-#else
-   Type is (real(kind=real128));   d_out=valuein
-#endif
-   type is (logical);              d_out=merge(0.0_wp,1.0_wp,valuein)
-   type is (character(len=*));     read(valuein,*) d_out
-   class default
-    !!d_out=huge(0.0_wp)
-    readable='NaN'
-    read(readable,*)d_out
-    !!stop '*M_framework__verify::anyscalar_to_realbig: unknown type'
-   end select
-end function anyscalar_to_realbig
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-pure elemental function anyscalar_to_double(valuein) result(d_out)
-use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
-implicit none
-
-! ident_22="@(#) M_framework__verify anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision"
-
-class(*),intent(in)       :: valuein
-doubleprecision           :: d_out
-doubleprecision,parameter :: big=huge(0.0d0)
-   select type(valuein)
-   type is (integer(kind=int8));   d_out=dble(valuein)
-   type is (integer(kind=int16));  d_out=dble(valuein)
-   type is (integer(kind=int32));  d_out=dble(valuein)
-   type is (integer(kind=int64));  d_out=dble(valuein)
-   type is (real(kind=real32));    d_out=dble(valuein)
-   type is (real(kind=real64));    d_out=dble(valuein)
-#ifdef __NVCOMPILER
-#else
-   Type is (real(kind=real128))
-#endif
-      !!if(valuein > big)then
-      !!   write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
-      !!endif
-      d_out=dble(valuein)
-   type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
-   type is (character(len=*));      read(valuein,*) d_out
-   !type is (real(kind=real128))
-   !   if(valuein > big)then
-   !      write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
-   !   endif
-   !   d_out=dble(valuein)
-   class default
-     d_out=0.0d0
-     !!stop '*M_framework__verify::anyscalar_to_double: unknown type'
-   end select
-end function anyscalar_to_double
+!integer,parameter,public   :: realtime=kind(0.0d0)    ! type for julian days
+!integer,parameter,public   :: EXIT_SUCCESS=0
+!integer,parameter,public   :: EXIT_FAILURE=1
+end subroutine unit_check_mode
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

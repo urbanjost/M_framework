@@ -42,13 +42,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
 <!--
-<h5><a href="https://github.com/urbanjost/M_framework__verify">[UP]</a></h5>
+<h5><a href="https://github.com/urbanjost/M_strings">[UP]</a></h5>
 <button type="button" onclick="javascript:history.back()">Back</button>
 -->
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>fstop (3m_framework__verify)</NOBR><HR></H1>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>string_to_value (3m_strings)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -56,16 +56,18 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-fstop(3f) - [M_framework__verify] call stop with both a number and a message
-(LICENSE:PD)
-</BLOCKQUOTE>
+<B>string_to_value(3f) </B>- [M_strings:TYPE] subroutine returns numeric
+<B>value from string
+</B><B>(LICENSE:PD)
+</B><B>
+</B></BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
 <A HREF=#3>Options</A><BR>
-<A HREF=#4>Examples</A><BR>
-<A HREF=#5>See Also</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
 <A HREF=#6>Author</A><BR>
 <A HREF=#7>License</A><BR>
 </BLOCKQUOTE>
@@ -75,12 +77,13 @@ fstop(3f) - [M_framework__verify] call stop with both a number and a message
 
 </A>
 <BLOCKQUOTE>
-subroutine fstop(ierr,stdout,stderr)
-<P>
 <PRE>
-    integer,intent(in)                   :: ierr
-    character(len=*),intent(in),optional :: stdout
-    character(len=*),intent(in),optional :: stderr
+subroutine <B>string_to_value</B>(chars,valu,ierr)
+<P>
+    character(len=*),intent(in)              :: chars   ! input string
+    integer|real|doubleprecision,intent(out) :: valu
+    integer,intent(out)                      :: ierr
+<P>
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
@@ -89,10 +92,17 @@ subroutine fstop(ierr,stdout,stderr)
 
 </A>
 <BLOCKQUOTE>
-FSTOP(3f) call STOP(3f). What a call to STOP does is very system
-dependent, so using an abstraction layer is useful, as it allows just
-the fstop() routine to be changed; and STOP does not allow a variable
-to be used on the numeric access status (this has changed at f2015).
+Returns a numeric value from a numeric character string.
+<P>
+Works with any g-format input, including integer, real, and
+exponential. If the input string begins with "B", "Z", or "O"
+and otherwise represents a positive whole number it is assumed to
+be a binary, hexadecimal, or octal value. If the string contains
+commas they are removed. If the string is of the form NN:MMM&#46;&#46;&#46; or
+NN#MMM then NN is assumed to be the base of the whole number.
+<P>
+If an error occurs in the READ, IOSTAT is returned in IERR and
+value is set to zero. if no error occurs, IERR=0.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -102,55 +112,48 @@ to be used on the numeric access status (this has changed at f2015).
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B>ierr</B> </TD><TD valign=bottom>
-- value in range 0 to 32
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>stdout</B> </TD><TD valign=bottom>
-- description to be printed to standard output
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>stderr</B> </TD><TD valign=bottom>
-- description to be printed to standard error
+<B>CHARS</B> </TD><TD valign=bottom>
+input string to read numeric value from
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
-     <H3>EXAMPLES</H3>
+     <H3>RETURNS</H3>
 
 </A>
 <BLOCKQUOTE>
-Sample program:
-<P>
-<PRE>
-   program demo_fstop
-   use M_framework__verify, only: fstop
-   implicit none
-   integer :: int
-   !*!write(*,*)&#146;Enter stop value&#146;
-   !*!read(*,*) int
-   int=25
-   select case(int)
-   case(10) ; call fstop(int)
-   case(20) ; call fstop(int,stderr=&#146;error: program will now stop&#146;)
-   case(25) ; call fstop(int,stdout=&#146;stdout message&#146;,stderr=&#146;stderr message&#146;)
-   case(30) ; call fstop(int,stdout=&#146;error: program will now stop&#146;)
-   case default
-              call fstop(int)
-   endselect
-<P>
-   end program demo_fstop
-<P>
-</PRE>
-Results:
-</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>VALU</B> </TD><TD valign=bottom>
+numeric value returned. May be INTEGER, REAL, or
+DOUBLEPRECISION.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IERR</B> </TD><TD valign=bottom>
+error flag (0 == no error)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>SEE ALSO</H3>
+     <H3>EXAMPLE</H3>
 
 </A>
 <BLOCKQUOTE>
-Look for common extensions, such as abort(3f), backtrace(3f)
+Sample Program:
+<P>
+<PRE>
+   program demo_string_to_value
+    use M_strings, only: string_to_value
+    implicit none
+    real :: value
+    integer :: ierr
+    character(len=80) :: string
+       string=&#146; -40.5e-2 &#146;
+       call string_to_value(string,value,ierr)
+       write(*,*) &#146;value of string [&#146;//trim(string)//&#146;] is &#146;,value
+   end program demo_string_to_value
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=6>
 
@@ -169,8 +172,8 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>fstop (3m_framework__verify)</TD> <TD align=right width=33%><I>April 16, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2b81c02f-b2de-451b-83ff-007c76506ca8 using man macros.</FONT>
-<br><br><center><img src="images/fstop.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>string_to_value (3m_strings)</TD> <TD align=right width=33%><I>December 24, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b5f400df-dddf-437e-b0db-2842f2af28a3 using man macros.</FONT>
+<br><br><center><img src="images/string_to_value.gif"></center>
 </div>
 </div>
 </body>

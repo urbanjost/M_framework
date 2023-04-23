@@ -1,5 +1,5 @@
      program demo_in_margin
-     use :: M_framework__verify, only : in_margin
+     use :: M_framework__approx, only : in_margin
      implicit none
      write(*,*) in_margin(4.00000,3.99999,0.000000001)
      write(*,*) in_margin(4.00000,3.99999,0.00000001)

@@ -1,5 +1,5 @@
      program demo_significant
-     use M_framework__verify, only : significant
+     use M_framework__approx, only : significant
      implicit none
      integer :: i
      real :: r, v

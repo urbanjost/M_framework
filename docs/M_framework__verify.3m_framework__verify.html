@@ -80,19 +80,15 @@ processing, debugging procedures and unit testing.
 Module procedures
 <P>
 <PRE>
-   use M_framework__verify, only : unit_check, unit_check_start, unit_check_done, unit_check_stop
-   use M_framework__verify, only : unit_check_good, unit_check_bad
-   use M_framework__verify, only : unit_check_msg
-   use M_framework__verify, only : debug
-   use M_framework__verify, only : fstop
-   use M_framework__verify, only : assert
-<P>
+   use M_framework__verify, only : unit_check, unit_check_start,     &
+                                   unit_check_done, unit_check_stop, &
+                                   unit_check_good, unit_check_bad,  &
+                                   unit_check_msg, unit_check_mode,  &
 </PRE>
 Module values
 <P>
 <PRE>
-   use M_framework__verify, only : unit_check_limit, unit_check_keep_going
-   use M_framework__verify, only : unit_check_command
+   use M_framework__verify, only : unit_check_level
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -147,23 +143,18 @@ provides for a non-zero exit code if any tests fail
     <H4>&nbsp; &nbsp; SET MODES</H4>
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>unit_check_keep_going</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-logical variable that can be used to turn off
-program termination on errors.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>unit_check_level</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-An integer that can be used to specify
-different debug levels
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>unit_check_command</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-name of command to execute. Defaults to the name
-"".
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+call unit_check_mode(command,keep_going,level)
+<P>
+<PRE>
+       command     name of command to execute. Defaults to the name
+       keep_going  logical variable that can be used to turn off
+                   program termination on errors.
+       level       An integer that can be used to specify
+                   different debug levels
+<P>
+</PRE>
+</BLOCKQUOTE>
 <A name=>
 
     <H4>&nbsp; &nbsp; UNIT TESTS</H4>
@@ -171,16 +162,14 @@ name of command to execute. Defaults to the name
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>unit_check_start(3f)</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B>unit_check_start(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 start tests of a procedure and optionally call
 </TD></TR>
-<TR></TR></TABLE><!-- .nf -->
+<TR><TD colspan=2>
 <PRE>
                              command NAME start &#46;&#46;&#46;
 </PRE>
-<TABLE cellpadding=3><!-- tsb:                              command NAME start &#46;&#46;&#46;
- -->
-<TR></TR><TR></TR>
+</TD></TR>
 <TR valign=top><TD colspan=2>
 <B>unit_check(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 if expression is false optionally call
@@ -242,28 +231,6 @@ and stop program by default
 <B>unit_check_msg(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 write message
 </TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE><A name=>
-
-    <H4>&nbsp; &nbsp; BASIC DEBUGGING</H4>
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>fstop(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-calls &#146;STOP VALUE&#146; passing in a value (1-32),
-with optional message
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>pdec(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-write ASCII Decimal Equivalent (ADE) numbers
-vertically beneath string
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>debug</B> </TD><TD valign=bottom>
-logical variable that can be tested by routines
-as a flag to process debug statements.
-</TD></TR>
 <TR></TR></TABLE>For unit testing, the existence of a command called "goodbad" is
 initially assumed. This is generally a script that makes entries
 for each unit in an SQLite data file which is then used to create
@@ -274,8 +241,8 @@ should be included in this distribution as an example.
 The flexibility introduced by calling an external script or program
 is that The goodbad(1) command can be changed as desired to write CSV
 files or simple logs or to notify developers with e-mail as desired.
-</BLOCKQUOTE>
-<A name=>
+</TD></TR>
+<TR></TR></TABLE><A name=>
 
     <H4>&nbsp; &nbsp; RELATED FUNCTIONS</H4>
 </A>
@@ -382,12 +349,10 @@ Sample program
     end module M_framework__demo
 <P>
     program demo_M_framework__verify
-    use M_framework__demo,  only: test_suite_M_demo
-    use M_framework__verify, only: unit_check_command, unit_check_keep_going,unit_check_level
-    unit_check_command=&#146;&#146;
-    unit_check_keep_going=.true.
-    unit_check_level=0
-      call test_suite_M_demo
+    use M_framework__demo,   only: test_suite_M_demo
+    use M_framework__verify, only: unit_check_mode
+       call unit_check_mode(command=&#146;&#146;,level=0,keep_going=.true.)
+       call test_suite_M_demo()
     end program demo_M_framework__verify
 <P>
 </PRE>
@@ -421,7 +386,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework__verify (3m_framework__verify)</TD> <TD align=right width=33%><I>April 16, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bcdf9b6f-af59-45fe-bfaf-0d64024b99c1 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework__verify (3m_framework__verify)</TD> <TD align=right width=33%><I>April 23, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a5ba92e7-f54e-49d7-be49-62415e4208e0 using man macros.</FONT>
 <br><br><center><img src="images/M_framework__verify.gif"></center>
 </div>
 </div>

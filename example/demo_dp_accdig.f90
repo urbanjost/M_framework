@@ -1,5 +1,5 @@
      program demo_dp_accdig ! fortran 90 example
-     use M_framework__verify, only : dp_accdig
+     use M_framework__approx, only : dp_accdig
      implicit none
      integer         :: digi
      doubleprecision :: a, b

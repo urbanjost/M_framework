@@ -80,10 +80,8 @@
       end module M_framework__demo
 
       program demo_M_framework__verify
-      use M_framework__demo,  only: test_suite_M_demo
-      use M_framework__verify, only: unit_check_command, unit_check_keep_going,unit_check_level
-      unit_check_command=''
-      unit_check_keep_going=.true.
-      unit_check_level=0
-        call test_suite_M_demo
+      use M_framework__demo,   only: test_suite_M_demo
+      use M_framework__verify, only: unit_check_mode
+         call unit_check_mode(command='',level=0,keep_going=.true.)
+         call test_suite_M_demo()
       end program demo_M_framework__verify

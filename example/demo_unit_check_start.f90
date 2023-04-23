@@ -1,8 +1,5 @@
       program demo_unit_check_start
-      use M_framework__verify, only: unit_check_start
-      use M_framework__verify, only: unit_check
-      use M_framework__verify, only: unit_check_done
-
+      use M_framework__verify, only: unit_check_start, unit_check, unit_check_done
       implicit none
       integer :: ival
       call unit_check_start('myroutine')

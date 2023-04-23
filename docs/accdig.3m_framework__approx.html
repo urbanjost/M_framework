@@ -42,13 +42,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
 <!--
-<h5><a href="https://github.com/urbanjost/M_framework__verify">[UP]</a></h5>
+<h5><a href="https://github.com/urbanjost/M_framework__approx">[UP]</a></h5>
 <button type="button" onclick="javascript:history.back()">Back</button>
 -->
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>dp_accdig (3m_framework__verify)</NOBR><HR></H1>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>accdig (3m_framework__approx)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -56,7 +56,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-dp_accdig(3f) - [M_framework__verify] compare two numbers only up to a specified number of digits
+accdig(3f) - [M_framework__approx] compare two real numbers only up to a specified number of digits
 (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
@@ -65,26 +65,25 @@ dp_accdig(3f) - [M_framework__verify] compare two numbers only up to a specified
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
 <A HREF=#3>Example</A><BR>
-<A HREF=#4>Notes</A><BR>
-<A HREF=#5>References</A><BR>
-<A HREF=#6>Dependencies</A><BR>
-<A HREF=#7>Authors</A><BR>
-<A HREF=#8>License</A><BR>
+<A HREF=#4>References</A><BR>
+<A HREF=#5>Dependencies</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
 </BLOCKQUOTE>
-<A name=9>
+<A name=8>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-subroutine dp_accdig(x,y,digio,acurcy,ind)
+subroutine accdig(x,y,digio,acurcy,ind)
 <P>
 <PRE>
-       class(*),intent(in)  :: X
-       class(*),intent(in)  :: Y
-       class(*),intent(in)  :: DIGI0
-       real,intent(out)     :: acurcy
-       integer,intent(out)  :: ind
+       real,intent(in)     :: X
+       real,intent(in)     :: Y
+       real,intent(in)     :: DIGI0
+       real,intent(out)    :: acurcy
+       integer,intent(out) :: ind
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -94,11 +93,10 @@ subroutine dp_accdig(x,y,digio,acurcy,ind)
 
 </A>
 <BLOCKQUOTE>
-<P>
 This procedure is used to check how closely two numbers agree.
 <P>
 <PRE>
-      call dp_accdig(X,Y,DIGI0,ACURCY,IND)
+      call accdig(X,Y,DIGI0,ACURCY,IND)
 <P>
 </PRE>
 The values X and Y are the numbers to compare, and DIGI0 is the
@@ -115,11 +113,11 @@ The result ACURCY gives a measure of the number of leading digits in X
 which are the same as the number of leading digits in Y.
 <P>
 <PRE>
-        ACURCY=-log10((X-Y)/Y)   if X != Y and Y != 0
-        ACURCY=-log10(X-Y)       if X != Y and Y = 0
-        ACURCY=8                 if X=Y
+           ACURCY=-log10((X-Y)/Y)   if X != Y and Y != 0
+           ACURCY=-log10(X-Y)       if X != Y and Y = 0
+           ACURCY=8                 if X=Y
 <P>
-        ACURCY is never less than -8 or greater than 8 for REAL values
+           ACURCY is never less than -8 or greater than 8
 <P>
 </PRE>
 TOLERANCE &#46;&#46;&#46;
@@ -172,52 +170,45 @@ here the accuracy reported is <B>-0.30103000</B>.
 Example program:
 <P>
 <PRE>
-   program demo_dp_accdig ! fortran 90 example
-   use M_framework__verify, only : dp_accdig
+   program demo_accdig ! fortran 90 example
+   use M_framework__approx, only : accdig
    implicit none
-   integer         :: digi
-   doubleprecision :: a, b
-   integer         :: i10, i20, i30
-   integer         :: ind, ind1, ind2
-   real            :: acurcy, acurcy1, acurcy2
-   doubleprecision :: vals(9)
+   integer :: digi
+   integer :: i10, i20, i30
+   integer :: ind, ind1, ind2
+   real    :: acurcy, acurcy1, acurcy2
+   real    :: a, b
+   real    :: vals(9)
    data vals/ &
-     &1.234680d0,   1.2345378d0,  2.2234568d0, 1.2345678d0, &
-     &1.2345679d0, -1.2345678d0, 76.234567d0,  2.4691356d0, &
-     &0.0d0/
+     &1.234680,   1.2345378,  2.2234568, 1.2345678, &
+     &1.2345679, -1.2345678, 76.234567,  2.4691356, &
+     &0.0/
       write(*,*)&#146;=========================&#146;
       do i10=0,16
-         a=1.0d0
-         b=a+1.0d0/(10**i10)
-         call dp_accdig(a,b,8.0,acurcy,ind)
+         a=1.0
+         b=a+1.0/(10**i10)
+         call accdig(a,b,8.0,acurcy,ind)
          write(*,*)i10,a,b,acurcy,ind
       enddo
       write(*,*)&#146;=========================&#146;
       digi=16
       do i20=0,digi
-         a=1.0d0
-         b=a+1.0d0/(10**i20)
-         call dp_accdig(a,b,dble(digi),acurcy,ind)
+         a=1.0
+         b=a+1.0/(10**i20)
+         call accdig(a,b,real(digi),acurcy,ind)
          write(*,*)i20,a,b,acurcy,ind
       enddo
       write(*,*)&#146;=========================&#146;
       do i30=1,9
-         call dp_accdig(1.2345678d0,vals(i30),8.0,acurcy1,ind1)
-         call dp_accdig(vals(i30),1.2345678d0,8.0,acurcy2,ind2)
+         call accdig(1.2345678,vals(i30),8.0,acurcy1,ind1)
+         call accdig(vals(i30),1.2345678,8.0,acurcy2,ind2)
          write(*,*)i30,vals(i30),acurcy1,acurcy2,ind1,ind2
       enddo
-   end program demo_dp_accdig
+   end program demo_accdig
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=4>
-
-     <H3>NOTES</H3>
-
-</A>
-<BLOCKQUOTE>
-</BLOCKQUOTE>
-<A name=5>
 
      <H3>REFERENCES</H3>
 
@@ -227,7 +218,7 @@ Example program:
 based on &#46;&#46;&#46;
 <P>
 <PRE>
-   NBS OMNITAB 1980 VERSION 6.01  1/ 1/81. dp_accdig V 7.00  2/14/90. **
+   NBS OMNITAB 1980 VERSION 6.01  1/ 1/81. accdig V 7.00  2/14/90. **
       David Hogben,
       Statistical Engineering Division,
       Center for Computing and Applied Mathematics,
@@ -241,7 +232,7 @@ based on &#46;&#46;&#46;
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=5>
 
      <H3>DEPENDENCIES</H3>
 
@@ -251,18 +242,18 @@ based on &#46;&#46;&#46;
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-M_framework__journal(), log10(), abs(1)
+M_framework__journal(),log10(), abs(1)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=7>
+<A name=6>
 
-     <H3>AUTHORS</H3>
+     <H3>AUTHOR</H3>
 
 </A>
 <BLOCKQUOTE>
 David Hogben, John S. Urban
 </BLOCKQUOTE>
-<A name=8>
+<A name=7>
 
      <H3>LICENSE</H3>
 
@@ -271,8 +262,8 @@ David Hogben, John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>dp_accdig (3m_framework__verify)</TD> <TD align=right width=33%><I>April 16, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 47d4bb1e-ed96-41b0-bcc4-b959244a7511 using man macros.</FONT>
-<br><br><center><img src="images/dp_accdig.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>accdig (3m_framework__approx)</TD> <TD align=right width=33%><I>April 23, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 84a6e7c1-1761-49bc-8cde-9ee3c451629d using man macros.</FONT>
+<br><br><center><img src="images/accdig.gif"></center>
 </div>
 </div>
 </body>
