@@ -517,7 +517,7 @@ end subroutine stderr
 !!     class(*),intent(in),optional :: generic5,generic6,generic7,generic8,generic9
 !!     class(*),intent(in),optional :: generica,genericb,genericc,genericd,generice
 !!     class(*),intent(in),optional :: genericf,genericg,generich,generici,genericj
-!!     integer,intent(out),optional :: ios
+!!     integer,intent(out),optional :: iostat
 !!##DESCRIPTION
 !!    WRT(3f) writes a list of scalar values  to the list of unit numbers in LUNS(:).
 !!##OPTIONS
@@ -583,13 +583,19 @@ class(*),intent(in),optional :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9
 class(*),intent(in),optional :: ga, gb, gc, gd, ge, gf, gg, gh, gi, gj
 integer,intent(out),optional :: iostat
 integer                      :: i
+integer                      :: ios, ios2
 character(len=256)           :: msg
+   ios2=0
    do i=1,size(luns)
-      write(luns(i),'(a)',iostat=iostat,iomsg=msg)str(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
-      if(iostat /= 0)then
+      write(luns(i),'(a)',iostat=ios,iomsg=msg)str(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+      if(ios /= 0)then
+         ios2=ios
          call stderr('<ERROR>*write*:',msg)
+         if(.not.present(iostat))stop 1
       endif
    enddo
+   if(present(iostat))iostat=ios2
+
 end subroutine wrt
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
