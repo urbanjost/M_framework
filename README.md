@@ -17,6 +17,19 @@ formal structure.
 I still find it useful to break this down into small modules so the 
 general ones can easily be used from other repositories as well.
 
+For an fpm(1) user the process should be that from the top of your
+directory, enter the test directory and enter the included "maketest"
+program. Either run it once for each procedure and make a file for 
+each procedure, or make a single executable. For example, if I have
+routines "a","b", and "c" that I want to test run
+
+    maketest a b c >test_suite_mymodule.f90
+
+If you then run "fpm test" the skeleton should run indicating the
+procedures are not tested.  Change the routines to actually call the
+"unit_check" procedures and you have the beginnings of a unit test for
+your procedures.
+
 # Name
 M_framework
 
