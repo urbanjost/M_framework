@@ -211,11 +211,11 @@ or just list it as a dependency in your fpm.toml project file.
 
  - single pages that uses javascript to combine all the HTML descriptions
    of the man-pages is at
-    + [BOOK_M_framework](https://urbanjost.github.io/M_framework/BOOK_M_framework__verify.html).
-    + [BOOK_M_framework](https://urbanjost.github.io/M_framework/BOOK_M_framework__approx.html).
-    + [BOOK_M_framework](https://urbanjost.github.io/M_framework/BOOK_M_framework__journal.html).
-    + [BOOK_M_framework](https://urbanjost.github.io/M_framework/BOOK_M_framework__msg.html).
-    + [BOOK_M_framework](https://urbanjost.github.io/M_framework/BOOK_M_framework__help.html).
+    + [BOOK_M_framework__verify](https://urbanjost.github.io/M_framework/BOOK_M_framework__verify.html).
+    + [BOOK_M_framework__approx](https://urbanjost.github.io/M_framework/BOOK_M_framework__approx.html).
+    + [BOOK_M_framework__journal](https://urbanjost.github.io/M_framework/BOOK_M_framework__journal.html).
+    + [BOOK_M_framework__msg](https://urbanjost.github.io/M_framework/BOOK_M_framework__msg.html).
+    + [BOOK_M_framework__help](https://urbanjost.github.io/M_framework/BOOK_M_framework__help.html).
 
 ### Developer
     + [ford-generated developers' document](https://urbanjost.github.io/M_strings/fpm-ford/index.html).
