@@ -178,6 +178,7 @@ Manager](https://github.com/fortran-lang/fpm) )
 ```bash
      git clone https://github.com/urbanjost/M_framework.git
      cd M_framework
+     fpm test -- --help
      fpm test
 ```
 <!--

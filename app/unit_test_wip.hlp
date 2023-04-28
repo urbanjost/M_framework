@@ -1,0 +1,144 @@
+================================================================================
+M_FRAMEWORK DESIGN OPTIONS
+
+
+unit testing versus test-to-failure, performance, scaling, stress, useability,
+code conformance
+
+================================================================================
+RECURSIVE TESTING
+
+call program and it calls itself with options to test stop or exit code functionality,
+usually be calling program with something set like line environment variable or option
+on command line.
+================================================================================
+INTERACTIVE MODE
+
+possible call of M_matrix, interactive access to call the PID with tools like gdb,
+small NAMELIST mode to pause and allow shell commands to be called, change level, 
+and other NAMELIST variables. 
+================================================================================
+ONE PROCEDURE PER TEST PROGRAM OR ONE TEST PROGRAM
+
+One file per procedure; works well with fpm and lets you selectively execute
+by globbing file names; run with debugger on single file
+
+single file is usually nice for build editing
+
+tests internal to code creates a dependency but allows for testing private
+procedures. If the build selectively removes the PRIVATE statement for special
+test builds that is a work-around in most cases
+
+built-in to programs as a confidence test if a subroutine is made instead of a program
+a little program wrapper can run it but it can also be called by programs for new
+installations to call.
+
+================================================================================
+Tools to compare files to results, examples showing using and(3f) and any(3f) with
+almost(3f) to compare floating point arrays, tools for comparing graphics pixel maps,
+maybe AI image recognition.
+
+================================================================================
+GENERATE TEST_SUITE FILE FROM FORTRAN SOURCECODE
+How to generate:  something like splitf90 but lists names in modules and submodules
+would be good. See also flower(1) for removing comments
+
+compilers have extensions that help
+
+scripts can leverage commands like nm, "gdb list functions", 
+
+ifort -c -S --fcode-asm M_factor.f90
+grep -- --- M_factor.code|grep -v '::.*:'
+ifort -Fa *.f90
+gprof
+gcov
+nm
+ld -print-map -cref
+objdump
+readelf
+
+================================================================================
+SETTING MODES VIA PROCEDURE
+call unix_check_mode(
+cmdline=.true.,
+interactive=.false.
+)
+================================================================================
+COMMAND LINE OPTIONS
+
+want a mode to not crack command line for use with programs that already use
+command line
+
+NAMELIST config files to set defaults 
+
+================================================================================
+LEVEL MEANING
+
+array so can either pick max or if a specific value is present, any integer
+
+================================================================================
+COLORIZE OUTPUT
+
+Whether to colorize output or not
+================================================================================
+CANDIDATES
+Using with M_matrix
+Using with M_graph
+using with gdb
+
+numeric diff tools like nd(1)/numdiff(1)
+
+procedures that generate "nice" ranges like used for drawing axis to make a
+list of test values, generate arrays of random numbers.
+================================================================================
+COMMAND output
+
+call debuggers, call scripts to insert into SQLITE3 files, ...
+
+seperate command for good and bad or recommend user-constructed goodbad(1) 
+command.
+
+options passed to command via string of options and/or namelist to stdin.
+Used to call goodbad with many options passed to generate different outputs;
+primarily to generate SQLITE3 file for generating reports from.
+
+================================================================================
+DIARY OR JOURNAL OUTPUT
+
+Allow specifying filename(s) 
+
+Select between stderr and stdout
+
+namelist output that can be post-processed into reports.
+
+multiple output formats like CSV version or XML or TOML/JSON?
+
+LUNS or list of names (stderr, stdout, user filenames) as an array instead of
+single output file via wrt(3f)
+
+There is some kind of "test anything" standard output file proposed that other
+tools can read. Not too familiar with it.
+================================================================================
+ENVIRONMENT
+
+Show compiler version and options used
+
+================================================================================
+GENERAL
+
+suitable for use with parallel code / thread safe?
+
+object-oriented versus procedural versus functional programming
+
+ease of use, documentation, built-in help, built-in generation 
+of skeleton program, easy to remember or do you need to look up everything to 
+use it?
+
+================================================================================
+SEE ALSO
+
+ + TTD (Test-Driven Development)
+ + stdlib has a unit test tool?
+ + Fortran wiki has a list of unit test tools
+
+================================================================================

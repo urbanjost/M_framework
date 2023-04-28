@@ -518,6 +518,7 @@ end subroutine stderr
 !!     class(*),intent(in),optional :: generica,genericb,genericc,genericd,generice
 !!     class(*),intent(in),optional :: genericf,genericg,generich,generici,genericj
 !!     integer,intent(out),optional :: iostat
+!!     character(len=*),intent(in)  :: types(*)
 !!##DESCRIPTION
 !!    WRT(3f) writes a list of scalar values  to the list of unit numbers in LUNS(:).
 !!##OPTIONS
@@ -525,6 +526,7 @@ end subroutine stderr
 !!    generic[1-20]   optional value to print the value of after the message. May
 !!                    be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
 !!                    or CHARACTER.
+!!    TYPES           one for each lun. '' for ASCII, 'CSV' for comma-seperated.
 !!##RETURNS
 !!    IOSTAT          The value of the last non-zero IOSTAT value. Returns zero if
 !!                    no errors occurred.
