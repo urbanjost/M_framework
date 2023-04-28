@@ -48,7 +48,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>unit_check_msg (3m_framework__verify)</NOBR><HR></H1>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>unit_check_mode (3m_framework__verify)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -56,7 +56,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-unit_check_msg(3f) - [M_framework__verify] converts up to nine standard scalar values to a message for unit testing
+unit_check_mode(3f) - [M_framework__verify] set testing modes
 (LICENSE:PD)
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
@@ -74,12 +74,33 @@ unit_check_msg(3f) - [M_framework__verify] converts up to nine standard scalar v
 
 </A>
 <BLOCKQUOTE>
-function unit_check_msg(name,g1,g2g3,g4,g5,g6,g7,g8,g9)
-<P>
-<PRE>
-    character(len=*),intent(in)  :: name
-    class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
-</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>subroutine unit_check_mode(</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>keep_going,</B> <!-- Consumed .TP -->
+<BR>
+<B>levels,</B> <!-- Consumed .TP -->
+<BR>
+<B>luns,</B> <!-- Consumed .TP -->
+<BR>
+<B>command,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+no_news_is_good_news, &
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>interactive,</B> <!-- Consumed .TP -->
+<BR>
+<B>PREFIX,</B> <!-- Consumed .TP -->
+<BR>
+<B>CMDLINE,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+debug)
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR></TR></TABLE>logical,intent(in) :: keep_going, no_news_is_good_news, interactive,debug
+integer,intent(in),allocatable :: luns(:), levels(:)
+character(len=*),intent(in) :: command
 </BLOCKQUOTE>
 <A name=2>
 
@@ -87,8 +108,7 @@ function unit_check_msg(name,g1,g2g3,g4,g5,g6,g7,g8,g9)
 
 </A>
 <BLOCKQUOTE>
-unit_check_msg(3f) builds a string from up to nine scalar values and
-prints it to the error long.
+unit_check_mode(3f) changes testing mode defaults
 </BLOCKQUOTE>
 <A name=3>
 
@@ -97,15 +117,46 @@ prints it to the error long.
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>name</B> </TD><TD valign=bottom>
-name of unit being tested
+<TR valign=top><TD colspan=2>
+<B>keep_going</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+keep running if a test fails. Default to TRUE
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B>g[1-9]</B> </TD><TD valign=bottom>
-optional value to print the value of after the message. May
-be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
-or CHARACTER.
+<B>levels</B> </TD><TD valign=bottom>
+a list of integer values that can be accessed from
+M_framework__verify as unit_check_levels(:) for use in
+selecting various tests conditionally
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>luns</B> </TD><TD valign=bottom>
+list of Fortran units to unit test messages to. Defaults
+to the the value of ERROR_UNIT from the intrinsic module
+ISO_FORTRAN_ENV (ie. defaults to "stderr"). It is
+Assumed the units have been opened by the program.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>command</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>no_news_is_good_news</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Determines if "SUCCESS" messages are printed.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>interactive</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>prefix</B> </TD><TD valign=bottom>
+&#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>cmdline</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>debug</B> </TD><TD valign=bottom>
+&#46;&#46;&#46;
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -117,18 +168,13 @@ or CHARACTER.
 Sample program:
 <P>
 <PRE>
-   program demo_unit_check_msg
-   use M_framework__verify, only : unit_check_start,unit_check_msg,unit_check_done
+   program demo_unit_check_mode
+   use M_framework
    implicit none
 <P>
-   call unit_check_start(&#146;myroutine&#146;)
-   call unit_check_msg(&#146;myroutine&#146;,&#146;HUGE(3f) integers&#146;,huge(0),&#146;and real&#146;,huge(0.0),&#146;and double&#146;,huge(0.0d0))
-   call unit_check_msg(&#146;myroutine&#146;,&#146;real            :&#146;,huge(0.0),0.0,12345.6789,tiny(0.0) )
-   call unit_check_msg(&#146;myroutine&#146;,&#146;doubleprecision :&#146;,huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
-   call unit_check_msg(&#146;myroutine&#146;,&#146;complex         :&#146;,cmplx(huge(0.0),tiny(0.0)) )
-   call unit_check_done(&#146;myroutine&#146;)
+   call unit_check_mode(keep_going=.false.,luns=[6],no_news_is_good_news=.true.)
 <P>
-   end program demo_unit_check_msg
+   end program demo_unit_check_mode
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -149,8 +195,8 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_check_msg (3m_framework__verify)</TD> <TD align=right width=33%><I>April 28, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 26411946-8da3-4366-bde9-6342056d062d using man macros.</FONT>
-<br><br><center><img src="images/unit_check_msg.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_check_mode (3m_framework__verify)</TD> <TD align=right width=33%><I>April 28, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0b4dd07c-a936-4679-b177-954fab33f4e7 using man macros.</FONT>
+<br><br><center><img src="images/unit_check_mode.gif"></center>
 </div>
 </div>
 </body>
