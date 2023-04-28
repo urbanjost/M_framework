@@ -218,8 +218,8 @@ or just list it as a dependency in your fpm.toml project file.
     + [BOOK_M_framework__help](https://urbanjost.github.io/M_framework/BOOK_M_framework__help.html).
 
 ### Developer
-    + [ford-generated developers' document](https://urbanjost.github.io/M_strings/fpm-ford/index.html).
-    + [github action status](docs/STATUS.md)
+   + [ford-generated developers' document](https://urbanjost.github.io/M_strings/fpm-ford/index.html).
+   + [github action status](docs/STATUS.md)
 
 ## Additional Directory Descriptions
 
