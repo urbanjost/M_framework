@@ -3,6 +3,9 @@
 The tools used by my modules for unit testing have been scattered within
 the GPF (General Purpose Fortran) package.
 
+Currently this is under rapid modification so if you use this I would
+recommend you use a specific version.
+
 This is the beginnings of an actual unit testing package based on the
 most-used components so that it can be a registered fpm(1) package
 (when version II of that becomes available), as unit testing is a
@@ -123,9 +126,9 @@ end subroutine test_cos
 
 end program M_test_suite_M_intrinsics
 ```
-The default output looks like this (note if not calls to unit_check routines are made 
+The default output looks like this (note if no calls to unit_check routines are made 
 between start and done the procedure gets an "UNTESTED" entry to remind you to make
-some tests ..
+some tests ..).
 ```text
 check:       sqrt                 SUCCESS : check table of values
 check:       sqrt                 SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
@@ -178,7 +181,11 @@ Manager](https://github.com/fortran-lang/fpm) )
 ```bash
      git clone https://github.com/urbanjost/M_framework.git
      cd M_framework
+     # make a sample program that calls the test libraries
+     fpm run maketest -- a b c 
+     # display help on the interactive command options
      fpm test -- --help
+     # test the package with itself
      fpm test
 ```
 <!--
