@@ -30,6 +30,17 @@ procedures are not tested.  Change the routines to actually call the
 "unit_check" procedures and you have the beginnings of a unit test for
 your procedures.
 
+Most of the modes allowed in unix_check_mode(3f) can be overridden
+on the command line ...
+
+    # options may be specified in NAMELIST input format with no 
+    # extraneous spaces
+    fpm test -- levels=100,200,300  
+    # a little more Unix-like or MSWindows-like syntax is allowed, as 
+    # leading -- or / strings are removed.
+    fpm test -- --levels=100,200,300 --keep_going
+    fpm test -- /levels=100,200,300 /keep_going=T
+
 # Name
 M_framework
 
