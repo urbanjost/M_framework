@@ -13,6 +13,7 @@
 !!                                    unit_check_done, unit_check_stop, &
 !!                                    unit_check_good, unit_check_bad,  &
 !!                                    unit_check_msg, unit_check_mode,  &
+!!                                    unit_check_system
 !!  Module values
 !!
 !!    use M_framework__verify, only : unit_check_level, unit_check_levels
@@ -73,6 +74,7 @@
 !!
 !!                           and stop program by default
 !!    unit_check_msg(3f)     write message
+!!    unit_check_system(3f)  execute system command
 !!
 !!    For unit testing, the existence of a command called "goodbad" is
 !!    initially assumed. This is generally a script that makes entries
@@ -120,7 +122,7 @@
 !!     subroutine test_suite_M_demo
 !!     use M_framework__verify, only: unit_check_start, unit_check
 !!     use M_framework__verify, only: unit_check_good, unit_check_bad, unit_check_done
-!!     use M_framework__verify, only: unit_check_msg, unit_check_stop
+!!     use M_framework__verify, only: unit_check_msg, unit_check_stop, unit_check_system
 !!     implicit none
 !!     integer :: i, j, k
 !!     integer,allocatable :: array(:)
@@ -256,6 +258,7 @@ public unit_check_bad
 public unit_check_done
 public unit_check_stop
 public unit_check_msg
+public unit_check_system
 public unit_check_mode
 
 contains
@@ -1242,6 +1245,224 @@ integer,optional, intent(in)          :: luns(:)        ! logical unit number to
 !integer,parameter,public   :: EXIT_SUCCESS=0
 !integer,parameter,public   :: EXIT_FAILURE=1
 end subroutine unit_check_mode
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    unit_check_system(3f) - [M_framework__verify] return status from system command
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    function unit_check_system(cmd,verbose)
+!!
+!!     character(len=*),intent(in)  :: cmd
+!!     logical,intent(in),optional  :: verbose
+!!##DESCRIPTION
+!!    unit_check_system(3f) executes a system command and returns the
+!!    exit status of the command.
+!!
+!!##OPTIONS
+!!    command    system command to execute. If it starts with "* " the
+!!               asterisk is replaced by the name of the current command.
+!!               If it starts with "** " the asterisks are replaced by
+!!               the current command including arguments.
+!!
+!!    verbose    if .true. the executed command is echoed to output. The
+!!               default is .false.
+!!
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!    program demo_unit_check_system
+!!    use M_framework__verify, only: &
+!!       unit_check_start, &
+!!       unit_check, &
+!!       unit_check_system, &
+!!       unit_check_done
+!!    implicit none
+!!    if(command_argument_count().eq.0)then
+!!       call unit_check_start('myroutine')
+!!       call unit_check('false',unit_check_system('false') == 0, 'check false')
+!!       call unit_check('true',unit_check_system('true') == 0, 'check true')
+!!       call unit_check('notthere',unit_check_system('notthere') == 0, &
+!!       & 'check notthere')
+!!       call unit_check('*',&
+!!       & unit_check_system('* and options',verbose=.true.) == 0, 'check "*"')
+!!       call unit_check_done('myroutine')
+!!    else
+!!       write(*,*)'called with an option'
+!!    endif
+!!    end program demo_unit_check_system
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+function unit_check_system(command,verbose) result(istat)
+!  EXITSTAT contains the integer exit code of the command, as returned by SYSTEM.
+!  CMDSTAT is set to zero if the command line was executed (whatever its exit status was).
+!          If an error condition occurs and CMDSTAT is not present, error termination of execution of the image is initiated.
+!     It is assigned
+!      + the value -1 if the processor does not support command line execution,
+!      + a processor-dependent positive value if an error condition occurs
+!      + the value -2 if no error condition occurs but WAIT is present
+!        with the value false and the processor does not support asynchronous
+!        execution.
+!      + Otherwise it is assigned the value 0.
+!  CMDMSG is assigned an error message if an error has occurred. (exitstat or cmdstat or both?)
+!         If an error condition occurs, it is assigned a processor- dependent explanatory message. Otherwise, it is unchanged.
+character(len=*),intent(in)  :: command
+logical,intent(in),optional  :: verbose
+logical                      :: verbose_
+integer                      :: istat
+logical,parameter            :: wait=.true.
+integer                      :: exitstat
+integer                      :: cmdstat
+character(len=256)           :: cmdmsg
+character(len=:),allocatable :: command_
+   if(present(verbose))then
+      verbose_=verbose
+   else
+      verbose_=.false.
+   endif
+   command_=adjustl(command)//'   '
+   if(index(command_,'* ').eq.1)then
+      command_=getname_()//command_(2:)
+   elseif(index(command_,'** ').eq.1)then
+      command_=getall_()//command_(2:)
+   endif
+   if(verbose_)call wrt(G_luns,"command: ",command_)
+   cmdmsg=' '
+   call execute_command_line(command_,wait,exitstat,cmdstat,cmdmsg)
+   flush(unit=6)
+   if(cmdstat.ne.0)then
+      call wrt(G_luns,"cmdstat: ",cmdmsg,'for command :',command_)
+   elseif(len_trim(cmdmsg).ne.0)then
+      call wrt(G_luns,"exitstat: ",cmdmsg,'for command :',command_)
+   endif
+   istat=merge(-cmdstat,exitstat,exitstat.eq.0.and.cmdstat.ne.0)
+end function unit_check_system
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    getname_(3f) - [M_io:QUERY] get name of the current executable
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function getname_() result(name)
+!!
+!!     character(len=:),allocatable         :: getname_
+!!
+!!##DESCRIPTION
+!!    getname_(3f) returns the name of the current executable using
+!!    get_command_argument(3f) and inquire(3f).
+!!
+!!##EXAMPLE
+!!
+!!    Sample getting a pathname of current executable:
+!!
+!!      program demo_getname_
+!!      use M_io, only : getname_
+!!      implicit none
+!!         write(*,'(*(a))')'Running ',getname_()
+!!      end program demo_getname_
+!!
+!!##AUTHOR
+!!        John S. Urban
+!!
+!!##LICENSE
+!!        Public Domain
+function getname_() result(name)
+! get the pathname of arg0
+implicit none
+character(len=:),allocatable :: arg0
+integer                      :: arg0_length
+integer                      :: ios
+character(len=4096)          :: long_name
+character(len=:),allocatable :: name
+   arg0_length=0
+   name=''
+   long_name=''
+   call get_command_argument(0,length=arg0_length,status=ios)
+   if(ios == 0)then
+      if(allocated(arg0))deallocate(arg0)
+      allocate(character(len=arg0_length) :: arg0)
+      call get_command_argument(0,arg0,status=ios)
+      if(ios == 0)then
+         inquire(file=arg0,iostat=ios,name=long_name)
+         if(ios == 0)then
+            name=trim(long_name)
+         else
+            name=arg0
+         endif
+      else
+         arg0=''
+      endif
+   else
+      arg0=''
+   endif
+end function getname_
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    getall_(3f) - [M_io:QUERY] get name of the current executable and options
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function getall_() result(name)
+!!
+!!     character(len=:),allocatable         :: getall_
+!!
+!!##DESCRIPTION
+!!    getall_(3f) returns the name of the current executable
+!!    and all the arguments surrounded with double-quotes
+!!
+!!##EXAMPLE
+!!
+!!    Sample getting a pathname of current executable:
+!!
+!!      program demo_getall_
+!!      use M_io, only : getall_
+!!      implicit none
+!!         write(*,'(*(a))')'Running ',getall_()
+!!      end program demo_getall_
+!!
+!!##AUTHOR
+!!        John S. Urban
+!!
+!!##LICENSE
+!!        Public Domain
+function getall_() result(command)
+! get the pathname of arg
+implicit none
+character(len=:),allocatable :: arg
+integer                      :: length
+integer                      :: ios
+integer                      :: i
+character(len=:),allocatable :: command
+   length=0
+   command=''
+   do i=1,command_argument_count()
+      call get_command_argument(i,length=length,status=ios)
+      if(ios == 0)then
+         if(allocated(arg))deallocate(arg)
+         allocate(character(len=length) :: arg)
+         call get_command_argument(0,arg,status=ios)
+         if(ios == 0)then
+                 command=command//' "'//arg//'"'
+         endif
+      endif
+   enddo
+   command=getname_()//command
+end function getall_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

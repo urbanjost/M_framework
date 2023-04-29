@@ -1,6 +1,7 @@
 ================================================================================
 M_FRAMEWORK DESIGN OPTIONS
 
+Just some random notes about some of the design factors under consideration.
 
 unit testing versus test-to-failure, performance, scaling, stress, useability,
 code conformance
@@ -11,6 +12,9 @@ RECURSIVE TESTING
 call program and it calls itself with options to test stop or exit code functionality,
 usually be calling program with something set like line environment variable or option
 on command line.
+
+Background: code that stops/aborts is unfriendly to testing
+frameworks that ideally want to attempt running later tests.  
 ================================================================================
 INTERACTIVE MODE
 
@@ -34,7 +38,10 @@ a little program wrapper can run it but it can also be called by programs for ne
 installations to call.
 
 ================================================================================
-Tools to compare files to results, examples showing using and(3f) and any(3f) with
+Tools to 
+compare files to results, 
+
+examples showing using and(3f) and any(3f) with
 almost(3f) to compare floating point arrays, tools for comparing graphics pixel maps,
 maybe AI image recognition.
 

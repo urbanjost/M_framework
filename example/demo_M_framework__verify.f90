@@ -17,7 +17,7 @@
       subroutine test_suite_M_demo
       use M_framework__verify, only: unit_check_start, unit_check
       use M_framework__verify, only: unit_check_good, unit_check_bad, unit_check_done
-      use M_framework__verify, only: unit_check_msg, unit_check_stop
+      use M_framework__verify, only: unit_check_msg, unit_check_stop, unit_check_system
       implicit none
       integer :: i, j, k
       integer,allocatable :: array(:)
