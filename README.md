@@ -147,11 +147,11 @@ overridden on the command line ...
 
     # options may be specified in NAMELIST input format with no 
     # extraneous spaces on the command line
-    fpm test -- levels=100,200,300  
+    fpm test -- flags=100,200,300  
     # a little more Unix-like or MSWindows-like syntax is allowed, as 
     # leading -- or / strings are removed.
-    fpm test -- --levels=100,200,300 --keep_going
-    fpm test -- /levels=100,200,300 /keep_going=T
+    fpm test -- --flags=100,200,300 --keep_going
+    fpm test -- /flags=100,200,300 /keep_going=T
 
 # suggest one test per program
 
@@ -174,7 +174,7 @@ To run all the tests in the gdb(1) debugger (you can enter
 ```bash
      fpm test --target 'base_*' --verbose \
      --runner 'gdb -ex run --quiet --args' \
-     -- levels=9997,9998,9999 luns=6
+     -- flags=9997,9998,9999 luns=6
 ```
 This runs fpm(1) in verbose mode, executes all the test programs
 whose name starts with "base_" leaving you at the gdb(1) prompt after
@@ -187,7 +187,7 @@ See "fpm help runner" or "fpm manual >manual.txt" for more information.
 
 If it is preferred one program tests multiple procedures the main
 disadvantage is that the complete test suite is always run. One of the
-uses of the unit_check_levels(:) array is to allow integer values to
+uses of the unit_check_flags(:) array is to allow integer values to
 be passed at execution time that can be tested to provide conditional
 computation.
 
@@ -431,7 +431,7 @@ DOES NOT WORK.
 If you put that in the "fpm.rsp" file as:
 
      @debug
-     options test '*' --verbose --runner 'gdb -ex run --args' -- --levels=9997,9998,9999 --luns=6 
+     options test '*' --verbose --runner 'gdb -ex run --args' -- --flags=9997,9998,9999 --luns=6 
 
 You can then just enter "fpm @debug"
 

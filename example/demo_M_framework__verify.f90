@@ -82,6 +82,6 @@
       program demo_M_framework__verify
       use M_framework__demo,   only: test_suite_M_demo
       use M_framework__verify, only: unit_check_mode
-         call unit_check_mode(command='',levels=[0],keep_going=.true.)
+         call unit_check_mode(command='',flags=[0],keep_going=.true.)
          call test_suite_M_demo()
       end program demo_M_framework__verify

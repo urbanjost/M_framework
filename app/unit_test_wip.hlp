@@ -148,4 +148,18 @@ SEE ALSO
  + stdlib has a unit test tool?
  + Fortran wiki has a list of unit test tools
 
+Wikipedia has these categories for unit testing.
+
+Check out the TAP output and how many tools are available that way
+
+    Name: This column contains the name of the framework and will usually link to it.
+    xUnit: This column indicates whether a framework should be considered of xUnit type.
+    TAP: This column indicates whether a framework can emit TAP output for TAP-compliant testing harnesses.
+    SubUnit: This column indicates whether a framework can emit SubUnit output.
+    Generators: Indicates whether a framework supports data generators. Data generators generate input data for a test and the test is run for each input data that the generator produces.
+    Fixtures: Indicates whether a framework supports test-local fixtures. Test-local fixtures ensure a specified environment for a single test.
+    Group fixtures: Indicates whether a framework supports group fixtures. Group fixtures ensure a specified environment for a whole group of Tests
+    MPI: Indicates whether a framework supports message passing via MPI - commonly used for high-performance scientific computing.
+    Other columns: These columns indicate whether a specific language / tool feature is available / used by a framework.
+    Remarks: Any remarks.
 ================================================================================

@@ -16,7 +16,7 @@
 !!                                    unit_check_system
 !!  Module values
 !!
-!!    use M_framework__verify, only : unit_check_level, unit_check_levels
+!!    use M_framework__verify, only : unit_check_level, unit_check_flags
 !!
 !!##QUOTE
 !!    Do not let your victories go to your head, nor let your failures go
@@ -30,7 +30,7 @@
 !!     o allows for a user-defined command to be called to collect results or
 !!       mail failure alerts, ...
 !!     o supports easily composing a message from up to nine scalar
-!!       intrinsic values and different message levels
+!!       scalar intrinsic values and different strings
 !!     o allows stopping on first failure or continuing
 !!     o provides for a non-zero exit code if any tests fail
 !!
@@ -187,7 +187,7 @@
 !!     program demo_M_framework__verify
 !!     use M_framework__demo,   only: test_suite_M_demo
 !!     use M_framework__verify, only: unit_check_mode
-!!        call unit_check_mode(command='',levels=[0],keep_going=.true.)
+!!        call unit_check_mode(command='',flags=[0],keep_going=.true.)
 !!        call test_suite_M_demo()
 !!     end program demo_M_framework__verify
 !!
@@ -227,8 +227,8 @@ character(len=20),save        :: G_prefix=''
 integer,save,allocatable      :: G_luns(:)              ! output units
 logical,save                  :: G_debug=.false.
 
-integer,save,public             :: unit_check_level=0      ! a level that can be used to select different debug levels
-integer,save,public,allocatable :: unit_check_levels(:)    ! a level that can be used to select different debug levels
+integer,save,public             :: unit_check_level=0      ! a value that can be used to select different debug levels
+integer,save,public,allocatable :: unit_check_flags(:)     ! an array of flags that can be used to select different options
 logical,save                    :: G_keep_going=.false.    ! can be used to turn on program termination on errors.
 logical,save                    :: G_interactive=.false.
 character(len=:),allocatable    :: G_command                         ! name of command to execute. Defaults to the name
@@ -1018,7 +1018,7 @@ integer :: i
    G_prefix=''
    G_keep_going=.true.
    unit_check_level=0
-   unit_check_levels=[integer :: ]
+   unit_check_flags=[integer :: ]
    G_luns=[integer :: ]
    G_interactive=.false.
    G_command=repeat(' ',4096)
@@ -1028,14 +1028,16 @@ subroutine cmdline_()
 use, intrinsic :: iso_fortran_env, only: compiler_version, compiler_options
 ! define arguments and their default values
 logical, save :: G_help = .false.
-integer,allocatable :: G_levels(:)
+integer,allocatable :: G_flags(:)
+integer             :: G_level
 integer,allocatable :: G_luns_hold(:)
 
 ! NOTE: assume all names in namelist start with G_ or unit_check
 namelist /args/ G_interactive
 namelist /args/ G_help
+namelist /args/ G_level
 namelist /args/ G_debug                   ! debug mode
-namelist /args/ G_levels                  ! a level that can be used to select different debug levels
+namelist /args/ G_flags                   ! values that can be used to select different tests or any conditional integer test
 namelist /args/ G_keep_going              ! logical variable that can be used to turn off program termination on errors.
 namelist /args/ G_command                 ! name of command to execute. Defaults to " ".
 namelist /args/ G_no_news_is_good_news
@@ -1056,9 +1058,10 @@ integer :: i, j, k, ios, equal_pos
    if (G_virgin%cmdline) then
       G_virgin%cmdline = .false.
       ! read arguments from command line
+      G_level=-1
       G_luns_hold=G_luns
       G_luns = [ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-      G_levels = [(-1, i=1, 1000)]
+      G_flags = [(-1, i=1, 1000)]
       do i = 1, command_argument_count()
          call get_command_argument(i, input(2))
          do j = 1, len_trim(input(2)) ! blank out leading - or / so "--name=value" or "/name=value" works
@@ -1093,6 +1096,8 @@ integer :: i, j, k, ios, equal_pos
                if (ios .ne. 0) then
                   call wrt(G_luns, 'ERROR UNQUOTED:'//trim(message1)//': when reading '//trim(input(2)))
                   call wrt(G_luns, 'ERROR QUOTED  :'//trim(message2)//': when reading '//trim(input(2)))
+                  G_command=trim(G_command)
+                  if(G_level.eq.-1) G_level=unit_check_level
                   do k = 1, size(G_luns)
                      write (G_luns(k), nml=args, delim='quote')
                   enddo
@@ -1100,6 +1105,8 @@ integer :: i, j, k, ios, equal_pos
                endif
             else
                call wrt(G_luns, 'ERROR:'//trim(message1)//': when reading '//trim(input(2)))
+               G_command=trim(G_command)
+               if(G_level.eq.-1) G_level=unit_check_level
                do k = 1, size(G_luns)
                   write (G_luns(k), nml=args, delim='quote')
                enddo
@@ -1113,20 +1120,20 @@ integer :: i, j, k, ios, equal_pos
       if (size(G_luns) .eq. 0) G_luns = [stderr]
       G_command = trim(G_command)
 
-      G_levels = pack(G_levels, G_levels .ge. 0)
-      if (size(G_levels) .ne. 0) unit_check_levels = G_levels
-      unit_check_level = maxval([unit_check_levels,0])
+      G_flags = pack(G_flags, G_flags .ge. 0)
+      if (size(G_flags) .ne. 0) unit_check_flags = G_flags
+      if(G_level.ne.-1) unit_check_level = G_level
 
       ! some pre-defined level numbers
-      if (any(unit_check_levels .eq. 9997)) then
+      if (any(unit_check_flags .eq. 9997)) then
          call wrt(G_luns, 'This file was compiled by ', compiler_version())
       endif
 
-      if (any(unit_check_levels .eq. 9998)) then
+      if (any(unit_check_flags .eq. 9998)) then
          call wrt(G_luns, ' using the options ', compiler_options())
       endif
 
-      if (any(unit_check_levels .eq. 9999)) then
+      if (any(unit_check_flags .eq. 9999)) then
          do i = 1, size(G_luns)
             write (G_luns(i), nml=args, delim='quote')
          enddo
@@ -1137,21 +1144,21 @@ integer :: i, j, k, ios, equal_pos
       write (*, '(g0)') [character(len=80) :: &
       'unit test command line options:', &
       '--help                      display this text and exit                          ', &
-      '--interactive                                                                   ', &
-      '--debug                                                                         ', &
-      '--unit_check_levels=L,M,N,...  set value for user to set different test levels  ', &
+      '--unit_check_flags=L,M,N,...  set value for user to set different test flags    ', &
       '                               values >= 9990 are reserved if on the commandline', &
       '                                  * 9997 compiler version                       ', &
       '                                  * 9998 compiler options                       ', &
       '                                  * 9999 command line options NAMELIST group    ', &
+      '--unit_check_level=N        user-requested debug level                          ', &
       '--keep_going=F              turn on program termination on test failure         ', &
       '--command="system_command"  program to call after each test                     ', &
       '--no_news_is_good_news      do not display "SUCCESS" lines                      ', &
       '--luns=L,M,N,...    list of unit numbers to write to, assumed opened by program ', &
+      '--interactive                                                                   ', &
+      '--debug                                                                         ', &
       '                                                                                ', &
-      'unit_check_level and unit_check_levels(:) are public members of                 ', &
-      'M_framework__verify. unit_check_level=maxval(unit_check_levels) when            ', &
-      'unit_check_levels(:) is set.                                                    ', &
+      'Note flags sets unit_check_flags(:) and level sets unit_check_level and         ', &
+      'unit_check_flags(:) are public members of M_framework__verify.                  ', &
       ' ']
       G_help=.false.
       stop
@@ -1169,7 +1176,7 @@ end subroutine cmdline_
 !!
 !!    subroutine unit_check_mode(     &
 !!              keep_going,           &
-!!              levels,               &
+!!              flags,                &
 !!              luns,                 &
 !!              command,              &
 !!              no_news_is_good_news, &
@@ -1179,15 +1186,15 @@ end subroutine cmdline_
 !!              debug)
 !!
 !!     logical,intent(in) :: keep_going, no_news_is_good_news, interactive,debug
-!!     integer,intent(in),allocatable :: luns(:), levels(:)
+!!     integer,intent(in),allocatable :: luns(:), flags(:)
 !!     character(len=*),intent(in) :: command
 !!##DESCRIPTION
 !!    unit_check_mode(3f) changes testing mode defaults
 !!
 !!##OPTIONS
 !!    keep_going   keep running if a test fails. Default to TRUE
-!!    levels       a list of integer values that can be accessed from
-!!                 M_framework__verify as unit_check_levels(:) for use in
+!!    flags        a list of integer values that can be accessed from
+!!                 M_framework__verify as unit_check_flags(:) for use in
 !!                 selecting various tests conditionally
 !!    luns         list of Fortran units to unit test messages to. Defaults
 !!                 to the the value of ERROR_UNIT from the intrinsic module
@@ -1216,7 +1223,7 @@ end subroutine cmdline_
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_check_mode(debug, prefix, keep_going, levels, command, no_news_is_good_news,cmdline,interactive,luns)
+subroutine unit_check_mode(debug, prefix, keep_going, level, flags, command, no_news_is_good_news,cmdline,interactive,luns)
 logical,optional, intent(in)          :: debug
 logical,optional, intent(in)          :: keep_going     ! logical variable that can be used to turn off program termination on errors.
 logical,optional, intent(in)          :: cmdline        ! flag whether to parse command line for arguments or not
@@ -1224,7 +1231,8 @@ logical,optional, intent(in)          :: interactive
 logical,optional, intent(in)          :: no_news_is_good_news   ! flag on whether to display SUCCESS: messages
 character(len=*),optional, intent(in) :: command                ! name of command to execute. Defaults to the name
 character(len=*),optional, intent(in) :: prefix
-integer,optional, intent(in)          :: levels(:)      ! a level that can be used to select different debug levels
+integer,optional, intent(in)          :: flags(:)       ! an  array that can be used to select different options
+integer,optional, intent(in)          :: level          ! an  integer that can be used to select different debug levels
 integer,optional, intent(in)          :: luns(:)        ! logical unit number to write output to
 
    if (G_virgin%preset_globals) then
@@ -1238,7 +1246,8 @@ integer,optional, intent(in)          :: luns(:)        ! logical unit number to
    if (present(cmdline))              G_cmdline=cmdline
    if (present(interactive))          G_interactive=interactive
    if (present(keep_going))           G_keep_going=keep_going
-   if (present(levels))               unit_check_levels=levels
+   if (present(flags))                unit_check_flags=flags
+   if (present(level))                unit_check_level=level
    if (present(no_news_is_good_news)) G_no_news_is_good_news=no_news_is_good_news
 
 !integer,parameter,public   :: realtime=kind(0.0d0)    ! type for julian days
