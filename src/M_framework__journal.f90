@@ -664,91 +664,8 @@ end subroutine d2j
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine j2d(dat,julian,ierr)
-! ident_8="@(#) j2d(3f) Converts Julian Day to date array"
-integer,intent(out)        :: dat(8)
-integer                    :: timezone(8), tz
-real(kind=dp),intent(in)   :: julian            ! Julian Day (non-negative)
-integer,intent(out)        :: ierr              ! 0 for successful execution, otherwise 1
-   real(kind=dp)           :: second
-   integer                 :: year
-   integer                 :: month
-   integer                 :: day
-   integer                 :: hour
-   integer                 :: minute
-   integer                 :: jalpha,ja,jb,jc,jd,je,ijul
-
-   if(julian.lt.0.d0) then                      ! Negative Julian Day not allowed
-      ierr=1
-      return
-   else
-      ierr=0
-   endif
-   call date_and_time(values=timezone)
-   tz=timezone(4)
-
-   ijul=idint(julian)                           ! Integral Julian Day
-   second=sngl((julian-dble(ijul))*secday)      ! Seconds from beginning of Jul. Day
-   second=second+(tz*60)
-
-   if(second.ge.(secday/2.0d0)) then            ! In next calendar day
-      ijul=ijul+1
-      second=second-(secday/2.0d0)              ! Adjust from noon to midnight
-   else                                         ! In same calendar day
-      second=second+(secday/2.0d0)              ! Adjust from noon to midnight
-   endif
-
-   if(second.ge.secday) then                    ! Final check to prevent time 24:00:00
-      ijul=ijul+1
-      second=second-secday
-   endif
-
-   minute=int(second/60.0)                      ! Integral minutes from beginning of day
-   second=second-float(minute*60)               ! Seconds from beginning of minute
-   hour=minute/60                               ! Integral hours from beginning of day
-   minute=minute-hour*60                        ! Integral minutes from beginning of hour
-
-   !---------------------------------------------
-   jalpha=idint((dble(ijul-1867216)-0.25d0)/36524.25d0) ! Correction for Gregorian Calendar
-   ja=ijul+1+jalpha-idint(0.25d0*dble(jalpha))
-   !---------------------------------------------
-
-   jb=ja+1524
-   jc=idint(6680.d0+(dble(jb-2439870)-122.1d0)/365.25d0)
-   jd=365*jc+idint(0.25d0*dble(jc))
-   je=idint(dble(jb-jd)/30.6001d0)
-   day=jb-jd-idint(30.6001d0*dble(je))
-   month=je-1
-
-   if(month.gt.12)then
-      month=month-12
-   endif
-
-   year=jc-4715
-   if(month.gt.2)then
-      year=year-1
-   endif
-
-   if(year.le.0)then
-      year=year-1
-   endif
-
-   dat(1)=year
-   dat(2)=month
-   dat(3)=day
-   dat(4)=tz
-   dat(5)=hour
-   dat(6)=minute
-   dat(7)=int(second)
-   dat(8)=int((second-int(second))*1000.0)
-   ierr=0
-
-end subroutine j2d
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 subroutine d2u(dat,unixtime,ierr)
-! ident_9="@(#) d2u(3f) Converts date array to Unix Time (UT starts at 0000 on 1 Jan. 1970)"
+! ident_8="@(#) d2u(3f) Converts date array to Unix Time (UT starts at 0000 on 1 Jan. 1970)"
 integer,intent(in)         :: dat(8)                  ! date time array similar to that returned by DATE_AND_TIME
 real(kind=dp),intent(out)  :: unixtime                ! Unix time (seconds)
 integer,intent(out)        :: ierr                    ! return 0 on successful, otherwise 1
@@ -769,35 +686,8 @@ end subroutine d2u
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine u2d(dat,unixtime,ierr)
-! REF:JRH:1991-05-23
-! REF:JSU:2015-12-12
-!-----------------------------------------------------------------------------------------------------------------------------------
-! ident_10="@(#) u2d(3f) Converts Unix Time to date array"
-integer,intent(out)        :: dat(8)                           ! date and time array
-real(kind=dp),intent(in)   :: unixtime                         ! Unix time (seconds)
-integer,intent(out)        :: ierr                             ! 0 for successful execution, otherwise 1
-real(kind=dp)              :: julian                           ! Unix time converted to a Julian date
-real(kind=dp),save         :: Unix_Origin_as_Julian            ! start of Unix Time as Julian date
-logical,save               :: first=.TRUE.
-integer                    :: v(8)                             ! date and time array used to get time zone
-!-----------------------------------------------------------------------------------------------------------------------------------
-if(first)then                                                  ! Initialize calculated constants on first call
-   call d2j([1970,1,1,0,0,0,0,0],Unix_Origin_as_Julian,ierr)   ! Compute start of Unix Time in Julian days
-   if(ierr.ne.0) return                                        ! Error
-   first=.FALSE.
-endif
-!-----------------------------------------------------------------------------------------------------------------------------------
-   call date_and_time(values=v)                                ! need to get time zone
-   julian=(unixtime/secday)+Unix_Origin_as_Julian              ! convert seconds from Unix Epoch to Julian days
-   call j2d(dat,julian,ierr)                                   ! calculate date array from Julian date
-   dat(4)=v(4)
-end subroutine u2d
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 FUNCTION d2o(dat) RESULT (ordinal)
-! ident_11="@(#) d2o(3f) Converts date-time array to Ordinal day"
+! ident_9="@(#) d2o(3f) Converts date-time array to Ordinal day"
 INTEGER,INTENT(IN)         :: dat(8)                  ! date time array similar to that returned by DATE_AND_TIME
 INTEGER                    :: ordinal                 ! the returned number of days
    REAL(KIND=dp)           :: unixtime                ! Unix time (seconds)
@@ -816,7 +706,7 @@ END FUNCTION d2o
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 FUNCTION v2mo(imonth) RESULT(month_name)
-! ident_12="@(#) v2mo(3f) returns the month name of a Common month"
+! ident_10="@(#) v2mo(3f) returns the month name of a Common month"
 CHARACTER(LEN=:),ALLOCATABLE :: month_name                                        ! string containing month name or abbreviation.
 INTEGER,INTENT(IN)           :: imonth                                            ! the number of the month(1-12)
 CHARACTER(LEN=*),PARAMETER   :: names(12)=[ character(len=9) ::  &
@@ -831,7 +721,7 @@ END FUNCTION v2mo
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 FUNCTION now(format)
-! ident_13="@(#) JSU 2015-10-24"
+! ident_11="@(#) JSU 2015-10-24"
 CHARACTER(LEN=*),INTENT(IN),OPTIONAL :: format
 CHARACTER(LEN=:),ALLOCATABLE         :: now
    INTEGER                           :: values(8)
@@ -853,7 +743,7 @@ END FUNCTION now
 FUNCTION fmtdate(values,format) RESULT (timestring)
 ! Read the FORMAT string and replace the "%" strings per the following rules:
 !-----------------------------------------------------------------------------------------------------------------------------------
-! ident_14="@(#) fmtdate(3f) given date array return date as string using format"
+! ident_12="@(#) fmtdate(3f) given date array return date as string using format"
 CHARACTER(LEN=*),INTENT(IN)     :: format    ! input format string
 INTEGER,DIMENSION(8),INTENT(IN) :: values    ! numeric time values as DATE_AND_TIME(3f) intrinsic returns
 CHARACTER(LEN=:),ALLOCATABLE    :: timestring
@@ -1007,57 +897,8 @@ END FUNCTION fmtdate
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine fmtdate_usage(ii)
-! ident_15="@(#) JSU 2015-10-24"
-character(len=51),allocatable :: usage(:)
-integer                       :: i,ii
-character(len=ii)             :: blanks
-usage=[ &                                               !date(1) COMMAND
-&' Base time array:                                  ',&
-&' (1) %Y -- year, yyyy                              ',&
-&' (2) %M -- month of year, 01 to 12                 ',&
-&' (3) %D -- day of month, 01 to 31                  ',&
-&'     %d -- day of month, with suffix (1st, 2nd,...)',&
-&' (4) %Z -- minutes from UTC                        ',&
-&'     %z -- -+hh:mm from UTC                        ',&
-&' (5) %h -- hours, 00 to 23                         ',&
-&'     %H -- hour (1 to 12, or twelve-hour clock)    ',&
-&'     %N -- AM (before noon) PM (>=after noon)      ',&
-&' (6) %m -- minutes, 00 to 59                       ',&
-&' (7) %s -- sec, 00 to 60                           ',&
-&' (8) %x -- milliseconds 000 to 999                 ',&
-&'Conversions                                        ',&
-&'     %E -- Unix Epoch time                         ',&
-&'     %e -- integer value of Unix Epoch time        ',&
-&'     %J -- Julian  date                            ',&
-&'     %j -- integer value of Julian date            ',&
-&'     %O -- Ordinal day (day of year)               ',&
-&'     %U -- day of week, 1..7 Sunday=1              ',&
-&'     %u -- day of week, 1..7 Monday=1              ',&
-&'     %i -- ISO week of year 1..53                  ',&
-&'     %I -- iso-8601 week-numbering date(yyyy-Www-d)',&
-&' Names                                             ',&
-&'     %l -- abbreviated month name                  ',&
-&'     %L -- full month name                         ',&
-&'     %w -- first three characters of weekday       ',&
-&'     %W -- weekday name                            ',&
-&' Literals                                          ',&
-&'     %% -- a literal %%                            ',&
-&'     %t -- tab character                           ',&
-&'     %b -- blank character                         ',&
-&' Program timing:                                   ',&
-&'     %c -- CPU_TIME(3f) output                     ',&
-&'     %C -- number of times this routine is used    ',&
-&'     %k -- time in seconds from SYSTEM_CLOCK(3f)   ',&
-&'                                                   ']
-   blanks=' '
-   WRITE(*,'(a,a)')(blanks(:ii),usage(i),i=1,size(usage))
-end subroutine fmtdate_usage
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 subroutine dow(values, weekday, day, ierr)
-! ident_16="@(#) dow(3f) Return the day of the week"
+! ident_13="@(#) dow(3f) Return the day of the week"
 real(kind=dp)                      :: julian    ! the julian day for which the weekday is required,
 integer,intent(in)                 :: values(8) ! date and time array used to get time zone
 integer,intent(out),optional       :: weekday   ! The day of the week, 1 = Sunday
@@ -1148,7 +989,7 @@ subroutine woy(dat,iso_year,iso_week,iso_weekday,iso_name)
 !AUTHOR:
 !  John S. Urban, 2015-12-19
 !-----------------------------------------------------------------------------------------------------------------------------------
-! ident_17="@(#) woy(3f) Calculate iso-8601 Week-numbering year date yyyy-Www-d"
+! ident_14="@(#) woy(3f) Calculate iso-8601 Week-numbering year date yyyy-Www-d"
 integer,parameter               :: dp=kind(0.0d0)
 integer,intent(in)              :: dat(8)     ! input date array
 integer,intent(out)             :: iso_year, iso_week, iso_weekday
@@ -1192,74 +1033,9 @@ end subroutine woy
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-function dj(dat) result (julian)
-! ident_18="@(#) dj(3f) Given date array returns Julian Day"
-real(kind=dp)              :: julian
-integer,intent(in)         :: dat(8)
-   integer                 :: ierr
-call d2j(dat,julian,ierr)
-end function dj
-
-function jd(julian) result (dat)
-! ident_19="@(#) jd(3f) Given Julian Day returns date array"
-real(kind=dp),intent(in)   :: julian
-integer                    :: dat(8)
-   integer                 :: ierr
-call j2d(dat,julian,ierr)
-end function jd
-
-function du(dat) result (unixtime)
-! ident_20="@(#) du(3f) Given date array returns Unix Epoch time"
-real(kind=dp)              :: unixtime
-integer,intent(in)         :: dat(8)
-   integer                 :: ierr
-call d2u(dat,unixtime,ierr)
-end function du
-
-function ud(unixtime) result (dat)
-! ident_21="@(#) ud(3f) Given Unix Epoch Time returns date array"
-real(kind=dp),intent(in)   :: unixtime
-integer                    :: dat(8)
-   integer                 :: ierr
-call u2d(dat,unixtime,ierr)
-end function ud
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-!
-!   XXXX
-!  X    X
-! X
-! X
-! X
-! X
-! X
-!  X    X
-!   XXXX
-!
-subroutine sys_sleep(wait_seconds)
-use, intrinsic  :: iso_c_binding, only: c_int
-
-! ident_22="@(#) sys_sleep(3f) call sleep(3c)"
-
-integer (c_int) :: wait_seconds, how_long
-interface
-      function c_sleep (seconds)  bind ( C, name="sleep" )
-          import
-          integer (c_int) :: c_sleep !  should be unsigned int (not available in Fortran).  OK until highest bit gets set.
-          integer (c_int), intent (in), VALUE :: seconds
-      end function c_sleep
-end interface
-   if(wait_seconds.gt.0)then
-      how_long = c_sleep(wait_seconds)
-   endif
-end subroutine sys_sleep
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 function now_ex(format)
 
-! ident_23="@(#) M_time now_ex(3f) use of now(3f) outside of a module"
+! ident_15="@(#) M_time now_ex(3f) use of now(3f) outside of a module"
 
 character(len=*),intent(in),optional :: format
 character(len=:),allocatable         :: now_ex

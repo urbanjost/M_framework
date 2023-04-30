@@ -31,8 +31,12 @@ CPROGFILES =
 PROG = ${PROGFILES:.f90=}
 CPROG = ${CPROGFILES:.c=}
 TPROG = ${TESTPROGFILES:.f90=}
-SRCS =  M_framework.f90 M_framework__msg.F90 M_framework__journal.f90 M_framework__verify.F90 M_framework__help.f90
-OBJS =  M_framework.o M_framework__msg.o M_framework__journal.o M_framework__verify.o M_framework__help.o
+SRCS =  M_framework.f90 M_framework__msg.F90 M_framework__journal.f90 \
+	M_framework__verify.F90 M_framework__help.f90 M_framework__utility.f90 \
+	M_framework__approx.F90
+OBJS =  M_framework.o M_framework__msg.o    M_framework__journal.o \
+	M_framework__verify.o   M_framework__help.o   M_framework__utility.o \
+	M_framework__approx.F90
 LIBRARY = libM__framework.a
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # platform-specific values you will probably change
@@ -89,10 +93,6 @@ $(LIBRARY): $(OBJS)
 .F90.o:
 	$(FC) $(FFLAGS) -c $<
 #=================================================================================
-M_framework__verify.o: M_framework__journal.o M_framework__msg.o 
-M__frameworkjournal.o: M_framework__msg.o 
-M_framework.o: M_framework__journal.o M_framework__msg.o M_framework__verify.o M_framework__help.o
-#=================================================================================
 clean:
 	-rm -f $(PROG) $(TPROG) $(CPROG) $(OBJS) *.mod $(LIBRARY) *.o
 	-rm -f mytrail.txt trail
@@ -128,6 +128,8 @@ man:
 doxygen: 
 	doxygen dox.in
 #=================================================================================
-M_framework__verify.o: M_framework__msg.o
-M_framework__journal.o: M_framework__msg.o
-M_framework.o: M_framework__verify.o M_framework__msg.o M_framework__approx.o M_framework__help.o M_framework__journal.o
+M_framework__journal.o: M_framework__msg.o 
+M_framework__help.o: M_framework__journal.o
+M_framework__verify.o: M_framework__journal.o M_framework__msg.o 
+M_framework.o: M_framework__journal.o M_framework__msg.o M_framework__verify.o \
+	M_framework__help.o M_framework__utility.o M_framework__approx.o 
