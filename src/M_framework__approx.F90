@@ -7,11 +7,25 @@ private
 ! COMPARING AND ROUNDING FLOATING POINT VALUES
 public  :: almost          ! function compares two numbers only up to a specified number of digits
 public  :: accdig          ! compare two real numbers only up to a specified number of digits
-public  :: dp_accdig       ! compare two double numbers only up to a specified number of digits
 public  :: in_margin       ! check if two reals are approximately equal using a relative margin
 public  :: round_to_power  ! round val to specified number of digits after the decimal point
 public  :: round           ! round val to specified number of significant digits
 public  :: significant     ! round val to specified number of significant digits
+!===========================
+! deprecated
+public  :: sp_accdig       ! compare two real numbers only up to a specified number of digits
+public  :: dp_accdig       ! compare two double numbers or other kinds only up to a specified number of digits
+
+interface dp_accdig        ! for backward compatibility, accdig(3f) preferred
+   module procedure accdig
+end interface dp_accdig
+!===========================
+
+interface significant
+   module procedure significant_real32
+   module procedure significant_real64
+end interface significant
+
 private :: anyscalar_to_realbig_
 private :: anyscalar_to_double_
 contains
@@ -24,7 +38,7 @@ contains
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    function almost(x,y,rdigits,verbose)
+!!    elemental impure function almost(x,y,digits,verbose)
 !!
 !!     class(*),intent(in)         :: x,y
 !!     class(*),intent(in)         :: rdigits
@@ -84,10 +98,10 @@ contains
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-function almost(x,y,digits,verbose)
+elemental impure function almost(x,y,digits,verbose)
 use M_framework__journal,  only : journal
 
-! ident_1="@(#) M_framework__approx almost(3f) function compares two real numbers up to specified number of digits by calling DP_ACCDIG(3f)"
+! ident_1="@(#) M_framework__approx almost(3f) function compares two real numbers up to specified number of digits by calling ACCDIG(3f)"
 
 class(*),intent(in)         :: x,y
 class(*),intent(in)         :: digits
@@ -111,18 +125,18 @@ integer                     :: ind
    type is(real)
       select type(y)
       type is(real)
-         call accdig(x,y,digits_local,acurcy,ind)
+         call sp_accdig(x,y,digits_local,acurcy,ind)
          if(verbose_local)then
             call journal('sc','*almost*','for values',x,y,'agreement of',acurcy,'digits out of requested',digits_local)
          endif
       class default
-         call dp_accdig(x,y,digits_local,acurcy,ind)
+         call accdig(x,y,digits_local,acurcy,ind)
          if(verbose_local)then
             call journal('sc','*almost*','for values',x,y,'agreement of',acurcy,'digits out of requested',digits_local)
          endif
       end select
    class default
-      call dp_accdig(x,y,digits,acurcy,ind)
+      call accdig(x,y,digits,acurcy,ind)
       if(verbose_local)then
          call journal('sc','*almost*','for values',x,y,'agreement of',acurcy,'digits out of requested',digits_local)
       endif
@@ -140,12 +154,13 @@ end function almost
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
-!!      accdig(3f) - [M_framework__approx] compare two real numbers only up to a specified number of digits
-!!      (LICENSE:PD)
+!!    sp_accdig(3f) - [M_framework__approx] compare two real numbers of
+!!    default kind only up to a specified number of digits
+!!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine accdig(x,y,digio,acurcy,ind)
+!!       subroutine sp_accdig(x,y,digio,acurcy,ind)
 !!
 !!        real,intent(in)     :: X
 !!        real,intent(in)     :: Y
@@ -156,7 +171,7 @@ end function almost
 !!##DESCRIPTION
 !!    This procedure is used to check how closely two numbers agree.
 !!
-!!       call accdig(X,Y,DIGI0,ACURCY,IND)
+!!       call sp_accdig(X,Y,DIGI0,ACURCY,IND)
 !!
 !!    The values X and Y are the numbers to compare, and DIGI0 is the
 !!    threshold number of digits to consider significant in returning IND.
@@ -179,11 +194,198 @@ end function almost
 !!         X and Y are considered equal within DIGI0 relative tolerance,
 !!         if ACURCY is greater than DIGI0.
 !!
-!!    For example, Take some numbers and compare then  to 1.2345678 ...
+!!    For example, Take some numbers and compare them to 1.2345678 ...
 !!
 !!       ================================================
 !!       A number     |    ACURCY       |   ACURCY
 !!                    |    1.2345678=Y  |   1.2345678=X
+!!       ================================================
+!!        1.234680    |    3.7900571    |   3.7901275
+!!        1.2345378   |    4.6144510    |   4.6144404
+!!        2.2234568   |    0.096367393  |   0.35188114
+!!        1.2345678   |    8.0000000    |   8.0000000
+!!        1.2345679   |    7.0732967    |   7.0731968
+!!       -1.2345678   |   -0.30103000   |  -0.30103000
+!!       76.234567    |   -1.7835463    |   0.0070906729
+!!        2.4691356   |    0.0          |   0.3010300
+!!        0.0         |    0.0          |  -0.91514942.
+!!
+!!    Due to the typical limits of the log function, the number of
+!!    significant digits in the result is best considered to be three.
+!!
+!!    Notice that 1.2345678=Y produces different values than 1.2345678=X
+!!
+!!    A negative result indicates the two values being compared either do
+!!    not agree in the first digit or they differ with respect to sign. An
+!!    example of two numbers which do not agree in their leading digit (and
+!!    actually differ in order of magnitude) is given above by X=76.234567
+!!    and Y=1.2345678; the accuracy reported is -1.7835463. An example of
+!!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
+!!    here the accuracy reported is -0.30103000.
+!!
+!!##EXAMPLE
+!!
+!!
+!!   Example program:
+!!
+!!    program demo_sp_accdig ! fortran 90 example
+!!    use M_framework__approx, only : sp_accdig
+!!    implicit none
+!!    integer :: digi
+!!    integer :: i10, i20, i30
+!!    integer :: ind, ind1, ind2
+!!    real    :: acurcy, acurcy1, acurcy2
+!!    real    :: a, b
+!!    real    :: vals(9)
+!!    data vals/ &
+!!      &1.234680,   1.2345378,  2.2234568, 1.2345678, &
+!!      &1.2345679, -1.2345678, 76.234567,  2.4691356, &
+!!      &0.0/
+!!       write(*,*)'========================='
+!!       do i10=0,16
+!!          a=1.0
+!!          b=a+1.0/(10.0**i10)
+!!          call sp_accdig(a,b,8.0,acurcy,ind)
+!!          write(*,*)i10,a,b,acurcy,ind
+!!       enddo
+!!       write(*,*)'========================='
+!!       digi=16
+!!       do i20=0,digi
+!!          a=1.0
+!!          b=a+1.0/(10.0**i20)
+!!          call sp_accdig(a,b,real(digi),acurcy,ind)
+!!          write(*,*)i20,a,b,acurcy,ind
+!!       enddo
+!!       write(*,*)'========================='
+!!       do i30=1,9
+!!          call sp_accdig(1.2345678,vals(i30),8.0,acurcy1,ind1)
+!!          call sp_accdig(vals(i30),1.2345678,8.0,acurcy2,ind2)
+!!          write(*,*)i30,vals(i30),acurcy1,acurcy2,ind1,ind2
+!!       enddo
+!!    end program demo_sp_accdig
+!!
+!!##REFERENCES
+!!
+!!   based on ...
+!!
+!!    NBS OMNITAB 1980 VERSION 6.01  1/ 1/81. accdig V 7.00  2/14/90. **
+!!       David Hogben,
+!!       Statistical Engineering Division,
+!!       Center for Computing and Applied Mathematics,
+!!       A337 Administration Building,
+!!       National Institute of Standards and Technology,
+!!       Gaithersburg, MD 20899
+!!                      TELEPHONE 301-975-2845
+!!           ORIGINAL VERSION -  October, 1969.
+!!            CURRENT VERSION - February, 1990.
+!!            JSU     VERSION - February, 1991.
+!!
+!!##DEPENDENCIES
+!!    o M_framework__journal(),log10(), abs(1)
+!!
+!!##AUTHOR
+!!    David Hogben, John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+!-----------------------------------------------------------------------------------------------------------------------------------
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!-----------------------------------------------------------------------------------------------------------------------------------
+SUBROUTINE sp_accdig(X,Y,digi0,ACURCY,IND)
+use M_framework__journal, only : journal
+implicit none
+
+! ident_2="@(#) M_framework__approx sp_accdig(3f) compare two real numbers only up to a specified number of digits"
+
+!     INPUT ...
+real,intent(in) :: x           ! First  of two real numbers to be compared.
+real,intent(in) :: y           ! Second of two real numbers to be compared.
+real,intent(in) :: digi0       ! Number of digits to be satisfied in relative tolerance.
+!     OUTPUT ...
+real,intent(out)    :: acurcy  ! = -LOG10(ABS((X-Y)/Y)))
+integer,intent(out) :: ind     ! = 0, If tolerance is     satisfied.
+! = 1, If tolerance is not satisfied.
+
+real     :: diff
+real     :: digi
+integer,parameter  :: ireal_significant_digits = int(log10(2.**digits(0.0))) ! maximum number of significant digits in a real number.
+
+   digi=digi0
+   if(digi <= 0)then
+      call journal('sc','*sp_accdig* bad number of significant digits=',digi)
+      digi=ireal_significant_digits
+   elseif(digi  >  ireal_significant_digits)then
+      call journal('sc','*sp_accdig* significant digit request too high=',digi)
+      digi=min(digi,real(ireal_significant_digits))
+   endif
+
+   diff = x - y
+   if(diff  ==  0.0) then
+      acurcy = ireal_significant_digits
+   elseif(y  ==  0.0) then
+      acurcy = -log10(abs(x))
+   else
+      acurcy = -log10(abs(diff)) + log10(abs(y))
+   endif
+
+   if(acurcy  <  digi ) then
+      ind = 1
+   else
+      ind = 0
+   endif
+
+END SUBROUTINE sp_accdig
+!-----------------------------------------------------------------------------------------------------------------------------------
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!-----------------------------------------------------------------------------------------------------------------------------------
+!>
+!!##NAME
+!!      accdig(3f) - [M_framework__approx] compare two numbers only up to a specified number of digits
+!!      (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!       elemental impure subroutine accdig(x,y,digio,acurcy,ind)
+!!
+!!        class(*),intent(in)  :: X
+!!        class(*),intent(in)  :: Y
+!!        class(*),intent(in)  :: DIGI0
+!!        real,intent(out)     :: acurcy
+!!        integer,intent(out)  :: ind
+!!
+!!##DESCRIPTION
+!!
+!!    This procedure is used to check how closely two numbers agree.
+!!
+!!       call accdig(X,Y,DIGI0,ACURCY,IND)
+!!
+!!    The values X and Y are the numbers to compare, and DIGI0 is the
+!!    threshold number of digits to consider significant in returning IND.
+!!
+!!    If X and Y are considered equal within DIGI0 relative tolerance,
+!!
+!!        IND    = 0, if tolerance is     satisfied.
+!!               = 1, if tolerance is not satisfied.
+!!
+!!    The result ACURCY gives a measure of the number of leading digits in X
+!!    which are the same as the number of leading digits in Y.
+!!
+!!         ACURCY=-log10((X-Y)/Y)   if X != Y and Y != 0
+!!         ACURCY=-log10(X-Y)       if X != Y and Y = 0
+!!         ACURCY=8                 if X=Y
+!!
+!!         ACURCY is never less than -8 or greater than 8 for 32-bit REAL values
+!!
+!!    TOLERANCE ...
+!!         X and Y are considered equal within DIGI0 relative tolerance,
+!!         if ACURCY is greater than DIGI0.
+!!
+!!    For example, Take some numbers and compare them  to 1.2345678 ...
+!!
+!!       ================================================
+!!       A number     |    ACURCY       |   ACURCY
+!!                    |    1.2345678=Y  |   1.2345678=X
+!!  =========================
 !!       ================================================
 !!        1.234680    |    3.7900571    |   3.7901275
 !!        1.2345378   |    4.6144510    |   4.6144404
@@ -216,193 +418,6 @@ end function almost
 !!    program demo_accdig ! fortran 90 example
 !!    use M_framework__approx, only : accdig
 !!    implicit none
-!!    integer :: digi
-!!    integer :: i10, i20, i30
-!!    integer :: ind, ind1, ind2
-!!    real    :: acurcy, acurcy1, acurcy2
-!!    real    :: a, b
-!!    real    :: vals(9)
-!!    data vals/ &
-!!      &1.234680,   1.2345378,  2.2234568, 1.2345678, &
-!!      &1.2345679, -1.2345678, 76.234567,  2.4691356, &
-!!      &0.0/
-!!       write(*,*)'========================='
-!!       do i10=0,16
-!!          a=1.0
-!!          b=a+1.0/(10**i10)
-!!          call accdig(a,b,8.0,acurcy,ind)
-!!          write(*,*)i10,a,b,acurcy,ind
-!!       enddo
-!!       write(*,*)'========================='
-!!       digi=16
-!!       do i20=0,digi
-!!          a=1.0
-!!          b=a+1.0/(10**i20)
-!!          call accdig(a,b,real(digi),acurcy,ind)
-!!          write(*,*)i20,a,b,acurcy,ind
-!!       enddo
-!!       write(*,*)'========================='
-!!       do i30=1,9
-!!          call accdig(1.2345678,vals(i30),8.0,acurcy1,ind1)
-!!          call accdig(vals(i30),1.2345678,8.0,acurcy2,ind2)
-!!          write(*,*)i30,vals(i30),acurcy1,acurcy2,ind1,ind2
-!!       enddo
-!!    end program demo_accdig
-!!
-!!##REFERENCES
-!!
-!!   based on ...
-!!
-!!    NBS OMNITAB 1980 VERSION 6.01  1/ 1/81. accdig V 7.00  2/14/90. **
-!!       David Hogben,
-!!       Statistical Engineering Division,
-!!       Center for Computing and Applied Mathematics,
-!!       A337 Administration Building,
-!!       National Institute of Standards and Technology,
-!!       Gaithersburg, MD 20899
-!!                      TELEPHONE 301-975-2845
-!!           ORIGINAL VERSION -  October, 1969.
-!!            CURRENT VERSION - February, 1990.
-!!            JSU     VERSION - February, 1991.
-!!
-!!##DEPENDENCIES
-!!    o M_framework__journal(),log10(), abs(1)
-!!
-!!##AUTHOR
-!!    David Hogben, John S. Urban
-!!
-!!##LICENSE
-!!    Public Domain
-!-----------------------------------------------------------------------------------------------------------------------------------
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!-----------------------------------------------------------------------------------------------------------------------------------
-SUBROUTINE accdig(X,Y,digi0,ACURCY,IND)
-use M_framework__journal, only : journal
-implicit none
-
-! ident_2="@(#) M_framework__approx accdig(3f) compare two real numbers only up to a specified number of digits"
-
-!     INPUT ...
-real,intent(in) :: x           ! First  of two real numbers to be compared.
-real,intent(in) :: y           ! Second of two real numbers to be compared.
-real,intent(in) :: digi0       ! Number of digits to be satisfied in relative tolerance.
-!     OUTPUT ...
-integer,intent(out) :: ind     ! = 0, If tolerance is     satisfied.
-! = 1, If tolerance is not satisfied.
-real,intent(out)    :: acurcy  ! = - LOG10(ABS((X-Y)/Y)))
-
-real     :: diff
-real     :: digi
-integer  :: ireal_significant_digits
-
-   ireal_significant_digits=int(log10(2.**digits(0.0))) ! maximum number of significant digits in a real number.
-   digi=digi0
-   if(digi <= 0)then
-      call journal('sc','*accdig* bad number of significant digits=',digi)
-      digi=ireal_significant_digits
-   elseif(digi  >  ireal_significant_digits)then
-      call journal('sc','*accdig* significant digit request too high=',digi)
-      digi=min(digi,real(ireal_significant_digits))
-   endif
-
-   diff = x - y
-   if(diff  ==  0.0) then
-      acurcy = digi
-   elseif(y  ==  0.0) then
-      acurcy = - log10(abs(x))
-   else
-      acurcy = - log10(abs(diff)) + log10(abs(y))
-   endif
-
-   if(acurcy  <  digi ) then
-      ind = 1
-   else
-      ind = 0
-   endif
-
-END SUBROUTINE accdig
-!-----------------------------------------------------------------------------------------------------------------------------------
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!-----------------------------------------------------------------------------------------------------------------------------------
-!>
-!!##NAME
-!!      dp_accdig(3f) - [M_framework__approx] compare two numbers only up to a specified number of digits
-!!      (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!       subroutine dp_accdig(x,y,digio,acurcy,ind)
-!!
-!!        class(*),intent(in)  :: X
-!!        class(*),intent(in)  :: Y
-!!        class(*),intent(in)  :: DIGI0
-!!        real,intent(out)     :: acurcy
-!!        integer,intent(out)  :: ind
-!!
-!!##DESCRIPTION
-!!
-!!    This procedure is used to check how closely two numbers agree.
-!!
-!!       call dp_accdig(X,Y,DIGI0,ACURCY,IND)
-!!
-!!    The values X and Y are the numbers to compare, and DIGI0 is the
-!!    threshold number of digits to consider significant in returning IND.
-!!
-!!    If X and Y are considered equal within DIGI0 relative tolerance,
-!!
-!!        IND    = 0, if tolerance is     satisfied.
-!!               = 1, if tolerance is not satisfied.
-!!
-!!    The result ACURCY gives a measure of the number of leading digits in X
-!!    which are the same as the number of leading digits in Y.
-!!
-!!         ACURCY=-log10((X-Y)/Y)   if X != Y and Y != 0
-!!         ACURCY=-log10(X-Y)       if X != Y and Y = 0
-!!         ACURCY=8                 if X=Y
-!!
-!!         ACURCY is never less than -8 or greater than 8 for REAL values
-!!
-!!    TOLERANCE ...
-!!         X and Y are considered equal within DIGI0 relative tolerance,
-!!         if ACURCY is greater than DIGI0.
-!!
-!!    For example, Take some numbers and compare then  to 1.2345678 ...
-!!
-!!       ================================================
-!!       A number     |    ACURCY       |   ACURCY
-!!                    |    1.2345678=Y  |   1.2345678=X
-!!       ================================================
-!!        1.234680    |    3.7900571    |   3.7901275
-!!        1.2345378   |    4.6144510    |   4.6144404
-!!        2.2234568   |    0.096367393  |   0.35188114
-!!        1.2345678   |    8.0000000    |   8.0000000
-!!        1.2345679   |    7.0732967    |   7.0731968
-!!       -1.2345678   |   -0.30103000   |  -0.30103000
-!!       76.234567    |   -1.7835463    |   0.0070906729
-!!        2.4691356   |    0.0          |   0.3010300
-!!        0.0         |    0.0          |  -0.91514942.
-!!
-!!    Due to the typical limits of the log function, the number of
-!!    significant digits in the result is best considered to be three.
-!!
-!!    Notice that 1.2345678=Y produces different values than 1.2345678=X
-!!
-!!    A negative result indicates the two values being compared either do
-!!    not agree in the first digit or they differ with respect to sign. An
-!!    example of two numbers which do not agree in their leading digit (and
-!!    actually differ in order of magnitude) is given above by X=76.234567
-!!    and Y=1.2345678; the accuracy reported is -1.7835463. An example of
-!!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
-!!    here the accuracy reported is -0.30103000.
-!!
-!!##EXAMPLE
-!!
-!!
-!!   Example program:
-!!
-!!    program demo_dp_accdig ! fortran 90 example
-!!    use M_framework__approx, only : dp_accdig
-!!    implicit none
 !!    integer         :: digi
 !!    doubleprecision :: a, b
 !!    integer         :: i10, i20, i30
@@ -416,25 +431,25 @@ END SUBROUTINE accdig
 !!       write(*,*)'========================='
 !!       do i10=0,16
 !!          a=1.0d0
-!!          b=a+1.0d0/(10**i10)
-!!          call dp_accdig(a,b,8.0,acurcy,ind)
+!!          b=a+1.0d0/(10.0d0**i10)
+!!          call accdig(a,b,8.0,acurcy,ind)
 !!          write(*,*)i10,a,b,acurcy,ind
 !!       enddo
 !!       write(*,*)'========================='
 !!       digi=16
 !!       do i20=0,digi
 !!          a=1.0d0
-!!          b=a+1.0d0/(10**i20)
-!!          call dp_accdig(a,b,dble(digi),acurcy,ind)
+!!          b=a+1.0d0/(10.0d0**i20)
+!!          call accdig(a,b,dble(digi),acurcy,ind)
 !!          write(*,*)i20,a,b,acurcy,ind
 !!       enddo
 !!       write(*,*)'========================='
 !!       do i30=1,9
-!!          call dp_accdig(1.2345678d0,vals(i30),8.0,acurcy1,ind1)
-!!          call dp_accdig(vals(i30),1.2345678d0,8.0,acurcy2,ind2)
+!!          call accdig(1.2345678d0,vals(i30),8.0,acurcy1,ind1)
+!!          call accdig(vals(i30),1.2345678d0,8.0,acurcy2,ind2)
 !!          write(*,*)i30,vals(i30),acurcy1,acurcy2,ind1,ind2
 !!       enddo
-!!    end program demo_dp_accdig
+!!    end program demo_accdig
 !!
 !!##NOTES
 !!##REFERENCES
@@ -464,7 +479,7 @@ END SUBROUTINE accdig
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
-SUBROUTINE dp_accdig(x,y,digi0,ACURCY,IND)
+elemental impure SUBROUTINE accdig(x,y,digi0,ACURCY,IND)
 #ifdef __NVCOMPILER
 use,intrinsic :: iso_fortran_env, only : wp=>real64
 #else
@@ -473,50 +488,48 @@ use,intrinsic :: iso_fortran_env, only : wp=>real128
 use M_framework__journal,  only : journal
 implicit none
 
-! ident_3="@(#) M_framework__approx dp_accdig(3f) compare two values only up to a specified number of digits"
+! ident_3="@(#) M_framework__approx accdig(3f) compare two values only up to a specified number of digits"
 
 !  INPUT ...
 class(*),intent(in)  :: x           ! FIRST  OF TWO NUMBERS TO BE COMPARED.
 class(*),intent(in)  :: y           ! SECOND OF TWO NUMBERS TO BE COMPARED.
 class(*),intent(in)  :: digi0       ! NUMBER OF DIGITS TO BE SATISFIED IN RELATIVE TOLERANCE.
-
-real(kind=wp)   :: x_local
-real(kind=wp)   :: y_local
-
+real(kind=wp)        :: x_local
+real(kind=wp)        :: y_local
 !  OUTPUT ...
+real,intent(out)     :: acurcy      ! = -LOG10(ABS((x_local-y_local)/y_local)))
 integer,intent(out)  :: ind         ! = 0, IF TOLERANCE IS     SATISFIED.
-                                              ! = 1, IF TOLERANCE IS NOT SATISFIED.
-real,intent(out)     :: acurcy      ! = - LOG10(ABS((x_local-y_local)/y_local)))
-real(kind=wp)   :: diff
-real(kind=wp)   :: digi
-integer              :: idble_significant_digits
+                                    ! = 1, IF TOLERANCE IS NOT SATISFIED.
+real(kind=wp)        :: diff
+real(kind=wp)        :: digi
+                        ! Maximum number of significant digits in a number of biggest real kind.
+integer,parameter    :: idble_significant_digits = int(log10(2.0_wp**digits(0.0_wp)))
 
    x_local=anyscalar_to_realbig_(x)
    y_local=anyscalar_to_realbig_(y)
    digi=anyscalar_to_realbig_(digi0)
 
-   idble_significant_digits=int(log10(2.0_wp**digits(0.0_wp))) ! MAXIMUM NUMBER OF SIGNIFICANT DIGITS IN A REAL128 NUMBER.
    if(digi <= 0)then
-      call journal('sc','*dp_accdig* bad number of significant digits=',real(digi,kind=wp))
+      call journal('sc','*accdig* bad number of significant digits=',real(digi,kind=wp))
       digi=idble_significant_digits
    elseif(digi  >  idble_significant_digits)then
-      call journal('sc','*dp_accdig* significant digit request too high=',real(digi,kind=wp))
+      call journal('sc','*accdig* significant digit request too high=',real(digi,kind=wp))
       digi=min(digi,real(idble_significant_digits,kind=wp))
    endif
    diff = x_local - y_local
    if(diff  ==  0.0_wp) then
-      acurcy = digi
+      acurcy = idble_significant_digits
    elseif(y_local  ==  0.0_wp) then
-      acurcy = - log10(abs(x_local))
+      acurcy = -log10(abs(x_local))
    else
-      acurcy = - log10(abs(diff)) + log10(abs(y_local))
+      acurcy = -log10(abs(diff)) + log10(abs(y_local))
    endif
    if(acurcy  <  digi ) then
       ind = 1
    else
       ind = 0
    endif
-end subroutine dp_accdig
+end subroutine accdig
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -730,14 +743,15 @@ end function round
 !!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RN
 !!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RC
 !!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RP
-pure elemental function significant(val,digits,round)
+pure elemental function significant_real32(val,digits,round) result(significant)
 
-! ident_7="@(#) M_framework__approx significant(3f) round val to specified number of significant digits"
+! ident_7="@(#) M_framework__approx significant_real32(3f) round val to specified number of significant digits"
 
-real,intent(in)                      :: val
+integer,parameter :: wp=real32
+real(kind=wp),intent(in)             :: val
 integer,intent(in)                   :: digits
 character(len=*),intent(in),optional :: round
-real                                 :: significant
+real(kind=wp)                        :: significant
 character(len=80)                    :: line,fmt
    if(present(round))then
       write(fmt,'("(",a,",e0.",i0,")")')trim(round),digits ! build e0.N format to write specified number of digits as 0.NNNNN+EE
@@ -745,8 +759,27 @@ character(len=80)                    :: line,fmt
       write(fmt,'("(e0.",i0,")")')digits ! build e0.N format to write specified number of digits as 0.NNNNN+EE
    endif
    write(line,fmt)val                  ! write with specified number of significant diguts
-   read(line,'(e50.20)')significant    ! read back into a value
-end function significant
+   read(line,'(e80.30)')significant    ! read back into a value
+end function significant_real32
+!-----------------------------------------------------------------------------------------------------------------------------------
+pure elemental function significant_real64(val,digits,round) result(significant)
+
+! ident_8="@(#) M_framework__approx significant_real64(3f) round val to specified number of significant digits"
+
+integer,parameter :: wp=real64
+real(kind=wp),intent(in)             :: val
+integer,intent(in)                   :: digits
+character(len=*),intent(in),optional :: round
+real(kind=wp)                        :: significant
+character(len=80)                    :: line,fmt
+   if(present(round))then
+      write(fmt,'("(",a,",d0.",i0,")")')trim(round),digits ! build e0.N format to write specified number of digits as 0.NNNNN+EE
+   else
+      write(fmt,'("(d0.",i0,")")')digits ! build e0.N format to write specified number of digits as 0.NNNNN+EE
+   endif
+   write(line,fmt)val                  ! write with specified number of significant diguts
+   read(line,'(d80.30)')significant    ! read back into a value
+end function significant_real64
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -759,7 +792,7 @@ use,intrinsic :: iso_fortran_env, only : wp=>real128
 #endif
 implicit none
 
-! ident_8="@(#) M_framework__approx anyscalar_to_realbig_(3f) convert integer or real parameter of any kind to real128 or biggest available"
+! ident_9="@(#) M_framework__approx anyscalar_to_realbig_(3f) convert integer or real parameter of any kind to real128 or biggest available"
 
 class(*),intent(in)          :: valuein
 real(kind=wp)           :: d_out
@@ -791,7 +824,7 @@ pure elemental function anyscalar_to_double_(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-! ident_9="@(#) M_framework__approx anyscalar_to_double_(3f) convert integer or real parameter of any kind to doubleprecision"
+! ident_10="@(#) M_framework__approx anyscalar_to_double_(3f) convert integer or real parameter of any kind to doubleprecision"
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out

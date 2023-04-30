@@ -1,11 +1,16 @@
 program runtest
+use, intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64 
+use, intrinsic :: iso_fortran_env,  only : real32, real64, real128  
+use, intrinsic :: iso_fortran_env,  only : ERROR_UNIT,OUTPUT_UNIT  
 use M_framework__msg
 use M_framework__verify
 use M_framework__journal
 use M_framework__approx
+implicit none
+character(len=*),parameter :: g='(*(g0,1x))'
+   call unit_check_mode(level=0,luns=[OUTPUT_UNIT])
    call test_accdig()         ! compare two real numbers only up to a specified number of digits
    call test_almost()         ! function compares two numbers only up to a specified number of digits
-   call test_dp_accdig()      ! compare two double numbers only up to a specified number of digits
    call test_in_margin()      ! check if two reals are approximately equal using a relative margin
    call test_round()          ! round val to specified number of significant digits
    call test_significant()    ! round val to specified number of significant digits
@@ -34,9 +39,35 @@ subroutine test_in_margin()
 end subroutine test_in_margin
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_significant()
+doubleprecision,allocatable :: answers(:)
+doubleprecision,allocatable :: expected(:)
 
    call unit_check_start('significant',msg='')
-   !!call unit_check('significant', 0.eq.0, 'checking', 100)
+
+   answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RU')
+   expected=[2.0d0, 1.3d0, 1.24d0, 1.235d0, 1.2346d0, 1.23457d0, 1.234568d0, 1.2345679d0, 1.2345679d0]
+   call unit_check('significant',all( answers == expected),'RU')
+
+   answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RD')
+   expected=[1.0d0, 1.2d0, 1.23d0, 1.234d0, 1.2345d0, 1.23456d0, 1.234567d0, 1.2345678d0, 1.23456789d0]
+   call unit_check('significant',all( answers == expected),'RD')
+
+   answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RZ')
+   expected=[1.0d0, 1.2d0, 1.23d0, 1.234d0, 1.2345d0, 1.23456d0, 1.234567d0, 1.2345678d0, 1.23456789d0]
+   call unit_check('significant',all( answers == expected),'RZ')
+
+   answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RN')
+   expected=[1.0d0, 1.2d0, 1.23d0, 1.235d0, 1.2346d0, 1.23457d0, 1.234568d0, 1.2345679d0, 1.23456789d0]
+   call unit_check('significant',all( answers == expected),'RN')
+
+   answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RC')
+   expected=[1.0d0, 1.2d0, 1.23d0, 1.235d0, 1.2346d0, 1.23457d0, 1.234568d0, 1.2345679d0, 1.23456789d0]
+   call unit_check('significant',all( answers == expected),'RC')
+
+   answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RP')
+   expected=[1.0d0, 1.2d0, 1.23d0, 1.235d0, 1.2346d0, 1.23457d0, 1.234568d0, 1.2345679d0, 1.23456789d0]
+   call unit_check('significant',all( answers == expected),'RP')
+
    call unit_check_done('significant',msg='')
 end subroutine test_significant
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -48,9 +79,23 @@ subroutine test_round()
 end subroutine test_round
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_accdig()
+integer,parameter :: sz=16
+doubleprecision   :: a, b, aarr(sz), barr(sz)
+integer           :: i, ind, indarr(sz)
+real              :: acurcy, acurcyarr(sz)
 
    call unit_check_start('accdig',msg='')
-   !!call unit_check('accdig', 0.eq.0, 'checking', 100)
+   do i=1,sz
+      a=1.0d0
+      b=a+1.0d0/(10.0d0**i)
+      call accdig(a,b,8.0,acurcy,ind)
+      if(unit_check_level>0) write(*,g)i,a,b,acurcy,ind
+      aarr(i)=a
+      barr(i)=b
+   enddo
+   call accdig(aarr,barr,8.0,acurcyarr,indarr)
+   if(unit_check_level>0) write(*,g)(aarr(i),barr(i),acurcyarr(i),indarr(i),new_line('a'),i=1,sz)
+   call unit_check('accdig', all(indarr.eq.[1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0]), 'expected 7 bad, got ',count(indarr.eq.1)+0)
    call unit_check_done('accdig',msg='')
 end subroutine test_accdig
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -69,16 +114,8 @@ logical,parameter :: expected(*)=[.true., .true., .false., .false., .false., .fa
    call unit_check_done('almost',msg='')
 end subroutine test_almost
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_dp_accdig()
-
-   call unit_check_start('dp_accdig',msg='')
-   !!call unit_check('dp_accdig', 0.eq.0, 'checking', 100)
-   call unit_check_done('dp_accdig',msg='')
-end subroutine test_dp_accdig
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 end program runtest
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !   call test_accdig()         ! compare two real numbers only up to a specified number of digits
-!   call test_dp_accdig()      ! compare two double numbers only up to a specified number of digits
 !   call test_round()          ! round val to specified number of significant digits
 !   call test_significant()    ! round val to specified number of significant digits
