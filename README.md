@@ -172,13 +172,13 @@ a test called "crash" with gdb(1) use
 To run all the tests in the gdb(1) debugger (you can enter
 "q" after each test has run; or enter gdb commands at the prompt):
 ```bash
-     fpm test --target 'base_*' --verbose \
-     --runner 'gdb -ex run --quiet --args' \
-     -- flags=9997,9998,9999 luns=6
+     fpm test --target '*' --verbose \
+     --runner 'gdb -ex "list, 0" -ex run --quiet --args' \
+     -- flags=9997,9998,9999 luns=6 level=3
 ```
-This runs fpm(1) in verbose mode, executes all the test programs
-whose name starts with "base_" leaving you at the gdb(1) prompt after
-each program runs, passing a few modes as arguments.
+This runs fpm(1) in verbose mode, executes all the test programs leaving
+you at the gdb(1) prompt after each program runs, passing a few modes
+as arguments.
 
 This is true with other tools that you can use with --runner as well. 
 See "fpm help runner" or "fpm manual >manual.txt" for more information.
