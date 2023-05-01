@@ -9,7 +9,7 @@ subroutine test_framework()
    call unit_check_start('unit_check_start',msg='')
 !      call unit_check('unit_check_start', .true.,'expression is true')
 !      call unit_check('unit_check_start', .false.,'expression is false')
-   call unit_check_done('unit_check_start',msg='')
+   call unit_check_end('unit_check_start',msg='')
 end subroutine test_framework
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 end program runtest

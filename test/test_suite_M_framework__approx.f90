@@ -1,7 +1,7 @@
 program runtest
-use, intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64 
-use, intrinsic :: iso_fortran_env,  only : real32, real64, real128  
-use, intrinsic :: iso_fortran_env,  only : ERROR_UNIT,OUTPUT_UNIT  
+use, intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
+use, intrinsic :: iso_fortran_env,  only : real32, real64, real128
+use, intrinsic :: iso_fortran_env,  only : ERROR_UNIT,OUTPUT_UNIT
 use M_framework__msg
 use M_framework__verify
 use M_framework__journal
@@ -35,7 +35,7 @@ subroutine test_in_margin()
      call unit_check('in_margin',     all(in_margin([4.0,40.0,400.0,4000.0,40000.0],&
                                                   & [3.9,39.9,399.9,3999.9,39999.9],0.1)),'should all be true')
 
-   call unit_check_done('in_margin',msg='')
+   call unit_check_end('in_margin',msg='')
 end subroutine test_in_margin
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_significant()
@@ -68,14 +68,14 @@ doubleprecision,allocatable :: expected(:)
    expected=[1.0d0, 1.2d0, 1.23d0, 1.235d0, 1.2346d0, 1.23457d0, 1.234568d0, 1.2345679d0, 1.23456789d0]
    call unit_check('significant',all( answers == expected),'RP')
 
-   call unit_check_done('significant',msg='')
+   call unit_check_end('significant',msg='')
 end subroutine test_significant
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_round()
 
    call unit_check_start('round',msg='')
    !!call unit_check('round', 0.eq.0, 'checking', 100)
-   call unit_check_done('round',msg='')
+   call unit_check_end('round',msg='')
 end subroutine test_round
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_accdig()
@@ -96,7 +96,7 @@ real              :: acurcy, acurcyarr(sz)
    call accdig(aarr,barr,8.0,acurcyarr,indarr)
    if(unit_check_level>0) write(*,g)(aarr(i),barr(i),acurcyarr(i),indarr(i),new_line('a'),i=1,sz)
    call unit_check('accdig', all(indarr.eq.[1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0]), 'expected 7 bad, got ',count(indarr.eq.1)+0)
-   call unit_check_done('accdig',msg='')
+   call unit_check_end('accdig',msg='')
 end subroutine test_accdig
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_almost()
@@ -111,7 +111,7 @@ logical,parameter :: expected(*)=[.true., .true., .false., .false., .false., .fa
        r=real(i)
        call unit_check('almost',almost(x,y,r,verbose=.false.).eqv.expected(i))
    enddo
-   call unit_check_done('almost',msg='')
+   call unit_check_end('almost',msg='')
 end subroutine test_almost
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 end program runtest

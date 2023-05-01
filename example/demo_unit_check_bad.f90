@@ -1,7 +1,7 @@
       program demo_unit_check_bad
       use M_framework__verify, only: unit_check_start, unit_check
       use M_framework__verify, only: unit_check_end, unit_check_stop
-      use M_framework__verify, only: unit_check_good, unit_check_bad
+      use M_framework__verify, only: unit_check_bad
 
       implicit none
       integer :: x

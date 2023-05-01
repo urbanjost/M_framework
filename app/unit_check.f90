@@ -16,7 +16,7 @@ program maketest
    write (out, g) "& stdout => output_unit, &"
    write (out, g) "& stderr => error_unit"
    write (out, g) "use M_framework, only : unit_check_start, unit_check, unit_check_msg"
-   write (out, g) "use M_framework, only : unit_check_done,  unit_check_good, unit_check_bad"
+   write (out, g) "use M_framework, only : unit_check_end,  unit_check_good, unit_check_bad"
    write (out, g) "use M_framework, only : unit_check_stop,  unit_check_mode"
    write (out, g) "use M_framework, only : unit_check_level, unit_check_levels"
    write (out, g) "!use M_xxxx"
@@ -49,7 +49,7 @@ program maketest
       write (out, g) 'subroutine test_'//words(i)//'()'
       write (out, g) '   call unit_check_start("'//words(i)//'",msg="")'
       write (out, g) '   !!call unit_check("'//words(i)//'", 0 .eq. 0, "checking",100)'
-      write (out, g) '   call unit_check_done("'//words(i)//'",msg="")'
+      write (out, g) '   call unit_check_end("'//words(i)//'",msg="")'
       write (out, g) 'end subroutine test_'//words(i)
    end do
 

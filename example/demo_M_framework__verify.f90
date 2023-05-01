@@ -1,101 +1,57 @@
       !! program demo_M_framework__verify
       module M_framework__demo
-      ! create a few procedures to test
       private
       public one ! some regular routine
       public two ! some regular routine
-      public test_suite_M_demo ! special name for use with test_suite(1bash).
       contains
 
-      subroutine one()
+      subroutine one(array)
+      integer,intent(out),allocatable :: array(:)
+         array=[21,51,14,45]
       end subroutine one
 
-      subroutine two()
+      subroutine two(array)
+      integer,intent(inout),allocatable :: array(:)
+         array=2*array
       end subroutine two
-
-      !! unit test
-      subroutine test_suite_M_demo
-      use M_framework__verify, only: unit_check_start, unit_check
-      use M_framework__verify, only: unit_check_good, unit_check_bad, &
-              & unit_check_end
-      use M_framework__verify, only: unit_check_msg, unit_check_stop, &
-              & unit_check_system
-      implicit none
-      integer :: i, j, k
-      integer,allocatable :: array(:)
-      integer :: arr(4)=[21,51,14,45]
-      integer :: a=21, b=51, c=14, d=45
-      ! TEST-DRIVEN DEVELOPMENT
-      ! optional set-up       perform initialization operations common to
-      !                       all tests within a module
-         i=1
-         j=2
-         k=3
-         array=[10,20,30,40,50,60,70]
-         call test_one()
-         call test_two()
-      ! optional tear-down    perform finalization operations common to
-      !                       all tests within a module
-      contains
-
-      subroutine test_one()
-      !  register an entry for specified name ("one") in database
-      ! with status of zero (0)
-      call unit_check_start('one')
-
-      !  if mask test fails, can
-      !  * produce a SUCCESS: or FAIL: message and stop program
-      !  * change database status for specified entry to -1 and
-      !    stop program, else continue
-      !  * produce a SUCCESS: or FAIL: message and keep going
-      !  * produce a FAIL: message if test fails but no SUCCESS: message
-      !    if test passes
-      call unit_check('one',i > 0,msg='I > 0')
-
-      ! using ANY(3f) and ALL(3f)
-      call unit_check('one',all([i,j,k] > 0), &
-              & 'testing if everyone greater than zero')
-      ! display message built of scalars as well
-      call unit_check('one',all(.not.[i,j,k] == 4), &
-              & 'for set ',i,j,k,'if no one equals four')
-
-      ! for tests that are hard to reduce to a logical test just call
-      ! unit_check_bad(3f) if fail
-      if(i+j+k < 1)then
-         call unit_check_bad('one')
-      endif
-
-      call unit_check_end('one','checks on "one" ended')
-      end subroutine test_one
-
-      subroutine test_two
-      ! use of all(3f), any(3f), merge(3f) can be useful
-      ! if you know what these would produce
-      ! this would return an array, the last element having the value T, else F
-      !  write(*,*)['A','X','X','X','X','B'] == 'B'
-      !  write(*,*)all(['A','X','X','X','X','X'] == 'X') ! this would return F
-      !  write(*,*)any(['A','X','X','X','X','X'] == 'B') ! this would return F
-      !  write(*,*)any(['A','X','X','X','X','B'] == 'B') ! this would return T
-      !  write(*,*).not.all(array < 100)
-      !  write(*,*)all(array < 100)
-      !  ! compare a list. This would return T
-      !  write(*,*)all([a,b,c,d] == [21,51,14,45])
-      !  ! compare an array. This would return T
-      !  write(*,*)all(arr == [21,51,14,45])
-      ! you know how valuable ANY(3f) and ALL(3f) will be
-      call unit_check_start('two','check on "two" passed')
-      call unit_check('two', 1 > 0 .and. &
-              & abs(10.10000-10.10001) < 0.0001,msg='two looks good')
-      call unit_check_end('two','checks on "two" ended')
-      end subroutine test_two
-
-      end subroutine test_suite_M_demo
 
       end module M_framework__demo
 
       program demo_M_framework__verify
-      use M_framework__demo,   only: test_suite_M_demo
-      use M_framework__verify, only: unit_check_mode
-         call unit_check_mode(command='',flags=[0],keep_going=.true.)
-         call test_suite_M_demo()
+      use M_framework, only: unit_check_start, unit_check,   &
+          & unit_check_end, unit_check_msg, unit_check_stop, &
+          & unit_check_system, unit_check_mode
+      use M_framework__demo,   only: one, two
+      ! set-up
+      call unit_check_mode(command='',flags=[0],keep_going=.true.)
+      ! call a test procedure for each routine to test
+         call test_one()
+         call test_two()
+      ! tear-down
+      call unit_check_stop()
+      contains
+
+      subroutine test_one()
+      integer,allocatable :: results(:)
+      integer,parameter   :: expected(*)=[21,51,14,45]
+      call unit_check_start('one')
+      call one(results)
+      call unit_check('one',all(expected>0), &
+         & 'testing if everyone greater than zero')
+      call unit_check('one',all(expected==results), &
+         & 'testing if all values are expected')
+      call unit_check_end('one','checks on "one" ended')
+      end subroutine test_one
+
+      subroutine test_two
+      integer,allocatable :: results(:)
+      integer,parameter   :: expected(*)=[2,20,200]
+      results=[1,10,100]
+      call two(results)
+      call unit_check_start('two','check procedure "two" ')
+      call unit_check('two', all(expected == results) .and. &
+         & all(expected > 0) .and. maxval(expected) <201,msg='long expression')
+      call unit_check_end('two','checks on "two" ended')
+      end subroutine test_two
+
       end program demo_M_framework__verify

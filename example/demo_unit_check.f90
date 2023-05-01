@@ -1,7 +1,10 @@
      program demo_unit_check
-     use M_framework__verify, only: unit_check_start, &
-                           & unit_check, unit_check_end
-     use M_framework__verify, only: unit_check_mode
+     use M_framework__verify, only: &
+        & unit_check_mode,     &
+        & unit_check_start,    &
+        & unit_check,          &
+        & unit_check_end,      &
+        & unit_check_stop
      use M_framework__approx, only: almost
 
      implicit none
@@ -34,5 +37,7 @@
 
         call unit_check_end('myroutine', &
         & msg='checks on "myroutine" all passed')
+
+        call unit_check_stop()
 
      end program demo_unit_check
