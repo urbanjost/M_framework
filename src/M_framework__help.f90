@@ -10,7 +10,8 @@ contains
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    help_command(3f) - [M_framework__help] uses a specially formatted text array to
+!!    help_command(3f) - [M_framework__help] uses a specially formatted
+!!    text array to
 !!    provide a HELP interface
 !!    (LICENSE:PD)
 !!

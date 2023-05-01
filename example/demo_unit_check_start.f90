@@ -1,5 +1,6 @@
       program demo_unit_check_start
-      use M_framework__verify, only: unit_check_start, unit_check, unit_check_done
+      use M_framework__verify, only: unit_check_start, unit_check, &
+       & unit_check_end
       implicit none
       integer :: ival
       call unit_check_start('myroutine')
@@ -16,9 +17,9 @@
         & ')
 
       ival=10
-      call unit_check('myroutine', ival > 3 ,   msg='test if big enough')
-      call unit_check('myroutine', ival < 100 , msg='test if small enough')
+      call unit_check('myroutine', ival > 3 ,   msg=' if big enough')
+      call unit_check('myroutine', ival < 100 , msg=' if small enough')
 
-      call unit_check_done('myroutine',msg='completed checks of "myroutine"')
+      call unit_check_end('myroutine',msg='completed checks of "myroutine"')
 
       end program demo_unit_check_start

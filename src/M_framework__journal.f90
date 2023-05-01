@@ -1,6 +1,7 @@
 !>
 !!##NAME
-!!     M_framework__journal(3fm) - [M_framework__journal::INTRO] write program messages to stdout and/or
+!!     M_framework__journal(3fm) - [M_framework__journal::INTRO] write
+!!     program messages to stdout and/or
 !!     a log file
 !!     (LICENSE:PD)
 !!##SYNOPSIS
@@ -42,9 +43,9 @@
 !!     >    call journal('SC','i1=',i1,'i2=',i2,'i3=',i3)
 !!     > enddo
 !!
-!!    In this example an output line was built with an internal write; but calls
-!!    to journal(3f) with numeric values with and without advancing I/O turned on
-!!    are often used for simpler output:
+!!    In this example an output line was built with an internal write; but
+!!    calls to journal(3f) with numeric values with and without advancing
+!!    I/O turned on are often used for simpler output:
 !!
 !!       I=10
 !!       R=20.3
@@ -52,23 +53,25 @@
 !!       call journal('+SC','I=',i)
 !!       call journal('SC','AND R=',r)
 !!
-!!    writes to the trail file are ignored unless a trail file was opened with
+!!    writes to the trail file are ignored unless a trail file was opened
+!!    with
 !!
 !!       CALL JOURNAL('O',filename)
 !!
 !!
-!!    So that routines that do their output via JOURNAL(3f) can be used with and
-!!    without programs generating trail files. That is, destinations 'T' and 'C'
-!!    are ignored unless a trail file has been requested.
+!!    So that routines that do their output via JOURNAL(3f) can be used with
+!!    and without programs generating trail files. That is, destinations
+!!    'T' and 'C' are ignored unless a trail file has been requested.
 !!
 !!    With no parameters, the trail file is flushed.
 !!
 !!##EXAMPLES
 !!
 !!
-!!    The man(1) page for journal(3f) describes all the options for the WHERE field.
-!!    In addition to being used to generate a journal, the routine can be used for
-!!    producing optional debug messages and timing information.
+!!    The man(1) page for journal(3f) describes all the options for the
+!!    WHERE field.  In addition to being used to generate a journal,
+!!    the routine can be used for producing optional debug messages and
+!!    timing information.
 !!
 !!    Sample program for debug messages:
 !!
@@ -164,7 +167,7 @@ private
 !!    subroutine journal([where,],[VALUE(s)])
 !!
 !!     character(len=*),intent(in) :: where
-!!     character(len=*)|real|integer|doubleprecision|complex,optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
+!!     class(*),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
 !!
 !!   WRITE MESSAGES
 !!    basic messages
@@ -265,15 +268,18 @@ private
 !!    program demo_journal
 !!    use M_framework__journal, only : journal
 !!    !! BASIC USAGE
-!!    call journal('write to standard output as-is, and trail file as a comment if open')
-!!    ! since we have not opened a trail file yet, only stdout will display output
+!!    call journal(&
+!!    & 'write to standard output as-is, and trail file as a comment if open')
+!!    ! since trail file is not yet open, only stdout will display output
 !!    call journal('c','ignored, as trail file is not open')
 !!    ! now open trail file "trail"
 !!    call journal('o','trail')
 !!    call journal('sc','same thing except now trail file is open')
 !!    ! only write to trail file if open
-!!    call journal('c','not ignored, as trail file is open. Written with # suffix')
-!!    call journal('t','not ignored, as trail file is open. Written as-is')
+!!    call journal('c',&
+!!    & 'not ignored, as trail file is open. Written with # suffix')
+!!    call journal('t',&
+!!    & 'not ignored, as trail file is open. Written as-is')
 !!    ! turn off trail file
 !!    call journal('o','')
 !!    end program demo_journal
@@ -285,13 +291,16 @@ private
 !!    implicit none
 !!       call journal('S','This is a test with no optional value')
 !!       call journal('S','This is a test with a logical value',.true.)
-!!       call journal('S','This is a test with a double value',1234567890.123456789d0)
-!!       call journal('S','This is a test with a real value',1234567890.123456789)
+!!       call journal('S', &
+!!         & 'This is a test with a double value',1234567890.123456789d0)
+!!       call journal('S', &
+!!         & 'This is a test with a real value',1234567890.123456789)
 !!       call journal('S','This is a test with an integer value',1234567890)
 !!       call journal('STDC','This is a test using STDC',1234567890)
 !!       call journal('stdc','This is a test using stdc',1234567890)
-!!       call journal('o','journal.txt')                        ! open trail file
-!!       call journal('S',1,12.34,56789.111111111d0,.false.,'a bunch of values')
+!!       call journal('o','journal.txt')  ! open trail file
+!!       call journal('S', &
+!!         & 1,12.34,56789.111111111d0,.false.,'a bunch of values')
 !!       ! the combinations that make sense
 !!       call journal('st','stdout and trail')
 !!       call journal('s' ,'stdout only')
@@ -304,33 +313,42 @@ private
 !!    end program test_journal
 !!
 !!    program testit
-!!    ! this is a utility program that calls the module routines. It is typically built using ccall(1).
+!!    ! this is a utility program that calls the module routines. It is
+!!    ! typically built using ccall(1).
 !!    use M_framework__journal, only : journal
-!!       character(len=:),allocatable :: time_stamp_prefix
-!!       call journal('s','--------------------------------------------------------------------------------')
-!!       call journal('s','SIMPLE WRITES')
-!!       call one()
-!!       call two()
-!!       call journal('sc','called ONE() and TWO() but did not generate a log file')
-!!       call journal('s','--------------------------------------------------------------------------------')
-!!       call journal('s','SIMPLE WRITES WITH LOG FILE')
-!!       call journal('o','journal.txt')                        ! open trail file
-!!       call one()
-!!       call two()
-!!       call journal('sc','called ONE() and TWO() and generated log file journal.txt')
-!!       call journal('','journal.txt')                         ! close trail file
-!!       call journal('s','--------------------------------------------------------------------------------')
-!!       call journal('s','SIMPLE WRITES WITH TIMING INFORMATION')
-!!       time_stamp_prefix='CPU_TIME=%c:CALLS=%C:SINCE=%S:%b'  ! change time prefix
-!!       call journal('%',time_stamp_prefix) ! set a time prefix in front of messages
-!!       call journal('o','timed.txt')                          ! open trail file
-!!       call one()
-!!       call two()
-!!       call journal('sc','called ONE() and TWO() and generate log file timed.txt')
-!!       call journal('','timed.txt')                           ! close trail file
-!!       call journal('%','')                                   ! turn off time prefix
-!!       call journal('o','timed.txt')                          ! open trail file
-!!       call journal('s','--------------------------------------------------------------------------------')
+!!    character(len=:),allocatable :: time_stamp_prefix
+!!     call journal('s', &
+!!     & '------------------------------------------------------------')
+!!     call journal('s','SIMPLE WRITES')
+!!     call one()
+!!     call two()
+!!     call journal('sc', &
+!!     & 'called ONE() and TWO() but did not generate a log file')
+!!     call journal('s', &
+!!     & '------------------------------------------------------------')
+!!     call journal('s','SIMPLE WRITES WITH LOG FILE')
+!!     call journal('o','journal.txt')     ! open trail file
+!!     call one()
+!!     call two()
+!!     call journal('sc', &
+!!     & 'called ONE() and TWO() and generated log file journal.txt')
+!!     call journal('','journal.txt')      ! close trail file
+!!     call journal('s', &
+!!     & '------------------------------------------------------------')
+!!     call journal('s','SIMPLE WRITES WITH TIMING INFORMATION')
+!!     ! change time prefix
+!!     time_stamp_prefix='CPU_TIME=%c:CALLS=%C:SINCE=%S:%b'
+!!     call journal('%',time_stamp_prefix) ! set a message time prefix
+!!     call journal('o','timed.txt')       ! open trail file
+!!     call one()
+!!     call two()
+!!     call journal('sc', &
+!!     & 'called ONE() and TWO() and generate log file timed.txt')
+!!     call journal('','timed.txt')        ! close trail file
+!!     call journal('%','')                ! turn off time prefix
+!!     call journal('o','timed.txt')       ! open trail file
+!!     call journal('s', &
+!!     & '------------------------------------------------------------')
 !!
 !!    contains
 !!
@@ -544,7 +562,8 @@ end subroutine set_stdout_lun
 !===================================================================================================================================
 !>
 !!##NAME
-!!    where_write_message_all(3f) - [M_framework__journal] converts any standard scalar type to a string and calls journal(3f)
+!!    where_write_message_all(3f) - [M_framework__journal] converts any
+!!    standard scalar type to a string and calls journal(3f)
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -556,7 +575,8 @@ end subroutine set_stdout_lun
 !!     character,intent(in),optional :: sep
 !!
 !!##DESCRIPTION
-!!    where_write_message_all(3f) builds and writes a space-separated string from up to nine scalar values.
+!!    where_write_message_all(3f) builds and writes a space-separated string
+!!    from up to nine scalar values.
 !!
 !!##OPTIONS
 !!

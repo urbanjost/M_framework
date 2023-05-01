@@ -1,16 +1,14 @@
 !>
 !!##NAME
-!!    M_framework__verify(3fm) - [M_framework__verify::INTRO] a collection of Fortran routines for
-!!                    supporting code development by providing error
-!!                    processing, debugging procedures and unit testing.
-!!                    (LICENSE:PD)
+!!    M_framework__verify(3fm) - [M_framework__verify::INTRO] unit test framework
+!!     (LICENSE:PD)
 !!##SYNOPSIS
 !!
 !!
 !!  Module procedures
 !!
 !!    use M_framework__verify, only : unit_check, unit_check_start,     &
-!!                                    unit_check_done, unit_check_stop, &
+!!                                    unit_check_end, unit_check_stop, &
 !!                                    unit_check_good, unit_check_bad,  &
 !!                                    unit_check_msg, unit_check_mode,  &
 !!                                    unit_check_system
@@ -23,78 +21,85 @@
 !!    to your heart.
 !!
 !!##DESCRIPTION
-!!    The M_framework__verify(3fm) Fortran module provides procedures and variables
-!!    useful for providing error processing, debugging capabilities, and
-!!    unit testing.
+!!    The M_framework(3f) module is a collection of Fortran routines for
+!!    supporting code development by providing logging, error processing,
+!!    debugging, comparison and unit testing.
+!!
+!!    The M_framework__verify(3fm) module specifically brings together a
+!!    few procedures for creating unit testing. It ...
 !!
 !!     o allows for a user-defined command to be called to collect results or
-!!       mail failure alerts, ...
-!!     o supports easily composing a message from up to nine scalar
+!!       produce mail alerts, or other custom bookkeeping operations.
+!!
+!!     o supports easily composing a message from up to twenty scalar
 !!       scalar intrinsic values and different strings
-!!     o allows stopping on first failure or continuing
+!!
+!!     o allows stopping on failure or continuing
+!!
 !!     o provides for a non-zero exit code if any tests fail
+!!
+!!     o is designed with integration with the fpm( the Fortran Package Manager)
+!!       test subcommand.
+!!
+!!    If default modes need changed it can be done via the unit_check_mode(3f)
+!!    procedure or as command line options.
+!!
+!!    messages by default are writting to stderr, but may be written to any
+!!    list of LUNs of preassigned or open files.
 !!
 !!    SET MODES
 !!
-!!       call unit_check_mode(command,keep_going,level)
+!!    Some of the most common options are
 !!
-!!        command     name of command to execute. Defaults to the name
-!!        keep_going  logical variable that can be used to turn off
+!!       call unit_check_mode(command,keep_going,level,luns=[K,L,M,N,...])
+!!
+!!        keep_going  logical variable that can be used to turn on or off
 !!                    program termination on errors.
+!!        luns        array of Fortran LUNs to write messages to
 !!        level       An integer that can be used to specify
 !!                    different debug levels
+!!        command     name of optional command to execute for a start,
+!!                    check, or finish.
 !!
-!!    UNIT TESTS
-!!    unit_check_start(3f)   start tests of a procedure and optionally call
+!!    PROCEDURES
 !!
-!!                              command NAME start ...
-!!    unit_check(3f)         if expression is false optionally call
-!!
-!!                              command NAME bad
-!!
-!!                           and stop program (by default)
-!!
-!!    unit_check_done(3f)    call
-!!
-!!                              command NAME good
-!!
-!!                           if no failures; else call
-!!
-!!                              command NAME bad
-!!   unit_check_stop(3f)     stop program with exit value of 0 if no failures
+!!    unit_check_start       start tests of a procedure
+!!    unit_check             report if expression is false or true
+!!                           and if .false. stop program when keep_going=.false.
+!!    unit_check_end      ends test of a procedure
+!!    unit_check_stop        stop program with exit value of 0 if no failures
 !!                           else with an exit value of 1
+!!    unit_check_good        shorthand for "unit_check('name',.true., ....)
+!!    unit_check_bad         shorthand for "unit_check('name',.false., ....)
+!!    unit_check_msg         write message
+!!    unit_check_system      execute system command, recursively if requested.
 !!
-!!    unit_check_good(3f)    call command
+!!    For custom unit testing reports, a command can be given that will be
+!!    passed information on the command line in NAMELIST format.
 !!
-!!                              command NAME good
+!!    This command is generally a script that makes entries for each unit,
+!!    perhaps in an SQLite data file for example.
 !!
-!!    unit_check_bad(3f)     call command
+!!    It might also send an email if a test fails in batch environments.
 !!
-!!                              command NAME bad
+!!    It could also convert the information to CSV for use in spreadsheets,
+!!    or generate an HTML report, for example.
 !!
-!!                           and stop program by default
-!!    unit_check_msg(3f)     write message
-!!    unit_check_system(3f)  execute system command
-!!
-!!    For unit testing, the existence of a command called "goodbad" is
-!!    initially assumed. This is generally a script that makes entries
-!!    for each unit in an SQLite data file which is then used to create
-!!    CSV and HTML reports on the status of each unit. A sample goodbad(1)
-!!    command written in the bash(1) shell and using the sqlite3(1) command
-!!    should be included in this distribution as an example.
+!!    A sample command written in the bash(1) shell and using the sqlite3(1)
+!!    command should be included in this distribution as an example.
 !!
 !!    The flexibility introduced by calling an external script or program
-!!    is that The goodbad(1) command can be changed as desired to write CSV
-!!    files or simple logs or to notify developers with e-mail as desired.
+!!    is that The command can be changed as desired with changing the test
+!!    programs.
 !!
 !!    RELATED FUNCTIONS
 !!
-!!    The routines in M_framework__verify(3f) are often combined with the M_hashkeys(3fm)
-!!    routines and various math and statistical routines to quickly create
-!!    unit tests.
+!!    The routines in M_framework__verify(3f) are often combined with the
+!!    M_hashkeys(3fm) routines and various math and statistical routines
+!!    to quickly create unit tests.
 !!
 !!    Comparisons of real values can be done with a tolerance with
-!!    M_Compare_Float_Numbers(3fm), for example.
+!!    M_Compare_Float_Numbers(3f) and M_framework__approx(3f), for example.
 !!
 !!    The intrinsics ANY(3f) and ALL(3f) are particularly useful in calls
 !!    to unit_check(3f).
@@ -105,13 +110,13 @@
 !!
 !!     !! program demo_M_framework__verify
 !!     module M_framework__demo
+!!     ! create a few procedures to test
 !!     private
-!!     public one !! regular routines
-!!     public two !! regular routines
-!!     public test_suite_M_demo !! special name for use with test_suite(1bash).
+!!     public one ! some regular routine
+!!     public two ! some regular routine
+!!     public test_suite_M_demo ! special name for use with test_suite(1bash).
 !!     contains
 !!
-!!     !!  regular routines
 !!     subroutine one()
 !!     end subroutine one
 !!
@@ -121,63 +126,77 @@
 !!     !! unit test
 !!     subroutine test_suite_M_demo
 !!     use M_framework__verify, only: unit_check_start, unit_check
-!!     use M_framework__verify, only: unit_check_good, unit_check_bad, unit_check_done
-!!     use M_framework__verify, only: unit_check_msg, unit_check_stop, unit_check_system
+!!     use M_framework__verify, only: unit_check_good, unit_check_bad, &
+!!             & unit_check_end
+!!     use M_framework__verify, only: unit_check_msg, unit_check_stop, &
+!!             & unit_check_system
 !!     implicit none
 !!     integer :: i, j, k
 !!     integer,allocatable :: array(:)
 !!     integer :: arr(4)=[21,51,14,45]
 !!     integer :: a=21, b=51, c=14, d=45
 !!     ! TEST-DRIVEN DEVELOPMENT
-!!     ! optional set-up       perform initialization operations common to all tests within a module
+!!     ! optional set-up       perform initialization operations common to
+!!     !                       all tests within a module
 !!        i=1
 !!        j=2
 !!        k=3
 !!        array=[10,20,30,40,50,60,70]
 !!        call test_one()
 !!        call test_two()
-!!     ! optional tear-down    perform finalization operations common to all tests within a module
+!!     ! optional tear-down    perform finalization operations common to
+!!     !                       all tests within a module
 !!     contains
 !!
 !!     subroutine test_one()
-!!     !  register an entry for specified name ("one") in database with status of zero (0)
+!!     !  register an entry for specified name ("one") in database
+!!     ! with status of zero (0)
 !!     call unit_check_start('one')
 !!
 !!     !  if mask test fails, can
 !!     !  * produce a SUCCESS: or FAIL: message and stop program
-!!     !  * change database status for specified entry to -1 and stop program, else continue
+!!     !  * change database status for specified entry to -1 and
+!!     !    stop program, else continue
 !!     !  * produce a SUCCESS: or FAIL: message and keep going
-!!     !  * produce a FAIL: message if test fails but no SUCCESS: message if test passes
+!!     !  * produce a FAIL: message if test fails but no SUCCESS: message
+!!     !    if test passes
 !!     call unit_check('one',i > 0,msg='I > 0')
 !!
 !!     ! using ANY(3f) and ALL(3f)
-!!     call unit_check('one',all([i,j,k] > 0),      'testing if everyone greater than zero')
+!!     call unit_check('one',all([i,j,k] > 0), &
+!!             & 'testing if everyone greater than zero')
 !!     ! display message built of scalars as well
-!!     call unit_check('one',all(.not.[i,j,k] == 4),'for set ',i,j,k,'testing if no one is equal to four')
+!!     call unit_check('one',all(.not.[i,j,k] == 4), &
+!!             & 'for set ',i,j,k,'if no one equals four')
 !!
-!!     ! for tests that are hard to reduce to a logical test just call unit_check_bad(3f) if fail
+!!     ! for tests that are hard to reduce to a logical test just call
+!!     ! unit_check_bad(3f) if fail
 !!     if(i+j+k < 1)then
 !!        call unit_check_bad('one')
 !!     endif
 !!
-!!     call unit_check_done('one','checks on "one" ended')
+!!     call unit_check_end('one','checks on "one" ended')
 !!     end subroutine test_one
 !!
 !!     subroutine test_two
 !!     ! use of all(3f), any(3f), merge(3f) can be useful
 !!     ! if you know what these would produce
-!!     ! write(*,*)['A','X','X','X','X','B'] == 'B'      ! this would return an array, the last element having the value T, else F
-!!     ! write(*,*)all(['A','X','X','X','X','X'] == 'X') ! this would return F
-!!     ! write(*,*)any(['A','X','X','X','X','X'] == 'B') ! this would return F
-!!     ! write(*,*)any(['A','X','X','X','X','B'] == 'B') ! this would return T
-!!     ! write(*,*).not.all(array < 100)
-!!     ! write(*,*)all(array < 100)
-!!     ! write(*,*)all([a,b,c,d] == [21,51,14,45]) ! compare a list. This would return T
-!!     ! write(*,*)all(arr == [21,51,14,45])       ! compare an array. This would return T
+!!     ! this would return an array, the last element having the value T, else F
+!!     !  write(*,*)['A','X','X','X','X','B'] == 'B'
+!!     !  write(*,*)all(['A','X','X','X','X','X'] == 'X') ! this would return F
+!!     !  write(*,*)any(['A','X','X','X','X','X'] == 'B') ! this would return F
+!!     !  write(*,*)any(['A','X','X','X','X','B'] == 'B') ! this would return T
+!!     !  write(*,*).not.all(array < 100)
+!!     !  write(*,*)all(array < 100)
+!!     !  ! compare a list. This would return T
+!!     !  write(*,*)all([a,b,c,d] == [21,51,14,45])
+!!     !  ! compare an array. This would return T
+!!     !  write(*,*)all(arr == [21,51,14,45])
 !!     ! you know how valuable ANY(3f) and ALL(3f) will be
 !!     call unit_check_start('two','check on "two" passed')
-!!     call unit_check('two', 1 > 0 .and. abs(10.10000-10.10001) < 0.0001,msg='two looks good')
-!!     call unit_check_done('two','checks on "two" ended')
+!!     call unit_check('two', 1 > 0 .and. &
+!!             & abs(10.10000-10.10001) < 0.0001,msg='two looks good')
+!!     call unit_check_end('two','checks on "two" ended')
 !!     end subroutine test_two
 !!
 !!     end subroutine test_suite_M_demo
@@ -193,13 +212,13 @@
 !!
 !!   Expected output:
 !!
-!!     unit_check:       one                  SUCCESS:I > 0
-!!     unit_check:       one                  SUCCESS:testing if everyone greater than zero
-!!     unit_check:       one                  SUCCESS:for set 1 2 3 testing if no one is equal to four
-!!     unit_check_done:  one                  PASSED   GOOD:3  BAD:0
+!!     unit_check:       one   SUCCESS:I > 0
+!!     unit_check:       one   SUCCESS:testing if everyone greater than zero
+!!     unit_check:       one   SUCCESS:for set 1 2 3 if no one equals four
+!!     unit_check_end:   one   PASSED   GOOD:3  BAD:0
 !!
-!!     unit_check:       two                  SUCCESS:two looks good
-!!     unit_check_done:  two                  PASSED   GOOD:1  BAD:0
+!!     unit_check:       two   SUCCESS:two looks good
+!!     unit_check_end:   two   PASSED   GOOD:1  BAD:0
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -223,9 +242,9 @@ end type called
 
 type(called),save             :: G_virgin
 
-character(len=20),save        :: G_prefix=''
 integer,save,allocatable      :: G_luns(:)              ! output units
 logical,save                  :: G_debug=.false.
+logical,save                  :: G_verbose=.false.
 
 integer,save,public             :: unit_check_level=0      ! a value that can be used to select different debug levels
 integer,save,public,allocatable :: unit_check_flags(:)     ! an array of flags that can be used to select different options
@@ -243,23 +262,30 @@ real(kind=realtime),save   :: duration_all=0.0d0
 integer,save               :: clicks=0.0d0
 integer,save               :: clicks_all=0.0d0
 
-logical,save ::  STOP_G=.true.                    ! global value indicating whether failed unit checks should stop program or not
-integer,save :: IPASSED_G=0                       ! counter of successes initialized by unit_check_start(3f)
-integer,save :: IFAILED_G=0                       ! counter of failures  initialized by unit_check_start(3f)
-integer,save :: IUNTESTED=0                       ! counter of untested  initialized by unit_check_start(3f)
-integer,save :: IPASSED_ALL_G=0                   ! counter of successes initialized at program start
-integer,save :: IFAILED_ALL_G=0                   ! counter of failures  initialized at program start
-integer,save :: IUNTESTED_ALL=0                   ! counter of untested  initialized at program start
+logical,save :: STOP_G=.true.            ! global value indicating whether failed unit checks should stop program or not
+integer,save :: IPASSED_G=0              ! counter of successes initialized by unit_check_start(3f)
+integer,save :: IFAILED_G=0              ! counter of failures  initialized by unit_check_start(3f)
+integer,save :: IUNTESTED=0              ! counter of untested  initialized by unit_check_start(3f)
+integer,save :: IPASSED_ALL_G=0          ! counter of successes initialized at program start
+integer,save :: IFAILED_ALL_G=0          ! counter of failures  initialized at program start
+integer,save :: IUNTESTED_ALL=0          ! counter of untested  initialized at program start
 
-public unit_check_start
-public unit_check
-public unit_check_good
-public unit_check_bad
-public unit_check_done
-public unit_check_stop
-public unit_check_msg
-public unit_check_system
-public unit_check_mode
+public unit_check_mode    ! optionally set some non-default modes
+
+public unit_check_start   ! start testing a procedure
+  public unit_check, unit_check_good, unit_check_bad        ! report results of a test
+public unit_check_end     ! end  testing a procedure
+
+public unit_check_stop    ! produce tally of all procedures tested and end program
+
+public unit_check_msg     ! maybe write some message
+public unit_check_system  ! usually used for recursive calls when testing program termination status
+
+! for backward compatibility 2023-04-30
+interface unit_check_done
+   module procedure unit_check_end
+end interface unit_check_done
+public :: unit_check_done
 
 contains
 !===================================================================================================================================
@@ -267,38 +293,46 @@ contains
 !===================================================================================================================================
 !>
 !!##NAME
-!!    unit_check_msg(3f) - [M_framework__verify] converts up to nine standard scalar values to a message for unit testing
+!!    unit_check_msg(3f) - [M_framework__verify] converts up to twenty
+!!    standard scalar values to a message for unit testing
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    function unit_check_msg(name,g1,g2g3,g4,g5,g6,g7,g8,g9)
+!!    function unit_check_msg(name,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9, &
+!!                               & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 !!
 !!     character(len=*),intent(in)  :: name
-!!     class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
+!!     class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9, &
+!!                                    & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
 !!##DESCRIPTION
-!!    unit_check_msg(3f) builds a string from up to nine scalar values and
+!!    unit_check_msg(3f) builds a string from up to twenty scalar values and
 !!    prints it to the error long.
 !!
 !!##OPTIONS
-!!    name    name of unit being tested
-!!    g[1-9]  optional value to print the value of after the message. May
-!!            be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
-!!            or CHARACTER.
+!!    name        name of unit being tested
+!!    msg,g[1-j]  optional value to print the value of after the message. May
+!!                be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
+!!                COMPLEX, or CHARACTER.
 !!
 !!##EXAMPLES
 !!
 !!   Sample program:
 !!
 !!    program demo_unit_check_msg
-!!    use M_framework__verify, only : unit_check_start,unit_check_msg,unit_check_done
+!!    use M_framework__verify, only : unit_check_start,unit_check_msg, &
+!!            & unit_check_end
 !!    implicit none
 !!
 !!    call unit_check_start('myroutine')
-!!    call unit_check_msg('myroutine','HUGE(3f) integers',huge(0),'and real',huge(0.0),'and double',huge(0.0d0))
-!!    call unit_check_msg('myroutine','real            :',huge(0.0),0.0,12345.6789,tiny(0.0) )
-!!    call unit_check_msg('myroutine','doubleprecision :',huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
-!!    call unit_check_msg('myroutine','complex         :',cmplx(huge(0.0),tiny(0.0)) )
-!!    call unit_check_done('myroutine')
+!!    call unit_check_msg('myroutine','HUGE(3f) integers', &
+!!            & huge(0),'and real',huge(0.0),'and double',huge(0.0d0))
+!!    call unit_check_msg('myroutine','real            :', &
+!!            & huge(0.0),0.0,12345.6789,tiny(0.0) )
+!!    call unit_check_msg('myroutine','doubleprecision :', &
+!!            & huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
+!!    call unit_check_msg('myroutine','complex         :', &
+!!            & cmplx(huge(0.0),tiny(0.0)) )
+!!    call unit_check_end('myroutine')
 !!
 !!    end program demo_unit_check_msg
 !!
@@ -306,19 +340,22 @@ contains
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_check_msg(name,g1, g2, g3, g4, g5, g6, g7, g8, g9)
+subroutine unit_check_msg(name,msg, g1, g2, g3, g4, g5, g6, g7, g8, g9 ,ga, gb, gc, gd, ge, gf, gg, gh, gi, gj)
 implicit none
 
 ! ident_1="@(#) M_framework__verify unit_check_msg(3f) writes a message to a string composed of any standard scalar types"
 
 character(len=*),intent(in)   :: name
-class(*),intent(in),optional  :: g1 ,g2 ,g3 ,g4 ,g5
-class(*),intent(in),optional  :: g6 ,g7 ,g8 ,g9
+class(*),intent(in),optional  :: msg, g1 ,g2 ,g3 ,g4 ,g5, g6 ,g7 ,g8 ,g9, ga ,gb ,gc ,gd ,ge, gf ,gg ,gh ,gi, gj
+character(len=:),allocatable  :: msgall
 
    if(G_virgin%cmdline) call cmdline_()
 
+   msgall=str(msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+
    ! write message to standard error
-   call wrt(G_luns,trim(G_prefix)//'check_msg:   '//atleast_(name,20)//' INFO    : '//str(g1,g2,g3,g4,g5,g6,g7,g8,g9))
+   call wrt(G_luns,'check_msg:   '//atleast_(name,20)//' INFO    : '// msgall)
+   if(G_command /= '') call run(G_command//' name="'//trim(name)//'", msg="'//msgall//'",')
 
 end subroutine unit_check_msg
 !===================================================================================================================================
@@ -327,21 +364,25 @@ end subroutine unit_check_msg
 !>
 !!
 !!##NAME
-!! unit_check(3f) - [M_framework__verify] report if logical expression is true or false,
-!!   and optionally call command "goodbad NAME good|bad" and stop program if false
+!! unit_check(3f) - [M_framework__verify] report if logical expression is
+!!                  true or false, and optionally call command "goodbad
+!!                  NAME good|bad" and optionally stop program if false
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine unit_check(name,expression,msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
+!!    subroutine unit_check(name,expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+!!                                         & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 !!
 !!     character(len=*),intent(in) :: name
 !!     logical,intent(in) :: expression
-!!     class(*),intent(in),optional :: msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9
+!!     class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+!!                                    & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
 !!
 !!##DESCRIPTION
-!!    unit_check(3f) tests the expression and displays a message composed of the generic
-!!    intrinsic values msg1 thorough msg9.  Additionally, if the expression  is false
+!!    unit_check(3f) tests the expression and displays a message composed
+!!    of the generic intrinsic values msg, g1 thorough gj. Additionally, if
+!!    the expression is false
 !!
 !!    o if unit_check_mode(command) is not blank optionally calls the
 !!    specified  shell command
@@ -351,20 +392,21 @@ end subroutine unit_check_msg
 !!    o if keep_going = .false. stop the program on a failed test
 !!
 !!##OPTIONS
-!!     NAME             the unit test name passed on to the goodbad(1)
-!!                      command
-!!     EXPRESSION       the logical expression to evaluate
-!!     MSG,MSG1...MSG9  optional message to display when performing test,
-!!                      composed of any scalar intrinsics of type INTEGER,
-!!                      REAL, DOUBLEPRECISION, COMPLEX, LOGICAL, or
-!!                      CHARACTER. A space is placed between each value.
+!!     NAME          the unit test name passed on to the goodbad(1)
+!!                   command
+!!     EXPRESSION    the logical expression to evaluate
+!!     msg,g1...gj   optional message to display when performing test,
+!!                   composed of any scalar intrinsics of type INTEGER,
+!!                   REAL, DOUBLEPRECISION, COMPLEX, LOGICAL, or
+!!                   CHARACTER. A space is placed between each value.
 !!
 !!##EXAMPLES
 !!
 !!   Sample program:
 !!
 !!    program demo_unit_check
-!!    use M_framework__verify, only: unit_check_start, unit_check, unit_check_done
+!!    use M_framework__verify, only: unit_check_start, &
+!!                          & unit_check, unit_check_end
 !!    use M_framework__verify, only: unit_check_mode
 !!    use M_framework__approx, only: almost
 !!
@@ -382,30 +424,37 @@ end subroutine unit_check_msg
 !!       arr2=[1.0001,10.001,100.01]
 !!       call unit_check_start('myroutine')
 !!
-!!       call unit_check('myroutine', x > 3 ,'test if big enough')
-!!       call unit_check('myroutine', x < 100 ,'test if small enough')
+!!       call unit_check('myroutine', x > 3 ,' if big enough')
+!!       call unit_check('myroutine', x < 100 ,' if small enough')
 !!
 !!       do i=1,size(arr1)
-!!          call unit_check('myroutine', almost(arr1(i),arr2(i),3.9,verbose=.true.) )
+!!          call unit_check('myroutine', &
+!!          & almost(arr1(i),arr2(i),3.9,verbose=.true.) )
 !!       enddo
 !!
 !!       arr=[10,20,30]
-!!       call unit_check('myroutine', .not.any(arr < 0) ,'fail if any negative values in array ARR')
-!!       call unit_check('myroutine', all(arr < 100) ,'fail unless all values are less than 100 in array ARR')
+!!       call unit_check('myroutine', .not.any(arr < 0) , &
+!!       & 'fail if any negative values in array ARR')
+!!       call unit_check('myroutine', all(arr < 100) , &
+!!       & 'fail unless all values are less than 100 in array ARR')
 !!
-!!       call unit_check_done('myroutine',msg='checks on "myroutine" all passed')
+!!       call unit_check_end('myroutine', &
+!!       & msg='checks on "myroutine" all passed')
 !!
 !!    end program demo_unit_check
 !!
 !!   Sample output (varies with what goodbad(1) command is used):
 !!
-!!    unit_check:      myroutine        SUCCESS:test if big enough
-!!    unit_check:      myroutine        SUCCESS:test if small enough
-!!    unit_check:      myroutine        SUCCESS:test if any negative values in array ARR
-!!    unit_check:      myroutine        SUCCESS:test if all values less than 100 in array ARR
-!!     *almost* for values 1.00000000 1.00010002 agreement of 3.99997139 digits out of requested 3.90000010
-!!     *almost* for values 10.0000000 10.0010004 agreement of 3.99986792 digits out of requested 3.90000010
-!!     *almost* for values 100.000000 100.010002 agreement of 3.99995065 digits out of requested 3.90000010
+!!    unit_check: myroutine  SUCCESS: if big enough
+!!    unit_check: myroutine  SUCCESS: if small enough
+!!    unit_check: myroutine  SUCCESS: if any negative values in array ARR
+!!    unit_check: myroutine  SUCCESS: if all values less than 100 in array ARR
+!!     *almost* for values 1.00000000 1.00010002
+!!              agreement of 3.99997139 digits out of requested 3.90000010
+!!     *almost* for values 10.0000000 10.0010004 agreement of
+!!              3.99986792 digits out of requested 3.90000010
+!!     *almost* for values 100.000000 100.010002 agreement of
+!!              3.99995065 digits out of requested 3.90000010
 !!    unit_check_good: myroutine        PASSED:checks on "myroutine" all passed
 !!
 !!
@@ -413,34 +462,33 @@ end subroutine unit_check_msg
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_check(name,logical_expression,msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
+subroutine unit_check(name,logical_expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 
 ! ident_2="@(#) M_framework__verify unit_check(3f) if .not.expression call 'goodbad NAME bad' & stop program"
 
 character(len=*),intent(in)          :: name
 logical,intent(in)                   :: logical_expression
-class(*),intent(in),optional         :: msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9
-character(len=:),allocatable         :: msg_local
+class(*),intent(in),optional         :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+character(len=:),allocatable         :: msgall
 
    if(G_virgin%cmdline) call cmdline_()
 
-   msg_local=str(msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
+   msgall=str(msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 
    if(.not.logical_expression)then
-      call wrt(G_luns,trim(G_prefix)//'check:       '//atleast_(name,20)//' FAILURE : '//trim(msg_local))
-      if(G_command /= '')then
-         call execute_command_line(G_command//' '//trim(name)//' bad')
-      endif
+      call wrt(G_luns,'check:       '//atleast_(name,20)//' FAILURE : '//msgall)
+      if(G_command /= '') call run(G_command//' name="'//trim(name)//'", passed=F, msg="'//msgall//'",')
       if(.not.G_keep_going) then
-         call wrt(G_luns,trim(G_prefix)//'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
+         call wrt(G_luns,'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
          stop 1
       endif
       IFAILED_G=IFAILED_G+1
       IFAILED_ALL_G=IFAILED_ALL_G+1
    else
       if(.not.G_no_news_is_good_news)then
-         call wrt(G_luns,trim(G_prefix)//'check:       '//atleast_(name,20)//' SUCCESS : '//trim(msg_local))
+         call wrt(G_luns,'check:       '//atleast_(name,20)//' SUCCESS : '//msgall)
       endif
+      if(G_command /= '') call run(G_command//' name="'//trim(name)//'", passed=T, msg="'//msgall//'",')
       IPASSED_G=IPASSED_G+1
       IPASSED_ALL_G=IPASSED_ALL_G+1
    endif
@@ -451,7 +499,8 @@ end subroutine unit_check
 !===================================================================================================================================
 !>
 !!##NAME
-!!    unit_check_start(3f) - [M_framework__verify] call command "goodbad NAME start" and optionally set options
+!!    unit_check_start(3f) - [M_framework__verify] call command "goodbad
+!!    NAME start" and optionally set options
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -494,7 +543,8 @@ end subroutine unit_check
 !!   Sample program:
 !!
 !!     program demo_unit_check_start
-!!     use M_framework__verify, only: unit_check_start, unit_check, unit_check_done
+!!     use M_framework__verify, only: unit_check_start, unit_check, &
+!!      & unit_check_end
 !!     implicit none
 !!     integer :: ival
 !!     call unit_check_start('myroutine')
@@ -511,10 +561,10 @@ end subroutine unit_check
 !!       & ')
 !!
 !!     ival=10
-!!     call unit_check('myroutine', ival > 3 ,   msg='test if big enough')
-!!     call unit_check('myroutine', ival < 100 , msg='test if small enough')
+!!     call unit_check('myroutine', ival > 3 ,   msg=' if big enough')
+!!     call unit_check('myroutine', ival < 100 , msg=' if small enough')
 !!
-!!     call unit_check_done('myroutine',msg='completed checks of "myroutine"')
+!!     call unit_check_end('myroutine',msg='completed checks of "myroutine"')
 !!
 !!     end program demo_unit_check_start
 !!
@@ -538,13 +588,9 @@ logical,save                         :: called=.false.
    if(var /= '')G_command=var
 
    if(present(options))then
-      if(G_command /= '')then
-         call execute_command_line(G_command//' '//trim(name)//' start '//trim(options))
-      endif
+      if(G_command /= '') call run(G_command//' name="'//trim(name)//'", start=T, msg="'//msg//'", '//options)
    else
-      if(G_command /= '')then
-         call execute_command_line(G_command//' '//trim(name)//' start')
-      endif
+      if(G_command /= '') call run(G_command//' name="'//trim(name)//'", start=T, msg="'//msg//'",')
    endif
 
    call system_clock(clicks)
@@ -556,7 +602,7 @@ logical,save                         :: called=.false.
    endif
    if(present(msg))then
      if(msg /= '')then
-        call wrt(G_luns,trim(G_prefix)//'check_start: '//atleast_(name,20)//' START   : '//trim(msg))
+        call wrt(G_luns,'check_start: '//atleast_(name,20)//' START   : '//trim(msg))
      endif
    endif
    call get_environment_variable('M_framework__verify_STOP',var)
@@ -576,8 +622,8 @@ end subroutine unit_check_start
 !>
 !!
 !!##NAME
-!!    unit_check_stop(3f) - [M_framework__verify] call command "goodbad NAME good" or
-!!    goodbad NAME bad" depending on whether failures were found
+!!    unit_check_stop(3f) - [M_framework__verify] call command "goodbad NAME
+!!    good" or "goodbad NAME bad" depending on whether failures were found
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -597,8 +643,10 @@ end subroutine unit_check_start
 !!   Sample program:
 !!
 !!     program demo_unit_check_stop
-!!     use M_framework__verify, only: unit_check_start, unit_check_done, unit_check
-!!     use M_framework__verify, only: unit_check_good, unit_check_stop, unit_check_bad
+!!     use M_framework__verify, only: unit_check_start, &
+!!             & unit_check_end, unit_check
+!!     use M_framework__verify, only: unit_check_good, &
+!!             & unit_check_stop, unit_check_bad
 !!     use M_framework__verify, only: unit_check_mode
 !!     implicit none
 !!     integer :: x
@@ -608,13 +656,13 @@ end subroutine unit_check_start
 !!     x=10
 !!     call unit_check_start('myroutine')
 !!
-!!     call unit_check('myroutine', x > 3 ,'test if big enough')
-!!     call unit_check('myroutine', x < 100 ,'test if small enough')
+!!     call unit_check('myroutine', x > 3 ,' if big enough')
+!!     call unit_check('myroutine', x < 100 ,' if small enough')
 !!
 !!     if(x /= 0)then
 !!        call unit_check_bad  ('myroutine',msg='x /= 0' )
 !!     endif
-!!     call unit_check_done  ('myroutine',msg='checks on "myroutine"' )
+!!     call unit_check_end  ('myroutine',msg='checks on "myroutine"' )
 !!
 !!     call unit_check_stop()
 !!     end program demo_unit_check_stop
@@ -655,7 +703,6 @@ integer                              :: clicks_now
        & " BAD:",i9,                            &
        & " DURATION:",i14.14                    &
        & )')                                    &
-       & trim(G_prefix),                        &
        & PF,                                    &
        & IPASSED_ALL_G,                         &
        & IFAILED_ALL_G,                         &
@@ -677,12 +724,13 @@ end subroutine unit_check_stop
 !>
 !!
 !!##NAME
-!!    unit_check_done(3f) - [M_framework__verify] call command "goodbad NAME good" or "goodbad NAME bad" depending on whether failures were found
+!!    unit_check_end(3f) - [M_framework__verify] call command "goodbad NAME
+!!    good" or "goodbad NAME bad" depending on whether failures were found
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine unit_check_done(name,opts,msg)
+!!    subroutine unit_check_end(name,opts,msg)
 !!
 !!     character(len=*),intent(in) :: name
 !!     character(len=*),intent(in),optional :: opts
@@ -705,32 +753,31 @@ end subroutine unit_check_stop
 !!
 !!   Sample program:
 !!
-!!     program demo_unit_check_done
+!!     program demo_unit_check_end
 !!     use M_framework__verify, only: unit_check_start
 !!     use M_framework__verify, only: unit_check
-!!     use M_framework__verify, only: unit_check_good, unit_check_done, unit_check_bad
-!!
+!!     use M_framework__verify, only: unit_check_good, &
+!!             & unit_check_end, unit_check_bad
 !!     implicit none
 !!     integer :: x
 !!     x=10
 !!     call unit_check_start('myroutine')
 !!
-!!     call unit_check('myroutine', x > 3 ,'test if big enough')
-!!     call unit_check('myroutine', x < 100 ,'test if small enough')
+!!     call unit_check('myroutine', x > 3 ,'if big enough')
+!!     call unit_check('myroutine', x < 100 ,'if small enough')
 !!
-!!     if(x /= 0)then
-!!        call unit_check_done ('myroutine',msg='checks on "myroutine"' ) ! program execution stopped
-!!     endif
+!!     ! program execution stopped
+!!     call unit_check_end ('myroutine',msg='checks on "myroutine"' )
 !!
-!!     end program demo_unit_check_done
+!!     end program demo_unit_check_end
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_check_done(name,opts,msg)
+subroutine unit_check_end(name,opts,msg)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
-! ident_5="@(#) M_framework__verify unit_check_done(3f) call 'goodbad NAME bad'"
+! ident_5="@(#) M_framework__verify unit_check_end(3f) call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -758,10 +805,10 @@ integer                              :: clicks_now
 
    if(G_command /= '')then                           ! if system command name is not blank call system command
       if(ifailed_g == 0)then
-         call execute_command_line(G_command//' '//trim(name)//' bad '//trim(opts))
+         call run(G_command//' name="'//trim(name)//'", done=T, passed=T, msg="'//msg//'", '//trim(opts))
          if(.not.G_keep_going) stop 1             ! stop program depending on mode
       else
-         call execute_command_line(G_command//' '//trim(name)//' good '//trim(opts))
+         call run(G_command//' name="'//trim(name)//'", done=T, passed=F, msg="'//msg//'", '//trim(opts))
       endif
    endif
 
@@ -773,21 +820,20 @@ integer                              :: clicks_now
       call system_clock(clicks_now)
       milliseconds=(julian()-duration)*1000
       milliseconds=clicks_now-clicks
-      write(out,'(a,"check_done:  ",a,    &
+      write(out,'("check_done:  ",a,      &
        & 1x,a,                            &
        & " GOOD:",i9,                     &
        & " BAD:",i9,                      &
        & " DURATION:",i14.14              &
        & )')                              &
-       & trim(G_prefix),                  &
-       & atleast_(name,20),                &
+       & atleast_(name,20),               &
        & PF,                              &
        & IPASSED_G,                       &
        & IFAILED_G,                       &
        & milliseconds
    else
-      write(out,'(a,"check_done:  ",a,1x,a," GOOD:",i0,1x," BAD:",i0)') &
-       & trim(G_prefix),atleast_(name,20),PF,IPASSED_G,IFAILED_G
+      write(out,'("check_done:  ",a,1x,a," GOOD:",i0,1x," BAD:",i0)') &
+       & atleast_(name,20),PF,IPASSED_G,IFAILED_G
    endif
    if(present(msg))then
       call wrt(G_luns,trim(out)//': '//trim(msg))
@@ -800,14 +846,15 @@ integer                              :: clicks_now
    IUNTESTED=0
    duration=0.0d0
 
-end subroutine unit_check_done
+end subroutine unit_check_end
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
 !!
 !!##NAME
-!!    unit_check_bad(3f) - [M_framework__verify] call command "goodbad NAME bad" and stop program
+!!    unit_check_bad(3f) - [M_framework__verify] call command "goodbad NAME
+!!    bad" and stop program
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -826,15 +873,15 @@ end subroutine unit_check_done
 !!
 !!    and stops the program. It is just a shortcut for calling
 !!         call unit_check(name,.false.)
-!!         call unit_check_done(name,opts,msg)
+!!         call unit_check_end(name,opts,msg)
 !!
 !!##EXAMPLES
 !!
 !!   Sample program:
 !!
 !!     program demo_unit_check_bad
-!!     use M_framework__verify, only: unit_check_start
-!!     use M_framework__verify, only: unit_check
+!!     use M_framework__verify, only: unit_check_start, unit_check
+!!     use M_framework__verify, only: unit_check_end, unit_check_stop
 !!     use M_framework__verify, only: unit_check_good, unit_check_bad
 !!
 !!     implicit none
@@ -842,12 +889,15 @@ end subroutine unit_check_done
 !!     x=10
 !!     call unit_check_start('myroutine')
 !!
-!!     call unit_check('myroutine', x > 3 ,'test if big enough')
-!!     call unit_check('myroutine', x < 100 ,'test if small enough')
+!!     call unit_check('myroutine', x > 3 ,'if big enough')
+!!     call unit_check('myroutine', x < 100 ,'if small enough')
 !!
 !!     if(x /= 0)then
-!!        call unit_check_bad ('myroutine',msg='checks on "myroutine" failed') ! program execution stopped
+!!       call unit_check_bad ('myroutine',msg='checks on "myroutine" failed')
+!!       ! program execution stopped
 !!     endif
+!!     call unit_check_end ('myroutine')
+!!     call unit_check_stop ('myroutine')
 !!
 !!     end program demo_unit_check_bad
 !!
@@ -881,7 +931,7 @@ character(len=:),allocatable         :: opts_local
    endif
 
    call unit_check(name,.false.)
-   call unit_check_done(name,opts_local,msg_local)
+   call unit_check_end(name,opts_local,msg_local)
 
 end subroutine unit_check_bad
 !===================================================================================================================================
@@ -890,7 +940,8 @@ end subroutine unit_check_bad
 !>
 !!
 !!##NAME
-!!    unit_check_good(3f) - [M_framework__verify] call command "goodbad NAME good"
+!!    unit_check_good(3f) - [M_framework__verify] call command "goodbad
+!!    NAME good"
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -905,14 +956,14 @@ end subroutine unit_check_bad
 !!    A shortcut for
 !!
 !!       call unit_check(name,.true.)
-!!       call unit_check_done(name,opts,msg)
+!!       call unit_check_end(name,opts,msg)
 !!
 !!##EXAMPLES
 !!
 !!   Sample program:
 !!
 !!     program demo_unit_check_good
-!!     use M_framework__verify, only: unit_check_start, unit_check_done
+!!     use M_framework__verify, only: unit_check_start, unit_check_end
 !!     use M_framework__verify, only: unit_check
 !!     use M_framework__verify, only: unit_check_good, unit_check_bad
 !!
@@ -921,8 +972,8 @@ end subroutine unit_check_bad
 !!     x=10
 !!     call unit_check_start('myroutine')
 !!
-!!     call unit_check('myroutine', x > 3 ,'test if big enough')
-!!     call unit_check('myroutine', x < 100 ,'test if small enough')
+!!     call unit_check('myroutine', x > 3 ,'if big enough')
+!!     call unit_check('myroutine', x < 100 ,'if small enough')
 !!
 !!     call unit_check_good('myroutine',msg='checks on "myroutine" ')
 !!
@@ -957,7 +1008,7 @@ character(len=:),allocatable         :: opts_local
    endif
 
    call unit_check(name,.true.,msg=msg_local)
-   call unit_check_done(name,opts_local)
+   call unit_check_end(name,opts_local)
 
 end subroutine unit_check_good
 !===================================================================================================================================
@@ -1015,7 +1066,6 @@ integer :: i
    G_command=repeat(' ',4096)
    G_cmdline=.true.
    G_debug=.false.
-   G_prefix=''
    G_keep_going=.true.
    unit_check_level=0
    unit_check_flags=[integer :: ]
@@ -1027,7 +1077,8 @@ end subroutine preset_globals
 subroutine cmdline_()
 use, intrinsic :: iso_fortran_env, only: compiler_version, compiler_options
 ! define arguments and their default values
-logical, save :: G_help = .false.
+! use naming convention of global variables to make parsing easier
+logical             :: G_help = .false.
 integer,allocatable :: G_flags(:)
 integer             :: G_level
 integer,allocatable :: G_luns_hold(:)
@@ -1035,6 +1086,7 @@ integer,allocatable :: G_luns_hold(:)
 ! NOTE: assume all names in namelist start with G_ or unit_check
 namelist /args/ G_interactive
 namelist /args/ G_help
+namelist /args/ G_verbose
 namelist /args/ G_level
 namelist /args/ G_debug                   ! debug mode
 namelist /args/ G_flags                   ! values that can be used to select different tests or any conditional integer test
@@ -1065,39 +1117,39 @@ integer :: i, j, k, ios, equal_pos
       do i = 1, command_argument_count()
          call get_command_argument(i, input(2))
          do j = 1, len_trim(input(2)) ! blank out leading - or / so "--name=value" or "/name=value" works
-            if (index('/- ', input(2) (j:j)) .eq. 0) exit
+            if (index('/- ', input(2) (j:j))  ==  0) exit
             input(2) (j:j) = ' '
          enddo
          ! if variable name does not start with "unit_check" add "G_" prefix so can use a nice name
          ! on command line, on unit_check_mode, and public variables
          input(2) = adjustl(input(2))
-         if (index(input(2), 'unit_check_') .eq. 1) then
+         if (index(input(2), 'unit_check_')  ==  1) then
             input(2) = ' '//adjustl(input(2))
          else
             input(2) = ' G_'//adjustl(input(2))
          endif
          ! if no equal sign add =T
-         if (index(input(2), '=') .eq. 0) then
+         if (index(input(2), '=')  ==  0) then
             input(2) = trim(input(2))//'=T'
          endif
 
          read (input, nml=args, iostat=ios, iomsg=message1)
          ! assume first failure might be because of missing quotes
 
-         if (ios .ne. 0) then
+         if (ios  /=  0) then
             equal_pos = index(input(2), '=')        ! find position of '='
-            G_luns = pack(G_luns, G_luns .ne. -1)     ! if G_luns is all negative at this point set it to [stderr]
-            if (size(G_luns) .eq. 0) G_luns = G_luns_hold
-            if (size(G_luns) .eq. 0) G_luns = [stderr]
-            if (equal_pos .ne. 0) then
+            G_luns = pack(G_luns, G_luns  /=  -1)     ! if G_luns is all negative at this point set it to [stderr]
+            if (size(G_luns)  ==  0) G_luns = G_luns_hold
+            if (size(G_luns)  ==  0) G_luns = [stderr]
+            if (equal_pos  /=  0) then
                ! requote and try again
                input(2) = input(2) (:equal_pos)//'"'//input(2) (equal_pos + 1:len_trim(input(2)))//'"'
                read (input, nml=args, iostat=ios, iomsg=message2)
-               if (ios .ne. 0) then
+               if (ios  /=  0) then
                   call wrt(G_luns, 'ERROR UNQUOTED:'//trim(message1)//': when reading '//trim(input(2)))
                   call wrt(G_luns, 'ERROR QUOTED  :'//trim(message2)//': when reading '//trim(input(2)))
                   G_command=trim(G_command)
-                  if(G_level.eq.-1) G_level=unit_check_level
+                  if(G_level == -1) G_level=unit_check_level
                   do k = 1, size(G_luns)
                      write (G_luns(k), nml=args, delim='quote')
                   enddo
@@ -1106,7 +1158,7 @@ integer :: i, j, k, ios, equal_pos
             else
                call wrt(G_luns, 'ERROR:'//trim(message1)//': when reading '//trim(input(2)))
                G_command=trim(G_command)
-               if(G_level.eq.-1) G_level=unit_check_level
+               if(G_level == -1) G_level=unit_check_level
                do k = 1, size(G_luns)
                   write (G_luns(k), nml=args, delim='quote')
                enddo
@@ -1115,25 +1167,26 @@ integer :: i, j, k, ios, equal_pos
          endif
       enddo
 
-      G_luns = pack(G_luns, G_luns .ne. -1)       ! make sure G_luns has at least one file
-      if (size(G_luns) .eq. 0) G_luns = G_luns_hold
-      if (size(G_luns) .eq. 0) G_luns = [stderr]
+      G_luns = pack(G_luns, G_luns  /=  -1)       ! make sure G_luns has at least one file
+      if (size(G_luns)  ==  0) G_luns = G_luns_hold
+      if (size(G_luns)  ==  0) G_luns = [stderr]
       G_command = trim(G_command)
 
-      G_flags = pack(G_flags, G_flags .ge. 0)
-      if (size(G_flags) .ne. 0) unit_check_flags = G_flags
-      if(G_level.ne.-1) unit_check_level = G_level
+      G_flags = pack(G_flags, G_flags  >=  0)
+      if(G_verbose) G_flags=[G_flags,9997,9998,9999] ! turn on these flags if verbose mode
+      if (size(G_flags)  /=  0) unit_check_flags = G_flags
+      if(G_level /= -1) unit_check_level = G_level
 
       ! some pre-defined level numbers
-      if (any(unit_check_flags .eq. 9997)) then
+      if (any(unit_check_flags  ==  9997)) then
          call wrt(G_luns, 'This file was compiled by ', compiler_version())
       endif
 
-      if (any(unit_check_flags .eq. 9998)) then
+      if (any(unit_check_flags  ==  9998)) then
          call wrt(G_luns, ' using the options ', compiler_options())
       endif
 
-      if (any(unit_check_flags .eq. 9999)) then
+      if (any(unit_check_flags  ==  9999)) then
          do i = 1, size(G_luns)
             write (G_luns(i), nml=args, delim='quote')
          enddo
@@ -1142,26 +1195,42 @@ integer :: i, j, k, ios, equal_pos
 
    if (G_help) then
       write (*, '(g0)') [character(len=80) :: &
+      '                                                                                ', &
       'unit test command line options:', &
-      '--help                      display this text and exit                          ', &
-      '--unit_check_flags=L,M,N,...  set value for user to set different test flags    ', &
-      '                               values >= 9990 are reserved if on the commandline', &
+      '--level=N                   user-requested debug level. Sets "unit_check_level".', &
+      '--keep_going=F              turn on program termination on test failure         ', &
+      '--no_news_is_good_news      do not display "SUCCESS" lines                      ', &
+      '--flags=L,M,N,...           set value for user to set different test flags      ', &
+      '                               values >= 9990 are reserved                      ', &
       '                                  * 9997 compiler version                       ', &
       '                                  * 9998 compiler options                       ', &
       '                                  * 9999 command line options NAMELIST group    ', &
-      '--unit_check_level=N        user-requested debug level                          ', &
-      '--keep_going=F              turn on program termination on test failure         ', &
       '--command="system_command"  program to call after each test                     ', &
-      '--no_news_is_good_news      do not display "SUCCESS" lines                      ', &
       '--luns=L,M,N,...    list of unit numbers to write to, assumed opened by program ', &
+      '--help                      display this text and exit                          ', &
+      '--verbose                   verbose mode                                        ', &
       '--interactive                                                                   ', &
       '--debug                                                                         ', &
       '                                                                                ', &
       'Note flags sets unit_check_flags(:) and level sets unit_check_level and         ', &
       'unit_check_flags(:) are public members of M_framework__verify.                  ', &
+      'EXAMPLES                                                                        ', &
+      ' sample commands:                                                               ', &
+      '  fpm test                                                                      ', &
+      '  fpm test -- luns=6 # write to stdout instead of stderr                        ', &
+      '  fpm test ''regression*''  # run tests beginning with specified string         ', &
+      '                                                                                ', &
+      '  # run a test called "crash" with gdb(1)                                       ', &
+      '  fpm test --target crash --runner "gdb -ex run --quiet"                        ', &
+      '                                                                                ', &
+      '  #To run all the tests in the gdb(1) debugger (you can enter                   ', &
+      '  #"q" after each test has run; or enter gdb commands at the prompt):           ', &
+      '  fpm test --target ''*'' --verbose \                                             ', &
+      '     --runner ''gdb -ex "list, 0" -ex run --quiet --args'' \                      ', &
+      '     -- flags=9997,9998,9999 luns=6 level=3                                     ', &
       ' ']
       G_help=.false.
-      stop
+      stop 1
    endif
 
 end subroutine cmdline_
@@ -1215,7 +1284,8 @@ end subroutine cmdline_
 !!    use M_framework
 !!    implicit none
 !!
-!!    call unit_check_mode(keep_going=.false.,luns=[6],no_news_is_good_news=.true.)
+!!    call unit_check_mode(keep_going=.false.,luns=[6], &
+!!            & no_news_is_good_news=.true.)
 !!
 !!    end program demo_unit_check_mode
 !!
@@ -1242,7 +1312,6 @@ integer,optional, intent(in)          :: luns(:)        ! logical unit number to
    if (present(luns))                 G_luns=luns
    if (present(command))              G_command=command
    if (present(debug))                G_debug=debug
-   if (present(prefix))               G_prefix=prefix
    if (present(cmdline))              G_cmdline=cmdline
    if (present(interactive))          G_interactive=interactive
    if (present(keep_going))           G_keep_going=keep_going
@@ -1259,7 +1328,8 @@ end subroutine unit_check_mode
 !===================================================================================================================================
 !>
 !!##NAME
-!!    unit_check_system(3f) - [M_framework__verify] return status from system command
+!!    unit_check_system(3f) - [M_framework__verify] return status from
+!!    system command
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -1286,22 +1356,22 @@ end subroutine unit_check_mode
 !!
 !!    program demo_unit_check_system
 !!    use M_framework__verify, only: &
-!!       unit_check_start, &
-!!       unit_check, &
+!!       unit_check_start,  &
+!!       unit_check,        &
 !!       unit_check_system, &
-!!       unit_check_done
+!!       unit_check_end
 !!    implicit none
-!!    if(command_argument_count().eq.0)then
+!!    if (command_argument_count()  ==  0) then
 !!       call unit_check_start('myroutine')
-!!       call unit_check('false',unit_check_system('false') == 0, 'check false')
-!!       call unit_check('true',unit_check_system('true') == 0, 'check true')
-!!       call unit_check('notthere',unit_check_system('notthere') == 0, &
+!!       call unit_check('false', unit_check_system('false') == 0, 'check false')
+!!       call unit_check('true', unit_check_system('true') == 0, 'check true')
+!!       call unit_check('notthere', unit_check_system('notthere') == 0, &
 !!       & 'check notthere')
 !!       call unit_check('*',&
-!!       & unit_check_system('* and options',verbose=.true.) == 0, 'check "*"')
-!!       call unit_check_done('myroutine')
+!!       & unit_check_system('* and options', verbose=.true.) == 0, 'check "*"')
+!!       call unit_check_end('myroutine')
 !!    else
-!!       write(*,*)'called with an option'
+!!       write (*, *) 'called with an option'
 !!    endif
 !!    end program demo_unit_check_system
 !!
@@ -1337,21 +1407,21 @@ character(len=:),allocatable :: command_
       verbose_=.false.
    endif
    command_=adjustl(command)//'   '
-   if(index(command_,'* ').eq.1)then
+   if(index(command_,'* ') == 1)then
       command_=getname_()//command_(2:)
-   elseif(index(command_,'** ').eq.1)then
+   elseif(index(command_,'** ') == 1)then
       command_=getall_()//command_(2:)
    endif
    if(verbose_)call wrt(G_luns,"command: ",command_)
    cmdmsg=' '
    call execute_command_line(command_,wait,exitstat,cmdstat,cmdmsg)
    flush(unit=6)
-   if(cmdstat.ne.0)then
+   if(cmdstat /= 0)then
       call wrt(G_luns,"cmdstat: ",cmdmsg,'for command :',command_)
-   elseif(len_trim(cmdmsg).ne.0)then
+   elseif(cmdmsg /= '')then
       call wrt(G_luns,"exitstat: ",cmdmsg,'for command :',command_)
    endif
-   istat=merge(-cmdstat,exitstat,exitstat.eq.0.and.cmdstat.ne.0)
+   istat=merge(-cmdstat,exitstat,exitstat == 0.and.cmdstat /= 0)
 end function unit_check_system
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -1472,6 +1542,24 @@ character(len=:),allocatable :: command
    enddo
    command=getname_()//command
 end function getall_
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine run(command) ! convenience routine so command does not cause program to stop
+character(len=*)             :: command
+logical,parameter            :: wait=.true.
+integer                      :: exitstat
+integer                      :: cmdstat
+character(len=256)           :: cmdmsg
+   if(G_verbose)call wrt(G_luns,"+ ",command)
+   cmdmsg=' '
+   call execute_command_line(command,wait,exitstat,cmdstat,cmdmsg)
+   if(cmdstat /= 0)then
+      call wrt(G_luns,"cmdstat: ",cmdmsg,'for command :',command)
+   elseif(cmdmsg /= '')then
+      call wrt(G_luns,"exitstat: ",cmdmsg,'for command :',command)
+   endif
+end subroutine run
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

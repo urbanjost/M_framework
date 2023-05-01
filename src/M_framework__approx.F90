@@ -34,7 +34,8 @@ contains
 !===================================================================================================================================
 !>
 !!##NAME
-!!    almost(3f) - [M_framework__approx] return true or false if two numbers agree up to specified number of digits
+!!    almost(3f) - [M_framework__approx] return true or false if two numbers
+!!    agree up to specified number of digits
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -76,22 +77,30 @@ contains
 !!    enddo
 !!    end program demo_almost
 !!
-!!  > *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 1.00000000
+!!  > *almost* for values 1.23456776 1.23000002
+!!     agreement of 2.43020344 digits out of requested 1.00000000
 !!  >            1 T
-!!  > *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 2.00000000
+!!  > *almost* for values 1.23456776 1.23000002
+!!     agreement of 2.43020344 digits out of requested 2.00000000
 !!  >            2 T
-!!  > *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 3.00000000
+!!  > *almost* for values 1.23456776 1.23000002
+!!     agreement of 2.43020344 digits out of requested 3.00000000
 !!  >            3 F
-!!  > *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 4.00000000
+!!  > *almost* for values 1.23456776 1.23000002
+!!     agreement of 2.43020344 digits out of requested 4.00000000
 !!  >            4 F
-!!  > *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 5.00000000
+!!  > *almost* for values 1.23456776 1.23000002
+!!     agreement of 2.43020344 digits out of requested 5.00000000
 !!  >            5 F
-!!  > *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 6.00000000
+!!  > *almost* for values 1.23456776 1.23000002
+!!     agreement of 2.43020344 digits out of requested 6.00000000
 !!  >            6 F
-!!  > *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 7.00000000
+!!  > *almost* for values 1.23456776 1.23000002
+!!     agreement of 2.43020344 digits out of requested 7.00000000
 !!  >            7 F
 !!  > *accdig* significant digit request too high= 8.00000000
-!!  > *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 digits out of requested 8.00000000
+!!  > *almost* for values 1.23456776 1.23000002
+!!     agreement of 2.43020344 digits out of requested 8.00000000
 !!  >            8 F
 !!
 !!##AUTHOR
@@ -340,7 +349,8 @@ END SUBROUTINE sp_accdig
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
-!!      accdig(3f) - [M_framework__approx] compare two numbers only up to a specified number of digits
+!!      accdig(3f) - [M_framework__approx] compare two numbers only up to
+!!      a specified number of digits
 !!      (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -535,11 +545,13 @@ end subroutine accdig
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
-!!   in_margin(3f) - [M_framework__approx] check if two reals are approximately equal using a relative margin
+!!   in_margin(3f) - [M_framework__approx] check if two reals are
+!!   approximately equal using a relative margin
 !!
 !!##SYNOPSIS
 !!
-!!     elemental pure function in_margin( expected_value, measured_value, allowed_margin )
+!!     elemental pure function in_margin( expected_value, measured_value,
+!!     allowed_margin )
 !!
 !!      real, intent(in)    :: expected_value
 !!      real, intent(in)    :: measured_value
@@ -572,8 +584,10 @@ end subroutine accdig
 !!    write(*,*) in_margin(4.00000,3.99999,0.0000001)
 !!    write(*,*) in_margin(4.00000,3.99999,0.000001)
 !!
-!!    write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], [3.9,39.9,399.9,3999.9,39999.9] ,0.000001)
-!!    write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], [3.9,39.9,399.9,3999.9,39999.9] ,0.00001)
+!!    write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], &
+!!            & [3.9,39.9,399.9,3999.9,39999.9] ,0.000001)
+!!    write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], &
+!!            & [3.9,39.9,399.9,3999.9,39999.9] ,0.00001)
 !!
 !!    write(*,*) in_margin(4.00000,3.99999,0.00001)
 !!    write(*,*) in_margin(4.00000,3.99999,0.0001)
@@ -666,7 +680,8 @@ end function round
 !===================================================================================================================================
 !>
 !!##NAME
-!!   significant(3f) - [M_framework__approx] round val to specified number of significant digits
+!!   significant(3f) - [M_framework__approx] round val to specified number
+!!   of significant digits
 !!
 !!##SYNOPSIS
 !!
@@ -736,13 +751,20 @@ end function round
 !!
 !!    8765.400 .1234600
 !!     default:   1.234568
-!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568
-!!    2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RU
-!!    1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 1.234567 1.234568 1.234568 RD
-!!    1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 1.234567 1.234568 1.234568 RZ
-!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RN
-!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RC
-!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RP
+!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+!!    1.234568 1.234568 1.234568
+!!    2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 ...
+!!    1.234568 1.234568 1.234568 RU
+!!    1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
+!!    1.234567 1.234568 1.234568 RD
+!!    1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
+!!    1.234567 1.234568 1.234568 RZ
+!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+!!    1.234568 1.234568 1.234568 RN
+!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+!!    1.234568 1.234568 1.234568 RC
+!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+!!    1.234568 1.234568 1.234568 RP
 pure elemental function significant_real32(val,digits,round) result(significant)
 
 ! ident_7="@(#) M_framework__approx significant_real32(3f) round val to specified number of significant digits"

@@ -79,7 +79,7 @@ subroutine journal([where,],[VALUE(s)])
 <P>
 <PRE>
     character(len=*),intent(in) :: where
-    character(len=*)|real|integer|doubleprecision|complex,optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
+    class(*),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -282,15 +282,18 @@ Sample program:
    program demo_journal
    use M_framework__journal, only : journal
    !! BASIC USAGE
-   call journal(&#146;write to standard output as-is, and trail file as a comment if open&#146;)
-   ! since we have not opened a trail file yet, only stdout will display output
+   call journal(&
+   & &#146;write to standard output as-is, and trail file as a comment if open&#146;)
+   ! since trail file is not yet open, only stdout will display output
    call journal(&#146;c&#146;,&#146;ignored, as trail file is not open&#146;)
    ! now open trail file "trail"
    call journal(&#146;o&#146;,&#146;trail&#146;)
    call journal(&#146;sc&#146;,&#146;same thing except now trail file is open&#146;)
    ! only write to trail file if open
-   call journal(&#146;c&#146;,&#146;not ignored, as trail file is open. Written with # suffix&#146;)
-   call journal(&#146;t&#146;,&#146;not ignored, as trail file is open. Written as-is&#146;)
+   call journal(&#146;c&#146;,&
+   & &#146;not ignored, as trail file is open. Written with # suffix&#146;)
+   call journal(&#146;t&#146;,&
+   & &#146;not ignored, as trail file is open. Written as-is&#146;)
    ! turn off trail file
    call journal(&#146;o&#146;,&#146;&#146;)
    end program demo_journal
@@ -304,13 +307,16 @@ Adding intrinsic scalar values to the message:
    implicit none
       call journal(&#146;S&#146;,&#146;This is a test with no optional value&#146;)
       call journal(&#146;S&#146;,&#146;This is a test with a logical value&#146;,.true.)
-      call journal(&#146;S&#146;,&#146;This is a test with a double value&#146;,1234567890.123456789d0)
-      call journal(&#146;S&#146;,&#146;This is a test with a real value&#146;,1234567890.123456789)
+      call journal(&#146;S&#146;, &
+        & &#146;This is a test with a double value&#146;,1234567890.123456789d0)
+      call journal(&#146;S&#146;, &
+        & &#146;This is a test with a real value&#146;,1234567890.123456789)
       call journal(&#146;S&#146;,&#146;This is a test with an integer value&#146;,1234567890)
       call journal(&#146;STDC&#146;,&#146;This is a test using STDC&#146;,1234567890)
       call journal(&#146;stdc&#146;,&#146;This is a test using stdc&#146;,1234567890)
-      call journal(&#146;o&#146;,&#146;journal.txt&#146;)                        ! open trail file
-      call journal(&#146;S&#146;,1,12.34,56789.111111111d0,.false.,&#146;a bunch of values&#146;)
+      call journal(&#146;o&#146;,&#146;journal.txt&#146;)  ! open trail file
+      call journal(&#146;S&#146;, &
+        & 1,12.34,56789.111111111d0,.false.,&#146;a bunch of values&#146;)
       ! the combinations that make sense
       call journal(&#146;st&#146;,&#146;stdout and trail&#146;)
       call journal(&#146;s&#146; ,&#146;stdout only&#146;)
@@ -323,33 +329,42 @@ Adding intrinsic scalar values to the message:
    end program test_journal
 <P>
    program testit
-   ! this is a utility program that calls the module routines. It is typically built using ccall(1).
+   ! this is a utility program that calls the module routines. It is
+   ! typically built using ccall(1).
    use M_framework__journal, only : journal
-      character(len=:),allocatable :: time_stamp_prefix
-      call journal(&#146;s&#146;,&#146;--------------------------------------------------------------------------------&#146;)
-      call journal(&#146;s&#146;,&#146;SIMPLE WRITES&#146;)
-      call one()
-      call two()
-      call journal(&#146;sc&#146;,&#146;called ONE() and TWO() but did not generate a log file&#146;)
-      call journal(&#146;s&#146;,&#146;--------------------------------------------------------------------------------&#146;)
-      call journal(&#146;s&#146;,&#146;SIMPLE WRITES WITH LOG FILE&#146;)
-      call journal(&#146;o&#146;,&#146;journal.txt&#146;)                        ! open trail file
-      call one()
-      call two()
-      call journal(&#146;sc&#146;,&#146;called ONE() and TWO() and generated log file journal.txt&#146;)
-      call journal(&#146;&#146;,&#146;journal.txt&#146;)                         ! close trail file
-      call journal(&#146;s&#146;,&#146;--------------------------------------------------------------------------------&#146;)
-      call journal(&#146;s&#146;,&#146;SIMPLE WRITES WITH TIMING INFORMATION&#146;)
-      time_stamp_prefix=&#146;CPU_TIME=%c:CALLS=%C:SINCE=%S:%b&#146;  ! change time prefix
-      call journal(&#146;%&#146;,time_stamp_prefix) ! set a time prefix in front of messages
-      call journal(&#146;o&#146;,&#146;timed.txt&#146;)                          ! open trail file
-      call one()
-      call two()
-      call journal(&#146;sc&#146;,&#146;called ONE() and TWO() and generate log file timed.txt&#146;)
-      call journal(&#146;&#146;,&#146;timed.txt&#146;)                           ! close trail file
-      call journal(&#146;%&#146;,&#146;&#146;)                                   ! turn off time prefix
-      call journal(&#146;o&#146;,&#146;timed.txt&#146;)                          ! open trail file
-      call journal(&#146;s&#146;,&#146;--------------------------------------------------------------------------------&#146;)
+   character(len=:),allocatable :: time_stamp_prefix
+    call journal(&#146;s&#146;, &
+    & &#146;------------------------------------------------------------&#146;)
+    call journal(&#146;s&#146;,&#146;SIMPLE WRITES&#146;)
+    call one()
+    call two()
+    call journal(&#146;sc&#146;, &
+    & &#146;called ONE() and TWO() but did not generate a log file&#146;)
+    call journal(&#146;s&#146;, &
+    & &#146;------------------------------------------------------------&#146;)
+    call journal(&#146;s&#146;,&#146;SIMPLE WRITES WITH LOG FILE&#146;)
+    call journal(&#146;o&#146;,&#146;journal.txt&#146;)     ! open trail file
+    call one()
+    call two()
+    call journal(&#146;sc&#146;, &
+    & &#146;called ONE() and TWO() and generated log file journal.txt&#146;)
+    call journal(&#146;&#146;,&#146;journal.txt&#146;)      ! close trail file
+    call journal(&#146;s&#146;, &
+    & &#146;------------------------------------------------------------&#146;)
+    call journal(&#146;s&#146;,&#146;SIMPLE WRITES WITH TIMING INFORMATION&#146;)
+    ! change time prefix
+    time_stamp_prefix=&#146;CPU_TIME=%c:CALLS=%C:SINCE=%S:%b&#146;
+    call journal(&#146;%&#146;,time_stamp_prefix) ! set a message time prefix
+    call journal(&#146;o&#146;,&#146;timed.txt&#146;)       ! open trail file
+    call one()
+    call two()
+    call journal(&#146;sc&#146;, &
+    & &#146;called ONE() and TWO() and generate log file timed.txt&#146;)
+    call journal(&#146;&#146;,&#146;timed.txt&#146;)        ! close trail file
+    call journal(&#146;%&#146;,&#146;&#146;)                ! turn off time prefix
+    call journal(&#146;o&#146;,&#146;timed.txt&#146;)       ! open trail file
+    call journal(&#146;s&#146;, &
+    & &#146;------------------------------------------------------------&#146;)
 <P>
    contains
 <P>
@@ -389,7 +404,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>journal (3m_framework__journal)</TD> <TD align=right width=33%><I>April 30, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d5c5bf09-0597-4b06-be16-f37da2784950 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>journal (3m_framework__journal)</TD> <TD align=right width=33%><I>April 30, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7f9c275f-e388-4696-a032-eaebd87c1e99 using man macros.</FONT>
 <br><br><center><img src="images/journal.gif"></center>
 </div>
 </div>

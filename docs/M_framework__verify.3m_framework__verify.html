@@ -56,9 +56,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-M_framework__verify(3fm) - [M_framework__verify::INTRO] a collection of Fortran routines for
-supporting code development by providing error
-processing, debugging procedures and unit testing.
+M_framework__verify(3fm) - [M_framework__verify::INTRO] unit test framework
 (LICENSE:PD)
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
@@ -81,7 +79,7 @@ Module procedures
 <P>
 <PRE>
    use M_framework__verify, only : unit_check, unit_check_start,     &
-                                   unit_check_done, unit_check_stop, &
+                                   unit_check_end, unit_check_stop, &
                                    unit_check_good, unit_check_bad,  &
                                    unit_check_msg, unit_check_mode,  &
                                    unit_check_system
@@ -108,36 +106,51 @@ to your heart.
 
 </A>
 <BLOCKQUOTE>
-The M_framework__verify(3fm) Fortran module provides procedures and variables
-useful for providing error processing, debugging capabilities, and
-unit testing.
+The M_framework(3f) module is a collection of Fortran routines for
+supporting code development by providing logging, error processing,
+debugging, comparison and unit testing.
+<P>
+The M_framework__verify(3fm) module specifically brings together a
+few procedures for creating unit testing. It &#46;&#46;&#46;
 <BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: The M_framework__verify(3fm) Fortran module provides procedures and variables
+<TABLE cellpadding=3><!-- tsb: The M_framework__verify(3fm) module specifically brings together a
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 allows for a user-defined command to be called to collect results or
-mail failure alerts, &#46;&#46;&#46;
+produce mail alerts, or other custom bookkeeping operations.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-supports easily composing a message from up to nine scalar
+supports easily composing a message from up to twenty scalar
 scalar intrinsic values and different strings
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-allows stopping on first failure or continuing
+allows stopping on failure or continuing
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 provides for a non-zero exit code if any tests fail
 </TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+is designed with integration with the fpm( the Fortran Package Manager)
+test subcommand.
+</TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
+<P>
+If default modes need changed it can be done via the unit_check_mode(3f)
+procedure or as command line options.
+<P>
+messages by default are writting to stderr, but may be written to any
+list of LUNs of preassigned or open files.
 </BLOCKQUOTE>
 <A name=>
 
@@ -145,120 +158,92 @@ provides for a non-zero exit code if any tests fail
 </A>
 <BLOCKQUOTE>
 <P>
-call unit_check_mode(command,keep_going,level)
+Some of the most common options are
 <P>
 <PRE>
-       command     name of command to execute. Defaults to the name
-       keep_going  logical variable that can be used to turn off
+      call unit_check_mode(command,keep_going,level,luns=[K,L,M,N,&#46;&#46;&#46;])
+<P>
+       keep_going  logical variable that can be used to turn on or off
                    program termination on errors.
+       luns        array of Fortran LUNs to write messages to
        level       An integer that can be used to specify
                    different debug levels
+       command     name of optional command to execute for a start,
+                   check, or finish.
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=>
 
-    <H4>&nbsp; &nbsp; UNIT TESTS</H4>
+    <H4>&nbsp; &nbsp; PROCEDURES</H4>
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>unit_check_start(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-start tests of a procedure and optionally call
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                             command NAME start &#46;&#46;&#46;
-</PRE>
+<B>unit_check_start</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+start tests of a procedure
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-if expression is false optionally call
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                             command NAME bad
-<P>
-</PRE>
-and stop program (by default)
+<B>unit_check</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+report if expression is false or true
+and if .false. stop program when keep_going=.false.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_done(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-call
+<B>unit_check_end</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+ends test of a procedure
 </TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-                             command NAME good
-<P>
-</PRE>
-if no failures; else call
-<P>
-<PRE>
-                             command NAME bad
-</PRE>
-</BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb:                              command NAME bad
- -->
-<TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_stop(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_check_stop</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 stop program with exit value of 0 if no failures
 else with an exit value of 1
-<TABLE width=100% cellpadding=3><!-- tsb: stop program with exit value of 0 if no failures
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>unit_check_good(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-call command
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                             command NAME good
-<P>
-</PRE>
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_bad(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-call command
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                             command NAME bad
-<P>
-</PRE>
-and stop program by default
+<B>unit_check_good</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+shorthand for "unit_check(&#146;name&#146;,.true., &#46;&#46;&#46;.)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_msg(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_check_bad</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+shorthand for "unit_check(&#146;name&#146;,.false., &#46;&#46;&#46;.)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>unit_check_msg</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 write message
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_system(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-execute system command
+<B>unit_check_system</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+execute system command, recursively if requested.
 </TD></TR>
-<TR></TR></TABLE>For unit testing, the existence of a command called "goodbad" is
-initially assumed. This is generally a script that makes entries
-for each unit in an SQLite data file which is then used to create
-CSV and HTML reports on the status of each unit. A sample goodbad(1)
-command written in the bash(1) shell and using the sqlite3(1) command
-should be included in this distribution as an example.
+<TR></TR></TABLE>For custom unit testing reports, a command can be given that will be
+passed information on the command line in NAMELIST format.
+<P>
+This command is generally a script that makes entries for each unit,
+perhaps in an SQLite data file for example.
+<P>
+It might also send an email if a test fails in batch environments.
+<P>
+It could also convert the information to CSV for use in spreadsheets,
+or generate an HTML report, for example.
+<P>
+A sample command written in the bash(1) shell and using the sqlite3(1)
+command should be included in this distribution as an example.
 <P>
 The flexibility introduced by calling an external script or program
-is that The goodbad(1) command can be changed as desired to write CSV
-files or simple logs or to notify developers with e-mail as desired.
-</TD></TR>
-<TR></TR></TABLE><A name=>
+is that The command can be changed as desired with changing the test
+programs.
+</BLOCKQUOTE>
+<A name=>
 
     <H4>&nbsp; &nbsp; RELATED FUNCTIONS</H4>
 </A>
 <BLOCKQUOTE>
 <P>
-The routines in M_framework__verify(3f) are often combined with the M_hashkeys(3fm)
-routines and various math and statistical routines to quickly create
-unit tests.
+The routines in M_framework__verify(3f) are often combined with the
+M_hashkeys(3fm) routines and various math and statistical routines
+to quickly create unit tests.
 <P>
 Comparisons of real values can be done with a tolerance with
-M_Compare_Float_Numbers(3fm), for example.
+M_Compare_Float_Numbers(3f) and M_framework__approx(3f), for example.
 <P>
 The intrinsics ANY(3f) and ALL(3f) are particularly useful in calls
 to unit_check(3f).
@@ -274,13 +259,13 @@ Sample program
 <PRE>
     !! program demo_M_framework__verify
     module M_framework__demo
+    ! create a few procedures to test
     private
-    public one !! regular routines
-    public two !! regular routines
-    public test_suite_M_demo !! special name for use with test_suite(1bash).
+    public one ! some regular routine
+    public two ! some regular routine
+    public test_suite_M_demo ! special name for use with test_suite(1bash).
     contains
 <P>
-    !!  regular routines
     subroutine one()
     end subroutine one
 <P>
@@ -290,63 +275,77 @@ Sample program
     !! unit test
     subroutine test_suite_M_demo
     use M_framework__verify, only: unit_check_start, unit_check
-    use M_framework__verify, only: unit_check_good, unit_check_bad, unit_check_done
-    use M_framework__verify, only: unit_check_msg, unit_check_stop, unit_check_system
+    use M_framework__verify, only: unit_check_good, unit_check_bad, &
+            & unit_check_end
+    use M_framework__verify, only: unit_check_msg, unit_check_stop, &
+            & unit_check_system
     implicit none
     integer :: i, j, k
     integer,allocatable :: array(:)
     integer :: arr(4)=[21,51,14,45]
     integer :: a=21, b=51, c=14, d=45
     ! TEST-DRIVEN DEVELOPMENT
-    ! optional set-up       perform initialization operations common to all tests within a module
+    ! optional set-up       perform initialization operations common to
+    !                       all tests within a module
        i=1
        j=2
        k=3
        array=[10,20,30,40,50,60,70]
        call test_one()
        call test_two()
-    ! optional tear-down    perform finalization operations common to all tests within a module
+    ! optional tear-down    perform finalization operations common to
+    !                       all tests within a module
     contains
 <P>
     subroutine test_one()
-    !  register an entry for specified name ("one") in database with status of zero (0)
+    !  register an entry for specified name ("one") in database
+    ! with status of zero (0)
     call unit_check_start(&#146;one&#146;)
 <P>
     !  if mask test fails, can
     !  * produce a SUCCESS: or FAIL: message and stop program
-    !  * change database status for specified entry to -1 and stop program, else continue
+    !  * change database status for specified entry to -1 and
+    !    stop program, else continue
     !  * produce a SUCCESS: or FAIL: message and keep going
-    !  * produce a FAIL: message if test fails but no SUCCESS: message if test passes
+    !  * produce a FAIL: message if test fails but no SUCCESS: message
+    !    if test passes
     call unit_check(&#146;one&#146;,i &gt; 0,msg=&#146;I &gt; 0&#146;)
 <P>
     ! using ANY(3f) and ALL(3f)
-    call unit_check(&#146;one&#146;,all([i,j,k] &gt; 0),      &#146;testing if everyone greater than zero&#146;)
+    call unit_check(&#146;one&#146;,all([i,j,k] &gt; 0), &
+            & &#146;testing if everyone greater than zero&#146;)
     ! display message built of scalars as well
-    call unit_check(&#146;one&#146;,all(.not.[i,j,k] == 4),&#146;for set &#146;,i,j,k,&#146;testing if no one is equal to four&#146;)
+    call unit_check(&#146;one&#146;,all(.not.[i,j,k] == 4), &
+            & &#146;for set &#146;,i,j,k,&#146;if no one equals four&#146;)
 <P>
-    ! for tests that are hard to reduce to a logical test just call unit_check_bad(3f) if fail
+    ! for tests that are hard to reduce to a logical test just call
+    ! unit_check_bad(3f) if fail
     if(i+j+k &lt; 1)then
        call unit_check_bad(&#146;one&#146;)
     endif
 <P>
-    call unit_check_done(&#146;one&#146;,&#146;checks on "one" ended&#146;)
+    call unit_check_end(&#146;one&#146;,&#146;checks on "one" ended&#146;)
     end subroutine test_one
 <P>
     subroutine test_two
     ! use of all(3f), any(3f), merge(3f) can be useful
     ! if you know what these would produce
-    ! write(*,*)[&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;B&#146;] == &#146;B&#146;      ! this would return an array, the last element having the value T, else F
-    ! write(*,*)all([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;] == &#146;X&#146;) ! this would return F
-    ! write(*,*)any([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;] == &#146;B&#146;) ! this would return F
-    ! write(*,*)any([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;B&#146;] == &#146;B&#146;) ! this would return T
-    ! write(*,*).not.all(array &lt; 100)
-    ! write(*,*)all(array &lt; 100)
-    ! write(*,*)all([a,b,c,d] == [21,51,14,45]) ! compare a list. This would return T
-    ! write(*,*)all(arr == [21,51,14,45])       ! compare an array. This would return T
+    ! this would return an array, the last element having the value T, else F
+    !  write(*,*)[&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;B&#146;] == &#146;B&#146;
+    !  write(*,*)all([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;] == &#146;X&#146;) ! this would return F
+    !  write(*,*)any([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;] == &#146;B&#146;) ! this would return F
+    !  write(*,*)any([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;B&#146;] == &#146;B&#146;) ! this would return T
+    !  write(*,*).not.all(array &lt; 100)
+    !  write(*,*)all(array &lt; 100)
+    !  ! compare a list. This would return T
+    !  write(*,*)all([a,b,c,d] == [21,51,14,45])
+    !  ! compare an array. This would return T
+    !  write(*,*)all(arr == [21,51,14,45])
     ! you know how valuable ANY(3f) and ALL(3f) will be
     call unit_check_start(&#146;two&#146;,&#146;check on "two" passed&#146;)
-    call unit_check(&#146;two&#146;, 1 &gt; 0 .and. abs(10.10000-10.10001) &lt; 0.0001,msg=&#146;two looks good&#146;)
-    call unit_check_done(&#146;two&#146;,&#146;checks on "two" ended&#146;)
+    call unit_check(&#146;two&#146;, 1 &gt; 0 .and. &
+            & abs(10.10000-10.10001) &lt; 0.0001,msg=&#146;two looks good&#146;)
+    call unit_check_end(&#146;two&#146;,&#146;checks on "two" ended&#146;)
     end subroutine test_two
 <P>
     end subroutine test_suite_M_demo
@@ -364,13 +363,13 @@ Sample program
 Expected output:
 <P>
 <PRE>
-    unit_check:       one                  SUCCESS:I &gt; 0
-    unit_check:       one                  SUCCESS:testing if everyone greater than zero
-    unit_check:       one                  SUCCESS:for set 1 2 3 testing if no one is equal to four
-    unit_check_done:  one                  PASSED   GOOD:3  BAD:0
+    unit_check:       one   SUCCESS:I &gt; 0
+    unit_check:       one   SUCCESS:testing if everyone greater than zero
+    unit_check:       one   SUCCESS:for set 1 2 3 if no one equals four
+    unit_check_end:   one   PASSED   GOOD:3  BAD:0
 <P>
-    unit_check:       two                  SUCCESS:two looks good
-    unit_check_done:  two                  PASSED   GOOD:1  BAD:0
+    unit_check:       two   SUCCESS:two looks good
+    unit_check_end:   two   PASSED   GOOD:1  BAD:0
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -391,7 +390,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework__verify (3m_framework__verify)</TD> <TD align=right width=33%><I>April 30, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 48881b68-f301-42cf-9390-f70284184ba0 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework__verify (3m_framework__verify)</TD> <TD align=right width=33%><I>April 30, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3b3e76b3-c5e9-48f1-af5f-74d339e296e5 using man macros.</FONT>
 <br><br><center><img src="images/M_framework__verify.gif"></center>
 </div>
 </div>

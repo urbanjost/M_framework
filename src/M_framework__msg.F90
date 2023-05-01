@@ -33,7 +33,8 @@ contains
 !===================================================================================================================================
 !>
 !!##NAME
-!!    str(3f) - [M_framework__msg] converts up to twenty standard scalar type values to a string
+!!    str(3f) - [M_framework__msg] converts up to twenty standard scalar
+!!    type values to a string
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -102,9 +103,11 @@ contains
 !!
 !!  Output
 !!
-!!    HUGE(3f) integers 2147483647 and real 3.40282347E+38 and double 1.7976931348623157E+308
+!!    HUGE(3f) integers 2147483647 and real 3.40282347E+38 ...
+!!    and double 1.7976931348623157E+308
 !!    real            : 3.40282347E+38 0.00000000 12345.6787 1.17549435E-38
-!!    doubleprecision : 1.7976931348623157E+308 0.0000000000000000 12345.678900000001 2.2250738585072014E-308
+!!    doubleprecision : 1.7976931348623157E+308 0.0000000000000000 ...
+!!    12345.678900000001 2.2250738585072014E-308
 !!    complex         : (3.40282347E+38,1.17549435E-38)
 !!     format=(*(i9:,1x))
 !!     program will now stop
@@ -283,7 +286,8 @@ end function msg_one
 !===================================================================================================================================
 !>
 !!##NAME
-!!    fmt(3f) - [M_framework__msg] convert any intrinsic to a string using specified format
+!!    fmt(3f) - [M_framework__msg] convert any intrinsic to a string using
+!!    specified format
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -293,8 +297,8 @@ end function msg_one
 !!     character(len=*),intent(in),optional  :: format
 !!     character(len=:),allocatable :: string
 !!##DESCRIPTION
-!!    FMT(3f) converts any standard intrinsic value to a string using the specified
-!!    format.
+!!    FMT(3f) converts any standard intrinsic value to a string using the
+!!    specified format.
 !!##OPTIONS
 !!    value    value to print the value of. May be of type INTEGER, LOGICAL,
 !!             REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
@@ -416,18 +420,22 @@ end function fmt
 !!    subroutine stderr(msg,[generic(s)])
 !!
 !!     class(*),intent(in),optional :: msg
-!!     class(*),intent(in),optional :: generic0,generic1,generic2,generic3,generic4
-!!     class(*),intent(in),optional :: generic5,generic6,generic7,generic8,generic9
-!!     class(*),intent(in),optional :: generica,genericb,genericc,genericd,generice
-!!     class(*),intent(in),optional :: genericf,genericg,generich,generici,genericj
+!!     class(*),intent(in),optional :: &
+!!                     & generic0,generic1,generic2,generic3,generic4
+!!     class(*),intent(in),optional :: &
+!!                     & generic5,generic6,generic7,generic8,generic9
+!!     class(*),intent(in),optional :: &
+!!                     & generica,genericb,genericc,genericd,generice
+!!     class(*),intent(in),optional :: &
+!!                     & genericf,genericg,generich,generici,genericj
 !!##DESCRIPTION
-!!    STDERR(3f) writes a message to standard error using a standard f2003 method.
-!!    Up to twenty generic options are available.
+!!    STDERR(3f) writes a message to standard error using a standard
+!!    f2003 method.  Up to twenty generic options are available.
 !!##OPTIONS
 !!    msg           - description to print
-!!    generic[0-j]  - optional value to print the value of after the message. May
-!!                    be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
-!!                    or CHARACTER.
+!!    generic[0-j]  - optional value to print the value of after the
+!!                    message. May be of type INTEGER, LOGICAL, REAL,
+!!                    DOUBLEPRECISION, COMPLEX, or CHARACTER.
 !!##EXAMPLES
 !!
 !!   Sample program:
@@ -446,14 +454,18 @@ end function fmt
 !!
 !!    SEVERAL: block
 !!    integer :: least=10, most=999, ival=-10
-!!    call stderr('error: value',ival,'should be between',least,'and',most)
+!!    call stderr('error: value',ival, &
+!!            & 'should be between',least,'and',most)
 !!    endblock SEVERAL
 !!
-!!    call stderr('real32  :',huge(0.0_real32),0.0_real32,12345.6789_real32,tiny(0.0_real32))
-!!    call stderr('real64  :',huge(0.0_real64),0.0_real64,12345.6789_real64,tiny(0.0_real64))
+!!    call stderr('real32  :',huge(0.0_real32),0.0_real32, &
+!!            & 12345.6789_real32,tiny(0.0_real32))
+!!    call stderr('real64  :',huge(0.0_real64),0.0_real64, &
+!!            & 12345.6789_real64,tiny(0.0_real64))
 !!    !#ifdef __NVCOMPILER
 !!    !#else
-!!    call stderr('real128 :',huge(0.0_real128),0.0_real128,12345.6789_real128,tiny(0.0_real128))
+!!    call stderr('real128 :',huge(0.0_real128),0.0_real128, &
+!!            & 12345.6789_real128,tiny(0.0_real128))
 !!    !#endif
 !!    call stderr('complex :',cmplx(huge(0.0_real),tiny(0.0_real)))
 !!
@@ -506,30 +518,38 @@ end subroutine stderr
 !===================================================================================================================================
 !>
 !!##NAME
-!!    wrt(3f) - [M_framework__msg] write multiple scalar values to any number of files
+!!    wrt(3f) - [M_framework__msg] write multiple scalar values to any
+!!    number of files
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
 !!    subroutine wrt(luns,generic(s),iostat)
 !!
 !!     integer,intent(in)           :: luns(:)
-!!     class(*),intent(in),optional :: generic0,generic1,generic2,generic3,generic4
-!!     class(*),intent(in),optional :: generic5,generic6,generic7,generic8,generic9
-!!     class(*),intent(in),optional :: generica,genericb,genericc,genericd,generice
-!!     class(*),intent(in),optional :: genericf,genericg,generich,generici,genericj
+!!     class(*),intent(in),optional :: &
+!!                     & generic0,generic1,generic2,generic3,generic4
+!!     class(*),intent(in),optional :: &
+!!                     & generic5,generic6,generic7,generic8,generic9
+!!     class(*),intent(in),optional :: &
+!!                     & generica,genericb,genericc,genericd,generice
+!!     class(*),intent(in),optional :: &
+!!                     & genericf,genericg,generich,generici,genericj
 !!     integer,intent(out),optional :: iostat
 !!     character(len=*),intent(in)  :: types(*)
 !!##DESCRIPTION
-!!    WRT(3f) writes a list of scalar values  to the list of unit numbers in LUNS(:).
+!!    WRT(3f) writes a list of scalar values  to the list of unit numbers
+!!    in LUNS(:).
 !!##OPTIONS
-!!    LUNS            Unit numbers to write to. If of size zero no output is generated
-!!    generic[1-20]   optional value to print the value of after the message. May
-!!                    be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
-!!                    or CHARACTER.
-!!    TYPES           one for each lun. '' for ASCII, 'CSV' for comma-seperated.
+!!    LUNS            Unit numbers to write to. If of size zero no output
+!!                    is generated
+!!    generic[1-20]   optional value to print the value of after the
+!!                    message. May be of type INTEGER, LOGICAL, REAL,
+!!                    DOUBLEPRECISION, COMPLEX, or CHARACTER.
+!!    TYPES           one for each lun. '' for ASCII, 'CSV' for
+!!                    comma-seperated.
 !!##RETURNS
-!!    IOSTAT          The value of the last non-zero IOSTAT value. Returns zero if
-!!                    no errors occurred.
+!!    IOSTAT          The value of the last non-zero IOSTAT value. Returns
+!!                    zero if no errors occurred.
 !!##EXAMPLES
 !!
 !!   Sample program:
@@ -930,7 +950,8 @@ end subroutine set_scalar
 !===================================================================================================================================
 !>
 !!##NAME
-!!      pdec(3f) - [M_framework__msg] write out string with ASCII decimal equivalent vertically under it
+!!      pdec(3f) - [M_framework__msg] write out string with ASCII decimal
+!!      equivalent vertically under it
 !!      (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -1004,7 +1025,8 @@ end subroutine pdec
 !===================================================================================================================================
 !>
 !!##NAME
-!!    assert(3f) - [M_framework__msg] print filename, linenumber, and message to stderr and stop program
+!!    assert(3f) - [M_framework__msg] print filename, linenumber, and
+!!    message to stderr and stop program
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -1041,7 +1063,8 @@ end subroutine pdec
 !!    implicit none
 !!    real :: a, toobig=1024
 !!    a=2000
-!!    call assert('myroutine', 101, a > toobig, 'The value is too large', a, ' > ', toobig)
+!!    call assert('myroutine', 101, a > toobig, &
+!!            & 'The value is too large', a, ' > ', toobig)
 !!    end program demo_assert
 !!
 !!##AUTHOR

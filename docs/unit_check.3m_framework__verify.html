@@ -57,8 +57,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-unit_check(3f) - [M_framework__verify] report if logical expression is true or false,
-and optionally call command "goodbad NAME good|bad" and stop program if false
+unit_check(3f) - [M_framework__verify] report if logical expression is
+true or false, and optionally call command "goodbad
+NAME good|bad" and optionally stop program if false
 (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
@@ -77,14 +78,15 @@ and optionally call command "goodbad NAME good|bad" and stop program if false
 
 </A>
 <BLOCKQUOTE>
-subroutine unit_check(name,expression,msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
+subroutine unit_check(name,expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+& ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+<BLOCKQUOTE>
 <P>
-<PRE>
-    character(len=*),intent(in) :: name
-    logical,intent(in) :: expression
-    class(*),intent(in),optional :: msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9
-<P>
-</PRE>
+character(len=*),intent(in) :: name
+logical,intent(in) :: expression
+class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+& ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -92,15 +94,12 @@ subroutine unit_check(name,expression,msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg
 
 </A>
 <BLOCKQUOTE>
-unit_check(3f) tests the expression and displays a message composed of the generic
-<TABLE cellpadding=3><!-- tsb: unit_check(3f) tests the expression and displays a message composed of the generic
+unit_check(3f) tests the expression and displays a message composed
+of the generic intrinsic values msg, g1 thorough gj. Additionally, if
+the expression is false
+<TABLE cellpadding=3><!-- tsb: unit_check(3f) tests the expression and displays a message composed
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>intrinsic values msg1 thorough msg9.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Additionally, if the expression  is false
-</TD></TR>
-<TR></TR></TABLE><TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
@@ -139,7 +138,7 @@ command
 the logical expression to evaluate
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>MSG,MSG1&#46;&#46;&#46;MSG9</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B>msg,g1&#46;&#46;&#46;gj</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 optional message to display when performing test,
 composed of any scalar intrinsics of type INTEGER,
 REAL, DOUBLEPRECISION, COMPLEX, LOGICAL, or
@@ -156,7 +155,8 @@ Sample program:
 <P>
 <PRE>
    program demo_unit_check
-   use M_framework__verify, only: unit_check_start, unit_check, unit_check_done
+   use M_framework__verify, only: unit_check_start, &
+                         & unit_check, unit_check_end
    use M_framework__verify, only: unit_check_mode
    use M_framework__approx, only: almost
 <P>
@@ -174,18 +174,22 @@ Sample program:
       arr2=[1.0001,10.001,100.01]
       call unit_check_start(&#146;myroutine&#146;)
 <P>
-      call unit_check(&#146;myroutine&#146;, x &gt; 3 ,&#146;test if big enough&#146;)
-      call unit_check(&#146;myroutine&#146;, x &lt; 100 ,&#146;test if small enough&#146;)
+      call unit_check(&#146;myroutine&#146;, x &gt; 3 ,&#146; if big enough&#146;)
+      call unit_check(&#146;myroutine&#146;, x &lt; 100 ,&#146; if small enough&#146;)
 <P>
       do i=1,size(arr1)
-         call unit_check(&#146;myroutine&#146;, almost(arr1(i),arr2(i),3.9,verbose=.true.) )
+         call unit_check(&#146;myroutine&#146;, &
+         & almost(arr1(i),arr2(i),3.9,verbose=.true.) )
       enddo
 <P>
       arr=[10,20,30]
-      call unit_check(&#146;myroutine&#146;, .not.any(arr &lt; 0) ,&#146;fail if any negative values in array ARR&#146;)
-      call unit_check(&#146;myroutine&#146;, all(arr &lt; 100) ,&#146;fail unless all values are less than 100 in array ARR&#146;)
+      call unit_check(&#146;myroutine&#146;, .not.any(arr &lt; 0) , &
+      & &#146;fail if any negative values in array ARR&#146;)
+      call unit_check(&#146;myroutine&#146;, all(arr &lt; 100) , &
+      & &#146;fail unless all values are less than 100 in array ARR&#146;)
 <P>
-      call unit_check_done(&#146;myroutine&#146;,msg=&#146;checks on "myroutine" all passed&#146;)
+      call unit_check_end(&#146;myroutine&#146;, &
+      & msg=&#146;checks on "myroutine" all passed&#146;)
 <P>
    end program demo_unit_check
 <P>
@@ -193,13 +197,16 @@ Sample program:
 Sample output (varies with what goodbad(1) command is used):
 <P>
 <PRE>
-   unit_check:      myroutine        SUCCESS:test if big enough
-   unit_check:      myroutine        SUCCESS:test if small enough
-   unit_check:      myroutine        SUCCESS:test if any negative values in array ARR
-   unit_check:      myroutine        SUCCESS:test if all values less than 100 in array ARR
-    *almost* for values 1.00000000 1.00010002 agreement of 3.99997139 digits out of requested 3.90000010
-    *almost* for values 10.0000000 10.0010004 agreement of 3.99986792 digits out of requested 3.90000010
-    *almost* for values 100.000000 100.010002 agreement of 3.99995065 digits out of requested 3.90000010
+   unit_check: myroutine  SUCCESS: if big enough
+   unit_check: myroutine  SUCCESS: if small enough
+   unit_check: myroutine  SUCCESS: if any negative values in array ARR
+   unit_check: myroutine  SUCCESS: if all values less than 100 in array ARR
+    *almost* for values 1.00000000 1.00010002
+             agreement of 3.99997139 digits out of requested 3.90000010
+    *almost* for values 10.0000000 10.0010004 agreement of
+             3.99986792 digits out of requested 3.90000010
+    *almost* for values 100.000000 100.010002 agreement of
+             3.99995065 digits out of requested 3.90000010
    unit_check_good: myroutine        PASSED:checks on "myroutine" all passed
 <P>
 <P>
@@ -222,7 +229,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_check (3m_framework__verify)</TD> <TD align=right width=33%><I>April 30, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b69e9385-0be5-4e5c-b5ac-4763b9e426d5 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_check (3m_framework__verify)</TD> <TD align=right width=33%><I>April 30, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 81fb7da9-32f7-445d-acf0-441f8062e453 using man macros.</FONT>
 <br><br><center><img src="images/unit_check.gif"></center>
 </div>
 </div>
