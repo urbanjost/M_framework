@@ -162,8 +162,6 @@
 !!
 !!     end program demo_M_framework__verify
 !!
-!!     end program demo_M_framework__verify
-!!
 !!   Expected output:
 !!
 !!    check_start: one   START   :
@@ -236,14 +234,16 @@ public unit_check_stop    ! produce tally of all procedures tested and end progr
 public unit_check_msg     ! maybe write some message
 public unit_check_system  ! usually used for recursive calls when testing program termination status
 
+!===================================================
 ! for backward compatibility 2023-04-30
 public unit_check_good  ! report results of a test
 public unit_check_bad   ! report results of a test
+
 interface unit_check_done
    module procedure unit_check_end
 end interface unit_check_done
-public :: unit_check_done
-
+public unit_check_done
+!===================================================
 contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -255,19 +255,19 @@ contains
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    function unit_check_msg(name,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9, &
-!!                               & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+!!    function unit_check_msg(name, msg, &
+!!     & g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 !!
 !!     character(len=*),intent(in)  :: name
-!!     class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9, &
-!!                                    & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+!!     class(*),intent(in),optional :: msg, &
+!!     & g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
 !!##DESCRIPTION
 !!    unit_check_msg(3f) builds a string from up to twenty scalar values and
-!!    prints it to the error long.
+!!    prints it to the error log.
 !!
 !!##OPTIONS
 !!    name        name of unit being tested
-!!    msg,g[1-j]  optional value to print the value of after the message. May
+!!    msg,g[1-j]  optional values to print the value of. May
 !!                be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
 !!                COMPLEX, or CHARACTER.
 !!
@@ -312,7 +312,7 @@ character(len=:),allocatable  :: msgall
 
    ! write message to standard error
    call wrt(G_luns,'check_msg:   '//atleast_(name,20)//' INFO    : '// msgall)
-   if(G_command /= '') call run(G_command//' name="'//trim(name)//'", msg="'//msgall//'",')
+   if(G_command /= '') call run(G_command//' name="'//trim(name)//'" msg="'//msgall//'"')
 
 end subroutine unit_check_msg
 !===================================================================================================================================
@@ -321,9 +321,8 @@ end subroutine unit_check_msg
 !>
 !!
 !!##NAME
-!! unit_check(3f) - [M_framework__verify] report if logical expression is
-!!                  true or false, and optionally call command "goodbad
-!!                  NAME good|bad" and optionally stop program if false
+!!    unit_check(3f) - [M_framework__verify] report if logical expression is
+!!    true or false, optionally call command and/or stop program.
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -338,19 +337,18 @@ end subroutine unit_check_msg
 !!
 !!##DESCRIPTION
 !!    unit_check(3f) tests the expression and displays a message composed
-!!    of the generic intrinsic values msg, g1 thorough gj. Additionally, if
-!!    the expression is false
+!!    of the generic intrinsic values msg, and g1 thorough gj. Additionally,
+!!    if the expression is false
 !!
-!!    o if unit_check_mode(command) is not blank optionally calls the
+!!    o if unit_check_mode(command) is not blank calls the
 !!    specified  shell command
 !!
-!!         $COMMAND NAME "good|bad"
+!!         $COMMAND name="NAME" check=T passed=T|F msg="all messages"
 !!
 !!    o if keep_going = .false. stop the program on a failed test
 !!
 !!##OPTIONS
-!!     NAME          the unit test name passed on to the goodbad(1)
-!!                   command
+!!     NAME          the unit test name
 !!     EXPRESSION    the logical expression to evaluate
 !!     msg,g1...gj   optional message to display when performing test,
 !!                   composed of any scalar intrinsics of type INTEGER,
@@ -408,18 +406,23 @@ end subroutine unit_check_msg
 !! Sample output (varies with what goodbad(1) command is used):
 !! ```text
 !!##STOP 0
-!! check:       myroutine            SUCCESS :  if big enough
-!! check:       myroutine            SUCCESS :  if small enough
-!! check:       myroutine            SUCCESS :
-!! check:       myroutine            SUCCESS :
-!! check:       myroutine            SUCCESS :
-!! check:       myroutine            SUCCESS : fail if any negative values in array ARR
-!! check:       myroutine            SUCCESS : fail unless all values are less than 100 in array ARR
-!! check_done:  myroutine            PASSED  : GOOD:        7 BAD:        0 DURATION:00000000000000: checks on "myroutine" all passed
-!! check_stop:  TALLY                PASSED  : GOOD:        7 BAD:        0 DURATION:
-!!  > *almost* for values 1.00000000 1.00010002 agreement of 3.99997139 digits out of requested 3.90000010
-!!  > *almost* for values 10.0000000 10.0010004 agreement of 3.99986792 digits out of requested 3.90000010
-!!  > *almost* for values 100.000000 100.010002 agreement of 3.99995065 digits out of requested 3.90000010
+!! check:       myroutine SUCCESS : if big enough
+!! check:       myroutine SUCCESS : if small enough
+!! check:       myroutine SUCCESS :
+!! check:       myroutine SUCCESS :
+!! check:       myroutine SUCCESS :
+!! check:       myroutine SUCCESS : fail if any negative values in array ARR
+!! check:       myroutine SUCCESS : fail unless all values are less than \
+!!                                  100 in array ARR
+!! check_done:  myroutine PASSED  : GOOD: 7 BAD: 0 DURATION:00000000000000: \
+!!                                  checks on "myroutine" all passed
+!! check_stop:  TALLY     PASSED  : GOOD: 7 BAD: 0 DURATION:
+!!  > *almost* for values 1.00000000 1.00010002 agreement of \
+!!     3.99997139 digits out of requested 3.90000010
+!!  > *almost* for values 10.0000000 10.0010004 agreement of \
+!!     3.99986792 digits out of requested 3.90000010
+!!  > *almost* for values 100.000000 100.010002 agreement of \
+!!     3.99995065 digits out of requested 3.90000010
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -440,7 +443,7 @@ character(len=:),allocatable         :: msgall
 
    if(.not.logical_expression)then
       call wrt(G_luns,'check:       '//atleast_(name,20)//' FAILURE : '//msgall)
-      if(G_command /= '') call run(G_command//' name="'//trim(name)//'", passed=F, msg="'//msgall//'",')
+      if(G_command /= '') call run(G_command//' name="'//trim(name)//'" check=T passed=F msg="'//msgall//'"')
       if(.not.G_keep_going) then
          call wrt(G_luns,'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
          stop 1
@@ -451,7 +454,7 @@ character(len=:),allocatable         :: msgall
       if(.not.G_no_news_is_good_news)then
          call wrt(G_luns,'check:       '//atleast_(name,20)//' SUCCESS : '//msgall)
       endif
-      if(G_command /= '') call run(G_command//' name="'//trim(name)//'", passed=T, msg="'//msgall//'",')
+      if(G_command /= '') call run(G_command//' name="'//trim(name)//'" check=T passed=T msg="'//msgall//'"')
       IPASSED_G=IPASSED_G+1
       IPASSED_ALL_G=IPASSED_ALL_G+1
    endif
@@ -462,8 +465,8 @@ end subroutine unit_check
 !===================================================================================================================================
 !>
 !!##NAME
-!!    unit_check_start(3f) - [M_framework__verify] call command "goodbad
-!!    NAME start" and optionally set options
+!!    unit_check_start(3f) - [M_framework__verify] reset counters
+!!    and start a new test block
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -481,8 +484,7 @@ end subroutine unit_check
 !!##OPTIONS
 !!    NAME   name of the procedure to test
 !!    MSG    message to print
-!!    OPTS   pass additional options to the shell command
-!!
+!!    OPTS   pass additional options to the optional shell command
 !!
 !!##EXAMPLES
 !!
@@ -519,13 +521,13 @@ end subroutine unit_check
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_check_start(name,opts,msg)
+subroutine unit_check_start(name,msg,opts)
 
 ! ident_3="@(#) M_framework__verify unit_check_start(3f) call 'goodbad NAME start'"
 
 character(len=*),intent(in)          :: name
-character(len=*),intent(in),optional :: opts
 character(len=*),intent(in),optional :: msg
+character(len=*),intent(in),optional :: opts
 character(len=:),allocatable         :: msg_local
 logical,save                         :: called=.false.
    if(present(msg))then
@@ -537,9 +539,9 @@ logical,save                         :: called=.false.
    if(G_virgin%cmdline) call cmdline_()
 
    if(present(opts))then
-      if(G_command /= '') call run(G_command//' name="'//trim(name)//'", start=T, msg="'//msg_local//'", '//opts)
+      if(G_command /= '') call run(G_command//' name="'//trim(name)//'" start=T msg="'//msg_local//'" '//opts)
    else
-      if(G_command /= '') call run(G_command//' name="'//trim(name)//'", start=T, msg="'//msg_local//'",')
+      if(G_command /= '') call run(G_command//' name="'//trim(name)//'" start=T msg="'//msg_local//'"')
    endif
 
    call system_clock(clicks)
@@ -671,11 +673,11 @@ end subroutine unit_check_stop
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine unit_check_end(name,opts,msg)
+!!    subroutine unit_check_end(name,msg,opts)
 !!
 !!     character(len=*),intent(in) :: name
-!!     character(len=*),intent(in),optional :: opts
 !!     character(len=*),intent(in),optional :: msg
+!!     character(len=*),intent(in),optional :: opts
 !!
 !!##DESCRIPTION
 !!
@@ -714,14 +716,14 @@ end subroutine unit_check_stop
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_check_end(name,opts,msg)
+subroutine unit_check_end(name,msg,opts)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
 ! ident_5="@(#) M_framework__verify unit_check_end(3f) call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
-character(len=*),intent(in),optional :: opts
 character(len=*),intent(in),optional :: msg
+character(len=*),intent(in),optional :: opts
 character(len=:),allocatable         :: msg_local
 character(len=:),allocatable         :: opts_local
 character(len=4096)                  :: out
@@ -745,10 +747,10 @@ integer                              :: clicks_now
 
    if(G_command /= '')then                           ! if system command name is not blank call system command
       if(ifailed_g == 0)then
-         call run(G_command//' name="'//trim(name)//'", done=T, passed=T, msg="'//msg//'", '//trim(opts))
+         call run(G_command//' name="'//trim(name)//'" end=T passed=T msg="'//msg//'" '//trim(opts))
          if(.not.G_keep_going) stop 1             ! stop program depending on mode
       else
-         call run(G_command//' name="'//trim(name)//'", done=T, passed=F, msg="'//msg//'", '//trim(opts))
+         call run(G_command//' name="'//trim(name)//'" end=T passed=F msg="'//msg//'" '//trim(opts))
       endif
    endif
 
@@ -799,11 +801,11 @@ end subroutine unit_check_end
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine unit_check_bad(name,opts,msg)
+!!    subroutine unit_check_bad(name,msg,opts)
 !!
 !!     character(len=*),intent(in) :: name
-!!     character(len=*),intent(in),optional :: opts
 !!     character(len=*),intent(in),optional :: msg
+!!     character(len=*),intent(in),optional :: opts
 !!
 !!##DESCRIPTION
 !!
@@ -813,7 +815,7 @@ end subroutine unit_check_end
 !!
 !!    and stops the program. It is just a shortcut for calling
 !!         call unit_check(name,.false.)
-!!         call unit_check_end(name,opts,msg)
+!!         call unit_check_end(name,msg,opts)
 !!
 !!##EXAMPLES
 !!
