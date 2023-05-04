@@ -338,7 +338,7 @@ endif
 
       ! write message to standard error
       call wrt(G_luns,'check_msg:   '//atleast_(name,20)//' INFO    : '// msg_all)
-      if(G_command /= '') call run(G_command//' type="message"  name="'//trim(name)//'" msg="'//msg_all//'"')
+      if(G_command /= '') call run(G_command//' type="message"  name="'//trim(name)//'" msg="'//ndq(msg_all)//'"')
    endif
 
 end subroutine unit_test_msg
@@ -465,7 +465,7 @@ character(len=:),allocatable         :: msg_all
 
    if(.not.logical_expression)then
       call wrt(G_luns,'check:       '//atleast_(name,20)//' FAILURE : '//msg_all)
-      if(G_command /= '') call run(G_command//'type="check" name="'//trim(name)//'" passed="failed" msg="'//msg_all//'"')
+      if(G_command /= '') call run(G_command//'type="check" name="'//trim(name)//'" passed="failed" msg="'//ndq(msg_all)//'"')
       if(.not.G_keep_going) then
          call wrt(G_luns,'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
          stop 1
@@ -476,7 +476,7 @@ character(len=:),allocatable         :: msg_all
       if(.not.G_no_news_is_good_news)then
          call wrt(G_luns,'check:       '//atleast_(name,20)//' SUCCESS : '//msg_all)
       endif
-      if(G_command /= '') call run(G_command//' type="check" name="'//trim(name)//'" passed="passed" msg="'//msg_all//'"')
+      if(G_command /= '') call run(G_command//' type="check" name="'//trim(name)//'" passed="passed" msg="'//ndq(msg_all)//'"')
       IPASSED_G=IPASSED_G+1
       IPASSED_ALL_G=IPASSED_ALL_G+1
    endif
@@ -562,9 +562,9 @@ logical,save                         :: called=.false.
    if(G_virgin%cmdline) call cmdline_()
 
    if(present(opts))then
-      if(G_command /= '') call run(G_command//' type="start" name="'//trim(name)//'" msg="'//msg_local//'" '//opts)
+      if(G_command /= '') call run(G_command//' type="start" name="'//trim(name)//'" msg="'//ndq(msg_local)//'" '//opts)
    else
-      if(G_command /= '') call run(G_command//' type="start" name="'//trim(name)//'" msg="'//msg_local//'"')
+      if(G_command /= '') call run(G_command//' type="start" name="'//trim(name)//'" msg="'//ndq(msg_local)//'"')
    endif
 
    call system_clock(clicks)
@@ -681,15 +681,15 @@ integer(kind=int64)                  :: clicks_now
 
    if(PF=='UNTESTED')then
       if(G_command /= '') &
-      & call run( str(G_command,' type="stop" passed="skipped" clicks=0 msg="',msg_local,'"',sep='') )
+      & call run( str(G_command,' type="stop" passed="skipped" clicks=0 msg="',ndq(msg_local),'"',sep='') )
       stop ! EXIT_SUCCESS
    elseif(IFAILED_ALL_G == 0)then
       if(G_command /= '') &
-      & call run( str(G_command,' type="stop" passed="passed" clicks=',milliseconds,' msg="',msg_local,'"',sep='') )
+      & call run( str(G_command,' type="stop" passed="passed" clicks=',milliseconds,' msg="',ndq(msg_local),'"',sep='') )
       stop ! EXIT_SUCCESS
    else
       if(G_command /= '') &
-      & call run( str(G_command,' type="stop" passed="failed" clicks=',milliseconds,' msg="',msg_local,'"',sep='') )
+      & call run( str(G_command,' type="stop" passed="failed" clicks=',milliseconds,' msg="',ndq(msg_local),'"',sep='') )
       stop EXIT_FAILURE
    endif
 end subroutine unit_test_stop
@@ -805,12 +805,12 @@ integer(kind=int64)                  :: clicks_now
 
    if(G_command /= '')then                           ! if system command name is not blank call system command
       if(ipassed_G+ifailed_G == 0)then
-         call run(str(G_command,' type="end" name="',name,'" passed="skipped" clicks=0',' msg="',msg,'" ',sep='') )
+         call run(str(G_command,' type="end" name="',name,'" passed="skipped" clicks=0',' msg="',ndq(msg),'" ',sep='') )
 
       elseif(ifailed_G == 0)then
-         call run(str(G_command,' type="end" name="',name,'" passed="passed" clicks=',milliseconds,' msg="',msg,'" ',sep='') )
+         call run(str(G_command,' type="end" name="',name,'" passed="passed" clicks=',milliseconds,' msg="',ndq(msg),'" ',sep='') )
       else
-         call run(str(G_command,' type="end" name="',name,'" passed="failed" clicks=',milliseconds,' msg="',msg,'" ',sep='') )
+         call run(str(G_command,' type="end" name="',name,'" passed="failed" clicks=',milliseconds,' msg="',ndq(msg),'" ',sep='') )
       endif
    endif
 
@@ -1538,6 +1538,21 @@ character(len=256)           :: cmdmsg
       call wrt(G_luns,"exitstat: ",cmdmsg,'for command :',command)
    endif
 end subroutine run
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+! because of shell expansion just remove doublequote character from messages for now
+function ndq(string) result(out)
+character(len=*),intent(in)  :: string
+character(len=len(string))   :: out
+integer                      :: i
+   do i=1,len(string)
+      select case(string(i:i))
+      case('"');    out(i:i)=' '
+      case default; out(i:i)=string(i:i)
+      end select
+   enddo
+end function ndq
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

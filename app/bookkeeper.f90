@@ -114,7 +114,7 @@ end interface exists
    end select
 contains
 subroutine cmdline_()                                ! read arguments from command line as NAMELIST group input
-character(len=256), save :: input(3) = [character(len=256) :: '&args', '', ' /']
+character(len=4096), save :: input(3) = [character(len=4096) :: '&args', '', ' /']
 character(len=256) :: message1, message2
 integer :: i, j, k, ios, equal_pos
 
