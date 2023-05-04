@@ -456,7 +456,7 @@ subroutine test_acosd()
 
 
 
-<p>call unit_check(&lsquo;acosd&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;acosd&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -486,7 +486,7 @@ subroutine test_asind()
 
 
 
-<p>call unit_check(&lsquo;asind&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;asind&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -516,7 +516,7 @@ subroutine test_atan2d()
 
 
 
-<p>call unit_check(&lsquo;atan2d&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;atan2d&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -546,7 +546,7 @@ subroutine test_atand()
 
 
 
-<p>call unit_check(&lsquo;atand&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;atand&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -576,7 +576,7 @@ subroutine test_atomnum2symbol()
 
 
 
-<p>call unit_check(&lsquo;atomnum2symbol&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;atomnum2symbol&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -628,7 +628,7 @@ subroutine test_cartesian_to_polar()
 
 
 
-<p>call unit_check(&lsquo;cartesian_to_polar&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;cartesian_to_polar&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -768,7 +768,7 @@ subroutine test_inf()
 
 
 
-<p>call unit_check(&lsquo;inf&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;inf&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -886,7 +886,7 @@ subroutine test_norm_angle_deg_double()
 
 
 
-<p>call unit_check(&lsquo;norm_angle_deg_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;norm_angle_deg_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -916,7 +916,7 @@ subroutine test_norm_angle_deg_integer()
 
 
 
-<p>call unit_check(&lsquo;norm_angle_deg_integer&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;norm_angle_deg_integer&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -946,7 +946,7 @@ subroutine test_norm_angle_deg_real()
 
 
 
-<p>call unit_check(&lsquo;norm_angle_deg_real&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;norm_angle_deg_real&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -976,7 +976,7 @@ subroutine test_norm_angle_rad()
 
 
 
-<p>call unit_check(&lsquo;norm_angle_rad&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;norm_angle_rad&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -1006,7 +1006,7 @@ subroutine test_polar_to_cartesian()
 
 
 
-<p>call unit_check(&lsquo;polar_to_cartesian&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;polar_to_cartesian&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -1124,7 +1124,7 @@ subroutine test_symbol2atomnum()
 
 
 
-<p>call unit_check(&lsquo;symbol2atomnum&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
+<p>call unit_test(&lsquo;symbol2atomnum&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
 
     <h4>Arguments</h4>
 
@@ -1261,8 +1261,8 @@ subroutine testit_p(label, value1, value2, message)
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">test_suite_M_units</span><span class="p">()</span>
-<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_check_start</span><span class="p">,</span><span class="n">unit_check</span><span class="p">,</span><span class="n">unit_check_done</span><span class="p">,</span><span class="n">unit_check_good</span><span class="p">,</span><span class="n">unit_check_bad</span><span class="p">,</span><span class="n">unit_check_msg</span>
-<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_check_level</span>
+<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_test_start</span><span class="p">,</span><span class="n">unit_test</span><span class="p">,</span><span class="n">unit_test_done</span><span class="p">,</span><span class="n">unit_test_good</span><span class="p">,</span><span class="n">unit_test_bad</span><span class="p">,</span><span class="n">unit_test_msg</span>
+<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_test_level</span>
 <span class="k">use </span><span class="n">M_framework__msg</span><span class="p">,</span>   <span class="k">only</span> <span class="p">:</span> <span class="n">str</span>
 
 <span class="c">!! test constants</span>
@@ -1307,7 +1307,7 @@ subroutine testit_p(label, value1, value2, message)
 <span class="k">use </span><span class="n">M_anything</span><span class="p">,</span><span class="k">only</span> <span class="p">:</span> <span class="n">anyscalar_to_real</span><span class="p">,</span> <span class="n">anyscalar_to_double</span>
 <span class="k">USE </span><span class="n">M_Compare_Float_Numbers</span>
 <span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">accdig</span>
-<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_check</span>
+<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_test</span>
 <span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span>
 <span class="kt">real</span>                <span class="kd">::</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span>
 <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">label</span>
@@ -1335,7 +1335,7 @@ subroutine testit_p(label, value1, value2, message)
       <span class="k">if</span><span class="p">(</span><span class="n">ind</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="nb">stat</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
    <span class="k">endif</span>
 <span class="c">!-----------------------</span>
- <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="nb">stat</span><span class="p">,</span><span class="n">label</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">),</span><span class="s1">&#39;accuracy=&#39;</span><span class="p">,</span><span class="n">acurcy</span><span class="p">,</span><span class="s1">&#39;asked for&#39;</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">significant_digits</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;digits&#39;</span><span class="p">)</span>
+ <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="nb">stat</span><span class="p">,</span><span class="n">label</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">),</span><span class="s1">&#39;accuracy=&#39;</span><span class="p">,</span><span class="n">acurcy</span><span class="p">,</span><span class="s1">&#39;asked for&#39;</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">significant_digits</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;digits&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">testit_p</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_nan</span><span class="p">()</span>
@@ -1343,26 +1343,26 @@ subroutine testit_p(label, value1, value2, message)
 <span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real32</span><span class="p">)</span> <span class="kd">::</span> <span class="n">r32</span>
 <span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real64</span><span class="p">)</span> <span class="kd">::</span> <span class="n">r64</span>
 <span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real128</span><span class="p">)</span> <span class="kd">::</span> <span class="n">r128</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="c">! (if X is NaN the comparison with 0.0 is always false.)</span>
    <span class="n">r32</span><span class="o">=</span><span class="n">nan</span><span class="p">(</span><span class="mf">0.0_real32</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r32</span><span class="o">&lt;=</span><span class="mf">0.0_real32</span><span class="p">)</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="p">.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r32</span><span class="o">&gt;=</span><span class="mf">0.0_real32</span><span class="p">),</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;real32&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r32</span><span class="o">&lt;=</span><span class="mf">0.0_real32</span><span class="p">)</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="p">.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r32</span><span class="o">&gt;=</span><span class="mf">0.0_real32</span><span class="p">),</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;real32&#39;</span><span class="p">)</span>
 
    <span class="n">r64</span><span class="o">=</span><span class="n">nan</span><span class="p">(</span><span class="mf">0.0_real64</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r64</span><span class="o">&lt;=</span><span class="mf">0.0_real64</span><span class="p">)</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="p">.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r64</span><span class="o">&gt;=</span><span class="mf">0.0_real64</span><span class="p">),</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;real64&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r64</span><span class="o">&lt;=</span><span class="mf">0.0_real64</span><span class="p">)</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="p">.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r64</span><span class="o">&gt;=</span><span class="mf">0.0_real64</span><span class="p">),</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;real64&#39;</span><span class="p">)</span>
 
    <span class="n">r128</span><span class="o">=</span><span class="n">nan</span><span class="p">(</span><span class="mf">0.0_real128</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r128</span><span class="o">&lt;=</span><span class="mf">0.0_real128</span><span class="p">)</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="p">.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r128</span><span class="o">&gt;=</span><span class="mf">0.0_real128</span><span class="p">),</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;real128&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r128</span><span class="o">&lt;=</span><span class="mf">0.0_real128</span><span class="p">)</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="p">.</span><span class="nb">not</span><span class="p">.(</span><span class="n">r128</span><span class="o">&gt;=</span><span class="mf">0.0_real128</span><span class="p">),</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;real128&#39;</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_nan</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_is_even</span><span class="p">()</span>
 <span class="kt">logical</span><span class="p">,</span><span class="k">parameter</span>     <span class="kd">::</span> <span class="n">t</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
 <span class="kt">logical</span><span class="p">,</span><span class="k">parameter</span>     <span class="kd">::</span> <span class="n">f</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;is_even&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;is_even&#39;</span><span class="p">,</span> <span class="k">all</span><span class="p">(</span><span class="n">is_even</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]).</span><span class="n">eqv</span><span class="p">.[</span><span class="n">t</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">]),</span> <span class="s1">&#39;-10, 0, 1, 2, 3&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;is_even&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;is_even&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;is_even&#39;</span><span class="p">,</span> <span class="k">all</span><span class="p">(</span><span class="n">is_even</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]).</span><span class="n">eqv</span><span class="p">.[</span><span class="n">t</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">]),</span> <span class="s1">&#39;-10, 0, 1, 2, 3&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;is_even&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_is_even</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_is_nan</span><span class="p">()</span>
@@ -1370,68 +1370,68 @@ subroutine testit_p(label, value1, value2, message)
 <span class="kt">real</span>                  <span class="kd">::</span> <span class="n">x</span>
 <span class="kt">logical</span><span class="p">,</span><span class="k">parameter</span>     <span class="kd">::</span> <span class="n">t</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
 <span class="kt">logical</span><span class="p">,</span><span class="k">parameter</span>     <span class="kd">::</span> <span class="n">f</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;is_nan&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;is_nan&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">read</span><span class="p">(</span><span class="n">line</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="n">x</span>
-<span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;is_nan&#39;</span><span class="p">,</span> <span class="k">all</span><span class="p">(</span><span class="n">is_nan</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="n">x</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="nb">huge</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)]).</span><span class="n">eqv</span><span class="p">.[</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">f</span><span class="p">]),</span>  <span class="p">&amp;</span>
+<span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;is_nan&#39;</span><span class="p">,</span> <span class="k">all</span><span class="p">(</span><span class="n">is_nan</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="n">x</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="nb">huge</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)]).</span><span class="n">eqv</span><span class="p">.[</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">f</span><span class="p">]),</span>  <span class="p">&amp;</span>
         <span class="p">&amp;</span> <span class="s1">&#39;checking&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">x</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="nb">huge</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;is_nan&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;is_nan&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_is_nan</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_inf</span><span class="p">()</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;inf&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;inf&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_inf</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_acosd</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;acosd&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;acosd&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;acosd&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;acosd&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;acosd&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;acosd&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_acosd</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_asind</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;asind&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;asind&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;asind&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;asind&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;asind&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;asind&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_asind</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_atan2d</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;atan2d&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;atan2d&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;atan2d&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;atan2d&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;atan2d&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;atan2d&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_atan2d</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_atand</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;atand&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;atand&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;atand&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;atand&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;atand&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;atand&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_atand</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_atomnum2symbol</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;atomnum2symbol&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;atomnum2symbol&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;atomnum2symbol&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;atomnum2symbol&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;atomnum2symbol&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;atomnum2symbol&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_atomnum2symbol</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_c2f</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;c2f&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;c2f&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;c2f&#39;</span><span class="p">,</span>     <span class="n">c2f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>   <span class="p">,</span>  <span class="mi">3</span><span class="mf">2.0</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;c2f&#39;</span><span class="p">,</span>     <span class="n">c2f</span><span class="p">(</span><span class="mi">10</span><span class="mf">0.0</span><span class="p">)</span> <span class="p">,</span> <span class="mi">21</span><span class="mf">2.0</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;c2f&#39;</span><span class="p">,</span>     <span class="n">c2f</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="mf">0.0</span><span class="p">)</span> <span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="mf">0.0</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;c2f&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;c2f&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_c2f</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_cartesian_to_polar</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;cartesian_to_polar&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;cartesian_to_polar&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;cartesian_to_polar&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;cartesian_to_polar&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;cartesian_to_polar&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;cartesian_to_polar&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_cartesian_to_polar</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_cartesian_to_spherical</span><span class="p">()</span>
@@ -1442,16 +1442,16 @@ subroutine testit_p(label, value1, value2, message)
 <span class="kt">real</span>    <span class="kd">::</span> <span class="n">radius</span><span class="p">,</span><span class="n">inclination</span><span class="p">,</span><span class="n">azimuth</span>
 <span class="kt">real</span>    <span class="kd">::</span> <span class="n">acurcy</span>
 <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ind1</span><span class="p">,</span><span class="n">ind2</span><span class="p">,</span><span class="n">ind3</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;cartesian_to_spherical&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;cartesian_to_spherical&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
    <span class="c">! 10,10,10 -&gt; 17.32, 0.9553, 0.7854</span>
    <span class="k">call </span><span class="n">cartesian_to_spherical</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">radius</span><span class="p">,</span><span class="n">inclination</span><span class="p">,</span><span class="n">azimuth</span><span class="p">)</span>
    <span class="k">call </span><span class="n">accdig</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span>      <span class="mi">1</span><span class="mf">7.3205090</span><span class="p">,</span>   <span class="mf">5.0</span><span class="p">,</span><span class="n">acurcy</span><span class="p">,</span><span class="n">ind1</span><span class="p">)</span>
    <span class="k">call </span><span class="n">accdig</span><span class="p">(</span><span class="n">inclination</span><span class="p">,</span>  <span class="mf">0.955316663</span> <span class="p">,</span><span class="mf">5.0</span><span class="p">,</span><span class="n">acurcy</span><span class="p">,</span><span class="n">ind2</span><span class="p">)</span>
    <span class="k">call </span><span class="n">accdig</span><span class="p">(</span><span class="n">azimuth</span><span class="p">,</span>      <span class="mf">0.785398185</span> <span class="p">,</span><span class="mf">5.0</span><span class="p">,</span><span class="n">acurcy</span><span class="p">,</span><span class="n">ind3</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;cartesian_to_spherical&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">([</span><span class="n">ind1</span><span class="p">,</span><span class="n">ind2</span><span class="p">,</span><span class="n">ind3</span><span class="p">].</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="s1">&#39;to&#39;</span><span class="p">,</span><span class="n">radius</span><span class="p">,</span><span class="n">inclination</span><span class="p">,</span><span class="n">azimuth</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;cartesian_to_spherical&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">([</span><span class="n">ind1</span><span class="p">,</span><span class="n">ind2</span><span class="p">,</span><span class="n">ind3</span><span class="p">].</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="s1">&#39;to&#39;</span><span class="p">,</span><span class="n">radius</span><span class="p">,</span><span class="n">inclination</span><span class="p">,</span><span class="n">azimuth</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;cartesian_to_spherical&#39;</span><span class="p">)</span> <span class="c">! if got here without being stopped assume passed test</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;cartesian_to_spherical&#39;</span><span class="p">)</span> <span class="c">! if got here without being stopped assume passed test</span>
 <span class="k">end subroutine </span><span class="n">test_cartesian_to_spherical</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_cosd</span><span class="p">()</span>
@@ -1459,19 +1459,19 @@ subroutine testit_p(label, value1, value2, message)
 <span class="kt">real</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">values</span><span class="p">(:)</span>
 <span class="kt">integer</span>           <span class="kd">::</span> <span class="n">i</span>
 <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">3</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">4</span><span class="mf">5.0</span><span class="p">,</span> <span class="mi">6</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">9</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">12</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">13</span><span class="mf">5.0</span><span class="p">,</span> <span class="mi">15</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">18</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">21</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">24</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">27</span><span class="mf">3.0</span><span class="p">,</span> <span class="mi">30</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">33</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">36</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="mf">5.0</span><span class="p">]</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;cosd&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;cosd&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
       <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;cosd&#39;</span><span class="p">,</span> <span class="n">cosd</span><span class="p">(</span><span class="n">values</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span> <span class="nb">cos</span><span class="p">(</span><span class="n">d2r</span><span class="p">(</span><span class="n">values</span><span class="p">(</span><span class="n">i</span><span class="p">))),</span><span class="n">message</span><span class="o">=</span><span class="n">str</span><span class="p">(</span><span class="s1">&#39;value=&#39;</span><span class="p">,</span><span class="n">values</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="p">)</span>
    <span class="k">enddo</span>
-<span class="k">   call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;cosd&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="k">   call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;cosd&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
-<span class="c">!  unit_check:       cosd  FAILED:cosd 6.12323426E-17 -4.37113883E-08 value= 90.0000000 accuracy= 0.00000000 asked for 6 digits</span>
-<span class="c">!  unit_check:       cosd  FAILED:cosd -1.83697015E-16 1.19248806E-08 value= 270.000000 accuracy= 0.00000000 asked for 6 digits</span>
+<span class="c">!  unit_test:       cosd  FAILED:cosd 6.12323426E-17 -4.37113883E-08 value= 90.0000000 accuracy= 0.00000000 asked for 6 digits</span>
+<span class="c">!  unit_test:       cosd  FAILED:cosd -1.83697015E-16 1.19248806E-08 value= 270.000000 accuracy= 0.00000000 asked for 6 digits</span>
 <span class="k">end subroutine </span><span class="n">test_cosd</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_d2r</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;d2r&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;d2r&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;d2r&#39;</span><span class="p">,</span> <span class="n">d2r</span><span class="p">(</span>    <span class="mf">0.0</span><span class="p">)</span>    <span class="p">,</span> <span class="mf">0.0</span>       <span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;real for 0&#39;</span><span class="p">)</span>
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;d2r&#39;</span><span class="p">,</span> <span class="n">d2r</span><span class="p">(</span>   <span class="mi">4</span><span class="mf">5.0</span><span class="p">)</span>    <span class="p">,</span> <span class="n">PI</span><span class="o">/</span><span class="mf">4.0</span>    <span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;real for 45&#39;</span><span class="p">)</span>
@@ -1491,94 +1491,94 @@ subroutine testit_p(label, value1, value2, message)
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;d2r&#39;</span><span class="p">,</span> <span class="n">d2r</span><span class="p">(</span>   <span class="mi">90</span><span class="p">)</span>      <span class="p">,</span> <span class="n">PI</span><span class="o">/</span><span class="mi">2</span>      <span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;integer for 90&#39;</span><span class="p">)</span>
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;d2r&#39;</span><span class="p">,</span> <span class="n">d2r</span><span class="p">(</span>  <span class="mi">180</span><span class="p">)</span>      <span class="p">,</span> <span class="n">PI</span>        <span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;integer for 180&#39;</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;d2r&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;d2r&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
 <span class="k">end subroutine </span><span class="n">test_d2r</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_f2c</span><span class="p">()</span>
 
-<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_check_start</span><span class="p">,</span><span class="n">unit_check</span><span class="p">,</span><span class="n">unit_check_done</span><span class="p">,</span><span class="n">unit_check_good</span><span class="p">,</span><span class="n">unit_check_bad</span><span class="p">,</span><span class="n">unit_check_msg</span>
-<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_check_level</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;f2c&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_test_start</span><span class="p">,</span><span class="n">unit_test</span><span class="p">,</span><span class="n">unit_test_done</span><span class="p">,</span><span class="n">unit_test_good</span><span class="p">,</span><span class="n">unit_test_bad</span><span class="p">,</span><span class="n">unit_test_msg</span>
+<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_test_level</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;f2c&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;f2c&#39;</span><span class="p">,</span>     <span class="n">f2c</span><span class="p">(</span><span class="mi">3</span><span class="mf">2.0</span><span class="p">)</span>  <span class="p">,</span>   <span class="mf">0.0</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;f2c&#39;</span><span class="p">,</span>     <span class="n">f2c</span><span class="p">(</span><span class="mi">21</span><span class="mf">2.0</span><span class="p">)</span> <span class="p">,</span> <span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;f2c&#39;</span><span class="p">,</span>     <span class="n">f2c</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="mf">0.0</span><span class="p">)</span> <span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="mf">0.0</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;f2c&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;f2c&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_f2c</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_feet_to_meters</span><span class="p">()</span>
 <span class="n">doubleprecision</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">f2m</span><span class="o">=</span><span class="mf">0.3048d0</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39; 0.3048&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39; 0.3048&#39;</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
       <span class="p">&amp;</span> <span class="k">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">feet_to_meters</span><span class="p">([</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="p">,</span><span class="mf">1.0</span><span class="o">/</span><span class="mi">1</span><span class="mf">2.0</span><span class="p">])</span><span class="o">-</span> <span class="p">[</span><span class="o">-</span><span class="n">f2m</span><span class="p">,</span> <span class="mf">0.0d0</span><span class="p">,</span> <span class="n">f2m</span><span class="p">,</span> <span class="mf">0.0254d0</span><span class="p">]).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001</span><span class="p">),</span><span class="s1">&#39;real&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
       <span class="p">&amp;</span> <span class="k">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">feet_to_meters</span><span class="p">([</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span>   <span class="p">])</span><span class="o">-</span> <span class="p">[</span><span class="o">-</span><span class="n">f2m</span><span class="p">,</span> <span class="mf">0.0d0</span><span class="p">,</span> <span class="n">f2m</span><span class="p">]).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001</span><span class="p">),</span><span class="s1">&#39;integer&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
       <span class="p">&amp;</span> <span class="k">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">([</span><span class="n">feet_to_meters</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0d0</span><span class="p">),</span><span class="n">feet_to_meters</span><span class="p">(</span><span class="mf">0.0d0</span><span class="p">),</span><span class="n">feet_to_meters</span><span class="p">(</span><span class="mf">1.0d0</span><span class="p">)]</span><span class="o">-</span><span class="p">[</span><span class="o">-</span><span class="n">f2m</span><span class="p">,</span> <span class="mf">0.0d0</span><span class="p">,</span> <span class="n">f2m</span><span class="p">]).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001</span><span class="p">),</span><span class="s1">&#39;double&#39;</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;feet_to_meters&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_feet_to_meters</span>
 
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_meters_to_feet</span><span class="p">()</span>
    <span class="n">doubleprecision</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">m2f</span><span class="o">=</span><span class="mf">3.2808398950131233595d0</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;3.2808398950131233595&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;3.2808398950131233595&#39;</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
      <span class="p">&amp;</span> <span class="k">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">meters_to_feet</span><span class="p">([</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="p">])</span><span class="o">-</span><span class="p">[</span><span class="o">-</span><span class="n">m2f</span><span class="p">,</span><span class="mf">0.0d0</span><span class="p">,</span><span class="n">m2f</span><span class="p">]).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001d0</span><span class="p">),</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;real&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
      <span class="p">&amp;</span> <span class="k">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">meters_to_feet</span><span class="p">([</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span>   <span class="p">])</span><span class="o">-</span><span class="p">[</span><span class="o">-</span><span class="n">m2f</span><span class="p">,</span><span class="mf">0.0d0</span><span class="p">,</span><span class="n">m2f</span><span class="p">]).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001d0</span><span class="p">)</span> <span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;integer&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
      <span class="p">&amp;</span> <span class="k">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">([</span><span class="n">meters_to_feet</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">d0</span><span class="p">),</span><span class="n">meters_to_feet</span><span class="p">(</span><span class="mf">0.0d0</span><span class="p">),</span><span class="n">meters_to_feet</span><span class="p">(</span><span class="mf">1.0d0</span><span class="p">)]</span><span class="o">-</span><span class="p">[</span><span class="o">-</span><span class="n">m2f</span><span class="p">,</span><span class="mf">0.0d0</span><span class="p">,</span><span class="n">m2f</span><span class="p">]).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001d0</span><span class="p">),</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;double&#39;</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;meters_to_feet&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_meters_to_feet</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_norm_angle_deg_double</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;norm_angle_deg_double&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;norm_angle_deg_double&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_norm_angle_deg_double</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_norm_angle_deg_integer</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_integer&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;norm_angle_deg_integer&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_integer&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_integer&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;norm_angle_deg_integer&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_integer&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_norm_angle_deg_integer</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_norm_angle_deg_real</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_real&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;norm_angle_deg_real&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_real&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_real&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;norm_angle_deg_real&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;norm_angle_deg_real&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_norm_angle_deg_real</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_norm_angle_rad</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;norm_angle_rad&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;norm_angle_rad&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;norm_angle_rad&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;norm_angle_rad&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;norm_angle_rad&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;norm_angle_rad&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_norm_angle_rad</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_polar_to_cartesian</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;polar_to_cartesian&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;polar_to_cartesian&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;polar_to_cartesian&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;polar_to_cartesian&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;polar_to_cartesian&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;polar_to_cartesian&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_polar_to_cartesian</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_pounds_to_kilograms</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">pounds_to_kilograms</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">-</span><span class="mf">0.45359237</span><span class="p">).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001</span><span class="p">,</span><span class="s1">&#39;real&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="nb">any</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">pounds_to_kilograms</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span> <span class="p">])</span><span class="o">-</span><span class="p">&amp;</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">pounds_to_kilograms</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">-</span><span class="mf">0.45359237</span><span class="p">).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001</span><span class="p">,</span><span class="s1">&#39;real&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="nb">any</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">pounds_to_kilograms</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span> <span class="p">])</span><span class="o">-</span><span class="p">&amp;</span>
       <span class="p">&amp;[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.45359237</span><span class="p">,</span> <span class="mi">4</span><span class="mf">5.359237</span><span class="p">,</span><span class="mi">9</span><span class="mf">0.718474</span><span class="p">]).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001</span><span class="p">),</span><span class="s1">&#39;integer&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">pounds_to_kilograms</span><span class="p">(</span><span class="mf">1.0d0</span><span class="p">)</span><span class="o">-</span><span class="mf">0.45359237</span><span class="p">).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001</span><span class="p">,</span><span class="s1">&#39;double&#39;</span><span class="p">)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">pounds_to_kilograms</span><span class="p">(</span><span class="mf">1.0d0</span><span class="p">)</span><span class="o">-</span><span class="mf">0.45359237</span><span class="p">).</span><span class="n">lt</span><span class="p">.</span><span class="mf">0.00001</span><span class="p">,</span><span class="s1">&#39;double&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;pounds_to_kilograms&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_pounds_to_kilograms</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_r2d</span><span class="p">()</span>
@@ -1586,7 +1586,7 @@ subroutine testit_p(label, value1, value2, message)
 <span class="kt">real</span>              <span class="kd">::</span> <span class="n">x</span><span class="o">=</span><span class="kt">real</span><span class="p">(</span><span class="n">PI</span><span class="p">)</span>
 <span class="n">doubleprecision</span>   <span class="kd">::</span> <span class="n">d</span><span class="o">=</span><span class="n">PI</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;r2d&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;r2d&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;r2d&#39;</span><span class="p">,</span> <span class="n">r2d</span><span class="p">(</span>  <span class="mf">0.0</span><span class="p">)</span>      <span class="p">,</span>   <span class="mf">0.0</span>    <span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;real&#39;</span><span class="p">)</span>
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;r2d&#39;</span><span class="p">,</span> <span class="n">r2d</span><span class="p">(</span>  <span class="n">x</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>      <span class="p">,</span>  <span class="mi">4</span><span class="mf">5.0</span>    <span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;real&#39;</span><span class="p">)</span>
@@ -1602,7 +1602,7 @@ subroutine testit_p(label, value1, value2, message)
 
    <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;r2d&#39;</span><span class="p">,</span> <span class="n">r2d</span><span class="p">(</span>  <span class="mi">0</span><span class="p">)</span>        <span class="p">,</span>   <span class="mf">0.0</span>    <span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;integer&#39;</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;r2d&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;r2d&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_r2d</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_sind</span><span class="p">()</span>
@@ -1610,13 +1610,13 @@ subroutine testit_p(label, value1, value2, message)
 <span class="kt">real</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">values</span><span class="p">(:)</span>
 <span class="kt">integer</span>           <span class="kd">::</span> <span class="n">i</span>
    <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">3</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">4</span><span class="mf">5.0</span><span class="p">,</span> <span class="mi">6</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">9</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">12</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">13</span><span class="mf">5.0</span><span class="p">,</span> <span class="mi">15</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">18</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">21</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">24</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">27</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">30</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">33</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">36</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="mf">5.0</span><span class="p">]</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;sind&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;sind&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
       <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;sind&#39;</span><span class="p">,</span>   <span class="n">sind</span><span class="p">(</span><span class="n">values</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>             <span class="p">,</span>  <span class="nb">sin</span><span class="p">(</span><span class="n">d2r</span><span class="p">(</span><span class="n">values</span><span class="p">(</span><span class="n">i</span><span class="p">))),</span><span class="n">message</span><span class="o">=</span><span class="n">str</span><span class="p">(</span><span class="s1">&#39;value=&#39;</span><span class="p">,</span><span class="n">values</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>  <span class="p">)</span>
    <span class="k">enddo</span>
-<span class="k">   call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;sind&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="c">! unit_check:       sind  FAILED:sind 1.22464685E-16 -8.74227766E-08 value= 180.000000 accuracy= 0.00000000 asked for 6 digits</span>
-<span class="c">! unit_check:       sind  FAILED:sind -2.44929371E-16 1.74845553E-07 value= 360.000000 accuracy= 0.00000000 asked for 6 digits</span>
+<span class="k">   call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;sind&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">! unit_test:       sind  FAILED:sind 1.22464685E-16 -8.74227766E-08 value= 180.000000 accuracy= 0.00000000 asked for 6 digits</span>
+<span class="c">! unit_test:       sind  FAILED:sind -2.44929371E-16 1.74845553E-07 value= 360.000000 accuracy= 0.00000000 asked for 6 digits</span>
 <span class="k">end subroutine </span><span class="n">test_sind</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_spherical_to_cartesian</span><span class="p">()</span>
@@ -1626,7 +1626,7 @@ subroutine testit_p(label, value1, value2, message)
 <span class="kt">real</span>    <span class="kd">::</span> <span class="n">radius</span><span class="p">,</span><span class="n">inclination</span><span class="p">,</span><span class="n">azimuth</span>
 <span class="kt">real</span>    <span class="kd">::</span> <span class="n">acurcy</span>
 <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ind1</span><span class="p">,</span><span class="n">ind2</span><span class="p">,</span><span class="n">ind3</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;spherical_to_cartesian&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;spherical_to_cartesian&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
    <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="mf">7.32</span><span class="p">;</span> <span class="n">inclination</span><span class="o">=</span><span class="mf">0.9553</span><span class="p">;</span> <span class="n">azimuth</span><span class="o">=</span><span class="mf">0.7854</span>
    <span class="n">x</span><span class="o">=-</span><span class="mi">9999</span><span class="p">;</span> <span class="n">y</span><span class="o">=-</span><span class="mi">9999</span><span class="p">;</span> <span class="n">z</span><span class="o">=-</span><span class="mi">9999</span><span class="p">;</span>
@@ -1636,31 +1636,31 @@ subroutine testit_p(label, value1, value2, message)
    <span class="k">call </span><span class="n">accdig</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="mi">1</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">4.0</span><span class="p">,</span><span class="n">acurcy</span><span class="p">,</span><span class="n">ind2</span><span class="p">)</span>
    <span class="k">call </span><span class="n">accdig</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">4.0</span><span class="p">,</span><span class="n">acurcy</span><span class="p">,</span><span class="n">ind3</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;spherical_to_cartesian&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">([</span><span class="n">ind1</span><span class="p">,</span><span class="n">ind2</span><span class="p">,</span><span class="n">ind3</span><span class="p">].</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span><span class="n">radius</span><span class="p">,</span><span class="n">inclination</span><span class="p">,</span><span class="n">azimuth</span><span class="p">,</span><span class="s1">&#39;to&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;spherical_to_cartesian&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">([</span><span class="n">ind1</span><span class="p">,</span><span class="n">ind2</span><span class="p">,</span><span class="n">ind3</span><span class="p">].</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span><span class="n">radius</span><span class="p">,</span><span class="n">inclination</span><span class="p">,</span><span class="n">azimuth</span><span class="p">,</span><span class="s1">&#39;to&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
 
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;spherical_to_cartesian&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;spherical_to_cartesian&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_spherical_to_cartesian</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_symbol2atomnum</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;symbol2atomnum&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!!call unit_check(&#39;symbol2atomnum&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;symbol2atomnum&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;symbol2atomnum&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!!call unit_test(&#39;symbol2atomnum&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;symbol2atomnum&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_symbol2atomnum</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_tand</span><span class="p">()</span>
 <span class="kt">real</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">values</span><span class="p">(:)</span>
 <span class="kt">integer</span>                      <span class="kd">::</span> <span class="n">i</span>
    <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">3</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">4</span><span class="mf">5.0</span><span class="p">,</span><span class="mi">6</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">9</span><span class="mf">2.0</span><span class="p">,</span><span class="mi">12</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">13</span><span class="mf">5.0</span><span class="p">,</span><span class="mi">15</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">18</span><span class="mf">3.0</span><span class="p">,</span><span class="mi">21</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">24</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">27</span><span class="mf">3.0</span><span class="p">,</span><span class="mi">30</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">33</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">36</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="mf">5.0</span><span class="p">]</span>
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;tand&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;tand&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
       <span class="k">call </span><span class="n">testit_p</span><span class="p">(</span><span class="s1">&#39;tand&#39;</span><span class="p">,</span> <span class="n">tand</span><span class="p">(</span><span class="n">values</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span> <span class="nb">tan</span><span class="p">(</span><span class="n">d2r</span><span class="p">(</span><span class="n">values</span><span class="p">(</span><span class="n">i</span><span class="p">))),</span><span class="n">message</span><span class="o">=</span><span class="n">str</span><span class="p">(</span><span class="s1">&#39;value=&#39;</span><span class="p">,</span><span class="n">values</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
    <span class="k">enddo</span>
-<span class="k">   call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;tand&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="c">! unit_check:       tand  FAILED:tand 1.63312395E+16 -22877332.0 value= 90.0000000 accuracy= -8.85361290 asked for 6 digits</span>
-<span class="c">! unit_check:       tand  FAILED:tand -1.22464685E-16 8.74227766E-08 value= 180.000000 accuracy= 0.00000000 asked for 6 digits</span>
-<span class="c">! unit_check:       tand  FAILED:tand 5.44374649E+15 -83858280.0 value= 270.000000 accuracy= -7.81235218 asked for 6 digits</span>
-<span class="c">! unit_check:       tand  FAILED:tand -2.44929371E-16 1.74845553E-07 value= 360.000000 accuracy= 0.00000000 asked for 6 digits</span>
+<span class="k">   call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;tand&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">! unit_test:       tand  FAILED:tand 1.63312395E+16 -22877332.0 value= 90.0000000 accuracy= -8.85361290 asked for 6 digits</span>
+<span class="c">! unit_test:       tand  FAILED:tand -1.22464685E-16 8.74227766E-08 value= 180.000000 accuracy= 0.00000000 asked for 6 digits</span>
+<span class="c">! unit_test:       tand  FAILED:tand 5.44374649E+15 -83858280.0 value= 270.000000 accuracy= -7.81235218 asked for 6 digits</span>
+<span class="c">! unit_test:       tand  FAILED:tand -2.44929371E-16 1.74845553E-07 value= 360.000000 accuracy= 0.00000000 asked for 6 digits</span>
 <span class="k">end subroutine </span><span class="n">test_tand</span>
 <span class="c">!===================================================================================================================================</span>
 <span class="k">end subroutine </span><span class="n">test_suite_M_units</span>

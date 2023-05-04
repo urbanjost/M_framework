@@ -78,15 +78,15 @@ M_framework__verify(3f) - [M_framework__verify::INTRO] unit test framework
 Module procedures
 <P>
 <PRE>
-   use M_framework__verify, only : unit_check, unit_check_start,    &
-                                   unit_check_end, unit_check_stop, &
-                                   unit_check_msg, unit_check_mode, &
-                                   unit_check_system
+   use M_framework__verify, only : unit_test, unit_test_start,    &
+                                   unit_test_end, unit_test_stop, &
+                                   unit_test_msg, unit_test_mode, &
+                                   unit_test_system
 </PRE>
 Module values
 <P>
 <PRE>
-   use M_framework__verify, only : unit_check_level, unit_check_flags
+   use M_framework__verify, only : unit_test_level, unit_test_flags
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -145,7 +145,7 @@ is designed for with integration with the fpm
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
-If default modes need changed it can be done via the unit_check_mode(3f)
+If default modes need changed it can be done via the unit_test_mode(3f)
 procedure or as command line options.
 <P>
 messages by default are writting to stderr, but may be written to any
@@ -160,7 +160,7 @@ list of LUNs of preassigned or open files.
 Some of the most common options are
 <P>
 <PRE>
-      call unit_check_mode(command,keep_going,level,luns=[K,L,M,N,&#46;&#46;&#46;])
+      call unit_test_mode(command,keep_going,level,luns=[K,L,M,N,&#46;&#46;&#46;])
 <P>
        keep_going  logical variable that can be used to turn on or off
                    program termination on errors.
@@ -180,29 +180,29 @@ Some of the most common options are
 <P>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>unit_check_start</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_start</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 start tests of a procedure
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 report if expression is false or true
 and if .false. stop program when keep_going=.false.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_end</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_end</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 ends test of a procedure
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_stop</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_stop</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 stop program with exit value of 0 if no failures
 else with an exit value of 1
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_msg</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_msg</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 write message
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_system</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_system</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 execute system command, recursively if requested.
 </TD></TR>
 <TR></TR></TABLE>For custom unit testing reports, a command can be given that will be
@@ -236,7 +236,7 @@ M_hashkeys(3f) routines and various math and statistical routines can
 be helpful to quickly create unit tests.
 <P>
 The intrinsics ANY(3f) and ALL(3f) are particularly useful in calls
-to unit_check(3f).
+to unit_test(3f).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -267,29 +267,29 @@ Sample program
     end module M_framework__demo
 <P>
     program demo_M_framework__verify
-    use M_framework, only: unit_check_start, unit_check,   &
-        & unit_check_end, unit_check_msg, unit_check_stop, &
-        & unit_check_system, unit_check_mode
+    use M_framework, only: unit_test_start, unit_test,   &
+        & unit_test_end, unit_test_msg, unit_test_stop, &
+        & unit_test_system, unit_test_mode
     use M_framework__demo,   only: one, two
     ! set-up
-    call unit_check_mode(command=&#146;&#146;,flags=[0],keep_going=.true.)
+    call unit_test_mode(command=&#146;&#146;,flags=[0],keep_going=.true.)
     ! call a test procedure for each routine to test
        call test_one()
        call test_two()
     ! tear-down
-    call unit_check_stop()
+    call unit_test_stop()
     contains
 <P>
     subroutine test_one()
     integer,allocatable :: results(:)
     integer,parameter   :: expected(*)=[21,51,14,45]
-    call unit_check_start(&#146;one&#146;)
+    call unit_test_start(&#146;one&#146;)
     call one(results)
-    call unit_check(&#146;one&#146;,all(expected&gt;0), &
+    call unit_test(&#146;one&#146;,all(expected&gt;0), &
        & &#146;testing if everyone greater than zero&#146;)
-    call unit_check(&#146;one&#146;,all(expected==results), &
+    call unit_test(&#146;one&#146;,all(expected==results), &
        & &#146;testing if all values are expected&#146;)
-    call unit_check_end(&#146;one&#146;,&#146;checks on "one" ended&#146;)
+    call unit_test_end(&#146;one&#146;,&#146;checks on "one" ended&#146;)
     end subroutine test_one
 <P>
     subroutine test_two
@@ -297,10 +297,10 @@ Sample program
     integer,parameter   :: expected(*)=[2,20,200]
     results=[1,10,100]
     call two(results)
-    call unit_check_start(&#146;two&#146;,&#146;check procedure "two" &#146;)
-    call unit_check(&#146;two&#146;, all(expected == results) .and. &
+    call unit_test_start(&#146;two&#146;,&#146;check procedure "two" &#146;)
+    call unit_test(&#146;two&#146;, all(expected == results) .and. &
        & all(expected &gt; 0) .and. maxval(expected) &lt;201,msg=&#146;long expression&#146;)
-    call unit_check_end(&#146;two&#146;,&#146;checks on "two" ended&#146;)
+    call unit_test_end(&#146;two&#146;,&#146;checks on "two" ended&#146;)
     end subroutine test_two
 <P>
     end program demo_M_framework__verify
@@ -337,7 +337,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework__verify (3m_framework__verify)</TD> <TD align=right width=33%><I>May 01, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c1fc6df5-9774-4a79-9afe-bfa6222f57ef using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework__verify (3m_framework__verify)</TD> <TD align=right width=33%><I>May 03, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 79f5c47b-13c8-435c-872e-cff224005e7e using man macros.</FONT>
 <br><br><center><img src="images/M_framework__verify.gif"></center>
 </div>
 </div>

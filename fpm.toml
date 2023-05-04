@@ -36,11 +36,11 @@ auto-examples = true
 
 # demo programs
 [install]
-library=true
+#library=true
 
 [[executable]]
 name = "hlp"
-source-dir = "app"
+source-dir = "app_demos"
 main = "hlp.f90"
 #link = "z"
 [executable.dependencies]

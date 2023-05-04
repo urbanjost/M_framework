@@ -15,17 +15,17 @@ program maketest
    write (out, g) "& stdin => input_unit,   &"
    write (out, g) "& stdout => output_unit, &"
    write (out, g) "& stderr => error_unit"
-   write (out, g) "use M_framework, only : unit_check_start, unit_check, unit_check_msg"
-   write (out, g) "use M_framework, only : unit_check_end,  unit_check_good, unit_check_bad"
-   write (out, g) "use M_framework, only : unit_check_stop,  unit_check_mode"
-   write (out, g) "use M_framework, only : unit_check_level, unit_check_levels"
+   write (out, g) "use M_framework, only : unit_test_start, unit_test, unit_test_msg"
+   write (out, g) "use M_framework, only : unit_test_end,  unit_test_good, unit_test_bad"
+   write (out, g) "use M_framework, only : unit_test_stop,  unit_test_mode"
+   write (out, g) "use M_framework, only : unit_test_level, unit_test_flags"
    write (out, g) "!use M_xxxx"
    write (out, g) "implicit none"
    write (out, g) "logical, parameter :: T=.true., F=.false."
    write (out, g) "! optional call to change default modes"
-   write (out, g) "   call unit_check_mode(       &"
+   write (out, g) "   call unit_test_mode(       &"
    write (out, g) "       keep_going=T,           &"
-   write (out, g) "       levels=[0],             &"
+   write (out, g) "       flags=[0],              &"
    write (out, g) "       luns=[stderr],          &"
    write (out, g) "       command='',             &"
    write (out, g) "       no_news_is_good_news=F, &"
@@ -34,22 +34,22 @@ program maketest
    write (out, g) "       CMDLINE=T,              &"
    write (out, g) "       debug=F)"
    write (out, g) ""
-   write (out, g) '   unit_check_level=0'
+   write (out, g) '   unit_test_level=0'
    words = get_stack()
    if (size(words) .eq. 0) words = ["sample"]
    write (out, g) ''
    do i = 1, size(words)
       write (out, g) '   call test_'//words(i)//'()'
    end do
-   write (out, g) '   call unit_check_stop()'
+   write (out, g) '   call unit_test_stop()'
    write (out, g) ''
    write (out, g) 'contains'
    do i = 1, size(words)
       write (out, g) ''
       write (out, g) 'subroutine test_'//words(i)//'()'
-      write (out, g) '   call unit_check_start("'//words(i)//'",msg="")'
-      write (out, g) '   !!call unit_check("'//words(i)//'", 0 .eq. 0, "checking",100)'
-      write (out, g) '   call unit_check_end("'//words(i)//'",msg="")'
+      write (out, g) '   call unit_test_start("'//words(i)//'",msg="")'
+      write (out, g) '   !!call unit_test("'//words(i)//'", 0 .eq. 0, "checking",100)'
+      write (out, g) '   call unit_test_end("'//words(i)//'",msg="")'
       write (out, g) 'end subroutine test_'//words(i)
    end do
 

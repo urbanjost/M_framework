@@ -48,7 +48,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>unit_check_msg (3m_framework__verify)</NOBR><HR></H1>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>unit_test_start (3m_framework__verify)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -56,9 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-unit_check_msg(3f) - [M_framework__verify] converts up to twenty
-standard scalar values to a message for unit testing
+unit_test_start(3f) - [M_framework__verify] reset counters
+and start a new test block
 (LICENSE:PD)
+<P>
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
@@ -75,19 +76,14 @@ standard scalar values to a message for unit testing
 
 </A>
 <BLOCKQUOTE>
-function unit_check_msg(name, msg, &
-& g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: function unit_check_msg(name, msg, &
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>character(len=*),intent(in)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: name
-class(*),intent(in),optional :: msg, &
-& g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+subroutine unit_test_start(name,msg,opts)
+<P>
+<PRE>
+    character(len=*),intent(in)          :: name
+    character(len=*),intent(in),optional :: msg
+    character(len=*),intent(in),optional :: opts
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -95,8 +91,8 @@ class(*),intent(in),optional :: msg, &
 
 </A>
 <BLOCKQUOTE>
-unit_check_msg(3f) builds a string from up to twenty scalar values and
-prints it to the error log.
+unit_test_start(3f) is an initialization procedure for starting a
+new procedure test.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -106,14 +102,16 @@ prints it to the error log.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B>name</B> </TD><TD valign=bottom>
-name of unit being tested
+<B>NAME</B> </TD><TD valign=bottom>
+name of the procedure to test
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>msg,g[1-j]</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-optional values to print the value of. May
-be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
-COMPLEX, or CHARACTER.
+<TR valign=top><TD width=6% nowrap>
+<B>MSG</B> </TD><TD valign=bottom>
+message to print
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>OPTS</B> </TD><TD valign=bottom>
+pass additional options to the optional shell command
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -125,23 +123,33 @@ COMPLEX, or CHARACTER.
 Sample program:
 <P>
 <PRE>
-   program demo_unit_check_msg
-   use M_framework__verify, only : unit_check_start,unit_check_msg, &
-           & unit_check_end
-   implicit none
+    program demo_unit_test_start
+    use M_framework__verify, only: unit_test_start, unit_test, &
+     & unit_test_end, unit_test_mode
+    implicit none
+    integer :: ival
+    call unit_test_mode(command=&#146;goodbad&#146;)
+    call unit_test_start(&#146;myroutine&#146;)
+    ! the example goodbad(1) command called here takes many options
+    ! used to build an SQLite3 entry
+    call unit_test_start(&#146;myroutine_long&#146;,opts=&#146;     &
+      & --section        3                            &
+      & --library        libGPF                       &
+      & --filename       &#145;pwd&#145;/M_framework__verify.FF &
+      & --documentation  y                            &
+      & --prep           y                            &
+      & --ccall          n                            &
+      & --archive        GPF.a                        &
+      & &#146;)
 <P>
-   call unit_check_start(&#146;myroutine&#146;)
-   call unit_check_msg(&#146;myroutine&#146;,&#146;HUGE(3f) integers&#146;, &
-           & huge(0),&#146;and real&#146;,huge(0.0),&#146;and double&#146;,huge(0.0d0))
-   call unit_check_msg(&#146;myroutine&#146;,&#146;real            :&#146;, &
-           & huge(0.0),0.0,12345.6789,tiny(0.0) )
-   call unit_check_msg(&#146;myroutine&#146;,&#146;doubleprecision :&#146;, &
-           & huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
-   call unit_check_msg(&#146;myroutine&#146;,&#146;complex         :&#146;, &
-           & cmplx(huge(0.0),tiny(0.0)) )
-   call unit_check_end(&#146;myroutine&#146;)
+    ival=10
 <P>
-   end program demo_unit_check_msg
+    call unit_test(&#146;myroutine&#146;, ival &gt; 3 ,   msg=&#146; if big enough&#146;)
+    call unit_test(&#146;myroutine&#146;, ival &lt; 100 , msg=&#146; if small enough&#146;)
+<P>
+    call unit_test_end(&#146;myroutine&#146;,msg=&#146;completed checks of "myroutine"&#146;)
+<P>
+    end program demo_unit_test_start
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -162,8 +170,8 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_check_msg (3m_framework__verify)</TD> <TD align=right width=33%><I>May 01, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5ec136c9-b65c-465f-b702-f510a92c8065 using man macros.</FONT>
-<br><br><center><img src="images/unit_check_msg.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_test_start (3m_framework__verify)</TD> <TD align=right width=33%><I>May 03, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 56568ebe-6e2b-4bed-b90a-16d7388e81b0 using man macros.</FONT>
+<br><br><center><img src="images/unit_test_start.gif"></center>
 </div>
 </div>
 </body>

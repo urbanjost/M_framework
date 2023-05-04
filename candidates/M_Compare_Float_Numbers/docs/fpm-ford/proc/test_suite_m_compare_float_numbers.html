@@ -366,7 +366,7 @@ subroutine test_compare_float_double()
 
 
 
-<p>!call unit_check(&lsquo;compare_float_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
+<p>!call unit_test(&lsquo;compare_float_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
 
     <h4>Arguments</h4>
 
@@ -396,7 +396,7 @@ subroutine test_compare_float_single()
 
 
 
-<p>!call unit_check(&lsquo;compare_float_single&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
+<p>!call unit_test(&lsquo;compare_float_single&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
 
     <h4>Arguments</h4>
 
@@ -426,7 +426,7 @@ subroutine test_is_equal_to_double()
 
 
 
-<p>!call unit_check(&lsquo;is_equal_to_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
+<p>!call unit_test(&lsquo;is_equal_to_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
 
     <h4>Arguments</h4>
 
@@ -456,7 +456,7 @@ subroutine test_is_equal_to_single()
 
 
 
-<p>!call unit_check(&lsquo;is_equal_to_single&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
+<p>!call unit_test(&lsquo;is_equal_to_single&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
 
     <h4>Arguments</h4>
 
@@ -486,7 +486,7 @@ subroutine test_is_greater_than_double()
 
 
 
-<p>!call unit_check(&lsquo;is_greater_than_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
+<p>!call unit_test(&lsquo;is_greater_than_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
 
     <h4>Arguments</h4>
 
@@ -516,7 +516,7 @@ subroutine test_is_greater_than_single()
 
 
 
-<p>!call unit_check(&lsquo;is_greater_than_single&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
+<p>!call unit_test(&lsquo;is_greater_than_single&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
 
     <h4>Arguments</h4>
 
@@ -546,7 +546,7 @@ subroutine test_is_less_than_double()
 
 
 
-<p>!call unit_check(&lsquo;is_less_than_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
+<p>!call unit_test(&lsquo;is_less_than_double&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
 
     <h4>Arguments</h4>
 
@@ -576,7 +576,7 @@ subroutine test_is_less_than_single()
 
 
 
-<p>!call unit_check(&lsquo;is_less_than_single&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
+<p>!call unit_test(&lsquo;is_less_than_single&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p>
 
     <h4>Arguments</h4>
 
@@ -595,8 +595,8 @@ subroutine test_is_less_than_single()
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">test_suite_M_Compare_Float_Numbers</span><span class="p">()</span>
-<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_check_start</span><span class="p">,</span><span class="n">unit_check</span><span class="p">,</span><span class="n">unit_check_done</span><span class="p">,</span><span class="n">unit_check_good</span><span class="p">,</span><span class="n">unit_check_bad</span><span class="p">,</span><span class="n">unit_check_msg</span>
-<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_check_level</span>
+<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_test_start</span><span class="p">,</span><span class="n">unit_test</span><span class="p">,</span><span class="n">unit_test_done</span><span class="p">,</span><span class="n">unit_test_good</span><span class="p">,</span><span class="n">unit_test_bad</span><span class="p">,</span><span class="n">unit_test_msg</span>
+<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span> <span class="k">only</span> <span class="p">:</span> <span class="n">unit_test_level</span>
 <span class="k">implicit none</span>
 <span class="c">!*! setup</span>
    <span class="k">call </span><span class="n">test_compare_float_double</span><span class="p">()</span>
@@ -611,58 +611,58 @@ subroutine test_is_less_than_single()
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_compare_float_double</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;compare_float_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!*!call unit_check(&#39;compare_float_double&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;compare_float_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;compare_float_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!*!call unit_test(&#39;compare_float_double&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;compare_float_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_compare_float_double</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_compare_float_single</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;compare_float_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!*!call unit_check(&#39;compare_float_single&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;compare_float_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;compare_float_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!*!call unit_test(&#39;compare_float_single&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;compare_float_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_compare_float_single</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_is_equal_to_double</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;is_equal_to_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!*!call unit_check(&#39;is_equal_to_double&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;is_equal_to_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;is_equal_to_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!*!call unit_test(&#39;is_equal_to_double&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;is_equal_to_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_is_equal_to_double</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_is_equal_to_single</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;is_equal_to_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!*!call unit_check(&#39;is_equal_to_single&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;is_equal_to_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;is_equal_to_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!*!call unit_test(&#39;is_equal_to_single&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;is_equal_to_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_is_equal_to_single</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_is_greater_than_double</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;is_greater_than_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!*!call unit_check(&#39;is_greater_than_double&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;is_greater_than_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;is_greater_than_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!*!call unit_test(&#39;is_greater_than_double&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;is_greater_than_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_is_greater_than_double</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_is_greater_than_single</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;is_greater_than_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!*!call unit_check(&#39;is_greater_than_single&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;is_greater_than_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;is_greater_than_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!*!call unit_test(&#39;is_greater_than_single&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;is_greater_than_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_is_greater_than_single</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_is_less_than_double</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;is_less_than_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!*!call unit_check(&#39;is_less_than_double&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;is_less_than_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;is_less_than_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!*!call unit_test(&#39;is_less_than_double&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;is_less_than_double&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_is_less_than_double</span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_is_less_than_single</span><span class="p">()</span>
 
-   <span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;is_less_than_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-   <span class="c">!*!call unit_check(&#39;is_less_than_single&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
-   <span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;is_less_than_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;is_less_than_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="c">!*!call unit_test(&#39;is_less_than_single&#39;, 0.eq.0, &#39;checking&#39;,100)</span>
+   <span class="k">call </span><span class="n">unit_test_done</span><span class="p">(</span><span class="s1">&#39;is_less_than_single&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="k">end subroutine </span><span class="n">test_is_less_than_single</span>
 <span class="c">!===================================================================================================================================</span>
 <span class="k">end subroutine </span><span class="n">test_suite_M_Compare_Float_Numbers</span>
