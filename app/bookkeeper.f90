@@ -233,7 +233,7 @@ html_header=[ CHARACTER(LEN=128) :: &
 'td { width: 25% ; }                                                                                                      ',&
 'table#unit_test { table-layout: fixed ; width: 100% ; border-collapse: collapse ; border: 1px black solid ; }            ',&
 'table#unit_test td { width: 25% ; border: 1px black solid ; padding: 10px ; }                                            ',&
-'table#unit_test caption { font-style: italic ; }                                                                         ',&
+'table#unit_test caption { font-style: italic ; font-weight: 600; color: gray;}                                           ',&
 '/*                                                                                                                       ',&
 'col:nth-child(even) {background: #FFF}                                                                                   ',&
 'col:nth-child(odd) {background: #CCC}                                                                                    ',&
