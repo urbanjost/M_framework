@@ -46,27 +46,27 @@ doubleprecision,allocatable :: expected(:)
 
    answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RU')
    expected=[2.0d0, 1.3d0, 1.24d0, 1.235d0, 1.2346d0, 1.23457d0, 1.234568d0, 1.2345679d0, 1.2345679d0]
-   call unit_test('significant',all( answers == expected),'RU')
+   call unit_test('significant',all( answers == expected),'RU : round up')
 
    answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RD')
    expected=[1.0d0, 1.2d0, 1.23d0, 1.234d0, 1.2345d0, 1.23456d0, 1.234567d0, 1.2345678d0, 1.23456789d0]
-   call unit_test('significant',all( answers == expected),'RD')
+   call unit_test('significant',all( answers == expected),'RD : round down ')
 
    answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RZ')
    expected=[1.0d0, 1.2d0, 1.23d0, 1.234d0, 1.2345d0, 1.23456d0, 1.234567d0, 1.2345678d0, 1.23456789d0]
-   call unit_test('significant',all( answers == expected),'RZ')
+   call unit_test('significant',all( answers == expected),'RZ : round towards zero')
 
    answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RN')
    expected=[1.0d0, 1.2d0, 1.23d0, 1.235d0, 1.2346d0, 1.23457d0, 1.234568d0, 1.2345679d0, 1.23456789d0]
-   call unit_test('significant',all( answers == expected),'RN')
+   call unit_test('significant',all( answers == expected),'RN : round towards nearest representable number')
 
    answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RC')
    expected=[1.0d0, 1.2d0, 1.23d0, 1.235d0, 1.2346d0, 1.23457d0, 1.234568d0, 1.2345679d0, 1.23456789d0]
-   call unit_test('significant',all( answers == expected),'RC')
+   call unit_test('significant',all( answers == expected),'RC : compatible rounding rounds to closest representable number')
 
    answers=significant(1.23456789012345d0,[1,2,3,4,5,6,7,8,9],'RP')
    expected=[1.0d0, 1.2d0, 1.23d0, 1.235d0, 1.2346d0, 1.23457d0, 1.234568d0, 1.2345679d0, 1.23456789d0]
-   call unit_test('significant',all( answers == expected),'RP')
+   call unit_test('significant',all( answers == expected),'RP : processor-dependent rounding ')
 
    call unit_test_end('significant',msg='')
 end subroutine test_significant

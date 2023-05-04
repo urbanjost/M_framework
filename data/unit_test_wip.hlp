@@ -21,6 +21,11 @@ INTERACTIVE MODE
 possible call of M_matrix, interactive access to call the PID with tools like gdb,
 small NAMELIST mode to pause and allow shell commands to be called, change level, 
 and other NAMELIST variables. 
+
+A response tester like expect/xexpect is more appropriate for GUI testing.
+================================================================================
+A simple scripting language for conditional commands to execute on different
+platforms or for different test failures?
 ================================================================================
 ONE PROCEDURE PER TEST PROGRAM OR ONE TEST PROGRAM
 

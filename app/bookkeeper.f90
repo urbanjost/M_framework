@@ -75,10 +75,10 @@ end interface exists
       write(htmlfile,g0)'<caption>',name,str(' -',if=msg.ne.''),' ',msg,'</caption>'
       write(htmlfile,g0)'<tbody>'
       write(htmlfile,g0)'<tr><!-- line -->'
-      write(htmlfile,g0)' <th class="odd" style="width:25%;"> name   </th>'
-      write(htmlfile,g0)' <th class="odd" style="width:10%;"> passed </th>'
-      write(htmlfile,g0)' <th class="odd" style="width:25%;"> date   </th>'
-      write(htmlfile,g0)' <th class="odd" style="width:40%;"> msg    </th>'
+      write(htmlfile,g0)' <th class="odd" style="width:25%;text-align:center;"> name   </th>'
+      write(htmlfile,g0)' <th class="odd" style="width:10%;text-align:center;"> passed </th>'
+      write(htmlfile,g0)' <th class="odd" style="width:25%;text-align:center;"> date   </th>'
+      write(htmlfile,g0)' <th class="odd" style="width:40%;text-align:center;"> msg    </th>'
       write(htmlfile,g0)'</tr>'
 
    case("check")
@@ -86,8 +86,8 @@ end interface exists
 
       write(htmlfile,g0)'<tr><!-- line -->'
       write(htmlfile,g0)' <td class="even" >', name    ,' </td>'
-      write(htmlfile,g0)' <td class="even" bgcolor="',color,'">', passed  ,' </td>'
-      write(htmlfile,g0)' <td class="even" >', date    ,' </td>'
+      write(htmlfile,g0)' <td class="even" style="text-align:center;" bgcolor="',color,'">', passed  ,' </td>'
+      write(htmlfile,g0)' <td class="even" style="text-align:center;">', date    ,' </td>'
       write(htmlfile,g0)' <td class="even" >', msg     ,' </td>'
       write(htmlfile,g0)'</tr>'
 
@@ -97,17 +97,22 @@ end interface exists
 
          write(htmlfile,g0)'<tr><!-- line -->'
          write(htmlfile,g0)' <td class="odd" >', name    ,' </td>'
-         write(htmlfile,g0)' <td class="odd" bgcolor="',color,'">', passed  ,' </td>'
-         write(htmlfile,g0)' <td class="odd" >', date    ,' </td>'
+         write(htmlfile,g0)' <td class="odd" bgcolor="',color,'" style="text-align:center;">', passed  ,' </td>'
+         write(htmlfile,g0)' <td class="odd" style="text-align:center;">', date    ,' </td>'
          write(htmlfile,g0)' <td class="odd" >', msg     ,' </td>'
          write(htmlfile,g0)'</tr>'
       endif
+      write(htmlfile,g0)'<tr><!-- line -->'
+      if(clicks.ne.0)write(htmlfile,g0)'<td colspan="4" bgcolor="#AAF" style="text-align:center;"> clicks:',clicks,'</td>'
+      write(htmlfile,g0)'</tr>'
+      write(htmlfile,g0)'</table>'
+
+
       write(clicksfile,g0),quote,name,quote,comma,           &
                            quote,here_and_now(),quote,comma, &
                            quote,clicks,quote,comma,         &
                            quote,msg,quote
 
-      write(htmlfile,g0)'</table>'
 
    case("stop")
 
@@ -212,7 +217,10 @@ html_header=[ CHARACTER(LEN=128) :: &
 'h4 { font-size:120%; }                                                                                                   ',&
 'h5,h6 { font-size:100% }                                                                                                 ',&
 'a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }                                                   ',&
-'td { border:thin solid #888; }                                                                                           ',&
+'/*                                                                                                                       ',&
+'td { border:thin solid #888; word-break: break-all; width: 1em}                                                          ',&
+'*/                                                                                                                       ',&
+'td { border:thin solid #888; overflow-wrap: break-word; }                                                                ',&
 'li { margin-bottom:0.5em; }                                                                                              ',&
 'blockquote { display:block; font-size:90%; font-style:italic; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }    ',&
 'pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }                                                ',&
