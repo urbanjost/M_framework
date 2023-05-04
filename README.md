@@ -263,7 +263,6 @@ write_message_only                            4          2          4
 
 ## Unique features: fpm(1), gdb(1), and M_framework(3f) work together
 
-
 It is easy to debug an individual test in a debugger. For example to run
 a test called "crash" with gdb(1) use
 ```bash

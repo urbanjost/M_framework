@@ -72,7 +72,7 @@ end interface exists
 
    case("start")
       write(htmlfile,g0)'<table id="unit_test">'
-      write(htmlfile,g0)'<caption>',name,'</caption>'
+      write(htmlfile,g0)'<caption>',name,' - ',msg,'</caption>'
       write(htmlfile,g0)'<tbody>'
       write(htmlfile,g0)'<tr><!-- line -->'
       write(htmlfile,g0)' <th class="odd" style="width:25%;"> name   </th>'
