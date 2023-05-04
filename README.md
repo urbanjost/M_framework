@@ -3,6 +3,9 @@
 Currently M_framework(3f)  is under rapid modification so if you use this I would
 recommend you use a specific commit or make you own copy. ( 2023-05-03 )
 
+Any feedback (features, performance, ease of use, ...) is appreciated,
+particularly in this early development phase.
+
 ### Synopsis
 Including unit testing is strongly encouraged for any software package,
 but particularly when it is to be used in programming environments the
@@ -29,6 +32,18 @@ other existing libraries cannot easily be conformed to this).
 Note that If a CD/CI github automated test script creates a Fortran
 environment including fpm and just calls "fpm test" you can standardize
 your testing and use the same CD/CI scripts for any package.
+
+Basic timing information is produced as well as the expected
+pass/fail/skipped report.
+
+M_framework(1) comes with a hook that allows calling your own programs to
+integrate into logging tools, report generators, spreadsheets or other
+local infrastructure. The example program "bookkeeper" is included that
+uses the hook to write CSV, HTML, and NAMELIST files.
+
+Using fpm(1) it is easy to run the tests with the --runner option,
+allowing for integration with other utilities such as the GNU debugger
+gdb(1), valgrind(1), and other tools.
 
 ### Basic output
 

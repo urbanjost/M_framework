@@ -27,6 +27,13 @@ interface set
    module procedure set_single
 end interface set
 
+type :: force_kwargs_hack ! force keywords, using @awvwgk method
+end type force_kwargs_hack
+! so then any argument that comes afer "force_kwargs" is a compile time error
+! if not done with a keyword unless someone "breaks" it by passing something
+! of this type:
+!    type(force_kwargs_hack), optional, intent(in) :: force_kwargs
+
 contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -42,17 +49,18 @@ contains
 !!    Syntax:
 !!
 !!      pure function str(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
-!!      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep)
+!!                      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep,if)
 !!      class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
 !!      class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+!!      logical,intent(in),optional          :: if
 !!      character(len=*),intent(in),optional :: sep
-!!      character,len=(:),allocatable :: str
+!!      character,len=(:),allocatable        :: str
 !!
 !!##DESCRIPTION
 !!    str(3f) builds a space-separated string from up to twenty scalar values.
 !!
 !!##OPTIONS
-!!    g[0-9a-j]   optional value to print the value of after the message. May
+!!    g[0-9a-j]   Optional value to print the value of after the message. May
 !!                be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
 !!                COMPLEX, or CHARACTER.
 !!
@@ -61,6 +69,9 @@ contains
 !!                arguments and array arguments is not supported.
 !!
 !!    sep         separator string used between values. Defaults to a space.
+!!                Must be specified with a keyword.
+!!    if          If false return a null string.
+!!                Must be specified with a keyword.
 !!
 !!##RETURNS
 !!    str     description to print
@@ -119,7 +130,7 @@ contains
 !!    Public Domain
 pure function msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9, &
                        & generica, genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj, &
-                       & sep)
+                       & force_kwargs,sep,if)
 implicit none
 
 ! ident_2="@(#) M_framework__msg msg_scalar(3fp) writes a message to a string composed of any standard scalar types"
@@ -129,11 +140,21 @@ class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic
 class(*),intent(in),optional  :: generica, genericb, genericc, genericd, generice
 class(*),intent(in),optional  :: genericf, genericg, generich, generici, genericj
 character(len=:),allocatable  :: msg_scalar
+type(force_kwargs_hack), optional, intent(in) :: force_kwargs
+character(len=*),intent(in),optional :: sep
+logical,intent(in),optional   :: if
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-character(len=*),intent(in),optional :: sep
 character(len=:),allocatable  :: sep_local
+
+   if(present(if))then
+      if(.not.if)then
+         msg_scalar=''
+         return
+      endif
+   endif
+
    if(present(sep))then
       increment=len(sep)+1
       sep_local=sep
@@ -200,7 +221,7 @@ end function msg_scalar
 !===================================================================================================================================
 pure function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,&
                     & generica,genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj,&
-                    & sep)
+                    & force_kwargs,sep,if)
 implicit none
 
 ! ident_3="@(#) M_framework__msg msg_one(3fp) writes a message to a string composed of any standard one dimensional types"
@@ -210,12 +231,22 @@ class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4
 class(*),intent(in),optional  :: generic6(:), generic7(:), generic8(:), generic9(:)
 class(*),intent(in),optional  :: generica(:), genericb(:), genericc(:), genericd(:), generice(:)
 class(*),intent(in),optional  :: genericf(:), genericg(:), generich(:), generici(:), genericj(:)
+type(force_kwargs_hack), optional, intent(in) :: force_kwargs
 character(len=*),intent(in),optional :: sep
+logical,intent(in),optional          :: if
 character(len=:),allocatable  :: sep_local
 character(len=:), allocatable :: msg_one
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
+
+   if(present(if))then
+      if(.not.if)then
+         msg_one=''
+         return
+      endif
+   endif
+
    if(present(sep))then
       increment=1+len(sep)
       sep_local=sep
