@@ -246,15 +246,15 @@ end type force_kwargs_hack
 public unit_test_good  ! report results of a test
 public unit_test_bad   ! report results of a test
 
-interface  unit_test_done;    module  procedure  unit_test_end;  end  interface  unit_test_done;    public  unit_test_done
-interface  unit_check_start;  module  procedure  unit_test_end;  end  interface  unit_check_start;  public  unit_check_start
-interface  unit_check;        module  procedure  unit_test;      end  interface  unit_check;        public  unit_check
-interface  unit_check_done;   module  procedure  unit_test_end;  end  interface  unit_check_done;   public  unit_check_done
-interface  unit_check_mode;   module  procedure  unit_test_end;  end  interface  unit_check_mode;   public  unit_check_mode
-interface  unit_check_stop;   module  procedure  unit_test_end;  end  interface  unit_check_stop;   public  unit_check_stop
-interface  unit_check_msg;    module  procedure  unit_test_end;  end  interface  unit_check_msg;    public  unit_check_msg
-interface  unit_check_good;   module  procedure  unit_test_end;  end  interface  unit_check_good;   public  unit_check_good
-interface  unit_check_bad;    module  procedure  unit_test_end;  end  interface  unit_check_bad;    public  unit_check_bad
+interface  unit_test_done;    module  procedure  unit_test_end;    end  interface  unit_test_done;    public  unit_test_done
+interface  unit_check_start;  module  procedure  unit_test_start;  end  interface  unit_check_start;  public  unit_check_start
+interface  unit_check;        module  procedure  unit_test;        end  interface  unit_check;        public  unit_check
+interface  unit_check_done;   module  procedure  unit_test_end;    end  interface  unit_check_done;   public  unit_check_done
+interface  unit_check_mode;   module  procedure  unit_test_mode;   end  interface  unit_check_mode;   public  unit_check_mode
+interface  unit_check_stop;   module  procedure  unit_test_stop;   end  interface  unit_check_stop;   public  unit_check_stop
+interface  unit_check_msg;    module  procedure  unit_test_msg;    end  interface  unit_check_msg;    public  unit_check_msg
+interface  unit_check_good;   module  procedure  unit_test_good;   end  interface  unit_check_good;   public  unit_check_good
+interface  unit_check_bad;    module  procedure  unit_test_bad;    end  interface  unit_check_bad;    public  unit_check_bad
 
 public unit_check_level
 integer :: unit_check_level
