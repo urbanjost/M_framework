@@ -15,6 +15,7 @@ character(len=25)            :: date    ; namelist /args/ date,    /long/ date
 integer(kind=int64)          :: clicks  ; namelist /args/ clicks,  /long/ clicks
 logical                      :: help    ; namelist                 /long/ help
 logical                      :: version ; namelist                 /long/ version
+logical                      :: verbose ; namelist                 /long/ verbose
 !integer                      :: level = -1         ; namelist /args/ level
 !integer,allocatable          :: flags(:)           ; namelist /args/ flags
 character(len=:),allocatable :: html_header(:), html_footer(:)
@@ -46,6 +47,7 @@ end interface exists
 
 
    call header()
+   verbose=.false.
    type = repeat(' ',4096)
    name = repeat(' ',4096)
    passed = repeat(' ',4096)
@@ -217,20 +219,24 @@ help_text=[ CHARACTER(LEN=128) :: &
 '      bookkeeper --type="end" --msg="message text"                              ',&
 '                                                                                ',&
 'OPTIONS                                                                         ',&
-'    type     "start","check","end","stop"                                       ',&
+'    type     "start","check","end","stop","message"                             ',&
 '    name     a label, typically the name of the procedure that was tested.      ',&
 '    passed   "passed","failed","skipped"                                        ',&
 '    msg      a description of the test, or a descriptive message                ',&
 '    date     YYYY-MM-DDTHH:MM:SS-HH:MM                                          ',&
 '    clicks   for type="end" assumed to be the time in clicks since the          ',&
 '             previous type="start"                                              ',&
+'                                                                                ',&
+'    verbose  flag to run in verbose mode                                        ',&
 '    help     display this help and exit                                         ',&
 '    version  output version information and exit                                ',&
 '                                                                                ',&
 'EXAMPLES                                                                        ',&
 '    Sample commands                                                             ',&
 '                                                                                ',&
-'       # fpm test -- command=bookkeeper                                         ',&
+'       fpm test -- command=bookkeeper                                           ',&
+'       fpm test --target=''time*'' -- command=bookkeeper luns=6                   ',&
+'                                                                                ',&
 '                                                                                ',&
 'SEE ALSO                                                                        ',&
 '    M_framemaker(3f), unit_test(3f), unit_test_mode(3f)                         ',&
