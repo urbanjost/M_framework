@@ -7,12 +7,14 @@ use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdin=>INPUT_UNIT,
 use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 use M_framework, only : wrt, str
 ! put something here into namelist and it becomes an argument
-character(len=:),allocatable :: type    ; namelist /args/ type
-character(len=:),allocatable :: name    ; namelist /args/ name
-character(len=:),allocatable :: passed  ; namelist /args/ passed
-character(len=:),allocatable :: msg     ; namelist /args/ msg
-character(len=25)            :: date    ; namelist /args/ date
-integer(kind=int64)          :: clicks  ; namelist /args/ clicks
+character(len=:),allocatable :: type    ; namelist /args/ type,    /long/ type
+character(len=:),allocatable :: name    ; namelist /args/ name,    /long/ name
+character(len=:),allocatable :: passed  ; namelist /args/ passed,  /long/ passed
+character(len=:),allocatable :: msg     ; namelist /args/ msg,     /long/ msg
+character(len=25)            :: date    ; namelist /args/ date,    /long/ date
+integer(kind=int64)          :: clicks  ; namelist /args/ clicks,  /long/ clicks
+logical                      :: help    ; namelist                 /long/ help
+logical                      :: version ; namelist                 /long/ version
 !integer                      :: level = -1         ; namelist /args/ level
 !integer,allocatable          :: flags(:)           ; namelist /args/ flags
 character(len=:),allocatable :: html_header(:), html_footer(:)
@@ -90,6 +92,7 @@ end interface exists
       write(htmlfile,g0)' <td class="even" style="text-align:center;">', date    ,' </td>'
       write(htmlfile,g0)' <td class="even" >', msg     ,' </td>'
       write(htmlfile,g0)'</tr>'
+   case("message")
 
    case("end")
       if(passed.eq.'skipped')then
@@ -119,10 +122,11 @@ end interface exists
    end select
 contains
 subroutine cmdline_()                                ! read arguments from command line as NAMELIST group input
-character(len=4096), save :: input(3) = [character(len=4096) :: '&args', '', ' /']
+character(len=4096), save :: input(3) = [character(len=4096) :: '&long', '', ' /']
 character(len=256) :: message1, message2
 integer :: i, j, k, ios, equal_pos
-
+   help = .false.
+   version = .false.
    do i = 1, command_argument_count()
       call get_command_argument(i, input(2))
       do j = 1, len_trim(input(2))                   ! blank out leading - or / so "--name=value" or "/name=value" works
@@ -131,27 +135,135 @@ integer :: i, j, k, ios, equal_pos
       enddo
       input(2) = ' '//adjustl(input(2))
       if (index(input(2), '=') == 0) input(2) = trim(input(2))//'=T' ! if no equal sign add =T
-      read (input, nml=args, iostat=ios, iomsg=message1)
+      read (input, nml=long, iostat=ios, iomsg=message1)
       if (ios /= 0) then                             ! assume first failure might be because of missing quotes
          equal_pos = index(input(2), '=')            ! find position of '='
          if (equal_pos /= 0) then
             ! requote and try again
             input(2) = input(2) (:equal_pos)//'"'//input(2) (equal_pos + 1:len_trim(input(2)))//'"'
-            read (input, nml=args, iostat=ios, iomsg=message2)
+            read (input, nml=long, iostat=ios, iomsg=message2)
             if (ios /= 0) then
                write(stderr,g) 'BOOKKEEPER:ERROR UNQUOTED:',trim(message1),': when reading ',trim(input(2))
                if(message1.ne.message2) write(stderr,g) 'BOOKKEEPER:ERROR QUOTED  :',trim(message2),': when reading ',trim(input(2))
-               write (*, nml=args, delim='quote')
+               type=trim(type)
+               name=trim(name)
+               passed=trim(passed)
+               msg=trim(msg)
+               write (*, nml=long, delim='quote')
                stop 2
             endif
          else
             write(stderr,g)'ERROR:',trim(message1),': when reading ',trim(input(2))
-            write (stderr, nml=args, delim='quote')
+            type=trim(type)
+            name=trim(name)
+            passed=trim(passed)
+            msg=trim(msg)
+            write (stderr, nml=long, delim='quote')
             stop 4
          endif
       endif
    enddo
+   if(help)call printhelp()
+   if(version)call printversion()
 end subroutine cmdline_
+subroutine printhelp()
+implicit none
+character(len=*),parameter     :: ident="@(#)printhelp(3f): prints help information"
+character(len=:),allocatable :: help_text(:)
+integer                        :: i
+help_text=[ CHARACTER(LEN=128) :: &
+!12345678901234567890123456789012345678901234567890123456789012345678901234567890',&
+'NAME                                                                            ',&
+'    bookkeeper-(1f) - example filter program callable from the M_framework(3f)  ',&
+'    unit testing harness.                                                       ',&
+'    (LICENSE:PD)                                                                ',&
+'SYNOPSIS                                                                        ',&
+' commands:                                                                      ',&
+'                                                                                ',&
+'     bookkeeper [help| version]                                                 ',&
+'     bookkeeper type="start" name="NAME" msg="MESSAGE TEXT" [opts]              ',&
+'     bookkeeper type="check" name="NAME" msg="MESSAGE TEXT" ...                 ',&
+'                passed="passed|failed"                                          ',&
+'     bookkeeper type="end" name="NAME" msg="MESSAGE TEXT" clicks=N ...          ',&
+'                [passed="failed|passed|skipped"]                                ',&
+'     bookkeeper type="stop" name="NAME" msg="MESSAGE TEXT"                      ',&
+'                [passed="failed|passed|skipped"] clicks=M                       ',&
+'     bookkeeper type="message" name="NAME" msg="MESSAGE TEXT"                   ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+' This is an example program that shows how to create an external program that   ',&
+' can be called by the testing harness in the M_framework__verify(3f) module     ',&
+' for custom processing. Data is based in the form of NAMELIST group data        ',&
+' for the NAMELIST group                                                         ',&
+'                                                                                ',&
+'     character(len=:),allocatable :: type                                       ',&
+'     character(len=:),allocatable :: name                                       ',&
+'     character(len=:),allocatable :: passed                                     ',&
+'     character(len=:),allocatable :: msg                                        ',&
+'     character(len=25)            :: date                                       ',&
+'     integer(kind=int64)          :: clicks                                     ',&
+'     logical                      :: help                                       ',&
+'     logical                      :: version                                    ',&
+'                                                                                ',&
+' The data conforms to the Fortran NAMELIST group input syntax with the          ',&
+' delimiter set to a double-quote except extraneous spaces are not allowed,      ',&
+' and names may optionally be preceded by " --" or " /" and if no equal          ',&
+' appears after a keyword "=T" is assumed to appear more like typical            ',&
+' Unix long options or MSWindows commands. So these would all be                 ',&
+' equivalent:                                                                    ',&
+'                                                                                ',&
+'      bookkeeper type="end" msg="message text"                                  ',&
+'      bookkeeper /type="end" /msg="message text"                                ',&
+'      bookkeeper --type="end" --msg="message text"                              ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'    type     "start","check","end","stop"                                       ',&
+'    name     a label, typically the name of the procedure that was tested.      ',&
+'    passed   "passed","failed","skipped"                                        ',&
+'    msg      a description of the test, or a descriptive message                ',&
+'    date     YYYY-MM-DDTHH:MM:SS-HH:MM                                          ',&
+'    clicks   for type="end" assumed to be the time in clicks since the          ',&
+'             previous type="start"                                              ',&
+'    help     display this help and exit                                         ',&
+'    version  output version information and exit                                ',&
+'                                                                                ',&
+'EXAMPLES                                                                        ',&
+'    Sample commands                                                             ',&
+'                                                                                ',&
+'       # fpm test -- command=bookkeeper                                         ',&
+'                                                                                ',&
+'SEE ALSO                                                                        ',&
+'    M_framemaker(3f), unit_test(3f), unit_test_mode(3f)                         ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
+   stop ! if --help was specified, stop
+end subroutine printhelp
+subroutine printversion()
+implicit none
+character(len=*),parameter     :: ident="@(#)printhelp(3f): prints help information"
+character(len=:),allocatable :: help_text(:)
+integer                        :: i
+help_text=[ CHARACTER(LEN=128) :: &
+!12345678901234567890123456789012345678901234567890123456789012345678901234567890',&
+'                                                                                ',&
+'PRODUCT:        Fortran Unit Testing Harness                                    ',&
+'PROGRAM:        bookkeeper(1)                                                   ',&
+'DESCRIPTION:    filter data from M_framework(3f) Unit Testing Framework         ',&
+'VERSION:        1.0, 20230505                                                   ',&
+'AUTHOR:         John S. Urban                                                   ',&
+'REPORTING BUGS: http://www.urbanjost.altervista.org/                            ',&
+'HOME PAGE:      https://github.com/urbanjost/M_framework                        ',&
+'LICENSE:        Public Domain. This is free software: you are free to change    ',&
+'                and redistribute it. There is NO WARRANTY,                      ',&
+'                to the extent permitted by law.                                 ',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
+   stop ! if --help was specified, stop
+end subroutine printversion
 
 function here_and_now() ! 2023-05-01 23:05:12 UTC-0400
 character :: date*(8), time*(10), zone*(5)
