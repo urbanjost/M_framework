@@ -70,7 +70,7 @@ debugger gdb(1), valgrind(1), and other tools.
 Unit testing allows you to automatically confirm changes are acceptable
 so you can quickly and confidently make and release changes. But many of
 the operations required for testing are useful generically. So this 
-project is broken down into small modules general-purpose modules and 
+project is broken down into small general-purpose modules and 
 one unit-testing-specific one.
 
 Therefore M\_framework(3f) is composed of the following individual modules:
@@ -90,7 +90,7 @@ Therefore M\_framework(3f) is composed of the following individual modules:
  + **M\_framework\_\_help** provides for creating a standard simple
    interactive help facility
 
- + **M\_framework\_\_verify__** is at the heart of the collection and 
+ + **M\_framework\_\_verify** is at the heart of the collection and 
    handles virtually all the unit-test-specific operations.
 
 The procedures can be used in a variety of ways. After using them for
@@ -127,12 +127,15 @@ As desired, command line options can be used to control various test
 behaviors.
 
 As an example, we can create a skeleton program to test a few
-routines. Using "fpm test\_suite sqrt cos sin > test\_suite.f90"
+routines. Using 
+```bash
+fpm test_suite sqrt cos sin > test/test_suite.f90
+```
 to create the skeleton program and then adding a few actual
 calls to unit\_test\_check(3f) results in 
 ```fortran
 program M_test_suite_M_intrinsics
-use M_framework, only : unit_test_start,unit_test,unit_test_done, &
+use M_framework, only : unit_test_start,unit_test,unit_test_end, &
                  unit_test_mode, unit_test_level, unit_test_stop
 !use M_mymodule
 implicit none
@@ -156,34 +159,35 @@ integer :: i
       & 'check table of values')
    call unit_test('sqrt', sqrt(25.0d0).eq.5.0d0,&
       & 'got',sqrt(25.0d0),'expected',5.0d0)
-   call unit_test_done('sqrt',msg='')
+   call unit_test_end('sqrt',msg='')
 end subroutine test_sqrt
 
 subroutine test_sin()
    call unit_test_start('sin',msg='')
-   call unit_test_done('sin',msg='')
+   call unit_test_end('sin',msg='')
 end subroutine test_sin
 
 subroutine test_cos()
    call unit_test_start('cos',msg='')
-   call unit_test_done('cos',msg='')
+   call unit_test_end('cos',msg='')
 end subroutine test_cos
 
 end program M_test_suite_M_intrinsics
 ```
-The default output looks like this (note if no calls to unit\_test routines are made
-between start and done the procedure gets an "UNTESTED" entry to remind you to make
+The default output looks like this (note if no calls to unit\_test
+routines are made between unit_test_start(3f)  and unit_test_end(3f)
+the procedure gets an "UNTESTED" entry to remind you to make
 some tests ..).
 ```text
 check:       sqrt   SUCCESS : check table of values
 check:       sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
-check_done:  sqrt   PASSED  : GOOD:        2 BAD:        0 DURATION:00000000012000:
-check_done:  cos    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
-check_done:  sin    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+check_end:   sqrt   PASSED  : GOOD:        2 BAD:        0 DURATION:00000000012000:
+check_end:   cos    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+check_end:   sin    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
 check_stop:  TALLY  PASSED  : GOOD:        2 BAD:        0 DURATION:00000000000000
 STOP 0
 ```
-this is a model that works well for basic numeric procedures in particular.
+this is a model that works particularly well for basic numeric procedures.
 
 Now it is just a matter of adding more calls to unit\_test(3f). This is
 where procedures from the other modules become useful, as they provide
