@@ -227,7 +227,7 @@ html_header=[ CHARACTER(LEN=128) :: &
 'a,li span { color:#000; }                                                                                                ',&
 'a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }                                                ',&
 '#Container { margin:0 10px; text-align:center; }                                                                         ',&
-'#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }                   ',&
+'#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:58em; }                   ',&
 'span.webName { font-size:.5em; }                                                                                         ',&
 'textarea#content { font-size: 1em; line-height: 1.125em; }                                                               ',&
 'h1#pageName { line-height:1.4em; margin:0.2em 0 0.2em 0; padding:0; }                                                    ',&
