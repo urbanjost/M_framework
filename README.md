@@ -55,7 +55,11 @@ even be sent to a scratch file, essentially creating a quiet mode.
 M\_framework(1) comes with a hook that allows calling your own programs to
 integrate with local logging tools, report generators, spreadsheets or other
 local infrastructure. The example program "bookkeeper" is included that
-uses the hook to write CSV, HTML, and NAMELIST files.
+uses the hook to write 
+[CSV](https://urbanjost.github.io/M_framework/bookkeeper.csv),
+[HTML](https://urbanjost.github.io/M_framework/bookkeeper.html), and
+[NAMELIST](https://urbanjost.github.io/M_framework/bookkeeper.nml)
+files.
 
 In conjunction with fpm(1) it is easy to run the tests with the --runner option,
 allowing for integration with other utilities as well such as the GNU
