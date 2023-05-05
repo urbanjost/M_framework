@@ -552,7 +552,9 @@ fpm test -- command=bookkeeper
  + for examples of CD/CI scripts that assume your package can be tested with an "fpm test" command.
  + examples that use M_framework in github fpm packages:
      * [M_strings](https://github.com/urbanjost/M_strings)
-     * [M_strings](https://github.com/urbanjost/M_process)
+     * [M_process](https://github.com/urbanjost/M_process)
+   These packages used a different reincarnation of the testing harness and are in the process of
+   being changed to use M_framework(3f) more appropriately, but still contain some useful examples.
 
  + [Fortran Package Manager](https://github.com/fortran-lang/fpm)
  + [fpm(1) registry](https://github.com/fortran-lang/fpm-registry)
