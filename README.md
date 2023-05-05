@@ -316,15 +316,33 @@ with it including generating alternate output file types; plotting
 timing data and so on.
 
 The HTML file is handy for importing into word processors or viewing
-via browsers.
+via browsers. Example output files from an fpm(1) package that uses
+M_framemaker illustrate the different types of output that can be 
+generated.
+ + [CSV](https://urbanjost.github.io/M_framework/bookkeeper.csv).
+   Generally. comma-seperated files can be read directly into spreadsheet
+   programs, sqlite3, and several common databases.
+ + [CSV runtimes](https://urbanjost.github.io/M_framework/bookkeeper_clicks.csv)
+   Another CSV file that is a record of the runtimes between a
+   unit test start and end.
+ + [HTML](https://urbanjost.github.io/M_framework/bookkeeper.html)
+   An example of a formatted report that can be displayed in a browser.
+ + [NAMELIST](https://urbanjost.github.io/M_framework/bookkeeper.nml).
+   Essentially this is a metafile that records the unit test calls.
+   It is very easy for a custom Fortran program to read back a NAMELIST
+   file and generate custom outputs instead of modifying bookkeeper(1).
 
-Here is an example SQLite3 Tool input file that can be run with 
+The bookkeeper(1) program is an example program that is expected to
+be customized. It provides for parsing the parameters passed to a
+M_framemaker external program.
+
+#### importing into SQLlite3
+Here is an example SQLite3 Tool input file that if placed in "test.sql"
+can be run with
 ```bash
      sqlite3 -batch -init test.sql bookkeeper.db .quit
 ```
 if you have sqlite3(1) installed.
-
-#### importing into SQLlite3
 ```text
 .mode csv
 .import bookkeeper.csv unit_check
