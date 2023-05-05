@@ -444,13 +444,15 @@ by the scripts whenever a "push" to the repository occurs.
 
 ## Supports FPM ![fpm](docs/images/fpm_logo.gif)
 
-To download the github repository and build it with fpm(1) 
-and create
-a test fpm(1) project:
+The impatient can try this, assuming git(1) and fpm(1) are installed.
+
+Download the github repository and build it with fpm(1) 
+and create a test fpm(1) project:
 
 ```bash
 #!/bin/bash
 # first you need to install a few example programs
+cd /tmp
 git clone https://github.com/urbanjost/M_framework.git
 cd M_framework
 # install the "unit_test", "bookkeeper", and "test_suite"
@@ -500,6 +502,16 @@ in your fpm.toml project file and start making tests that call M\_framework(3f).
 The optional programs demonstrated ("unit\_test", "test\_suite") are just simple
 stand-alone programs that make skeleton programs to run tests that you can 
 customize (and rename too to avoid confusion).
+```bash
+# some useful things to try. Check out the man-pages for all the unit_test_*(3f)
+# procedures.
+# Then look at
+unit_test --help
+fpm test -- help
+# run the demo bookkeeper script
+fpm test -- command=bookkeeper
+# and look at the bookkeeper*.* files in the top of the project
+```
 
 ```toml
      [dev-dependencies]
