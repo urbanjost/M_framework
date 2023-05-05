@@ -512,12 +512,10 @@ fpm test -- help
 fpm test -- command=bookkeeper
 # and look at the bookkeeper*.* files in the top of the project
 ```
-
 ```toml
      [dev-dependencies]
      M_framework        = { git = "https://github.com/urbanjost/M_framework.git" }
 ```
-
 ## Documentation   ![docs](docs/images/docs.gif)
 ### User
 
@@ -553,6 +551,7 @@ fpm test -- command=bookkeeper
  + examples that use M_framework in github fpm packages:
      * [M_strings](https://github.com/urbanjost/M_strings)
      * [M_process](https://github.com/urbanjost/M_process)
+
    These packages used a different reincarnation of the testing harness and are in the process of
    being changed to use M_framework(3f) more appropriately, but still contain some useful examples.
 
