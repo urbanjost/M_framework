@@ -357,12 +357,13 @@ end subroutine unit_test_msg
 !!##SYNOPSIS
 !!
 !!    subroutine unit_test(name,expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
-!!    & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+!!    & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,only_on_fail)
 !!
 !!     character(len=*),intent(in) :: name
 !!     logical,intent(in) :: expression
 !!     class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
 !!     & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+!!     logical,intent(in),optional :: only_on_fail
 !!
 !!##DESCRIPTION
 !!    unit_test(3f) tests the expression and displays a message composed
@@ -384,6 +385,8 @@ end subroutine unit_test_msg
 !!                   composed of any scalar intrinsics of type INTEGER,
 !!                   REAL, DOUBLEPRECISION, COMPLEX, LOGICAL, or
 !!                   CHARACTER. A space is placed between each value.
+!!     wordy         If .false. The message MSG is only displayed if the expression
+!!                   is .false. . Must be used as a keyword. Default is .true. .
 !!
 !!##EXAMPLES
 !!
@@ -462,14 +465,23 @@ end subroutine unit_test_msg
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_test(name,logical_expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+subroutine unit_test(name,logical_expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,force_kwargs,wordy)
 
 ! ident_2="@(#) M_framework__verify unit_test(3f) assert if expression is .true. or .false. and optionally call command or stop on .false."
 
 character(len=*),intent(in)          :: name
 logical,intent(in)                   :: logical_expression
 class(*),intent(in),optional         :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+type(force_kwargs_hack),optional,intent(in) :: force_kwargs
+logical,intent(in),optional          :: wordy
 character(len=:),allocatable         :: msg_all
+logical                              :: wordy_local
+
+   if(present(wordy))then
+      wordy_local=wordy
+   else
+      wordy_local=.true.
+   endif
 
    if(G_virgin%cmdline) call cmdline_()
 
@@ -486,7 +498,7 @@ character(len=:),allocatable         :: msg_all
       IFAILED_ALL_G=IFAILED_ALL_G+1
    else
       if(.not.G_no_news_is_good_news)then
-         call wrt(G_luns,'check:       '//atleast_(name,20)//' SUCCESS : '//msg_all)
+         if(wordy_local)call wrt(G_luns,'check:       '//atleast_(name,20)//' SUCCESS : '//msg_all)
       endif
       if(G_command /= '') call run(G_command//' type="check" name="'//trim(name)//'" passed="passed" msg="'//ndq(msg_all)//'"')
       IPASSED_G=IPASSED_G+1
