@@ -60,16 +60,18 @@
 !!        command     name of optional command to execute for a start,
 !!                    check, or finish.
 !!
-!!    PROCEDURES
+!!  PROCEDURES
 !!
-!!    unit_test_start       start tests of a procedure
-!!    unit_test             report if expression is false or true
-!!                           and if .false. stop program when keep_going=.false.
-!!    unit_test_end         ends test of a procedure
-!!    unit_test_stop        stop program with exit value of 0 if no failures
-!!                           else with an exit value of 1
-!!    unit_test_msg         write message
-!!    unit_test_system      execute system command, recursively if requested.
+!!  The unit test procedures are
+!!
+!!       unit_test_start()     start tests of a procedure
+!!       unit_test()           report if expression is false or true
+!!                              and if .false. stop program when keep_going=.false.
+!!       unit_test_end()       ends test of a procedure
+!!       unit_test_msg()       write message
+!!       unit_test_stop()      stop program with exit value of 0 if no failures
+!!                              else with an exit value of 1
+!!       unit_test_system()    execute system command, recursively if requested.
 !!
 !!    For custom unit testing reports, a command can be given that will be
 !!    passed information on the command line in NAMELIST format.
@@ -355,12 +357,12 @@ end subroutine unit_test_msg
 !!##SYNOPSIS
 !!
 !!    subroutine unit_test(name,expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
-!!                                         & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+!!    & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 !!
 !!     character(len=*),intent(in) :: name
 !!     logical,intent(in) :: expression
 !!     class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
-!!                                    & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+!!     & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
 !!
 !!##DESCRIPTION
 !!    unit_test(3f) tests the expression and displays a message composed
@@ -368,9 +370,10 @@ end subroutine unit_test_msg
 !!    if the expression is false
 !!
 !!    o if unit_test_mode(command) is not blank calls the
-!!    specified  shell command
+!!    specified shell command
 !!
-!!       $COMMAND name="NAME" type="check" passed="passed|failed" msg="all messages"
+!!       $COMMAND name="NAME" type="check" passed="passed|failed" ...
+!!       msg="all messages"
 !!
 !!    o if keep_going = .false. stop the program on a failed test
 !!
@@ -386,65 +389,74 @@ end subroutine unit_test_msg
 !!
 !!   Sample program:
 !!
-!!    program demo_unit_test
-!!    use M_framework__verify, only: &
-!!       & unit_test_mode,     &
-!!       & unit_test_start,    &
-!!       & unit_test,          &
-!!       & unit_test_end,      &
-!!       & unit_test_stop
-!!    use M_framework__approx, only: almost
+!!       program demo_unit_test
+!!       use M_framework__verify, only: &
+!!          & unit_test_mode,     &
+!!          & unit_test_start,    &
+!!          & unit_test,          &
+!!          & unit_test_end,      &
+!!          & unit_test_stop
+!!       use M_framework__approx, only: almost
 !!
-!!    implicit none
-!!    integer :: i
-!!    integer :: x
-!!    integer,allocatable :: arr(:)
-!!    real,allocatable :: arr1(:)
-!!    real,allocatable :: arr2(:)
+!!       implicit none
+!!       integer :: i
+!!       integer :: x
+!!       integer,allocatable :: arr(:)
+!!       real,allocatable :: arr1(:)
+!!       real,allocatable :: arr2(:)
 !!
-!!       call unit_test_mode(keep_going=.true.,debug=.false.,command='')
+!!          call unit_test_mode(keep_going=.true.,debug=.false.,command='')
 !!
-!!       x=10
-!!       arr1=[1.0,10.0,100.0]
-!!       arr2=[1.0001,10.001,100.01]
-!!       call unit_test_start('myroutine')
+!!          x=10
+!!          arr1=[1.0,10.0,100.0]
+!!          arr2=[1.0001,10.001,100.01]
+!!          call unit_test_start('myroutine')
 !!
-!!       call unit_test('myroutine', x > 3 ,' if big enough')
-!!       call unit_test('myroutine', x < 100 ,' if small enough')
+!!          call unit_test('myroutine', x > 3 ,' if big enough')
+!!          call unit_test('myroutine', x < 100 ,' if small enough')
 !!
-!!       do i=1,size(arr1)
-!!          call unit_test('myroutine', &
-!!          & almost(arr1(i),arr2(i),3.9,verbose=.true.) )
-!!       enddo
+!!          do i=1,size(arr1)
+!!             call unit_test('myroutine', &
+!!             & almost(arr1(i),arr2(i),3.9,verbose=.true.) )
+!!          enddo
 !!
-!!       arr=[10,20,30]
-!!       call unit_test('myroutine', .not.any(arr < 0) , &
-!!       & 'fail if any negative values in array ARR')
-!!       call unit_test('myroutine', all(arr < 100) , &
-!!       & 'fail unless all values are less than 100 in array ARR')
+!!          arr=[10,20,30]
+!!          call unit_test('myroutine', .not.any(arr < 0) , &
+!!          & 'fail if any negative values in array ARR')
+!!          call unit_test('myroutine', all(arr < 100) , &
+!!          & 'fail unless all values are less than 100 in array ARR')
 !!
-!!       call unit_test_end('myroutine', &
-!!       & msg='checks on "myroutine" all passed')
+!!          call unit_test_end('myroutine', &
+!!          & msg='checks on "myroutine" all passed')
 !!
-!!       call unit_test_stop()
+!!          call unit_test_stop()
 !!
-!!    end program demo_unit_test
-!! ```
-!! Sample output (varies with what optional command or modes is used):
-!! ```text
-!!##STOP 0
-!! check:       myroutine SUCCESS : if big enough
-!! check:       myroutine SUCCESS : if small enough
-!! check:       myroutine SUCCESS :
-!! check:       myroutine SUCCESS :
-!! check:       myroutine SUCCESS :
-!! check:       myroutine SUCCESS : fail if any negative values in array ARR
-!! check:       myroutine SUCCESS : fail unless all values are less than                                  100 in array ARR
-!! check_done:  myroutine PASSED  : GOOD: 7 BAD: 0 DURATION:00000000000000:                                  checks on "myroutine" all passed
-!! check_stop:  TALLY     PASSED  : GOOD: 7 BAD: 0 DURATION:
-!!  > *almost* for values 1.00000000 1.00010002 agreement of     3.99997139 digits out of requested 3.90000010
-!!  > *almost* for values 10.0000000 10.0010004 agreement of     3.99986792 digits out of requested 3.90000010
-!!  > *almost* for values 100.000000 100.010002 agreement of     3.99995065 digits out of requested 3.90000010
+!!       end program demo_unit_test
+!!
+!! Results:
+!!
+!!  Sample output (varies with what optional command or modes is used):
+!!
+!!      >check_start: myroutine            START   :
+!!      >check:       myroutine            SUCCESS :  if big enough
+!!      >check:       myroutine            SUCCESS :  if small enough
+!!      >*almost* for values 1.00000000 1.00010002 agreement of 3.99997139 ...
+!!      >digits out of requested 3.90000010
+!!      >check:       myroutine            SUCCESS :
+!!      >*almost* for values 10.0000000 10.0010004 agreement of 3.99986792 ...
+!!      >digits out of requested 3.90000010
+!!      >check:       myroutine            SUCCESS :
+!!      >*almost* for values 100.000000 100.010002 agreement of 3.99995065 ...
+!!      >digits out of requested 3.90000010
+!!      >check:       myroutine            SUCCESS :
+!!      >check:       myroutine            SUCCESS : fail if any negative ...
+!!      >values in array ARR
+!!      >check:       myroutine            SUCCESS : fail unless all values ...
+!!      >are less than 100 in array ARR
+!!      >check_done:  myroutine            PASSED  : GOOD:        7 BAD: ...
+!!      >0 DURATION:00000000294709: checks on "myroutine" all passed
+!!      >check_stop:  TALLY                PASSED  : GOOD:        7 BAD: ...
+!!      >0 DURATION:00000000267059
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -716,7 +728,8 @@ end subroutine unit_test_stop
 !!    A message is shown including the duration of the tests
 !!    If there have been no failures the optional shell command
 !!
-!!        $COMMAND name="name" type="end" passed="passed|failed|skipped" clicks=NNNN msg="message" opts
+!!        $COMMAND name="name" type="end" passed="passed|failed|skipped" ...
+!!        clicks=NNNN msg="message" opts
 !!
 !!    is executed
 !!
@@ -1224,19 +1237,13 @@ end subroutine cmdline_
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    subroutine unit_test_mode(     &
-!!              keep_going,           &
-!!              flags,                &
-!!              luns,                 &
-!!              command,              &
-!!              no_news_is_good_news, &
-!!              interactive,          &
-!!              CMDLINE,              &
-!!              debug)
 !!
-!!     logical,intent(in) :: keep_going, no_news_is_good_news, interactive,debug
-!!     integer,intent(in),allocatable :: luns(:), flags(:)
-!!     character(len=*),intent(in) :: command
+!!      subroutine unit_test_mode( keep_going, flags, luns, command, &
+!!      no_news_is_good_news, interactive, CMDLINE, debug)
+!!
+!!      logical,intent(in) :: keep_going, no_news_is_good_news, interactive,debug
+!!      integer,intent(in),allocatable :: luns(:), flags(:)
+!!      character(len=*),intent(in) :: command
 !!##DESCRIPTION
 !!    unit_test_mode(3f) changes testing mode defaults
 !!

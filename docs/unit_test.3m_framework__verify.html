@@ -79,13 +79,14 @@ true or false, optionally call command and/or stop program.
 <BLOCKQUOTE>
 subroutine unit_test(name,expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
 & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
-<BLOCKQUOTE>
 <P>
-character(len=*),intent(in) :: name
-logical,intent(in) :: expression
-class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
-& ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-</BLOCKQUOTE>
+<PRE>
+    character(len=*),intent(in) :: name
+    logical,intent(in) :: expression
+    class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+    & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -103,14 +104,12 @@ if the expression is false
 o
 </TD><TD>
 if unit_test_mode(command) is not blank calls the
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>specified</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-shell command
+specified shell command
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-      $COMMAND name="NAME" type="check" passed="passed|failed" msg="all messages"
+      $COMMAND name="NAME" type="check" passed="passed|failed" &#46;&#46;&#46;
+      msg="all messages"
 <P>
 </PRE>
 <TABLE cellpadding=3>
@@ -152,113 +151,80 @@ CHARACTER. A space is placed between each value.
 Sample program:
 <P>
 <PRE>
-   program demo_unit_test
-   use M_framework__verify, only: &
-      & unit_test_mode,     &
-      & unit_test_start,    &
-      & unit_test,          &
-      & unit_test_end,      &
-      & unit_test_stop
-   use M_framework__approx, only: almost
+      program demo_unit_test
+      use M_framework__verify, only: &
+         & unit_test_mode,     &
+         & unit_test_start,    &
+         & unit_test,          &
+         & unit_test_end,      &
+         & unit_test_stop
+      use M_framework__approx, only: almost
 <P>
-   implicit none
-   integer :: i
-   integer :: x
-   integer,allocatable :: arr(:)
-   real,allocatable :: arr1(:)
-   real,allocatable :: arr2(:)
+      implicit none
+      integer :: i
+      integer :: x
+      integer,allocatable :: arr(:)
+      real,allocatable :: arr1(:)
+      real,allocatable :: arr2(:)
 <P>
-      call unit_test_mode(keep_going=.true.,debug=.false.,command=&#146;&#146;)
+         call unit_test_mode(keep_going=.true.,debug=.false.,command=&#146;&#146;)
 <P>
-      x=10
-      arr1=[1.0,10.0,100.0]
-      arr2=[1.0001,10.001,100.01]
-      call unit_test_start(&#146;myroutine&#146;)
+         x=10
+         arr1=[1.0,10.0,100.0]
+         arr2=[1.0001,10.001,100.01]
+         call unit_test_start(&#146;myroutine&#146;)
 <P>
-      call unit_test(&#146;myroutine&#146;, x &gt; 3 ,&#146; if big enough&#146;)
-      call unit_test(&#146;myroutine&#146;, x &lt; 100 ,&#146; if small enough&#146;)
+         call unit_test(&#146;myroutine&#146;, x &gt; 3 ,&#146; if big enough&#146;)
+         call unit_test(&#146;myroutine&#146;, x &lt; 100 ,&#146; if small enough&#146;)
 <P>
-      do i=1,size(arr1)
-         call unit_test(&#146;myroutine&#146;, &
-         & almost(arr1(i),arr2(i),3.9,verbose=.true.) )
-      enddo
+         do i=1,size(arr1)
+            call unit_test(&#146;myroutine&#146;, &
+            & almost(arr1(i),arr2(i),3.9,verbose=.true.) )
+         enddo
 <P>
-      arr=[10,20,30]
-      call unit_test(&#146;myroutine&#146;, .not.any(arr &lt; 0) , &
-      & &#146;fail if any negative values in array ARR&#146;)
-      call unit_test(&#146;myroutine&#146;, all(arr &lt; 100) , &
-      & &#146;fail unless all values are less than 100 in array ARR&#146;)
+         arr=[10,20,30]
+         call unit_test(&#146;myroutine&#146;, .not.any(arr &lt; 0) , &
+         & &#146;fail if any negative values in array ARR&#146;)
+         call unit_test(&#146;myroutine&#146;, all(arr &lt; 100) , &
+         & &#146;fail unless all values are less than 100 in array ARR&#146;)
 <P>
-      call unit_test_end(&#146;myroutine&#146;, &
-      & msg=&#146;checks on "myroutine" all passed&#146;)
+         call unit_test_end(&#146;myroutine&#146;, &
+         & msg=&#146;checks on "myroutine" all passed&#146;)
 <P>
-      call unit_test_stop()
+         call unit_test_stop()
 <P>
-   end program demo_unit_test
+      end program demo_unit_test
+<P>
 </PRE>
-&#145;&#145;&#145;
-Sample output (varies with what optional command or modes is used):
-&#145;&#145;&#145;text
-STOP 0
+Results:
+<P>
+<PRE>
+ Sample output (varies with what optional command or modes is used):
+<P>
+     &gt;check_start: myroutine            START   :
+     &gt;check:       myroutine            SUCCESS :  if big enough
+     &gt;check:       myroutine            SUCCESS :  if small enough
+     &gt;*almost* for values 1.00000000 1.00010002 agreement of 3.99997139 &#46;&#46;&#46;
+     &gt;digits out of requested 3.90000010
+     &gt;check:       myroutine            SUCCESS :
+     &gt;*almost* for values 10.0000000 10.0010004 agreement of 3.99986792 &#46;&#46;&#46;
+     &gt;digits out of requested 3.90000010
+     &gt;check:       myroutine            SUCCESS :
+     &gt;*almost* for values 100.000000 100.010002 agreement of 3.99995065 &#46;&#46;&#46;
+     &gt;digits out of requested 3.90000010
+     &gt;check:       myroutine            SUCCESS :
+     &gt;check:       myroutine            SUCCESS : fail if any negative &#46;&#46;&#46;
+     &gt;values in array ARR
+     &gt;check:       myroutine            SUCCESS : fail unless all values &#46;&#46;&#46;
+     &gt;are less than 100 in array ARR
+     &gt;check_done:  myroutine            PASSED  : GOOD:        7 BAD: &#46;&#46;&#46;
+     &gt;0 DURATION:00000000294709: checks on "myroutine" all passed
+     &gt;check_stop:  TALLY                PASSED  : GOOD:        7 BAD: &#46;&#46;&#46;
+     &gt;0 DURATION:00000000267059
+<P>
+</PRE>
 </BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb:    end program demo_unit_test
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>check:</B> </TD><TD valign=bottom>
-myroutine SUCCESS : if big enough
-<TABLE width=100% cellpadding=3><!-- tsb: myroutine SUCCESS : if big enough
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>check:</B> </TD><TD valign=bottom>
-myroutine SUCCESS : if small enough
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>check:</B> </TD><TD valign=bottom>
-myroutine SUCCESS :
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>check:</B> </TD><TD valign=bottom>
-myroutine SUCCESS :
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>check:</B> </TD><TD valign=bottom>
-myroutine SUCCESS :
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>check:</B> </TD><TD valign=bottom>
-myroutine SUCCESS : fail if any negative values in array ARR
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>check:</B> </TD><TD valign=bottom>
-myroutine SUCCESS : fail unless all values are less than                                  100 in array ARR
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>check_done:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-myroutine PASSED  : GOOD: 7 BAD: 0 DURATION:00000000000000:                                  checks on "myroutine" all passed
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>check_stop:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-TALLY     PASSED  : GOOD: 7 BAD: 0 DURATION:
-<TABLE width=100% cellpadding=3><!-- tsb: TALLY     PASSED  : GOOD: 7 BAD: 0 DURATION:
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>&gt; *almost* for values 1.00000000 1.00010002 agreement of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-3.99997139 digits out of requested 3.90000010
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>&gt; *almost* for values 10.0000000 10.0010004 agreement of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-3.99986792 digits out of requested 3.90000010
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>&gt; *almost* for values 100.000000 100.010002 agreement of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-3.99995065 digits out of requested 3.90000010
-</TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE><A name=5>
+<A name=5>
 
      <H3>AUTHOR</H3>
 
@@ -275,7 +241,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_test (3m_framework__verify)</TD> <TD align=right width=33%><I>May 04, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 199221aa-0e40-4948-b3ac-5499744b22a3 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_test (3m_framework__verify)</TD> <TD align=right width=33%><I>May 04, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bea71178-4696-4f92-bb4e-0093a24e3e69 using man macros.</FONT>
 <br><br><center><img src="images/unit_test.gif"></center>
 </div>
 </div>
