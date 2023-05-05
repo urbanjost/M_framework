@@ -201,7 +201,7 @@ options, to interactively pause after each check, and to change options
 like which output file to write on, what error level to use, and other
 things I will hopefully solidify and document here.
 
-### Basic output
+### Recommended Basic Usage
 
 So for an fpm(1) user a recommended process is to create and/or enter the
 test/ directory and use the "unit\_test" program. It will make a test
@@ -250,7 +250,7 @@ M\_framework(3f) uses a built-in command line parser instead of
 packages like M\_CLI or M\_CLI2 to minimize the number of dependencies
 required.
 
-# suggest one test per program
+### suggest one test per program
 
 There are advantages to each procedure being tested with a seperate
 program.
