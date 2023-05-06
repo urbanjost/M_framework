@@ -829,10 +829,10 @@ integer(kind=int64)                  :: clicks_now
        & atleast_(name,20),PF,IPASSED_G,IFAILED_G
    endif
    if(present(msg))then
-      if(.not.G_no_news_is_good_news.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
+      if(.not.G_no_news_is_good_news.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
        & call wrt(G_luns,trim(out)//': '//trim(msg))
    else
-      if(.not.G_no_news_is_good_news.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
+      if(.not.G_no_news_is_good_news.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
        & call wrt(G_luns,out)
    endif
 
