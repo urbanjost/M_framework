@@ -23,6 +23,7 @@ character(len=*),parameter   :: g='(*(g0,1x))'
 character(len=*),parameter   :: g0='(*(g0))'
 character(len=1),parameter   :: comma=',', quote='"'
 character(len=:),allocatable :: color
+logical                      :: intable
 integer :: i
 integer :: htmlfile, csvfile, clicksfile, nmlfile
 interface exists        ! for backward compatibility, accdig(3f) preferred
@@ -52,6 +53,7 @@ end interface exists
    name = repeat(' ',4096)
    passed = repeat(' ',4096)
    msg = repeat(' ',4096)
+   intable=.false.
    date=here_and_now()
    clicks=-1
 !   flags = [(-1, i=1, 1000)]
@@ -75,6 +77,7 @@ end interface exists
    select case(type)
 
    case("start")
+      intable=.true.
       write(htmlfile,g0)'<table id="unit_test">'
       write(htmlfile,g0)'<caption>',name,str(' -',if=msg.ne.''),' ',msg,'</caption>'
       write(htmlfile,g0)'<tbody>'
@@ -95,8 +98,14 @@ end interface exists
       write(htmlfile,g0)' <td class="even" >', msg     ,' </td>'
       write(htmlfile,g0)'</tr>'
    case("message")
+      if(intable)then
+         write(htmlfile,g0)'<td colspan="4" bgcolor="#AAF" style="text-align:center;">',msg,'</td>'
+      else
+         write(htmlfile,g0)msg
+      endif
 
    case("end")
+      intable=.false.
       if(passed.eq.'skipped')then
          write(csvfile,g0),quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
 
@@ -120,6 +129,7 @@ end interface exists
 
 
    case("stop")
+      intable=.false.
 
    end select
 contains
