@@ -16,6 +16,11 @@ on command line.
 Background: code that stops/aborts is unfriendly to testing
 frameworks that ideally want to attempt running later tests.  
 ================================================================================
+OPTIONAL RETURN
+optionally return if string in *_start does not contain a string; alternate
+returns are considered obsolete; could add optional match on _start user could
+test, or ...
+================================================================================
 INTERACTIVE MODE
 
 possible call of M_matrix, interactive access to call the PID with tools like gdb,

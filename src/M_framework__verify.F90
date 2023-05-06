@@ -200,6 +200,7 @@ type(called),save             :: G_virgin
 integer,save,allocatable      :: G_luns(:)              ! output units
 logical,save                  :: G_debug=.false.
 logical,save                  :: G_verbose=.false.
+character(len=:),allocatable  :: G_match
 
 integer,save,public             :: unit_test_level=0      ! a value that can be used to select different debug levels
 integer,save,public,allocatable :: unit_test_flags(:)     ! an array of flags that can be used to select different options
@@ -519,11 +520,12 @@ end subroutine unit_test
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine unit_test_start(name,msg,opts)
+!!    subroutine unit_test_start(name,msg,opts,matched)
 !!
 !!     character(len=*),intent(in)          :: name
 !!     character(len=*),intent(in),optional :: msg
 !!     character(len=*),intent(in),optional :: opts
+!!     logical,intent(out),optional         :: matched
 !!
 !!##DESCRIPTION
 !!    unit_test_start(3f) is an initialization procedure for starting a
@@ -570,13 +572,15 @@ end subroutine unit_test
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_test_start(name,msg,opts)
+subroutine unit_test_start(name,msg,opts,force_kwargs,matched)
 
 ! ident_3="@(#) M_framework__verify unit_test_start(3f) start testing procedure "name""
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: msg
 character(len=*),intent(in),optional :: opts
+type(force_kwargs_hack), optional, intent(in) :: force_kwargs
+logical,intent(out),optional         :: matched
 character(len=:),allocatable         :: msg_local
 logical,save                         :: called=.false.
    if(present(msg))then
@@ -584,8 +588,20 @@ logical,save                         :: called=.false.
    else
       msg_local=''
    endif
+   ! check optional matched string and return if string is not blank and not matched.
+   ! It is assumed program will skip the subsequent test
 
    if(G_virgin%cmdline) call cmdline_()
+
+   if(present(matched))then
+      if(G_match.ne.'')then
+         matched=.true.
+         matched=glob(name//' '//msg_local,G_match)
+         if(.not.matched)return
+      else
+         matched=.true.
+      endif
+   endif
 
    if(present(opts))then
       if(G_command /= '') call run(G_command//' type="start" name="'//trim(name)//'" msg="'//ndq(msg_local)//'" '//opts)
@@ -1073,7 +1089,6 @@ subroutine preset_globals()
 integer :: i
 integer :: iostat
    G_virgin%preset_globals=.false.
-   G_command=repeat(' ',4096)
    G_cmdline=.true.
    G_debug=.false.
    G_keep_going=.true.
@@ -1081,6 +1096,7 @@ integer :: iostat
    unit_test_flags=[integer :: ]
    G_luns=[integer :: ]
    G_interactive=.false.
+   G_match=repeat(' ',4096)
    G_command=repeat(' ',4096)
    open(unit=999,status='scratch',iostat=iostat)
 end subroutine preset_globals
@@ -1098,6 +1114,7 @@ integer,allocatable :: G_luns_hold(:)
 namelist /args/ G_interactive
 namelist /args/ G_help
 namelist /args/ G_verbose
+namelist /args/ G_match
 namelist /args/ G_level
 namelist /args/ G_debug                   ! debug mode
 namelist /args/ G_flags                   ! values that can be used to select different tests or any conditional integer test
@@ -1160,6 +1177,7 @@ integer :: i, j, k, ios, equal_pos
                   call wrt(G_luns, 'ERROR UNQUOTED:'//trim(message1)//': when reading '//trim(input(2)))
                   call wrt(G_luns, 'ERROR QUOTED  :'//trim(message2)//': when reading '//trim(input(2)))
                   G_command=trim(G_command)
+                  G_match=trim(G_match)
                   if(G_level == -1) G_level=unit_test_level
                   do k = 1, size(G_luns)
                      write (G_luns(k), nml=args, delim='quote')
@@ -1169,6 +1187,7 @@ integer :: i, j, k, ios, equal_pos
             else
                call wrt(G_luns, 'ERROR:'//trim(message1)//': when reading '//trim(input(2)))
                G_command=trim(G_command)
+               G_match=trim(G_match)
                if(G_level == -1) G_level=unit_test_level
                do k = 1, size(G_luns)
                   write (G_luns(k), nml=args, delim='quote')
@@ -1182,7 +1201,7 @@ integer :: i, j, k, ios, equal_pos
       if (size(G_luns)  ==  0) G_luns = G_luns_hold
       if (size(G_luns)  ==  0) G_luns = [stderr]
       G_command = trim(G_command)
-
+      G_match=trim(G_match)
       G_flags = pack(G_flags, G_flags  >=  0)
       if(G_verbose) G_flags=[G_flags,9997,9998,9999] ! turn on these flags if verbose mode
       if (size(G_flags)  /=  0) unit_test_flags = G_flags
@@ -1217,6 +1236,8 @@ integer :: i, j, k, ios, equal_pos
       '                                  * 9998 compiler options                       ', &
       '                                  * 9999 command line options NAMELIST group    ', &
       '--command="system_command"  program to call after each test                     ', &
+      '--match="glob expression"   string to be tested by "matched" argument on        ', &
+      '                            unit_test_start(3f)                                 ', &
       '--luns=L,M,N,...    list of unit numbers to write to, assumed opened by program ', &
       '                                  * 6   typically stdout                        ', &
       '                                  * 0   typically stderr                        ', &
@@ -1259,7 +1280,7 @@ end subroutine cmdline_
 !!
 !!
 !!      subroutine unit_test_mode( keep_going, flags, luns, command, &
-!!      no_news_is_good_news, interactive, CMDLINE, debug)
+!!      no_news_is_good_news, interactive, CMDLINE, debug, match)
 !!
 !!      logical,intent(in) :: keep_going, no_news_is_good_news, interactive,debug
 !!      integer,intent(in),allocatable :: luns(:), flags(:)
@@ -1276,8 +1297,14 @@ end subroutine cmdline_
 !!                 to the the value of ERROR_UNIT from the intrinsic module
 !!                 ISO_FORTRAN_ENV (ie. defaults to "stderr"). It is
 !!                 Assumed the units have been opened by the program.
-!!    command      ...
-!!    no_news_is_good_news   Determines if "SUCCESS" messages are printed.
+!!    match        the string that is tested against the name and msg
+!!                 specified on unit_test_start() to set the "matched"
+!!                 argument.
+!!    command      filter command, typically to generate reports. It is
+!!                 passed data on the command line. See the example filter
+!!                 "bookkeeper" for examples.
+!!    no_news_is_good_news   If present only "FAIL" messages are produced.
+!!
 !!    interactive  ...
 !!    cmdline      ...
 !!    debug        ...
@@ -1299,21 +1326,23 @@ end subroutine cmdline_
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_test_mode(debug, keep_going, level, flags, command, no_news_is_good_news,cmdline,interactive,luns)
-logical,optional, intent(in)          :: debug
-logical,optional, intent(in)          :: keep_going     ! logical variable that can be used to turn off program termination on errors.
-logical,optional, intent(in)          :: cmdline        ! flag whether to parse command line for arguments or not
-logical,optional, intent(in)          :: interactive
-logical,optional, intent(in)          :: no_news_is_good_news   ! flag on whether to display SUCCESS: messages
-character(len=*),optional, intent(in) :: command                ! name of command to execute. Defaults to the name
-integer,optional, intent(in)          :: flags(:)       ! an  array that can be used to select different options
-integer,optional, intent(in)          :: level          ! an  integer that can be used to select different debug levels
-integer,optional, intent(in)          :: luns(:)        ! logical unit number to write output to
+subroutine unit_test_mode(debug, keep_going, level, flags, command, no_news_is_good_news,cmdline,interactive,luns,match)
+logical,optional, intent(in)           :: debug
+logical,optional, intent(in)           :: keep_going     ! logical variable that can be used to turn off program termination on errors.
+logical,optional, intent(in)           :: cmdline        ! flag whether to parse command line for arguments or not
+logical,optional, intent(in)           :: interactive
+logical,optional, intent(in)           :: no_news_is_good_news   ! flag on whether to display SUCCESS: messages
+character(len=*),optional, intent(in)  :: command                ! name of command to execute. Defaults to the name
+integer,optional, intent(in)           :: flags(:)       ! an  array that can be used to select different options
+integer,optional, intent(in)           :: level          ! an  integer that can be used to select different debug levels
+integer,optional, intent(in)           :: luns(:)        ! logical unit number to write output to
+character(len=*), optional, intent(in) :: match
 
    if (G_virgin%preset_globals) then
       call preset_globals()
    endif
 
+   if (present(match))                G_match=match
    if (present(luns))                 G_luns=luns
    if (present(command))              G_command=command
    if (present(debug))                G_debug=debug
@@ -1580,6 +1609,163 @@ integer                      :: i
       end select
    enddo
 end function ndq
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    glob(3f) - [M_strings:COMPARE] compare given string for match to
+!!    a pattern which may contain globbing wildcard characters
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    logical function glob(string, pattern )
+!!
+!!     character(len=*),intent(in) :: string
+!!     character(len=*),intent(in) :: pattern
+!!
+!!##DESCRIPTION
+!!    glob(3f) compares given (entire) STRING for a match to PATTERN which may
+!!    contain basic wildcard "globbing" characters.
+!!
+!!    To get a match the entire string must be described
+!!    by PATTERN. Trailing whitespace is significant, so trim the input
+!!    string to have trailing whitespace ignored.
+!!
+!!    Patterns like "b*ba" fail on a string like "babababa" because the
+!!    algorithm finds an early match. To skip over the early matches insert
+!!    an extra character at the end of the string and pattern that does
+!!    not occur in the pattern. Typically a NULL is used (char(0)).
+!!
+!!##OPTIONS
+!!    string   the input string to test to see if it contains the pattern.
+!!    pattern  the following simple globbing options are available
+!!
+!!             o "?" matching any one character
+!!             o "*" matching zero or more characters.
+!!               Do NOT use adjacent asterisks.
+!!             o spaces are significant and must be matched or pretrimmed
+!!             o There is no escape character, so matching strings with
+!!               literal question mark and asterisk is problematic.
+!!
+!!##EXAMPLES
+!!
+!!   Example program
+!!
+!!    program demo_glob
+!!    use M_framework, only : unit_test_glob
+!!    implicit none
+!!    write(*,*)glob('abcdabcd','*cd*')
+!!    write(*,*)glob('abcdabcd','*no*')
+!!    end program demo_glob
+!!
+!!##AUTHOR
+!!   John S. Urban
+!!
+!!##REFERENCE
+!!   The article "Matching Wildcards: An Empirical Way to Tame an Algorithm"
+!!   in Dr Dobb's Journal, By Kirk J. Krauss, October 07, 2014
+!!
+!!##LICENSE
+!!   Public Domain
+function glob(tame,wild)
+
+! ident_10="@(#) M_strings glob(3f) function compares text strings one of which can have wildcards ('*' or '?')."
+
+logical                    :: glob
+character(len=*)           :: tame       ! A string without wildcards
+character(len=*)           :: wild       ! A (potentially) corresponding string with wildcards
+character(len=len(tame)+1) :: tametext
+character(len=len(wild)+1) :: wildtext
+character(len=1),parameter :: NULL=char(0)
+integer                    :: wlen
+integer                    :: ti, wi
+integer                    :: i
+character(len=:),allocatable :: tbookmark, wbookmark
+! These two values are set when we observe a wildcard character. They
+! represent the locations, in the two strings, from which we start once we have observed it.
+   tametext=tame//NULL
+   wildtext=wild//NULL
+   tbookmark = NULL
+   wbookmark = NULL
+   wlen=len(wild)
+   wi=1
+   ti=1
+   do                                            ! Walk the text strings one character at a time.
+      if(wildtext(wi:wi) == '*')then             ! How do you match a unique text string?
+         do i=wi,wlen                            ! Easy: unique up on it!
+            if(wildtext(wi:wi) == '*')then
+               wi=wi+1
+            else
+               exit
+            endif
+         enddo
+         if(wildtext(wi:wi) == NULL) then        ! "x" matches "*"
+            glob=.true.
+            return
+         endif
+         if(wildtext(wi:wi)  /=  '?') then
+            ! Fast-forward to next possible match.
+            do while (tametext(ti:ti)  /=  wildtext(wi:wi))
+               ti=ti+1
+               if (tametext(ti:ti) == NULL)then
+                  glob=.false.
+                  return                         ! "x" doesn't match "*y*"
+               endif
+            enddo
+         endif
+         wbookmark = wildtext(wi:)
+         tbookmark = tametext(ti:)
+      elseif(tametext(ti:ti)  /=  wildtext(wi:wi) .and. wildtext(wi:wi)  /=  '?') then
+         ! Got a non-match. If we've set our bookmarks, back up to one or both of them and retry.
+         if(wbookmark /= NULL) then
+            if(wildtext(wi:) /=  wbookmark) then
+               wildtext = wbookmark
+               wlen=len_trim(wbookmark)
+               wi=1
+               ! Don't go this far back again.
+               if (tametext(ti:ti)  /=  wildtext(wi:wi)) then
+                  tbookmark=tbookmark(2:)
+                  tametext = tbookmark
+                  ti=1
+                  cycle                          ! "xy" matches "*y"
+               else
+                  wi=wi+1
+               endif
+            endif
+            if (tametext(ti:ti) /= NULL) then
+               ti=ti+1
+               cycle                             ! "mississippi" matches "*sip*"
+            endif
+         endif
+         glob=.false.
+         return                                  ! "xy" doesn't match "x"
+      endif
+      ti=ti+1
+      wi=wi+1
+      if (ti > len(tametext)) then
+         glob=.false.
+         return
+      elseif (tametext(ti:ti) == NULL) then          ! How do you match a tame text string?
+         if(wildtext(wi:wi) /= NULL)then
+            do while (wildtext(wi:wi) == '*')    ! The tame way: unique up on it!
+               wi=wi+1                           ! "x" matches "x*"
+               if(wildtext(wi:wi) == NULL)exit
+            enddo
+         endif
+         if (wildtext(wi:wi) == NULL)then
+            glob=.true.
+            return                               ! "x" matches "x"
+         endif
+         glob=.false.
+         return                                  ! "x" doesn't match "xy"
+      endif
+   enddo
+end function glob
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
