@@ -16,12 +16,12 @@ program maketest
    write (out, g) "& stdout => output_unit, &"
    write (out, g) "& stderr => error_unit"
    write (out, g) "use M_framework, only : unit_test_start, unit_test, unit_test_msg"
-   write (out, g) "use M_framework, only : unit_test_end,  unit_test_good, unit_test_bad"
-   write (out, g) "use M_framework, only : unit_test_stop,  unit_test_mode"
+   write (out, g) "use M_framework, only : unit_test_end, unit_test_stop, unit_test_mode"
    write (out, g) "use M_framework, only : unit_test_level, unit_test_flags"
    write (out, g) "!use M_xxxx"
    write (out, g) "implicit none"
    write (out, g) "logical, parameter :: T=.true., F=.false."
+   write (out, g) "logical            :: matched"
    write (out, g) "! optional call to change default modes"
    write (out, g) "   call unit_test_mode(       &"
    write (out, g) "       keep_going=T,           &"
@@ -29,6 +29,8 @@ program maketest
    write (out, g) "       luns=[stderr],          &"
    write (out, g) "       command='',             &"
    write (out, g) "       no_news_is_good_news=F, &"
+   write (out, g) "       matched='',             &"
+   write (out, g) "       interactive=F,          &"
    write (out, g) "       interactive=F,          &"
    write (out, g) "       PREFIX='',              &"
    write (out, g) "       CMDLINE=T,              &"
@@ -47,7 +49,8 @@ program maketest
    do i = 1, size(words)
       write (out, g) ''
       write (out, g) 'subroutine test_'//words(i)//'()'
-      write (out, g) '   call unit_test_start("'//words(i)//'",msg="")'
+      write (out, g) '   call unit_test_start("'//words(i)//'",msg="",matched=matched)'
+      write (out, g) '   if(.not.matched)return'
       write (out, g) '   !!call unit_test("'//words(i)//'", 0 .eq. 0, "checking",100)'
       write (out, g) '   call unit_test_end("'//words(i)//'",msg="")'
       write (out, g) 'end subroutine test_'//words(i)
