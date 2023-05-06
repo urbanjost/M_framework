@@ -338,8 +338,10 @@ endif
    if(if_local)then
       msg_all=str(msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 
-      ! write message to standard error
-      call wrt(G_luns,'check_msg:   '//atleast_(name,20)//' INFO    : '// msg_all)
+      if(.not.G_no_news_is_good_news)then
+         ! write message to standard error
+         call wrt(G_luns,'check_msg:   '//atleast_(name,20)//' INFO    : '// msg_all)
+      endif
       if(G_command /= '') call run(G_command//' type="message"  name="'//trim(name)//'" msg="'//ndq(msg_all)//'"')
    endif
 
@@ -599,7 +601,9 @@ logical,save                         :: called=.false.
       called=.true.
    endif
 
-   call wrt(G_luns,'check_start: '//atleast_(name,20)//' START   : '//msg_local)
+   if(.not.G_no_news_is_good_news)then
+      call wrt(G_luns,'check_start: '//atleast_(name,20)//' START   : '//msg_local)
+   endif
 
    IPASSED_G=0
    IFAILED_G=0
@@ -698,9 +702,11 @@ integer(kind=int64)                  :: clicks_now
        & IFAILED_ALL_G,                         &
        & milliseconds
    if(present(msg))then
-      call wrt(G_luns,trim(out)//': '//trim(msg))
+           if(.not.G_no_news_is_good_news.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
+                   & call wrt(G_luns,trim(out)//': '//trim(msg))
    else
-      call wrt(G_luns,out)
+           if(.not.G_no_news_is_good_news.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
+                   & call wrt(G_luns,out)
    endif
 
    if(PF=='UNTESTED')then
@@ -823,9 +829,11 @@ integer(kind=int64)                  :: clicks_now
        & atleast_(name,20),PF,IPASSED_G,IFAILED_G
    endif
    if(present(msg))then
-      call wrt(G_luns,trim(out)//': '//trim(msg))
+      if(.not.G_no_news_is_good_news.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
+       & call wrt(G_luns,trim(out)//': '//trim(msg))
    else
-      call wrt(G_luns,out)
+      if(.not.G_no_news_is_good_news.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
+       & call wrt(G_luns,out)
    endif
 
    if(G_command /= '')then                           ! if system command name is not blank call system command
