@@ -595,12 +595,10 @@ logical,save                         :: called=.false.
 
    if(present(matched))then
       if(G_match.ne.'')then
-         matched=.true.
          matched=glob(name//' '//msg_local,G_match)
          if(.not.matched)return
-      else
-         matched=.true.
       endif
+      matched=.true.
    endif
 
    if(present(opts))then
