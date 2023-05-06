@@ -20,7 +20,7 @@ character(len=128)            :: string
       & i, istat, argument_length, filename
       call swallow(filename,help_text)
    else
-      call swallow('app/unit_test_wip.hlp',help_text)
+      call swallow('data/unit_test_wip.hlp',help_text)
    endif
    do
       write(*,'(*(g0))',advance='no')'enter topic>'

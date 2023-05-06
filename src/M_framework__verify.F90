@@ -534,7 +534,14 @@ end subroutine unit_test
 !!##OPTIONS
 !!    NAME   name of the procedure to test
 !!    MSG    message to print
-!!    OPTS   pass additional options to the optional shell command
+!!    OPTS   pass additional options to the optional shell command that
+!!           can be assigned on the command line or by unit_test_mode(3f).
+!!    MATCHED  if the match string has been set with unit_test_mode(3f)
+!!             or on the command line this will return true if the name
+!!             and msg concatenated with a space match the entire match
+!!             string, where "*" matches any string and "?" matches any
+!!             single character. This allows you to skip a test set if
+!!             you wish by exiting.
 !!
 !!##EXAMPLES
 !!
@@ -542,29 +549,33 @@ end subroutine unit_test
 !!
 !!     program demo_unit_test_start
 !!     use M_framework__verify, only: unit_test_start, unit_test, &
-!!      & unit_test_end, unit_test_mode
+!!      & unit_test_end, unit_test_mode, unit_test_stop
 !!     implicit none
 !!     integer :: ival
-!!     call unit_test_mode(command='goodbad')
-!!     call unit_test_start('myroutine')
+!!     logical :: matched
+!!     call unit_test_mode()
+!!     call test_mysub1()
+!!     call test_mysub2()
+!!     call unit_test_stop()
+!!     contains
+!!     subroutine test_mysub1() ! first test
+!!     call unit_test_start('mysub1')
 !!     ! the example goodbad(1) command called here takes many options
 !!     ! used to build an SQLite3 entry
-!!     call unit_test_start('myroutine_long',opts='     &
-!!       & --section        3                            &
-!!       & --library        libGPF                       &
-!!       & --filename       `pwd`/M_framework__verify.FF &
-!!       & --documentation  y                            &
-!!       & --prep           y                            &
-!!       & --ccall          n                            &
-!!       & --archive        GPF.a                        &
-!!       & ')
-!!
 !!     ival=10
+!!     call unit_test('mysub1', ival > 3 ,   msg=' if big enough')
+!!     call unit_test('mysub1', ival < 100 , msg=' if small enough')
+!!     call unit_test_end('mysub1',msg='completed checks of "mysub1"')
+!!     end subroutine test_mysub1
 !!
-!!     call unit_test('myroutine', ival > 3 ,   msg=' if big enough')
-!!     call unit_test('myroutine', ival < 100 , msg=' if small enough')
-!!
-!!     call unit_test_end('myroutine',msg='completed checks of "myroutine"')
+!!     subroutine test_mysub2() ! second test
+!!     call unit_test_start('mysub1','',matched=matched)
+!!     ival=200
+!!        if(.not.matched)return ! makes it skippable
+!!        call unit_test('mysub1', ival > 3 ,   msg=' if big enough')
+!!        call unit_test('mysub1', ival < 100 , msg=' if small enough')
+!!        call unit_test_end('mysub1',msg='completed checks of "mysub2"')
+!!     end subroutine test_mysub2
 !!
 !!     end program demo_unit_test_start
 !!
