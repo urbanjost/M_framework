@@ -10,24 +10,24 @@ use M_framework__verify, only : unit_test, unit_test_bad, unit_test_end, unit_te
    contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_unit_test_start()
-   call unit_test_start('unit_test_start',msg='a')
+   call unit_test_start('unit_test_start',msg='')
 !      call unit_test('unit_test_start', .true.,'expression is true')
 !      call unit_test('unit_test_start', .false.,'expression is false')
-   call unit_test_end('unit_test_start',msg='b')
+   call unit_test_end('unit_test_start',msg='')
 end subroutine test_unit_test_start
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_unit_test()
-   call unit_test_start('unit_test',msg='c')
+   call unit_test_start('unit_test',msg='')
 !      call unit_test('unit_test', .true.,'expression is true')
 !      call unit_test('unit_test', .false.,'expression is false')
-   call unit_test_end('unit_test',msg='d')
+   call unit_test_end('unit_test',msg='')
 end subroutine test_unit_test
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_unit_test_end()
-   call unit_test_start('unit_test_end',msg='e')
+   call unit_test_start('unit_test_end',msg='')
 !      call unit_test('unit_test_end', .true.,'expression is true')
 !      call unit_test('unit_test_end', .false.,'expression is false')
-   call unit_test_end('unit_test_end',msg='f')
+   call unit_test_end('unit_test_end',msg='')
 end subroutine test_unit_test_end
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_unit_test_bad()

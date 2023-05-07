@@ -109,7 +109,7 @@ logical,parameter :: expected(*)=[.true., .true., .false., .false., .false., .fa
    y=1.2300000
    do i=1,8
        r=real(i)
-       call unit_test('almost',almost(x,y,r,verbose=.false.).eqv.expected(i))
+       call unit_test('almost',almost(x,y,r,verbose=.false.).eqv.expected(i),'for',x,y,r,'expected',expected(i))
    enddo
    call unit_test_end('almost',msg='')
 end subroutine test_almost
