@@ -656,9 +656,9 @@ end subroutine unit_test_start
 !!
 !!    give a tally of all calls to unit_test(3f) and stop program.
 !!
-!!    Stop the test program and tally up the test result totals.
+!!    Tally up the test result totals and stop the program.
 !!    If a command is set via unit_test_mode(3f) or the command line
-!!    call it optionally appending OPTS to the end of the command.
+!!    call it appending OPTS to the end of the command.
 !!
 !!##OPTIONS
 !!     MSG  additional message to display
@@ -671,20 +671,22 @@ end subroutine unit_test_start
 !!     program demo_unit_test_stop
 !!     use M_framework__verify, only: unit_test_start, unit_test_end, &
 !!     & unit_test, unit_test_stop, unit_test_mode
+!!     use,intrinsic :: iso_fortran_env, stdout=>OUTPUT_UNIT
 !!     implicit none
 !!     integer :: x
-!!
-!!     call unit_test_mode(keep_going=.true.,debug=.false.,command='')
-!!
-!!     ! do a test
-!!     call unit_test_start('myroutine')
 !!     x=10
-!!     call unit_test('myroutine', x > 3 ,' if big enough')
-!!     call unit_test('myroutine', x < 100 ,' if small enough')
-!!     if(x /= 0)then
-!!        call unit_test ('myroutine',.false.,msg='x /= 0' )
-!!     endif
-!!     call unit_test_end  ('myroutine',msg='checks on "myroutine"' )
+!!     call unit_test_mode(luns=[stdout])
+!!     ! do a test
+!!     call unit_test_start('proc1')
+!!     call unit_test('proc1', x > 3 , 'if big enough')
+!!     call unit_test('proc1', x < 100 , 'if small enough')
+!!     call unit_test_end  ('proc1',msg='checks all done' )
+!!     ! do another test
+!!     call unit_test_start('proc2')
+!!     call unit_test('proc2', x > 3 , 'if big enough')
+!!     call unit_test('proc2', x < 100 , 'if small enough')
+!!     call unit_test_end  ('proc2',msg='checks all done' )
+!!
 !!     ! tally up test results and stop program
 !!     call unit_test_stop()
 !!
@@ -740,7 +742,7 @@ integer(kind=int64)                  :: clicks_now
 
    if(PF=='UNTESTED')then
       if(G_command /= '') &
-      & call run( str(G_command,' type="stop" passed="skipped" clicks=0 msg="',ndq(msg_local),'"',sep='') )
+      & call run( str(G_command,' type="stop" passed="untested" clicks=0 msg="',ndq(msg_local),'"',sep='') )
       stop ! EXIT_SUCCESS
    elseif(IFAILED_ALL_G == 0)then
       if(G_command /= '') &
@@ -775,7 +777,7 @@ end subroutine unit_test_stop
 !!    A message is shown including the duration of the tests
 !!    If there have been no failures the optional shell command
 !!
-!!        $COMMAND name="name" type="end" passed="passed|failed|skipped" ...
+!!        $COMMAND name="name" type="end" passed="passed|failed|untested" ...
 !!        clicks=NNNN msg="message" opts
 !!
 !!    is executed
@@ -867,7 +869,7 @@ integer(kind=int64)                  :: clicks_now
 
    if(G_command /= '')then                           ! if system command name is not blank call system command
       if(ipassed_G+ifailed_G == 0)then
-         call run(str(G_command,' type="end" name="',name,'" passed="skipped" clicks=0',' msg="',ndq(msg),'" ',sep='') )
+         call run(str(G_command,' type="end" name="',name,'" passed="untested" clicks=0',' msg="',ndq(msg),'" ',sep='') )
 
       elseif(ifailed_G == 0)then
          call run(str(G_command,' type="end" name="',name,'" passed="passed" clicks=',milliseconds,' msg="',ndq(msg),'" ',sep='') )
@@ -1242,7 +1244,7 @@ integer :: i, j, k, ios, equal_pos
       'unit test command line options:                                                 ', &
       '--level=N                   user-requested debug level. Sets "unit_test_level". ', &
       '--keep_going=F              turn on program termination on test failure         ', &
-      '--no_news_is_good_news      do not display "SUCCESS" lines                      ', &
+      '--no_news_is_good_news      only display messages of failed tests               ', &
       '--flags=L,M,N,...           set value for user to set different test flags      ', &
       '                               values >= 9990 are reserved                      ', &
       '                                  * 9997 compiler version                       ', &
@@ -1260,21 +1262,21 @@ integer :: i, j, k, ios, equal_pos
       '--interactive                                                                   ', &
       '--debug                                                                         ', &
       '                                                                                ', &
-      'Note flags sets unit_test_flags(:) and level sets unit_test_level and           ', &
-      'unit_test_flags(:) are public members of M_framework__verify.                   ', &
+      'Note flags => unit_test_flags(:) and level => unit_test_level, which are        ', &
+      'public members of M_framework__verify.                                          ', &
       'EXAMPLES                                                                        ', &
       ' sample commands:                                                               ', &
       '  fpm test                                                                      ', &
       '  fpm test -- luns=6 # write to stdout instead of stderr                        ', &
-      '  fpm test ''regression*''  # run tests beginning with specified string         ', &
+      '  fpm test ''*regression*''  # run tests containing specified start string      ', &
       '                                                                                ', &
       '  # run a test called "crash" with gdb(1)                                       ', &
       '  fpm test --target crash --runner "gdb -ex run --quiet"                        ', &
       '                                                                                ', &
-      '  #To run all the tests in the gdb(1) debugger (you can enter                   ', &
-      '  #"q" after each test has run; or enter gdb commands at the prompt):           ', &
-      '  fpm test --target ''*'' --verbose \                                             ', &
-      '     --runner ''gdb -ex "list, 0" -ex run --quiet --args'' \                      ', &
+      '  # run all the tests in the gdb(1) debugger (you can enter                     ', &
+      '  # "q" after each test has run; or enter gdb commands at the prompt):          ', &
+      '  fpm test --target ''*'' --verbose \                                           ', &
+      '     --runner ''gdb -ex "list, 0" -ex run --quiet --args'' \                    ', &
       '     -- flags=9997,9998,9999 luns=6 level=3                                     ', &
       ' ']
       G_help=.false.

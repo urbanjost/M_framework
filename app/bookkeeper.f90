@@ -24,7 +24,7 @@ character(len=*),parameter   :: g0='(*(g0))'
 character(len=1),parameter   :: comma=',', quote='"'
 character(len=:),allocatable :: color
 logical                      :: intable
-integer :: i
+integer :: i 
 integer :: htmlfile, csvfile, clicksfile, nmlfile
 interface exists        ! for backward compatibility, accdig(3f) preferred
    procedure fileexists
@@ -68,7 +68,7 @@ end interface exists
 !USE
    write(nmlfile,nml=args) ! cannot do advance='no'
    select case(passed)
-   case("skipped");color='yellow'
+   case("untested");color='yellow'
    case("passed") ;color='#9F9'
    case("failed") ;color='red'
    case default   ;color='white'
@@ -78,10 +78,10 @@ end interface exists
 
    case("start")
       intable=.true.
-      write(htmlfile,g0)'<table id="unit_test">'
-      write(htmlfile,g0)'<caption>',name,str(' -',if=msg.ne.''),' ',msg,'</caption>'
+      write(htmlfile,g0)'<table>'
+      write(htmlfile,g0)'<caption class="caption" style="text-align:left">',name,str(' -',if=msg.ne.''),' ',msg,'</caption>'
       write(htmlfile,g0)'<tbody>'
-      write(htmlfile,g0)'<tr><!-- line -->'
+      write(htmlfile,g0)'<tr class="header"><!-- line -->'
       write(htmlfile,g0)' <th class="odd" style="width:25%;text-align:center;"> name   </th>'
       write(htmlfile,g0)' <th class="odd" style="width:10%;text-align:center;"> passed </th>'
       write(htmlfile,g0)' <th class="odd" style="width:25%;text-align:center;"> date   </th>'
@@ -91,7 +91,7 @@ end interface exists
    case("check")
       write(csvfile,g0),quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
 
-      write(htmlfile,g0)'<tr><!-- line -->'
+      write(htmlfile,g0)'<tr class="',passed,'"><!-- line -->'
       write(htmlfile,g0)' <td class="even" >', name    ,' </td>'
       write(htmlfile,g0)' <td class="even" style="text-align:center;" bgcolor="',color,'">', passed  ,' </td>'
       write(htmlfile,g0)' <td class="even" style="text-align:center;">', date    ,' </td>'
@@ -99,26 +99,30 @@ end interface exists
       write(htmlfile,g0)'</tr>'
    case("message")
       if(intable)then
+         write(htmlfile,g0)'<tr class="message"><!-- line -->'
          write(htmlfile,g0)'<td colspan="4" bgcolor="#AAF" style="text-align:center;">',msg,'</td>'
+         write(htmlfile,g0)'</tr>'
       else
          write(htmlfile,g0)msg
       endif
 
    case("end")
       intable=.false.
-      if(passed.eq.'skipped')then
+      if(passed.eq.'untested')then
          write(csvfile,g0),quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
 
-         write(htmlfile,g0)'<tr><!-- line -->'
+         write(htmlfile,g0)'<tr class="',passed,'"><!-- line -->'
          write(htmlfile,g0)' <td class="odd" >', name    ,' </td>'
          write(htmlfile,g0)' <td class="odd" bgcolor="',color,'" style="text-align:center;">', passed  ,' </td>'
          write(htmlfile,g0)' <td class="odd" style="text-align:center;">', date    ,' </td>'
          write(htmlfile,g0)' <td class="odd" >', msg     ,' </td>'
          write(htmlfile,g0)'</tr>'
       endif
-      write(htmlfile,g0)'<tr><!-- line -->'
-      if(clicks.ne.0)write(htmlfile,g0)'<td colspan="4" bgcolor="#AAF" style="text-align:center;"> clicks:',clicks,'</td>'
-      write(htmlfile,g0)'</tr>'
+      if(clicks.ne.0)then
+         write(htmlfile,g0)'<tr class="clicks" class="',passed,'"><!-- line -->'
+         write(htmlfile,g0)'<td colspan="4" bgcolor="#AAF" style="text-align:center;"> clicks:',clicks,' for ',name,'</td>'
+         write(htmlfile,g0)'</tr>'
+      endif
       write(htmlfile,g0)'</table>'
 
 
@@ -197,9 +201,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '     bookkeeper type="check" name="NAME" msg="MESSAGE TEXT" ...                 ',&
 '                passed="passed|failed"                                          ',&
 '     bookkeeper type="end" name="NAME" msg="MESSAGE TEXT" clicks=N ...          ',&
-'                [passed="failed|passed|skipped"]                                ',&
+'                [passed="failed|passed|untested"]                               ',&
 '     bookkeeper type="stop" name="NAME" msg="MESSAGE TEXT"                      ',&
-'                [passed="failed|passed|skipped"] clicks=M                       ',&
+'                [passed="failed|passed|untested"] clicks=M                      ',&
 '     bookkeeper type="message" name="NAME" msg="MESSAGE TEXT"                   ',&
 '                                                                                ',&
 'DESCRIPTION                                                                     ',&
@@ -231,7 +235,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 'OPTIONS                                                                         ',&
 '    type     "start","check","end","stop","message"                             ',&
 '    name     a label, typically the name of the procedure that was tested.      ',&
-'    passed   "passed","failed","skipped"                                        ',&
+'    passed   "passed","failed","untested"                                       ',&
 '    msg      a description of the test, or a descriptive message                ',&
 '    date     YYYY-MM-DDTHH:MM:SS-HH:MM                                          ',&
 '    clicks   for type="end" assumed to be the time in clicks since the          ',&
@@ -269,7 +273,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        Fortran Unit Testing Harness                                    ',&
 'PROGRAM:        bookkeeper(1)                                                   ',&
 'DESCRIPTION:    filter data from M_framework(3f) Unit Testing Framework         ',&
-'VERSION:        1.0, 20230505                                                   ',&
+'VERSION:        1.0, 20230507                                                   ',&
 'AUTHOR:         John S. Urban                                                   ',&
 'REPORTING BUGS: http://www.urbanjost.altervista.org/                            ',&
 'HOME PAGE:      https://github.com/urbanjost/M_framework                        ',&
@@ -377,6 +381,48 @@ html_header=[ CHARACTER(LEN=128) :: &
 'tr:nth-child(even) {background: #CCC}                                                                                    ',&
 'tr:nth-child(odd) {background: #FFF}                                                                                     ',&
 '</style>                                                                                                                 ',&
+'<script language="JavaScript1.1" type="text/javascript">                                                                 ',&
+'//<![CDATA[                                                                                                              ',&
+'   //---------------------------------------------------------------------------                                         ',&
+'   // turn on/off visibility of class                                                                                    ',&
+'   function toggleHiddenClass(objectClassName) {                                                                         ',&
+'                                                                                                                         ',&
+'      const collection = document.getElementsByClassName(objectClassName);                                               ',&
+'                                                                                                                         ',&
+'      for (let i = 0; i < collection.length; i++) {                                                                      ',&
+'         if(collection[i].style.display == "none" ) {                                                                    ',&
+'            collection[i].style.display = "";                                                                            ',&
+'         }else{                                                                                                          ',&
+'            collection[i].style.display = "none";                                                                        ',&
+'         }                                                                                                               ',&
+'      }                                                                                                                  ',&
+'   }                                                                                                                     ',&
+'   //---------------------------------------------------------------------------                                         ',&
+'   //alert("A1");                                                                                                        ',&
+'   //---------------------------------------------------------------------------                                         ',&
+'   // turn on/off visibility of id                                                                                       ',&
+'   function toggleHiddenId(objectIdName) {                                                                               ',&
+'      var TARGET = document.getElementById(objectIdName);                                                                ',&
+'      if(TARGET.style.display == "none" ) {                                                                              ',&
+'         TARGET.style.display = "";                                                                                      ',&
+'      }else{                                                                                                             ',&
+'         TARGET.style.display = "none";                                                                                  ',&
+'      }                                                                                                                  ',&
+'   //alert(TARGET.style.display);                                                                                        ',&
+'   }                                                                                                                     ',& 
+'   //---------------------------------------------------------------------------                                         ',&
+'</script>                                                                                                                ',&
+'<p>                                                                                                                      ',&
+'   <form>                                                                                                                ',&
+'      <input  type="button"  value="passed"   onclick="toggleHiddenClass(''passed'');" />                                ',&
+'      <input  type="button"  value="failed"   onclick="toggleHiddenClass(''failed'');" />                                ',&
+'      <input  type="button"  value="untested" onclick="toggleHiddenClass(''untested'');" />                              ',&
+'      <input  type="button"  value="clicks"   onclick="toggleHiddenClass(''clicks'');" />                                ',&
+'      <input  type="button"  value="message"  onclick="toggleHiddenClass(''message'');" />                               ',&
+'      <input  type="button"  value="caption"  onclick="toggleHiddenClass(''caption'');" />                               ',&
+'      <input  type="button"  value="header"   onclick="toggleHiddenClass(''header'');" />                                ',&
+'  </form>                                                                                                                ',&
+'</p>                                                                                                                     ',&
 '</head>                                                                                                                  ',&
 '<body>                                                                                                                   ',&
 '<div id="Container">                                                                                                     ',&
