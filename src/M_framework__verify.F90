@@ -459,9 +459,9 @@ end subroutine unit_test_msg
 !!      >values in array ARR
 !!      >check:       myroutine            SUCCESS : fail unless all values ...
 !!      >are less than 100 in array ARR
-!!      >check_done:  myroutine            PASSED  : GOOD:        7 BAD: ...
+!!      >check_done:  myroutine            PASSED  : GOOD:7         BAD: ...
 !!      >0 DURATION:00000000294709: checks on "myroutine" all passed
-!!      >check_stop:  TALLY                PASSED  : GOOD:        7 BAD: ...
+!!      >check_stop:  TALLY                PASSED  : GOOD:7         BAD: ...
 !!      >0 DURATION:00000000267059
 !!
 !!##AUTHOR
@@ -724,13 +724,13 @@ integer(kind=int64)                  :: clicks_now
    endif
    write(out,'( &
        & "check_stop:  TALLY                ",a,&
-       & " GOOD:",i9,                           &
-       & " BAD:",i9,                            &
-       & " DURATION:",i14.14                    &
+       & " GOOD: ",a,                           &
+       & " BAD: ",a,                            &
+       & " DURATION: ",i14.14                   &
        & )')                                    &
        & PF,                                    &
-       & IPASSED_ALL_G,                         &
-       & IFAILED_ALL_G,                         &
+       & atleast_(str(IPASSED_ALL_G),9),        &
+       & atleast_(str(IFAILED_ALL_G),9),        &
        & milliseconds
    if(present(msg))then
            if(.not.G_no_news_is_good_news.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
@@ -845,19 +845,19 @@ integer(kind=int64)                  :: clicks_now
       milliseconds=clicks_now-clicks
       write(out,'("check_done:  ",a,      &
        & 1x,a,                            &
-       & " GOOD:",i9,                     &
-       & " BAD:",i9,                      &
-       & " DURATION:",i14.14              &
+       & " GOOD: ",a,                     &
+       & " BAD: " ,a,                     &
+       & " DURATION: ",i14.14             &
        & )')                              &
        & atleast_(name,20),               &
        & PF,                              &
-       & IPASSED_G,                       &
-       & IFAILED_G,                       &
+       & atleast_(str(IPASSED_G),9),      &
+       & atleast_(str(IFAILED_G),9),      &
        & milliseconds
    else
       milliseconds=0
-      write(out,'("check_done:  ",a,1x,a," GOOD:",i0,1x," BAD:",i0)') &
-       & atleast_(name,20),PF,IPASSED_G,IFAILED_G
+      write(out,'("check_done:  ",a,1x,a," GOOD: ",a,1x," BAD: ",a)') &
+       & atleast_(name,20),PF,atleast_(str(IPASSED_G),9),atleast_(str(IFAILED_G),9)
    endif
    if(present(msg))then
       if(.not.G_no_news_is_good_news.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
