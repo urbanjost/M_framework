@@ -78,7 +78,7 @@ end interface exists
 
    case("start")
       intable=.true.
-      write(htmlfile,g0)'<table>'
+      write(htmlfile,g0)'<table id="',name,'">'
       write(htmlfile,g0)'<caption class="caption" style="text-align:left">',name,str(' -',if=msg.ne.''),' ',msg,'</caption>'
       write(htmlfile,g0)'<tbody>'
       write(htmlfile,g0)'<tr class="header"><!-- line -->'
