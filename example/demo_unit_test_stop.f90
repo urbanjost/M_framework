@@ -6,18 +6,16 @@
 
       call unit_test_mode(keep_going=.true.,debug=.false.,command='')
 
-      x=10
+      ! do a test
       call unit_test_start('myroutine')
-
+      x=10
       call unit_test('myroutine', x > 3 ,' if big enough')
       call unit_test('myroutine', x < 100 ,' if small enough')
-
       if(x /= 0)then
          call unit_test ('myroutine',.false.,msg='x /= 0' )
       endif
-
       call unit_test_end  ('myroutine',msg='checks on "myroutine"' )
-
+      ! tally up test results and stop program
       call unit_test_stop()
 
       end program demo_unit_test_stop

@@ -647,16 +647,22 @@ end subroutine unit_test_start
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine unit_test_stop(name,msg,opts)
+!!    subroutine unit_test_stop(msg,opts)
 !!
-!!     character(len=*),intent(in) :: name
 !!     character(len=*),intent(in),optional :: msg
 !!     character(len=*),intent(in),optional :: opts
 !!
 !!##DESCRIPTION
 !!
-!!    give a tally of all calls to unit_test(3f). If a command is set
-!!    call it appending OPTS to the end of the command.
+!!    give a tally of all calls to unit_test(3f) and stop program.
+!!
+!!    Stop the test program and tally up the test result totals.
+!!    If a command is set via unit_test_mode(3f) or the command line
+!!    call it optionally appending OPTS to the end of the command.
+!!
+!!##OPTIONS
+!!     MSG  additional message to display
+!!     OPTS add string to filter command line if any is specified.
 !!
 !!##EXAMPLES
 !!
@@ -670,18 +676,16 @@ end subroutine unit_test_start
 !!
 !!     call unit_test_mode(keep_going=.true.,debug=.false.,command='')
 !!
-!!     x=10
+!!     ! do a test
 !!     call unit_test_start('myroutine')
-!!
+!!     x=10
 !!     call unit_test('myroutine', x > 3 ,' if big enough')
 !!     call unit_test('myroutine', x < 100 ,' if small enough')
-!!
 !!     if(x /= 0)then
 !!        call unit_test ('myroutine',.false.,msg='x /= 0' )
 !!     endif
-!!
 !!     call unit_test_end  ('myroutine',msg='checks on "myroutine"' )
-!!
+!!     ! tally up test results and stop program
 !!     call unit_test_stop()
 !!
 !!     end program demo_unit_test_stop
@@ -1274,7 +1278,7 @@ integer :: i, j, k, ios, equal_pos
       '     -- flags=9997,9998,9999 luns=6 level=3                                     ', &
       ' ']
       G_help=.false.
-      stop 1
+      stop
    endif
 
 end subroutine cmdline_
