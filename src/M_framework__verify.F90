@@ -1109,7 +1109,7 @@ integer :: iostat
    G_keep_going=.true.
    unit_test_level=0
    unit_test_flags=[integer :: ]
-   G_luns=[integer :: ]
+   G_luns=[stderr]
    G_interactive=.false.
    G_match=repeat(' ',4096)
    G_command=repeat(' ',4096)
@@ -1181,9 +1181,12 @@ integer :: i, j, k, ios, equal_pos
 
          if (ios  /=  0) then
             equal_pos = index(input(2), '=')        ! find position of '='
-            G_luns = pack(G_luns, G_luns  /=  -1)     ! if G_luns is all negative at this point set it to [stderr]
-            if (size(G_luns)  ==  0) G_luns = G_luns_hold
-            if (size(G_luns)  ==  0) G_luns = [stderr]
+            if(any(G_luns < -1) ) then
+               G_luns=[integer ::]
+            else
+               G_luns = pack(G_luns, G_luns  /=  -1)     ! if G_luns is all negative at this point set it to [stderr]
+               if (size(G_luns)  ==  0) G_luns = G_luns_hold
+            endif
             if (equal_pos  /=  0) then
                ! requote and try again
                input(2) = input(2) (:equal_pos)//'"'//input(2) (equal_pos + 1:len_trim(input(2)))//'"'
@@ -1212,9 +1215,12 @@ integer :: i, j, k, ios, equal_pos
          endif
       enddo
 
-      G_luns = pack(G_luns, G_luns  /=  -1)       ! make sure G_luns has at least one file
-      if (size(G_luns)  ==  0) G_luns = G_luns_hold
-      if (size(G_luns)  ==  0) G_luns = [stderr]
+      if(any(G_luns < -1) ) then
+         G_luns=[integer ::]
+      else
+         G_luns = pack(G_luns, G_luns  /=  -1)     ! if G_luns is all negative at this point set it to [stderr]
+         if (size(G_luns)  ==  0) G_luns = G_luns_hold
+      endif
       G_command = trim(G_command)
       G_match=trim(G_match)
       G_flags = pack(G_flags, G_flags  >=  0)
