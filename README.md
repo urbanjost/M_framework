@@ -1,13 +1,51 @@
 # Name
 M\_framework
+## Synopsis
+M\_framework(3f) is an aggregate of Fortran modules useful for creating
+terminal messages, comparing expected values to results, writing logfiles
+and playback journals and performing unit tests for Fortran.
 
-Currently M\_framework(3f) is undergoing rapid modification so if you use
-this I would recommend you use a specific commit and/or make you own copy.
+It is designed for integration with the fpm(1) "test" subcommand, although
+all the modules can be used stand-alone.
 
-( 2023-05-03 )
+### basic timing is included
+As well as the expected **pass/fail/skipped unit testing** report.
+basic **timing information** can be produced by the unit testing module
+M\_framework\_\_verify(3f).
 
-Any feedback (features, performance, ease of use, ...) is appreciated,
-particularly in the ongoing development phase.
+### hooks are provided to external local applications
+M\_framework(3f) comes with a hook that allows calling your own programs to
+integrate with local logging tools, report generators, spreadsheets or other
+local infrastructure. The example program "bookkeeper" is included that
+uses the hook to write example report data files:
+
+ + [CSV](https://urbanjost.github.io/M_framework/bookkeeper.csv),
+ + [HTML](https://urbanjost.github.io/M_framework/bookkeeper.html)
+ + [NAMELIST](https://urbanjost.github.io/M_framework/bookkeeper.nml)
+
+The hook can call any local program with an interface similar to
+"bookkeeper".  Modify the program for local needs such as sending e-mail
+alerts and so on without having to change the tests.
+
+### messages can be composed almost like list-directed I/O
+Messages can be composed of up to twenty scalar intrinsic variables, allowing
+freedom in writing messages akin to that of list-directed (ie. "asterisk") 
+I/O; but simultaneously to a list of output units. This easily lets messages
+go to stdout or stdout and a file of the user's choosing as well. Output can 
+even be sent to a scratch file, essentially creating a quiet mode.
+
+### designed for integration with fpm(1)
+In conjunction with fpm(1) it is easy to run the tests with the --runner
+option, allowing for integration with other utilities as well such as
+the GNU debugger gdb(1), valgrind(1), and other tools.
+
+### programs included to generate skeleton test program
+Example programs are provided to create unit test skeleton programs to
+ease usage.
+
+### Easily used with github CD/CI
+Example CD/CI scripts that can be used with github are in the .github/ directory
+that assume your tests can by run by using "fpm test".
 
 ## Motivation
 Including **unit testing** is strongly encouraged for any software package,
@@ -33,37 +71,6 @@ dependencies and ultimately become a registered fpm(1) package to aid in
 the development of the fpm(1) repository.
 
 That being said, it can be used standalone as well.
-
-## Synopsis
-M\_framework(3f)  is an aggregate of modules useful for creating terminal
-messages, comparing expected values to results, writing logfiles and
-playback journals and performing unit tests.
-
-As well as the expected **pass/fail/skipped unit testing** report.
-basic **timing information** can be produced by the unit testing module
-M\_framework\_\_verify(3f).
-
-Example programs are provided to create unit test skeleton programs to
-ease usage.
-
-Messages can be composed of up to twenty scalar intrinsic variables, allowing
-freedom in writing messages akin to that of list-directed (ie. "asterisk") 
-I/O; but simultaneously to a list of output units. This easily lets messages
-go to stdout or stdout and a file of the user's choosing as well. Output can 
-even be sent to a scratch file, essentially creating a quiet mode.
-
-M\_framework(1) comes with a hook that allows calling your own programs to
-integrate with local logging tools, report generators, spreadsheets or other
-local infrastructure. The example program "bookkeeper" is included that
-uses the hook to write 
-[CSV](https://urbanjost.github.io/M_framework/bookkeeper.csv),
-[HTML](https://urbanjost.github.io/M_framework/bookkeeper.html), and
-[NAMELIST](https://urbanjost.github.io/M_framework/bookkeeper.nml)
-files.
-
-In conjunction with fpm(1) it is easy to run the tests with the --runner option,
-allowing for integration with other utilities as well such as the GNU
-debugger gdb(1), valgrind(1), and other tools.
 
 ## Description
 
@@ -275,8 +282,11 @@ If it is preferred, one program can test multiple procedures. The
 main disadvantage is that the complete test suite is always run unless
 conditional coding is added. One of the uses of the unit\_test\_flags(:)
 array is to allow integer values to be passed at execution time that
-can be tested to provide such conditional testing.
-
+can be tested to provide such conditional testing. When many tests are
+in one file the unit_test_start(3f) procedure includes a "matched" argument
+which can detect if a simple globbing expression that can be given on the
+command line matches the string composed of the test name and message. 
+This allows you to optionally select specific groups of tests from a set.
 
 ## Unique features: Calling an external program
 
@@ -559,6 +569,14 @@ fpm test -- command=bookkeeper
  + [fpm(1) registry](https://github.com/fortran-lang/fpm-registry)
  + [Fortran Wiki: unit testing list](https://fortranwiki.org/fortran/show/Unit+testing+frameworks)
  + [ford(1)](https://politicalphysicist.github.io/ford-fortran-documentation.html) for generating documentation for your projects
+
+## Note
+M\_framework(3f) is subject to interface changes so the generally recommended
+practice of using a specific commit when using it an an external
+fpm(1) dependency is highly encouraged.
+
+Any feedback (features, performance, ease of use, ...) is appreciated,
+particularly in the ongoing development phase.
 <!--
 ====================================================================================================
 
