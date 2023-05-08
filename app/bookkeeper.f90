@@ -81,21 +81,21 @@ end interface exists
       write(htmlfile,g0)'<table id="',name,'">'
       write(htmlfile,g0)'<caption class="caption" style="text-align:left">',name,str(' -',if=msg.ne.''),' ',msg,'</caption>'
       write(htmlfile,g0)'<tbody>'
-      write(htmlfile,g0)'<tr class="header"><!-- line -->'
-      write(htmlfile,g0)' <th class="odd" style="width:25%;text-align:center;"> name   </th>'
-      write(htmlfile,g0)' <th class="odd" style="width:10%;text-align:center;"> passed </th>'
-      write(htmlfile,g0)' <th class="odd" style="width:25%;text-align:center;"> date   </th>'
-      write(htmlfile,g0)' <th class="odd" style="width:40%;text-align:center;"> msg    </th>'
+      write(htmlfile,g0)'<tr class="odd" class="header"><!-- line -->'
+      write(htmlfile,g0)' <th style="width:25%;text-align:center;"> name   </th>'
+      write(htmlfile,g0)' <th style="width:10%;text-align:center;"> passed </th>'
+      write(htmlfile,g0)' <th style="width:40%;text-align:center;"> msg    </th>'
+      write(htmlfile,g0)' <th style="width:25%;text-align:center;"> date   </th>'
       write(htmlfile,g0)'</tr>'
 
    case("check")
       write(csvfile,g0),quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
 
-      write(htmlfile,g0)'<tr class="',passed,'"><!-- line -->'
-      write(htmlfile,g0)' <td class="even" >', name    ,' </td>'
-      write(htmlfile,g0)' <td class="even" style="text-align:center;" bgcolor="',color,'">', passed  ,' </td>'
-      write(htmlfile,g0)' <td class="even" style="text-align:center;">', date    ,' </td>'
-      write(htmlfile,g0)' <td class="even" >', msg     ,' </td>'
+      write(htmlfile,g0)'<tr class="even" class="',passed,'"><!-- line -->'
+      write(htmlfile,g0)' <td >', name    ,' </td>'
+      write(htmlfile,g0)' <td style="text-align:center;" bgcolor="',color,'">', passed  ,' </td>'
+      write(htmlfile,g0)' <td >', msg     ,' </td>'
+      write(htmlfile,g0)' <td style="text-align:center;">', date    ,' </td>'
       write(htmlfile,g0)'</tr>'
    case("message")
       if(intable)then
@@ -111,11 +111,11 @@ end interface exists
       if(passed.eq.'untested')then
          write(csvfile,g0),quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
 
-         write(htmlfile,g0)'<tr class="',passed,'"><!-- line -->'
-         write(htmlfile,g0)' <td class="odd" >', name    ,' </td>'
-         write(htmlfile,g0)' <td class="odd" bgcolor="',color,'" style="text-align:center;">', passed  ,' </td>'
-         write(htmlfile,g0)' <td class="odd" style="text-align:center;">', date    ,' </td>'
-         write(htmlfile,g0)' <td class="odd" >', msg     ,' </td>'
+         write(htmlfile,g0)'<tr class="odd" class="',passed,'"><!-- line -->'
+         write(htmlfile,g0)' <td >', name    ,' </td>'
+         write(htmlfile,g0)' <td bgcolor="',color,'" style="text-align:center;">', passed  ,' </td>'
+         write(htmlfile,g0)' <td >', msg     ,' </td>'
+         write(htmlfile,g0)' <td style="text-align:center;">', date    ,' </td>'
          write(htmlfile,g0)'</tr>'
       endif
       if(clicks.ne.0)then
