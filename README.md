@@ -1,4 +1,4 @@
-![M_framework](docs/images/framework.gif)
+![framework](docs/images/framework.gif)
 # Name
 M\_framework
 ## Synopsis
