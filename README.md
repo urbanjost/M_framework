@@ -1,6 +1,5 @@
 ![framework](docs/images/framework.gif)
-# Name
-M\_framework
+# M\_framework
 ## Synopsis
 M\_framework(3f) is an aggregate of Fortran modules useful for creating
 terminal messages, comparing expected values to results, writing logfiles
