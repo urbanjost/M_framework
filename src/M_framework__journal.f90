@@ -373,7 +373,6 @@ private
 !!    John S. Urban
 !!
 !!##LICENSE
-!!    Public Domain
 public journal
 
 interface journal
