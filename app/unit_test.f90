@@ -15,20 +15,18 @@ character(len=256)            :: iomsg
    if (size(words) .eq. 0)words=['--help']
    if(words(1).eq.'--help')then
       write (stderr, g) '--------------------------------------------------------------------------------'
-      write (stderr, g) 'usage: unit_test ARG1 ARG2 ARG3 ARG4 ...                                       '
-      write (stderr, g) 'generate skeleton programs in current directory named "unit_test_ARG.f90 for  "'
-      write (stderr, g) 'use with "fpm test".                                                            '
-      write (stderr, g) 'EXAMPLE:                                                                        '
+      write (stderr, g) 'NAME                                                                            '
+      write (stderr, g) ' unit-test(1f) - create unit-test skeleton programs for use with M_framework(1) '
+      write (stderr, g) 'SYNOPSIS                                                                        '
+      write (stderr, g) '     unit_test ARG1 ARG2 ARG3 ARG4 ...                                          '
+      write (stderr, g) 'DESCRIPTION                                                                     '
+      write (stderr, g) '   generate skeleton programs in current directory named "unit_test_ARG.f90 for"'
+      write (stderr, g) '   for use with "fpm test". Will not overwrite existing files.                  '
+      write (stderr, g) 'EXAMPLE                                                                         '
       write (stderr, g) 'Create a new fpm project to try it out                                          '
-      write (stderr, g) '    fpm new tryit;cd tryit/test  # go to test/ directory of an fpm(1) project   '
-      write (stderr, g) '    unit_test a b c             # create three skeleton test files             '
+      write (stderr, g) '   fpm new tryit;cd tryit/test  # go to test/ directory of an fpm(1) project    '
+      write (stderr, g) ' unit_test a b c             # create three skeleton test files                 '
       write (stderr, g) 'Ensure your fpm.toml file includes M_framework as a dependency with lines like  '
-!      write (stderr, g) '    [[test]]                                                                    '
-!      write (stderr, g) '    name="test_suite"                                                           '
-!      write (stderr, g) '    source-dir="test"                                                           '
-!      write (stderr, g) '    main="check.f90"                                                            '
-!      write (stderr, g) '    [test.dependencies]                                                         '
-!      write (stderr, g) '    M_framework = { git = "https://github.com/urbanjost/M_framework.git" }      '
       write (stderr, g) '[dev-dependencies]                                                              '
       write (stderr, g) '   M_framework    = { git = "https://github.com/urbanjost/M_framework.git" }    '
       write (stderr, g) 'Run tests                                                                       '
@@ -40,10 +38,20 @@ character(len=256)            :: iomsg
       write (stderr, g) 'Now try it in a real fpm(1) test/ directory and add real tests or results in the'
       write (stderr, g) 'unit_test(3f) calls.                                                           '
       write (stderr, g) '--------------------------------------------------------------------------------'
+!      write (stderr, g) '    [[test]]                                                                    '
+!      write (stderr, g) '    name="test_suite"                                                           '
+!      write (stderr, g) '    source-dir="test"                                                           '
+!      write (stderr, g) '    main="check.f90"                                                            '
+!      write (stderr, g) '    [test.dependencies]                                                         '
+!      write (stderr, g) '    M_framework = { git = "https://github.com/urbanjost/M_framework.git" }      '
       stop
    endif
    do i = 1, size(words)
       open(newunit=out,file='unit_test_'//words(i)//'.f90',status='new',iostat=iostat,iomsg=iomsg)
+      if(iostat.ne.0)then
+         write(stderr,g) trim(iomsg)
+         cycle
+      endif
       write (out, g) "program unit_test_",words(i)
       write (out, g) "use, intrinsic :: iso_fortran_env, only: &"
       write (out, g) "& stdin => input_unit,   &"

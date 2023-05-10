@@ -267,6 +267,12 @@ fpm defaults to running all the tests, but can execute subgroups
 easily because it can execute a list of tests and the names can
 use simple globbing.
 
+If you autogenerate a list of procedure names to test and call the
+sample program "unit_test" with the names of the procedures it will
+generate new names but skip existing files; allowing for a simple form
+of auto-generation assuming you have a way of listing all the procedure
+names to test.
+
 individual procedure tests can be deleted or added or moved easily when
 each is in its own file.
 
