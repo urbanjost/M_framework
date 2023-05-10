@@ -69,16 +69,16 @@ character(len=256)            :: iomsg
       write (out, g) ""
       write (out, g) '   unit_test_level=0'
       write (out, g) ''
-      write (out, g) '   call test_'//words(i)//'()'
+      write (out, g) '   call test_suite_'//words(i)//'()'
       write (out, g) '   call unit_test_stop()'
       write (out, g) ''
       write (out, g) 'contains'
       write (out, g) ''
-      write (out, g) 'subroutine test_'//words(i)//'()'
+      write (out, g) 'subroutine test_suite_'//words(i)//'()'
       write (out, g) '   call unit_test_start("'//words(i)//'",msg="")'
       write (out, g) '   !!call unit_test("'//words(i)//'", 0 .eq. 0, "checking",100)'
       write (out, g) '   call unit_test_end("'//words(i)//'",msg="")'
-      write (out, g) 'end subroutine test_'//words(i)
+      write (out, g) 'end subroutine test_suite_'//words(i)
       write (out, g) ''
       write (out, g) "end program unit_test_",words(i)
       close(unit=out,iostat=iostat)

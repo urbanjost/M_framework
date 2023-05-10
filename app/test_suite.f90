@@ -29,10 +29,8 @@ program maketest
    write (out, g) "       luns=[stderr],          &"
    write (out, g) "       command='',             &"
    write (out, g) "       no_news_is_good_news=F, &"
-   write (out, g) "       matched='',             &"
+   write (out, g) "       match='',               &"
    write (out, g) "       interactive=F,          &"
-   write (out, g) "       interactive=F,          &"
-   write (out, g) "       PREFIX='',              &"
    write (out, g) "       CMDLINE=T,              &"
    write (out, g) "       debug=F)"
    write (out, g) ""
@@ -41,19 +39,19 @@ program maketest
    if (size(words) .eq. 0) words = ["sample"]
    write (out, g) ''
    do i = 1, size(words)
-      write (out, g) '   call test_'//words(i)//'()'
+      write (out, g) '   call test_suite_'//words(i)//'()'
    end do
    write (out, g) '   call unit_test_stop()'
    write (out, g) ''
    write (out, g) 'contains'
    do i = 1, size(words)
       write (out, g) ''
-      write (out, g) 'subroutine test_'//words(i)//'()'
+      write (out, g) 'subroutine test_suite_'//words(i)//'()'
       write (out, g) '   call unit_test_start("'//words(i)//'",msg="",matched=matched)'
       write (out, g) '   if(.not.matched)return'
       write (out, g) '   !!call unit_test("'//words(i)//'", 0 .eq. 0, "checking",100)'
       write (out, g) '   call unit_test_end("'//words(i)//'",msg="")'
-      write (out, g) 'end subroutine test_'//words(i)
+      write (out, g) 'end subroutine test_suite_'//words(i)
    end do
 
    write (out, g) ''

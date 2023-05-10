@@ -336,7 +336,7 @@ subroutine get_html_header()
 html_header=[ CHARACTER(LEN=128) :: &
 '<html>',&
 '<head>',&
-'<title>test_results</title>',&
+'<title>unit_test_results</title>',&
 '<style>        ',&
 'body {xfont-style: italic}',&
 'body {                    ',&
