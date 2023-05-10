@@ -31,7 +31,7 @@ alerts and so on without having to change the tests.
 Messages can be composed of up to twenty scalar intrinsic variables, allowing
 freedom in writing messages akin to that of list-directed (ie. "asterisk") 
 I/O; but simultaneously to a list of output units. This easily lets messages
-go to stdout or stdout and a file of the user's choosing as well. Output can 
+go to stdout or stderr and a file of the user's choosing as well. Output can 
 even be sent to a scratch file, essentially creating a quiet mode.
 
 ### designed for integration with fpm(1)
@@ -80,7 +80,7 @@ the operations required for testing are useful generically. So this
 project is broken down into small general-purpose modules and 
 one unit-testing-specific one.
 
-Therefore M\_framework(3f) is composed of the following individual modules:
+M\_framework(3f) is composed of the following individual modules:
 
  + **M\_framework\_\_msg** is a small module that in particular
    can convert a list of variables of any of the common default types
@@ -493,16 +493,16 @@ fpm test
 # in to unit_test(3f) and see how the default report 
 # changes
 #
-# so now to to run the default tests is as simple as
+# so now to run the default tests is as simple as
 fpm test
 # run just one test
 fpm test unit_test_a
 # run tests using globbing; eg. all tests beginning with "unit\_"
-fpm test 'unit\_*'
+fpm test 'unit_*'
 # display help on the interactive command options
 fpm test -- --help
 
-# you can pass parameters and/or change the unit\_test\_mode(3f)
+# you can pass parameters and/or change the unit_test_mode(3f)
 # calls to change some of the test behavior
 ```
 So once you want to use this on your own projects, you would normally
@@ -522,16 +522,9 @@ fpm test -- help
 fpm test -- command=bookkeeper
 # and look at the bookkeeper*.* files in the top of the project
 ```
-```toml
-     [dev-dependencies]
-     M_framework        = { git = "https://github.com/urbanjost/M_framework.git" }
-```
 ## Documentation   ![docs](docs/images/docs.gif)
-### User
 
- - man-pages in
-    + [manpages.zip](https://urbanjost.github.io/M_framework/manpages.zip)
-    + [manpages.tgz](https://urbanjost.github.io/M_framework/manpages.tgz)
+### User
 
  - An [index](https://urbanjost.github.io/M_framework/man3.html) to HTML versions
    of the manpages
@@ -544,8 +537,12 @@ fpm test -- command=bookkeeper
     + [BOOK_M_framework__msg](https://urbanjost.github.io/M_framework/BOOK_M_framework__msg.html)
     + [BOOK_M_framework__help](https://urbanjost.github.io/M_framework/BOOK_M_framework__help.html)
 
+ - man-pages in
+    + [manpages.zip](https://urbanjost.github.io/M_framework/manpages.zip)
+    + [manpages.tgz](https://urbanjost.github.io/M_framework/manpages.tgz)
+
 ### Developer
-   + [ford-generated developers' document](https://urbanjost.github.io/M_strings/fpm-ford/index.html)
+   + [ford-generated developers' document](https://urbanjost.github.io/M_framework/fpm-ford/index.html)
    + [github action status](docs/STATUS.md)
 
 ## Additional Directory Descriptions
