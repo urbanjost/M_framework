@@ -126,7 +126,7 @@ COMMAND output
 
 call debuggers, call scripts to insert into SQLITE3 files, ...
 
-seperate command for good and bad or recommend user-constructed goodbad(1) 
+separate command for good and bad or recommend user-constructed goodbad(1) 
 command.
 
 options passed to command via string of options and/or namelist to stdin.

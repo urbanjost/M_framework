@@ -218,13 +218,10 @@ real(kind=realtime),save   :: duration_all=0.0d0
 integer(kind=int64),save   :: clicks=0_int64
 integer(kind=int64),save   :: clicks_all=0_int64
 
-logical,save :: STOP_G=.true.            ! global value indicating whether failed unit checks should stop program or not
 integer,save :: IPASSED_G=0              ! counter of successes initialized by unit_test_start(3f)
 integer,save :: IFAILED_G=0              ! counter of failures  initialized by unit_test_start(3f)
-integer,save :: IUNTESTED=0              ! counter of untested  initialized by unit_test_start(3f)
 integer,save :: IPASSED_ALL_G=0          ! counter of successes initialized at program start
 integer,save :: IFAILED_ALL_G=0          ! counter of failures  initialized at program start
-integer,save :: IUNTESTED_ALL=0          ! counter of untested  initialized at program start
 
 public unit_test_mode    ! optionally set some non-default modes
 
@@ -599,11 +596,11 @@ logical,save                         :: called=.false.
    else
       msg_local=''
    endif
-   ! check optional matched string and return if string is not blank and not matched.
-   ! It is assumed program will skip the subsequent test
 
    if(G_virgin%cmdline) call cmdline_()
 
+   ! check optional matched string and return if string is not blank and not matched.
+   ! It is assumed program will skip the subsequent test
    if(present(matched))then
       if(G_match.ne.'')then
          matched=glob(name//' '//msg_local,G_match)
@@ -611,6 +608,7 @@ logical,save                         :: called=.false.
       endif
       matched=.true.
    endif
+
 
    if(present(opts))then
       if(G_command /= '') call run(G_command//' type="start" name="'//trim(name)//'" msg="'//ndq(msg_local)//'" '//opts)
@@ -632,7 +630,6 @@ logical,save                         :: called=.false.
 
    IPASSED_G=0
    IFAILED_G=0
-   IUNTESTED=0
 
 end subroutine unit_test_start
 !===================================================================================================================================
@@ -884,8 +881,9 @@ integer(kind=int64)                  :: clicks_now
 
    IPASSED_G=0
    IFAILED_G=0
-   IUNTESTED=0
    duration=0.0d0
+
+   if(paws())continue
 
 end subroutine unit_test_end
 !===================================================================================================================================
@@ -1101,7 +1099,6 @@ end function julian
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine preset_globals()
-integer :: i
 integer :: iostat
    G_virgin%preset_globals=.false.
    G_cmdline=.true.
@@ -1787,6 +1784,28 @@ end function glob
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+function paws()
+! prompt for a letter and return try if "y" or "Y"
+! maybe choice if default is T or F; maybe raw read (not portable though)
+! originally was interactive with NAMELIST group for "expected" and "answer" that could be viewed
+! option to pause on each unit_test(3f) as well or not; allow system commands; ...
+character(len=1) :: value
+integer :: iostat
+logical :: paws
+   paws=.false.
+   if(G_interactive)then
+      write(*,'(*(g0))',advance='no')'enter RETURN to continue:'
+      read(*,'(a)',iostat=iostat)value
+      if(iostat.eq.0)then
+         select case(value)
+         case('y','Y')
+            paws=.true.
+         case default
+            paws=.false.
+         end select
+      endif
+   endif
+end function paws
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

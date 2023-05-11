@@ -577,7 +577,7 @@ end subroutine stderr
 !!                    message. May be of type INTEGER, LOGICAL, REAL,
 !!                    DOUBLEPRECISION, COMPLEX, or CHARACTER.
 !!    TYPES           one for each lun. '' for ASCII, 'CSV' for
-!!                    comma-seperated.
+!!                    comma-separated.
 !!##RETURNS
 !!    IOSTAT          The value of the last non-zero IOSTAT value. Returns
 !!                    zero if no errors occurred.

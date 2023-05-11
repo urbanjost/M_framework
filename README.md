@@ -112,7 +112,7 @@ so using them was no more a burden than say, calling an intrinsic.
 Put autodetecting tools (at least the ones employed) are not generally
 portable; and with public packages there is a strong incentive to 
 minimize the amount of infrastructure and external dependencies. It is
-generally imperitive to make package use as simple and generic as possible.
+generally imperative to make package use as simple and generic as possible.
 
 So the suggested scheme is to create a small test program for each
 procedure or closely related procedures in the fpm test/ directory.
@@ -215,7 +215,7 @@ test/ directory and use the "unit\_test" program. It will make a test
 program called "unit\_test\_$NAME.f90" for each name given on the command
 line.
 
-There is a case made for closely related groups of proceducers to share
+There is a case made for closely related groups of procedures to share
 a single test file that will be made a little bit later. For that, the
 command "test\_suite" is used instead of "unit\_test".
 
@@ -259,7 +259,7 @@ required.
 
 ### suggest one test per program
 
-There are advantages to each procedure being tested with a seperate
+There are advantages to each procedure being tested with a separate
 program.
 
 A large number of individual test programs works well with fpm(1).
@@ -322,7 +322,7 @@ The CSV files can typically be read directly into a spreadsheet program.
 
 They can also be read using the SQLite3 tool. This is very powerful,
 letting you use SQL to select specific data, generate reports, and 
-convert the subsquent results to HTML, CSV, flat text and other formats.
+convert the subsequent results to HTML, CSV, flat text and other formats.
 
 The NAMELIST output file is essentially a record of the harness calls
 using the standardized NAMELIST format that is almost trivial to read
@@ -336,7 +336,7 @@ via browsers. Example output files from an fpm(1) package that uses
 M_framemaker illustrate the different types of output that can be 
 generated.
  + [CSV](https://urbanjost.github.io/M_framework/bookkeeper.csv).
-   Generally. comma-seperated files can be read directly into spreadsheet
+   Generally. comma-separated files can be read directly into spreadsheet
    programs, sqlite3, and several common databases.
  + [CSV runtimes](https://urbanjost.github.io/M_framework/bookkeeper_clicks.csv)
    Another CSV file that is a record of the runtimes between a
@@ -376,7 +376,7 @@ SELECT name FROM unit_check GROUP BY name ORDER BY name ;
 .width 64 9 9 9 
 SELECT name,
 --- depending on SQL version a simpler IIF/IF, IFNULL, or TOTAL might be better but this works well
---- and is relatively "standard" as much as something like a standard is actually adherred to in
+--- and is relatively "standard" as much as something like a standard is actually adhered to in
 --- SQL-land.
 CASE  sum( passed == 'passed'  ) WHEN NULL THEN 0 ELSE sum ( passed == 'passed')  END  AS 'ok',
 CASE  sum( passed == 'failed'  ) WHEN NULL THEN 0 ELSE sum ( passed == 'failed')  END  AS 'not ok',
@@ -640,7 +640,7 @@ me everything is "UNTESTED".
 -->
 <!--
 Command line options use the built-in NAMELIST-group
-See the tests for M_time and M_strings for more elaborata examples.
+See the tests for M_time and M_strings for more elaborate examples.
 ## Samples
 + comparing files numerically
 + comparing floating point scalar values and arrays
