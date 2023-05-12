@@ -1139,9 +1139,9 @@ namelist /args/ G_luns
 !    Only run cases or collections whose description contains the given string
 !    Don't colorize the output
 
-character(len=256), save :: input(3) = [character(len=256) :: '&args', '', ' /']
+character(len=4096), save :: input(3) = [character(len=4096) :: '&args', '', ' /'], arg
 character(len=256) :: message1, message2
-integer :: i, j, k, ios, equal_pos
+integer :: i, j, k, ios, equal_pos, iend
 
    if (G_virgin%preset_globals) then
       call preset_globals()
@@ -1155,29 +1155,32 @@ integer :: i, j, k, ios, equal_pos
       G_luns = [ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
       G_flags = [(-1, i=1, 1000)]
       do i = 1, command_argument_count()
-         call get_command_argument(i, input(2))
-         do j = 1, len_trim(input(2)) ! blank out leading - or / so "--name=value" or "/name=value" works
-            if (index('/- ', input(2) (j:j))  ==  0) exit
-            input(2) (j:j) = ' '
+         call get_command_argument(i, arg)
+         do j = 1, len_trim(arg) ! blank out leading - or / so "--name=value" or "/name=value" works
+            if (index('/- ', arg(j:j))  ==  0) exit
+            arg(j:j) = ' '
          enddo
          ! if variable name does not start with "unit_test" add "G_" prefix so can use a nice name
          ! on command line, on unit_test_mode, and public variables
-         input(2) = adjustl(input(2))
-         if (index(input(2), 'unit_test_')  ==  1) then
-            input(2) = ' '//adjustl(input(2))
+         arg= adjustl(arg)
+         if (index(arg, 'unit_test_')  ==  1) then
+            arg = ' '//adjustl(arg)
          else
-            input(2) = ' G_'//adjustl(input(2))
+            arg = ' G_'//adjustl(arg)
          endif
          ! if no equal sign add =T
-         if (index(input(2), '=')  ==  0) then
-            input(2) = trim(input(2))//'=T'
+         if (index(arg, '=')  ==  0) then
+            arg = trim(arg)//'=T'
          endif
 
+         iend=len_trim(arg)
+         input(2)=arg
+         if(arg(iend:iend).ne.',')input(2)=input(2)//' ,'
          read (input, nml=args, iostat=ios, iomsg=message1)
          ! assume first failure might be because of missing quotes
 
          if (ios  /=  0) then
-            equal_pos = index(input(2), '=')        ! find position of '='
+            equal_pos = index(arg, '=')        ! find position of '='
             if(any(G_luns < -1) ) then
                G_luns=[integer ::]
             else
@@ -1186,7 +1189,10 @@ integer :: i, j, k, ios, equal_pos
             endif
             if (equal_pos  /=  0) then
                ! requote and try again
-               input(2) = input(2) (:equal_pos)//'"'//input(2) (equal_pos + 1:len_trim(input(2)))//'"'
+               arg = arg (:equal_pos)//'"'//arg (equal_pos + 1:len_trim(arg))//'"'
+               iend=len_trim(arg)
+               input(2)=arg
+               if(arg(iend:iend).ne.',')input(2)=input(2)//' ,'
                read (input, nml=args, iostat=ios, iomsg=message2)
                if (ios  /=  0) then
                   call wrt(G_luns, 'ERROR UNQUOTED:'//trim(message1)//': when reading '//trim(input(2)))

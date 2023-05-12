@@ -138,25 +138,31 @@ end interface exists
    end select
 contains
 subroutine cmdline_()                                ! read arguments from command line as NAMELIST group input
-character(len=4096), save :: input(3) = [character(len=4096) :: '&long', '', ' /']
+character(len=4096), save :: input(3) = [character(len=4096) :: '&long', '', ' /'], arg
 character(len=256) :: message1, message2
-integer :: i, j, k, ios, equal_pos
+integer :: i, j, k, ios, equal_pos, iend
    help = .false.
    version = .false.
    do i = 1, command_argument_count()
-      call get_command_argument(i, input(2))
-      do j = 1, len_trim(input(2))                   ! blank out leading - or / so "--name=value" or "/name=value" works
-         if (index('/- ', input(2) (j:j)) == 0) exit
-         input(2) (j:j) = ' '
+      call get_command_argument(i, arg)
+      do j = 1, len_trim(arg)                   ! blank out leading - or / so "--name=value" or "/name=value" works
+         if (index('/- ', arg (j:j)) == 0) exit
+         arg (j:j) = ' '
       enddo
-      input(2) = ' '//adjustl(input(2))
-      if (index(input(2), '=') == 0) input(2) = trim(input(2))//'=T' ! if no equal sign add =T
+      arg = ' '//adjustl(arg)
+      if (index(arg, '=') == 0) arg = trim(arg)//'=T' ! if no equal sign add =T
+      iend=len_trim(arg)
+      input(2)=arg
+      if(arg(iend:iend).ne.',')input(2)=input(2)//' ,'
       read (input, nml=long, iostat=ios, iomsg=message1)
       if (ios /= 0) then                             ! assume first failure might be because of missing quotes
-         equal_pos = index(input(2), '=')            ! find position of '='
+         equal_pos = index(arg, '=')            ! find position of '='
          if (equal_pos /= 0) then
             ! requote and try again
-            input(2) = input(2) (:equal_pos)//'"'//input(2) (equal_pos + 1:len_trim(input(2)))//'"'
+            arg = arg(:equal_pos)//'"'//arg(equal_pos + 1:len_trim(arg))//'"'
+            iend=len_trim(arg)
+            input(2)=arg
+            if(arg(iend:iend).ne.',')input(2)=input(2)//' ,'
             read (input, nml=long, iostat=ios, iomsg=message2)
             if (ios /= 0) then
                write(stderr,g) 'BOOKKEEPER:ERROR UNQUOTED:',trim(message1),': when reading ',trim(input(2))
