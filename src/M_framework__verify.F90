@@ -200,6 +200,8 @@ type(called),save             :: G_virgin
 integer,save,allocatable      :: G_luns(:)              ! output units
 logical,save                  :: G_debug=.false.
 logical,save                  :: G_verbose=.false.
+logical,save                  :: G_silent =.false.
+logical,save                  :: G_brief=.false.    ! flag on whether to display SUCCESS: messages
 character(len=:),allocatable  :: G_match
 
 integer,save,public             :: unit_test_level=0      ! a value that can be used to select different debug levels
@@ -207,7 +209,6 @@ integer,save,public,allocatable :: unit_test_flags(:)     ! an array of flags th
 logical,save                    :: G_keep_going=.false.    ! can be used to turn on program termination on errors.
 logical,save                    :: G_interactive=.false.
 character(len=:),allocatable    :: G_command                         ! name of command to execute. Defaults to the name
-logical,save                    :: G_no_news_is_good_news=.false.    ! flag on whether to display SUCCESS: messages
 logical,save                    :: G_cmdline=.true.                  ! flag whether to parse command line for arguments or not
 
 integer,parameter,public   :: realtime=kind(0.0d0)      ! type for julian days
@@ -336,7 +337,7 @@ endif
    if(if_local)then
       msg_all=str(msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 
-      if(.not.G_no_news_is_good_news)then
+      if(.not.G_brief)then
          ! write message to standard error
          call wrt(G_luns,'check_msg:   '//atleast_(name,20)//' INFO    : '// msg_all)
       endif
@@ -497,7 +498,7 @@ logical                              :: wordy_local
       IFAILED_G=IFAILED_G+1
       IFAILED_ALL_G=IFAILED_ALL_G+1
    else
-      if(.not.G_no_news_is_good_news)then
+      if(.not.G_brief)then
          if(wordy_local)call wrt(G_luns,'check:       '//atleast_(name,20)//' SUCCESS : '//msg_all)
       endif
       if(G_command /= '') call run(G_command//' type="check" name="'//trim(name)//'" passed="passed" msg="'//ndq(msg_all)//'"')
@@ -624,7 +625,7 @@ logical,save                         :: called=.false.
       called=.true.
    endif
 
-   if(.not.G_no_news_is_good_news)then
+   if(.not.G_brief)then
       call wrt(G_luns,'check_start: '//atleast_(name,20)//' START   : '//msg_local)
    endif
 
@@ -730,10 +731,10 @@ integer(kind=int64)                  :: clicks_now
        & atleast_(str(IFAILED_ALL_G),9),        &
        & milliseconds
    if(present(msg))then
-           if(.not.G_no_news_is_good_news.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
+           if(.not.G_brief.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
                    & call wrt(G_luns,trim(out)//': '//trim(msg))
    else
-           if(.not.G_no_news_is_good_news.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
+           if(.not.G_brief.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
                    & call wrt(G_luns,out)
    endif
 
@@ -857,10 +858,10 @@ integer(kind=int64)                  :: clicks_now
        & atleast_(name,20),PF,atleast_(str(IPASSED_G),9),atleast_(str(IFAILED_G),9)
    endif
    if(present(msg))then
-      if(.not.G_no_news_is_good_news.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
+      if(.not.G_brief.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
        & call wrt(G_luns,trim(out)//': '//trim(msg))
    else
-      if(.not.G_no_news_is_good_news.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
+      if(.not.G_brief.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
        & call wrt(G_luns,out)
    endif
 
@@ -1123,17 +1124,18 @@ integer             :: G_level
 integer,allocatable :: G_luns_hold(:)
 
 ! NOTE: assume all names in namelist start with G_ or unit_test
-namelist /args/ G_interactive
-namelist /args/ G_help
-namelist /args/ G_verbose
 namelist /args/ G_match
 namelist /args/ G_level
 namelist /args/ G_debug                   ! debug mode
 namelist /args/ G_flags                   ! values that can be used to select different tests or any conditional integer test
 namelist /args/ G_keep_going              ! logical variable that can be used to turn off program termination on errors.
 namelist /args/ G_command                 ! name of command to execute. Defaults to " ".
-namelist /args/ G_no_news_is_good_news
+namelist /args/ G_brief
 namelist /args/ G_luns
+namelist /args/ G_interactive
+namelist /args/ G_help
+namelist /args/ G_verbose
+namelist /args/ G_silent
 
 !    Report the beginning and end of execution of each test case or suite
 !    Only run cases or collections whose description contains the given string
@@ -1228,6 +1230,7 @@ integer :: i, j, k, ios, equal_pos, iend
       G_match=trim(G_match)
       G_flags = pack(G_flags, G_flags  >=  0)
       if(G_verbose) G_flags=[G_flags,9997,9998,9999] ! turn on these flags if verbose mode
+      if(G_silent) G_luns=[999] ! turn on these flags if verbose mode
       if (size(G_flags)  /=  0) unit_test_flags = G_flags
       if(G_level /= -1) unit_test_level = G_level
 
@@ -1253,7 +1256,6 @@ integer :: i, j, k, ios, equal_pos, iend
       'unit test command line options:                                                 ', &
       '--level=N                   user-requested debug level. Sets "unit_test_level". ', &
       '--keep_going=F              turn on program termination on test failure         ', &
-      '--no_news_is_good_news      only display messages of failed tests               ', &
       '--flags=L,M,N,...           set value for user to set different test flags      ', &
       '                               values >= 9990 are reserved                      ', &
       '                                  * 9997 compiler version                       ', &
@@ -1268,6 +1270,8 @@ integer :: i, j, k, ios, equal_pos, iend
       '                                  * 999 scratch file deleted when program ends  ', &
       '--help                      display this text and exit                          ', &
       '--verbose                   verbose mode                                        ', &
+      '--brief                     only display messages of failed tests               ', &
+      '--silent                    no messages from unit_test procedures is produced   ', &
       '--interactive                                                                   ', &
       '--debug                                                                         ', &
       '                                                                                ', &
@@ -1304,9 +1308,9 @@ end subroutine cmdline_
 !!
 !!
 !!      subroutine unit_test_mode( keep_going, flags, luns, command, &
-!!      no_news_is_good_news, interactive, CMDLINE, debug, match)
+!!      brief, interactive, CMDLINE, debug, match)
 !!
-!!      logical,intent(in) :: keep_going, no_news_is_good_news, interactive,debug
+!!      logical,intent(in) :: keep_going, brief, interactive,debug
 !!      integer,intent(in),allocatable :: luns(:), flags(:)
 !!      character(len=*),intent(in) :: command
 !!##DESCRIPTION
@@ -1327,7 +1331,7 @@ end subroutine cmdline_
 !!    command      filter command, typically to generate reports. It is
 !!                 passed data on the command line. See the example filter
 !!                 "bookkeeper" for examples.
-!!    no_news_is_good_news   If present only "FAIL" messages are produced.
+!!    brief        If present only "FAIL" messages are produced.
 !!
 !!    interactive  ...
 !!    cmdline      ...
@@ -1342,7 +1346,7 @@ end subroutine cmdline_
 !!    implicit none
 !!
 !!    call unit_test_mode(keep_going=.false.,luns=[6], &
-!!            & no_news_is_good_news=.true.)
+!!            & brief=.true.)
 !!
 !!    end program demo_unit_test_mode
 !!
@@ -1350,13 +1354,13 @@ end subroutine cmdline_
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_test_mode(debug, keep_going, level, flags, command, no_news_is_good_news,cmdline,interactive,luns,match)
+subroutine unit_test_mode(debug, keep_going, level, flags, command, brief,cmdline,interactive,luns,match)
 logical,optional, intent(in)           :: debug
 logical,optional, intent(in)           :: keep_going     ! logical variable that can be used to turn off program termination on errors.
 logical,optional, intent(in)           :: cmdline        ! flag whether to parse command line for arguments or not
 logical,optional, intent(in)           :: interactive
-logical,optional, intent(in)           :: no_news_is_good_news   ! flag on whether to display SUCCESS: messages
-character(len=*),optional, intent(in)  :: command                ! name of command to execute. Defaults to the name
+logical,optional, intent(in)           :: brief          ! flag on whether to display SUCCESS: messages
+character(len=*),optional, intent(in)  :: command        ! name of command to execute. Defaults to the name
 integer,optional, intent(in)           :: flags(:)       ! an  array that can be used to select different options
 integer,optional, intent(in)           :: level          ! an  integer that can be used to select different debug levels
 integer,optional, intent(in)           :: luns(:)        ! logical unit number to write output to
@@ -1375,7 +1379,7 @@ character(len=*), optional, intent(in) :: match
    if (present(keep_going))           G_keep_going=keep_going
    if (present(flags))                unit_test_flags=flags
    if (present(level))                unit_test_level=level
-   if (present(no_news_is_good_news)) G_no_news_is_good_news=no_news_is_good_news
+   if (present(brief))                G_brief=brief
 
 !integer,parameter,public   :: realtime=kind(0.0d0)    ! type for julian days
 !integer,parameter,public   :: EXIT_SUCCESS=0
