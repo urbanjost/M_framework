@@ -28,7 +28,7 @@ program maketest
    write (out, g) "       flags=[0],              &"
    write (out, g) "       luns=[stderr],          &"
    write (out, g) "       command='',             &"
-   write (out, g) "       no_news_is_good_news=F, &"
+   write (out, g) "       brief=F,                &"
    write (out, g) "       match='',               &"
    write (out, g) "       interactive=F,          &"
    write (out, g) "       CMDLINE=T,              &"
