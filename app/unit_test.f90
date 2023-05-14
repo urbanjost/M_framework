@@ -98,25 +98,26 @@ contains
 
    function get_stack() result(args)
       character(len=:), allocatable :: args(:)
+      character(len=256) :: errmsg
       integer :: ilength, ilongest, iargs, istatus, i
       ilength = 0
       ilongest = 1 ! get an error if try to get string of zero length in gfortran 7.0.4 so set to 1 instead of 0
       iargs = command_argument_count()
       GET_LONGEST: do i = 1, iargs                                              ! look at all arguments
-         call get_command_argument(number=i, length=ilength, status=istatus)    ! get next argument
+         call get_command_argument(number=i, length=ilength, status=istatus,errmsg=errmsg)    ! get next argument
          if (istatus /= 0) then                                                 ! stop program on error
-            write (stderr, *) '*get_stack* error obtaining argument ', i
+            write (stderr, *) '*get_stack* error obtaining length for argument ', i, trim(errmsg)
             exit GET_LONGEST
          elseif (ilength .gt. 0) then
             ilongest = max(ilongest, ilength)
          end if
       end do GET_LONGEST
       allocate (character(len=ilongest) :: args(iargs))
-      args = ''
+      args(:) = ''
       GET_ARGS: do i = 1, command_argument_count()                                           ! copy array of arguments
-         call get_command_argument(number=i, value=args(i), length=ilength, status=istatus)  ! get next argument
+         call get_command_argument(number=i, value=args(i), length=ilength, status=istatus,errmsg=errmsg)  ! get next argument
          if (istatus /= 0) then                                                              ! stop program on error
-            write (stderr, *) '*get_stack* error obtaining argument ', i
+            write (stderr, *) '*get_stack* error obtaining argument ', i, trim(errmsg)
             exit GET_ARGS
          end if
       end do GET_ARGS
