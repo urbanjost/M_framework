@@ -730,7 +730,7 @@ integer(kind=int64)                  :: clicks_now
       PF='UNTESTED:'
    endif
    write(out,'( &
-       & "check_stop:  TALLY                ",a,&
+       & "check_stop:",atleast(G_LONGEST,"TALLY"),a,&
        & " GOOD: ",a,                           &
        & " BAD: ",a,                            &
        & " DURATION: ",i14.14                   &

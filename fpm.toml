@@ -1,11 +1,11 @@
 # TOML file for fpm as described at https://github.com/fortran-lang/fpm/blob/master/manifest-reference.md
 name = "M_framework"
-version = "0.1.0"
+version = "2.0.0"
 license = "Public Domain"
 author = "John S. Urban"
 maintainer = "urbanjost@comcast.net"
 copyright = "2020 John S. Urban"
-description = "converts any standard scalar type to a string and support unit testing"
+description = "support unit testing and related logging and messaging"
 categories = ["messages", " testing"]
 keywords = ["fortran", "unit testing"]
 homepage = "https://github.com/urbanjost/M_framework.git"
