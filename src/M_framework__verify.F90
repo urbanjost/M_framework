@@ -223,6 +223,7 @@ integer,save :: IPASSED_G=0              ! counter of successes initialized by u
 integer,save :: IFAILED_G=0              ! counter of failures  initialized by unit_test_start(3f)
 integer,save :: IPASSED_ALL_G=0          ! counter of successes initialized at program start
 integer,save :: IFAILED_ALL_G=0          ! counter of failures  initialized at program start
+integer,save :: G_LONGEST=20
 
 public unit_test_mode    ! optionally set some non-default modes
 
@@ -327,6 +328,9 @@ type(force_kwargs_hack), optional, intent(in) :: force_kwargs
 logical,intent(in),optional   :: if
 character(len=:),allocatable  :: msg_all
 logical                       :: if_local
+
+G_LONGEST=max(G_LONGEST,len_trim(name))
+
 if(present(if))then
    if_local=if
 else
@@ -339,7 +343,7 @@ endif
 
       if(.not.G_brief)then
          ! write message to standard error
-         call wrt(G_luns,'check_msg:   '//atleast_(name,20)//' INFO    : '// msg_all)
+         call wrt(G_luns,'check_msg:   '//atleast_(name,G_LONGEST)//' INFO    : '// msg_all)
       endif
       if(G_command /= '') call run(G_command//' type="message"  name="'//trim(name)//'" msg="'//ndq(msg_all)//'"')
    endif
@@ -478,6 +482,8 @@ logical,intent(in),optional          :: wordy
 character(len=:),allocatable         :: msg_all
 logical                              :: wordy_local
 
+   G_LONGEST=max(G_LONGEST,len_trim(name))
+
    if(present(wordy))then
       wordy_local=wordy
    else
@@ -489,7 +495,7 @@ logical                              :: wordy_local
    msg_all=str(msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 
    if(.not.logical_expression)then
-      call wrt(G_luns,'check:       '//atleast_(name,20)//' FAILURE : '//msg_all)
+      call wrt(G_luns,'check:       '//atleast_(name,G_LONGEST)//' FAILURE : '//msg_all)
       if(G_command /= '') call run(G_command//' type="check" name="'//trim(name)//'" passed="failed" msg="'//ndq(msg_all)//'"')
       if(.not.G_keep_going) then
          call wrt(G_luns,'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
@@ -499,7 +505,7 @@ logical                              :: wordy_local
       IFAILED_ALL_G=IFAILED_ALL_G+1
    else
       if(.not.G_brief)then
-         if(wordy_local)call wrt(G_luns,'check:       '//atleast_(name,20)//' SUCCESS : '//msg_all)
+         if(wordy_local)call wrt(G_luns,'check:       '//atleast_(name,G_LONGEST)//' SUCCESS : '//msg_all)
       endif
       if(G_command /= '') call run(G_command//' type="check" name="'//trim(name)//'" passed="passed" msg="'//ndq(msg_all)//'"')
       IPASSED_G=IPASSED_G+1
@@ -592,6 +598,9 @@ type(force_kwargs_hack), optional, intent(in) :: force_kwargs
 logical,intent(out),optional         :: matched
 character(len=:),allocatable         :: msg_local
 logical,save                         :: called=.false.
+
+   G_LONGEST=max(G_LONGEST,len_trim(name))
+
    if(present(msg))then
       msg_local=trim(msg)
    else
@@ -626,7 +635,7 @@ logical,save                         :: called=.false.
    endif
 
    if(.not.G_brief)then
-      call wrt(G_luns,'check_start: '//atleast_(name,20)//' START   : '//msg_local)
+      call wrt(G_luns,'check_start: '//atleast_(name,G_LONGEST)//' START   : '//msg_local)
    endif
 
    IPASSED_G=0
@@ -819,6 +828,8 @@ character(len=9)                     :: pf
 integer(kind=int64)                  :: milliseconds
 integer(kind=int64)                  :: clicks_now
 
+   G_LONGEST=max(G_LONGEST,len_trim(name))
+
    if(G_virgin%cmdline) call cmdline_()
 
    if(present(msg))then
@@ -847,7 +858,7 @@ integer(kind=int64)                  :: clicks_now
        & " BAD: " ,a,                     &
        & " DURATION: ",i14.14             &
        & )')                              &
-       & atleast_(name,20),               &
+       & atleast_(name,G_LONGEST),        &
        & PF,                              &
        & atleast_(str(IPASSED_G),9),      &
        & atleast_(str(IFAILED_G),9),      &
@@ -855,7 +866,7 @@ integer(kind=int64)                  :: clicks_now
    else
       milliseconds=0
       write(out,'("check_done:  ",a,1x,a," GOOD: ",a,1x," BAD: ",a)') &
-       & atleast_(name,20),PF,atleast_(str(IPASSED_G),9),atleast_(str(IFAILED_G),9)
+       & atleast_(name,G_LONGEST),PF,atleast_(str(IPASSED_G),9),atleast_(str(IFAILED_G),9)
    endif
    if(present(msg))then
       if(.not.G_brief.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
