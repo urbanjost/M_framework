@@ -1252,8 +1252,26 @@ integer :: i, j, k, ios, equal_pos, iend
 
    if (G_help) then
       write (*, '(g0)') [character(len=80) :: &
+      'NAME                                                                            ', &
+      '    unit_tests(1f) -- unit test command line options                            ', &
+      'SYNOPSIS                                                                        ', &
+      ' CMD --level=0 --keep_going --flags=''10000*-1'' --command="" --match=""          ', &
+      ' luns=stderr,-1,-1,-1,-1 --verbose=F --brief=F --silent=F interactive=F         ', &
       '                                                                                ', &
-      'unit test command line options:                                                 ', &
+      'DESCRIPTION                                                                     ', &
+      '   When using the M_framework unit test routines options are read from the      ', &
+      '   command line of any program built with the interface by default. To prevent  ', &
+      '   the command line from being parsed in case the program already parses the    ', &
+      '   command line add "call unit_test_mode(cmdline=.false.)" to the calling       ', &
+      '   program.                                                                     ', &
+      'OPTIONS                                                                         ', &
+      '--command="system_command"  program to call after each test                     ', &
+      '--luns=L,M,N,...    list of unit numbers to write to, assumed opened by program ', &
+      '                            * 6   typically stdout                              ', &
+      '                            * 0   typically stderr                              ', &
+      '                            * 999 scratch file deleted when program ends        ', &
+      '--match="glob expression"   string to be tested by "matched" argument on        ', &
+      '                            unit_test_start(3f)                                 ', &
       '--level=N                   user-requested debug level. Sets "unit_test_level". ', &
       '--keep_going=F              turn on program termination on test failure         ', &
       '--flags=L,M,N,...           set value for user to set different test flags      ', &
@@ -1261,13 +1279,6 @@ integer :: i, j, k, ios, equal_pos, iend
       '                                  * 9997 compiler version                       ', &
       '                                  * 9998 compiler options                       ', &
       '                                  * 9999 command line options NAMELIST group    ', &
-      '--command="system_command"  program to call after each test                     ', &
-      '--match="glob expression"   string to be tested by "matched" argument on        ', &
-      '                            unit_test_start(3f)                                 ', &
-      '--luns=L,M,N,...    list of unit numbers to write to, assumed opened by program ', &
-      '                                  * 6   typically stdout                        ', &
-      '                                  * 0   typically stderr                        ', &
-      '                                  * 999 scratch file deleted when program ends  ', &
       '--help                      display this text and exit                          ', &
       '--verbose                   verbose mode                                        ', &
       '--brief                     only display messages of failed tests               ', &
@@ -1333,9 +1344,13 @@ end subroutine cmdline_
 !!                 "bookkeeper" for examples.
 !!    brief        If present only "FAIL" messages are produced.
 !!
-!!    interactive  ...
-!!    cmdline      ...
-!!    debug        ...
+!!    brief        Only display FAIL messages and related information
+!!    verbose      verbose mode displays compiler version and options and
+!!                 all standard messages.
+!!    silent       no output from unit_test_*(3f) procedures
+!!    interactive  prompt as each test case starts as to continue.
+!!    cmdline      If set to .false. do not parse command line for options.
+!!    debug        Debug mode for the M_framework package
 !!
 !!##EXAMPLES
 !!
@@ -1354,12 +1369,14 @@ end subroutine cmdline_
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_test_mode(debug, keep_going, level, flags, command, brief,cmdline,interactive,luns,match)
+subroutine unit_test_mode(debug, keep_going, level, flags, command, brief,verbose,silent,cmdline,interactive,luns,match)
 logical,optional, intent(in)           :: debug
 logical,optional, intent(in)           :: keep_going     ! logical variable that can be used to turn off program termination on errors.
 logical,optional, intent(in)           :: cmdline        ! flag whether to parse command line for arguments or not
 logical,optional, intent(in)           :: interactive
 logical,optional, intent(in)           :: brief          ! flag on whether to display SUCCESS: messages
+logical,optional, intent(in)           :: verbose        ! flag on whether to display all messages including addtional information
+logical,optional, intent(in)           :: silent         ! do not output any messages from unit_test_*(3f) procedures
 character(len=*),optional, intent(in)  :: command        ! name of command to execute. Defaults to the name
 integer,optional, intent(in)           :: flags(:)       ! an  array that can be used to select different options
 integer,optional, intent(in)           :: level          ! an  integer that can be used to select different debug levels
@@ -1380,6 +1397,8 @@ character(len=*), optional, intent(in) :: match
    if (present(flags))                unit_test_flags=flags
    if (present(level))                unit_test_level=level
    if (present(brief))                G_brief=brief
+   if (present(verbose))              G_verbose=verbose
+   if (present(silent))               G_silent=silent
 
 !integer,parameter,public   :: realtime=kind(0.0d0)    ! type for julian days
 !integer,parameter,public   :: EXIT_SUCCESS=0

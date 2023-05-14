@@ -246,8 +246,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '    date     YYYY-MM-DDTHH:MM:SS-HH:MM                                          ',&
 '    clicks   for type="end" assumed to be the time in clicks since the          ',&
 '             previous type="start"                                              ',&
-'                                                                                ',&
-'    verbose  flag to run in verbose mode                                        ',&
+'    silent|brief|verbose   silent produces no output from unit_check_* routines ',&
+'                           brief only shows failed tests, verbose shows all     ',&
+'                           messages including compiler and options.             ',&
 '    help     display this help and exit                                         ',&
 '    version  output version information and exit                                ',&
 '                                                                                ',&
