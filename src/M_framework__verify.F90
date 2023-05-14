@@ -169,10 +169,10 @@
 !!    check_start: one   START   :
 !!    check:       one   SUCCESS : testing if everyone greater than zero
 !!    check:       one   SUCCESS : testing if all values are expected
-!!    check_done:  one   PASSED  : GOOD:  2 BAD:  0 DURATION:00000001
+!!    check_end:   one   PASSED  : GOOD:  2 BAD:  0 DURATION:00000001
 !!    check_start: two   START   :
 !!    check:       two   SUCCESS : long expression
-!!    check_done:  two   PASSED  : GOOD:   1 BAD:  0 DURATION:00000000
+!!    check_end:   two   PASSED  : GOOD:   1 BAD:  0 DURATION:00000000
 !!    check_stop:  TALLY PASSED  : GOOD:    3 BAD:  0 DURATION:00000001
 !!
 !!##AUTHOR
@@ -235,6 +235,12 @@ public unit_test_stop    ! produce tally of all procedures tested and end progra
 
 public unit_test_msg     ! maybe write some message
 public unit_test_system  ! usually used for recursive calls when testing program termination status
+
+private atleast_
+private cmdline_
+private getname_
+private getall_
+private glob_
 
 type :: force_kwargs_hack ! force keywords, using @awvwgk method
 end type force_kwargs_hack
@@ -461,7 +467,7 @@ end subroutine unit_test_msg
 !!      >values in array ARR
 !!      >check:       myroutine            SUCCESS : fail unless all values ...
 !!      >are less than 100 in array ARR
-!!      >check_done:  myroutine            PASSED  : GOOD:7         BAD: ...
+!!      >check_end:   myroutine            PASSED  : GOOD:7         BAD: ...
 !!      >0 DURATION:00000000294709: checks on "myroutine" all passed
 !!      >check_stop:  TALLY                PASSED  : GOOD:7         BAD: ...
 !!      >0 DURATION:00000000267059
@@ -613,7 +619,7 @@ logical,save                         :: called=.false.
    ! It is assumed program will skip the subsequent test
    if(present(matched))then
       if(G_match.ne.'')then
-         matched=glob(name//' '//msg_local,G_match)
+         matched=glob_(name//' '//msg_local,G_match)
          if(.not.matched)return
       endif
       matched=.true.
@@ -729,15 +735,11 @@ integer(kind=int64)                  :: clicks_now
    if(PF == 'PASSED  :'.and.ipassed_all_G == 0)then
       PF='UNTESTED:'
    endif
-   write(out,'( &
-       & "check_stop:",atleast(G_LONGEST,"TALLY"),a,&
-       & " GOOD: ",a,                           &
-       & " BAD: ",a,                            &
-       & " DURATION: ",i14.14                   &
-       & )')                                    &
-       & PF,                                    &
-       & atleast_(str(IPASSED_ALL_G),9),        &
-       & atleast_(str(IFAILED_ALL_G),9),        &
+      write(out,'("check_stop:  ",a,1x,a," GOOD: ",a," BAD: ",a," DURATION: ",i14.14)') &
+       & atleast_("TALLY",G_LONGEST),     &
+       & PF,                              &
+       & atleast_(str(IPASSED_ALL_G),9),  &
+       & atleast_(str(IFAILED_ALL_G),9),  &
        & milliseconds
    if(present(msg))then
            if(.not.G_brief.or.(IFAILED_ALL_G+IPASSED_ALL_G.eq.0).or.IFAILED_ALL_G.ne.0) &
@@ -852,7 +854,7 @@ integer(kind=int64)                  :: clicks_now
       call system_clock(clicks_now)
       milliseconds=(julian()-duration)*1000
       milliseconds=clicks_now-clicks
-      write(out,'("check_done:  ",a,      &
+      write(out,'("check_end:   ",a,      &
        & 1x,a,                            &
        & " GOOD: ",a,                     &
        & " BAD: " ,a,                     &
@@ -865,7 +867,7 @@ integer(kind=int64)                  :: clicks_now
        & milliseconds
    else
       milliseconds=0
-      write(out,'("check_done:  ",a,1x,a," GOOD: ",a,1x," BAD: ",a)') &
+      write(out,'("check_end:   ",a,1x,a," GOOD: ",a,1x," BAD: ",a)') &
        & atleast_(name,G_LONGEST),PF,atleast_(str(IPASSED_G),9),atleast_(str(IFAILED_G),9)
    endif
    if(present(msg))then
@@ -1671,19 +1673,19 @@ end function ndq
 !===================================================================================================================================
 !>
 !!##NAME
-!!    glob(3f) - [M_strings:COMPARE] compare given string for match to
+!!    glob_(3f) - [M_strings:COMPARE] compare given string for match to
 !!    a pattern which may contain globbing wildcard characters
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!    logical function glob(string, pattern )
+!!    logical function glob_(string, pattern )
 !!
 !!     character(len=*),intent(in) :: string
 !!     character(len=*),intent(in) :: pattern
 !!
 !!##DESCRIPTION
-!!    glob(3f) compares given (entire) STRING for a match to PATTERN which may
+!!    glob_(3f) compares given (entire) STRING for a match to PATTERN which may
 !!    contain basic wildcard "globbing" characters.
 !!
 !!    To get a match the entire string must be described
@@ -1713,8 +1715,8 @@ end function ndq
 !!    program demo_glob
 !!    use M_framework, only : unit_test_glob
 !!    implicit none
-!!    write(*,*)glob('abcdabcd','*cd*')
-!!    write(*,*)glob('abcdabcd','*no*')
+!!    write(*,*)glob_('abcdabcd','*cd*')
+!!    write(*,*)glob_('abcdabcd','*no*')
 !!    end program demo_glob
 !!
 !!##AUTHOR
@@ -1726,11 +1728,11 @@ end function ndq
 !!
 !!##LICENSE
 !!   Public Domain
-function glob(tame,wild)
+function glob_(tame,wild)
 
-! ident_10="@(#) M_strings glob(3f) function compares text strings one of which can have wildcards ('*' or '?')."
+! ident_10="@(#) M_strings glob_(3f) function compares text strings one of which can have wildcards ('*' or '?')."
 
-logical                    :: glob
+logical                    :: glob_
 character(len=*)           :: tame       ! A string without wildcards
 character(len=*)           :: wild       ! A (potentially) corresponding string with wildcards
 character(len=len(tame)+1) :: tametext
@@ -1759,7 +1761,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
             endif
          enddo
          if(wildtext(wi:wi) == NULL) then        ! "x" matches "*"
-            glob=.true.
+            glob_=.true.
             return
          endif
          if(wildtext(wi:wi)  /=  '?') then
@@ -1767,7 +1769,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
             do while (tametext(ti:ti)  /=  wildtext(wi:wi))
                ti=ti+1
                if (tametext(ti:ti) == NULL)then
-                  glob=.false.
+                  glob_=.false.
                   return                         ! "x" doesn't match "*y*"
                endif
             enddo
@@ -1796,13 +1798,13 @@ character(len=:),allocatable :: tbookmark, wbookmark
                cycle                             ! "mississippi" matches "*sip*"
             endif
          endif
-         glob=.false.
+         glob_=.false.
          return                                  ! "xy" doesn't match "x"
       endif
       ti=ti+1
       wi=wi+1
       if (ti > len(tametext)) then
-         glob=.false.
+         glob_=.false.
          return
       elseif (tametext(ti:ti) == NULL) then          ! How do you match a tame text string?
          if(wildtext(wi:wi) /= NULL)then
@@ -1812,14 +1814,14 @@ character(len=:),allocatable :: tbookmark, wbookmark
             enddo
          endif
          if (wildtext(wi:wi) == NULL)then
-            glob=.true.
+            glob_=.true.
             return                               ! "x" matches "x"
          endif
-         glob=.false.
+         glob_=.false.
          return                                  ! "x" doesn't match "xy"
       endif
    enddo
-end function glob
+end function glob_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
