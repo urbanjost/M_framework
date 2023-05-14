@@ -490,7 +490,7 @@ logical                              :: wordy_local
 
    if(.not.logical_expression)then
       call wrt(G_luns,'check:       '//atleast_(name,20)//' FAILURE : '//msg_all)
-      if(G_command /= '') call run(G_command//'type="check" name="'//trim(name)//'" passed="failed" msg="'//ndq(msg_all)//'"')
+      if(G_command /= '') call run(G_command//' type="check" name="'//trim(name)//'" passed="failed" msg="'//ndq(msg_all)//'"')
       if(.not.G_keep_going) then
          call wrt(G_luns,'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
          stop 1
@@ -1143,7 +1143,7 @@ namelist /args/ G_silent
 
 character(len=4096), save :: input(3) = [character(len=4096) :: '&args', '', ' /'], arg
 character(len=256) :: message1, message2
-integer :: i, j, k, ios, equal_pos, iend
+integer :: i, j, k, iostat, equal_pos, iend
 
    if (G_virgin%preset_globals) then
       call preset_globals()
@@ -1177,11 +1177,10 @@ integer :: i, j, k, ios, equal_pos, iend
 
          iend=len_trim(arg)
          input(2)=arg
-         if(arg(iend:iend).ne.',')input(2)=input(2)//' ,'
-         read (input, nml=args, iostat=ios, iomsg=message1)
+         if(arg(iend:iend).ne.',')input(2)=trim(input(2))//','
+         read (input, nml=args, iostat=iostat, iomsg=message1)
          ! assume first failure might be because of missing quotes
-
-         if (ios  /=  0) then
+         if (iostat  /=  0) then
             equal_pos = index(arg, '=')        ! find position of '='
             if(any(G_luns < -1) ) then
                G_luns=[integer ::]
@@ -1194,9 +1193,9 @@ integer :: i, j, k, ios, equal_pos, iend
                arg = arg (:equal_pos)//'"'//arg (equal_pos + 1:len_trim(arg))//'"'
                iend=len_trim(arg)
                input(2)=arg
-               if(arg(iend:iend).ne.',')input(2)=input(2)//' ,'
-               read (input, nml=args, iostat=ios, iomsg=message2)
-               if (ios  /=  0) then
+               if(arg(iend:iend).ne.',')input(2)=trim(input(2))//' ,'
+               read (input, nml=args, iostat=iostat, iomsg=message2)
+               if (iostat  /=  0) then
                   call wrt(G_luns, 'ERROR UNQUOTED:'//trim(message1)//': when reading '//trim(input(2)))
                   call wrt(G_luns, 'ERROR QUOTED  :'//trim(message2)//': when reading '//trim(input(2)))
                   G_command=trim(G_command)
