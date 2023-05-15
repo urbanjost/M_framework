@@ -188,6 +188,10 @@ integer                                :: howbig
 integer                                :: old_position
 
    howbig=size(help_text)
+   if(howbig.eq.0)then
+      call journal('help text is empty')
+      return
+   endif
    toomany=1
    last_response=' '
    numbered=.false.
