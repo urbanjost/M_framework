@@ -1007,9 +1007,6 @@ end subroutine set_scalar
 !!    2. print the character if it has an ADE of 32 on up
 !!    3. print a space if it has an ADE of less than 32
 !!    4. underneath each character print the ADE value vertically
-!!    5. strings are assumed under 32767 characters in length.
-!!       Format integer constants > 32767 are not supported on HP-UX
-!!       when newer compilers are available use unlimited
 !!
 !!##EXAMPLES
 !!
@@ -1048,8 +1045,12 @@ integer                     :: i        ! counter used to step thru string
    write(*,202)     (ichar(string(i:i))/100,    i=1,ilen)
    write(*,202)(mod( ichar(string(i:i)),100)/10,i=1,ilen)
    write(*,202)(mod((ichar(string(i:i))),10),   i=1,ilen)
-101   format(32767a1:)  ! format for printing string characters
-202   format(32767i1:)  ! format for printing ADE values
+! strings are assumed under 32767+1 characters in length because format integer constants > 32767+1 are not supported on HP-UX
+! when newer compilers are available use unlimited
+!101   format(32767a1:)  ! format for printing string characters
+!202   format(32767i1:)  ! format for printing ADE values
+101   format(*(a1:))  ! format for printing string characters
+202   format(*(i1:))  ! format for printing ADE values
 end subroutine pdec
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

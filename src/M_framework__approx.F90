@@ -15,7 +15,6 @@ public  :: significant     ! round val to specified number of significant digits
 ! deprecated
 public  :: sp_accdig       ! compare two real numbers only up to a specified number of digits
 public  :: dp_accdig       ! compare two double numbers or other kinds only up to a specified number of digits
-
 interface dp_accdig        ! for backward compatibility, accdig(3f) preferred
    module procedure accdig
 end interface dp_accdig
@@ -136,7 +135,7 @@ integer                     :: ind
    type is(real)
       select type(y)
       type is(real)
-         call sp_accdig(x,y,digits_local,acurcy,ind)
+         call accdig(x,y,digits_local,acurcy,ind)
          if(verbose_local)then
             call journal('sc','*almost*','for values',x,y,'agreement of',acurcy,'digits out of requested',digits_local)
          endif
