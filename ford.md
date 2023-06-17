@@ -7,7 +7,7 @@ output_dir: docs/fpm-ford
 project: M_framework
 summary: collection of modules for unit testing and logging and messaging
 project_github: https://github.com/urbanjost/M_framework
-project_download:
+project_download: https://github.com/urbanjost/M_framework/archive/refs/heads/master.zip
 author: John S. Urban
 author_email: urbanjost@gmail.com
 github: https://github.com/urbanjost/M_framework

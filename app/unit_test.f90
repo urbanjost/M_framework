@@ -47,12 +47,12 @@ character(len=256)            :: iomsg
       stop
    endif
    do i = 1, size(words)
-      open(newunit=out,file='unit_test_'//words(i)//'.f90',status='new',iostat=iostat,iomsg=iomsg)
+      open(newunit=out,file='unit_test_'//trim(words(i))//'.f90',status='new',iostat=iostat,iomsg=iomsg)
       if(iostat.ne.0)then
          write(stderr,g) trim(iomsg)
          cycle
       endif
-      write (out, g) "program unit_test_",words(i)
+      write (out, g) "program unit_test_",trim(words(i))
       write (out, g) "use, intrinsic :: iso_fortran_env, only: &"
       write (out, g) "& stdin => input_unit,   &"
       write (out, g) "& stdout => output_unit, &"
@@ -79,18 +79,18 @@ character(len=256)            :: iomsg
       write (out, g) ""
       write (out, g) '   unit_test_level=0'
       write (out, g) ''
-      write (out, g) '   call test_suite_'//words(i)//'()'
+      write (out, g) '   call test_suite_'//trim(words(i))//'()'
       write (out, g) '   call unit_test_stop()'
       write (out, g) ''
       write (out, g) 'contains'
       write (out, g) ''
-      write (out, g) 'subroutine test_suite_'//words(i)//'()'
-      write (out, g) '   call unit_test_start("'//words(i)//'",msg="")'
-      write (out, g) '   !!call unit_test("'//words(i)//'", 0 .eq. 0, "checking",100)'
-      write (out, g) '   call unit_test_end("'//words(i)//'",msg="")'
-      write (out, g) 'end subroutine test_suite_'//words(i)
+      write (out, g) 'subroutine test_suite_'//trim(words(i))//'()'
+      write (out, g) '   call unit_test_start("'//trim(words(i))//'",msg="")'
+      write (out, g) '   !!call unit_test("'//trim(words(i))//'", 0 .eq. 0, "checking",100)'
+      write (out, g) '   call unit_test_end("'//trim(words(i))//'",msg="")'
+      write (out, g) 'end subroutine test_suite_'//trim(words(i))
       write (out, g) ''
-      write (out, g) "end program unit_test_",words(i)
+      write (out, g) "end program unit_test_",trim(words(i))
       close(unit=out,iostat=iostat)
    enddo
 

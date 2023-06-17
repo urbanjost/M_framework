@@ -107,7 +107,7 @@
 !!   Sample program
 !!
 !!     !! program demo_M_framework__verify
-!!     module M_framework__demo
+!!     module M_framework__verify_demo
 !!     private
 !!     public one ! some regular routine
 !!     public two ! some regular routine
@@ -123,13 +123,13 @@
 !!        array=2*array
 !!     end subroutine two
 !!
-!!     end module M_framework__demo
+!!     end module M_framework__verify_demo
 !!
 !!     program demo_M_framework__verify
 !!     use M_framework, only: unit_test_start, unit_test,   &
 !!         & unit_test_end, unit_test_msg, unit_test_stop, &
 !!         & unit_test_system, unit_test_mode
-!!     use M_framework__demo,   only: one, two
+!!     use M_framework__verify_demo,   only: one, two
 !!     ! set-up
 !!     call unit_test_mode(command='',flags=[0],keep_going=.true.)
 !!     ! call a test procedure for each routine to test

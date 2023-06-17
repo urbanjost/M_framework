@@ -39,19 +39,19 @@ program maketest
    if (size(words) .eq. 0) words = ["sample"]
    write (out, g) ''
    do i = 1, size(words)
-      write (out, g) '   call test_suite_'//words(i)//'()'
+      write (out, g) '   call test_suite_'//trim(words(i))//'()'
    end do
    write (out, g) '   call unit_test_stop()'
    write (out, g) ''
    write (out, g) 'contains'
    do i = 1, size(words)
       write (out, g) ''
-      write (out, g) 'subroutine test_suite_'//words(i)//'()'
-      write (out, g) '   call unit_test_start("'//words(i)//'",msg="",matched=matched)'
+      write (out, g) 'subroutine test_suite_'//trim(words(i))//'()'
+      write (out, g) '   call unit_test_start("'//trim(words(i))//'",msg="",matched=matched)'
       write (out, g) '   if(.not.matched)return'
-      write (out, g) '   !!call unit_test("'//words(i)//'", 0 .eq. 0, "checking",100)'
-      write (out, g) '   call unit_test_end("'//words(i)//'",msg="")'
-      write (out, g) 'end subroutine test_suite_'//words(i)
+      write (out, g) '   !!call unit_test("'//trim(words(i))//'", 0 .eq. 0, "checking",100)'
+      write (out, g) '   call unit_test_end("'//trim(words(i))//'",msg="")'
+      write (out, g) 'end subroutine test_suite_'//trim(words(i))
    end do
 
    write (out, g) ''
