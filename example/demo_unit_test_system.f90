@@ -1,5 +1,5 @@
      program demo_unit_test_system
-     use M_framework__verify, only: &
+     use M_framework, only: &
         unit_test_start,  &
         unit_test,        &
         unit_test_system, &

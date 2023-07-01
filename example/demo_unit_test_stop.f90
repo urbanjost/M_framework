@@ -1,5 +1,5 @@
       program demo_unit_test_stop
-      use M_framework__verify, only: unit_test_start, unit_test_end, &
+      use M_framework, only: unit_test_start, unit_test_end, &
       & unit_test, unit_test_stop, unit_test_mode
       use,intrinsic :: iso_fortran_env, stdout=>OUTPUT_UNIT
       implicit none

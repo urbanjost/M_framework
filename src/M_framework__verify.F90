@@ -7,13 +7,14 @@
 !!
 !!  Module procedures
 !!
-!!    use M_framework__verify, only : unit_test, unit_test_start,    &
-!!                                    unit_test_end, unit_test_stop, &
-!!                                    unit_test_msg, unit_test_mode, &
-!!                                    unit_test_system
+!!    use M_framework, only : unit_test, unit_test_start,    &
+!!                            unit_test_end, unit_test_stop, &
+!!                            unit_test_msg, unit_test_mode, &
+!!                            unit_test_system,              &
+!!                            unit_test_expected
 !!  Module values
 !!
-!!    use M_framework__verify, only : unit_test_level, unit_test_flags
+!!    use M_framework, only : unit_test_level, unit_test_flags
 !!
 !!##QUOTE
 !!    Do not let your victories go to your head, nor let your failures go
@@ -72,6 +73,10 @@
 !!       unit_test_stop()      stop program with exit value of 0 if no failures
 !!                              else with an exit value of 1
 !!       unit_test_system()    execute system command, recursively if requested.
+!!
+!!  The unit test short-cut procedures are
+!!
+!!       unit_test_expected()  report if two values are equal
 !!
 !!    For custom unit testing reports, a command can be given that will be
 !!    passed information on the command line in NAMELIST format.
@@ -225,16 +230,18 @@ integer,save :: IPASSED_ALL_G=0          ! counter of successes initialized at p
 integer,save :: IFAILED_ALL_G=0          ! counter of failures  initialized at program start
 integer,save :: G_LONGEST=20
 
-public unit_test_mode    ! optionally set some non-default modes
+public unit_test_mode      ! optionally set some non-default modes
 
-public unit_test_start   ! start testing a procedure
-  public unit_test       ! report results of a test
-public unit_test_end     ! end  testing a procedure
+public unit_test_start     ! start testing a procedure
+public unit_test           ! report results of a test
+public unit_test_end       ! end  testing a procedure
 
-public unit_test_stop    ! produce tally of all procedures tested and end program
+public unit_test_stop      ! produce tally of all procedures tested and end program
 
-public unit_test_msg     ! maybe write some message
-public unit_test_system  ! usually used for recursive calls when testing program termination status
+public unit_test_msg       ! maybe write some message
+public unit_test_system    ! usually used for recursive calls when testing program termination status
+
+public unit_test_expected  ! shortcut for common call to unit_test with expression and expected result
 
 private atleast_
 private cmdline_
@@ -242,7 +249,7 @@ private getname_
 private getall_
 private glob_
 
-type :: force_kwargs_hack ! force keywords, using @awvwgk method
+type :: force_kwargs_hack  ! force keywords, using @awvwgk method
 end type force_kwargs_hack
 ! so then any argument that comes afer "force_kwargs" is a compile time error
 ! if not done with a keyword unless someone "breaks" it by passing something
@@ -263,6 +270,18 @@ interface  unit_check_stop;   module  procedure  unit_test_stop;   end  interfac
 interface  unit_check_msg;    module  procedure  unit_test_msg;    end  interface  unit_check_msg;    public  unit_check_msg
 interface  unit_check_good;   module  procedure  unit_test_good;   end  interface  unit_check_good;   public  unit_check_good
 interface  unit_check_bad;    module  procedure  unit_test_bad;    end  interface  unit_check_bad;    public  unit_check_bad
+
+interface unit_test_expected
+   module procedure unit_test_expected_int32
+   module procedure unit_test_expected_int64
+   module procedure unit_test_expected_char
+   module procedure unit_test_expected_boolean
+   module procedure unit_test_expected_onoff
+   module procedure unit_test_expected_real32
+   module procedure unit_test_expected_real64
+   module procedure unit_test_expected_cmplx32
+   module procedure unit_test_expected_cmplx64
+end interface
 
 public unit_check_level
 integer :: unit_check_level
@@ -302,7 +321,7 @@ contains
 !!   Sample program:
 !!
 !!    program demo_unit_test_msg
-!!    use M_framework__verify, only : unit_test_start,unit_test_msg, &
+!!    use M_framework, only : unit_test_start,unit_test_msg, &
 !!            & unit_test_end
 !!    implicit none
 !!
@@ -404,13 +423,13 @@ end subroutine unit_test_msg
 !!   Sample program:
 !!
 !!       program demo_unit_test
-!!       use M_framework__verify, only: &
+!!       use M_framework, only: &
 !!          & unit_test_mode,     &
 !!          & unit_test_start,    &
 !!          & unit_test,          &
 !!          & unit_test_end,      &
 !!          & unit_test_stop
-!!       use M_framework__approx, only: almost
+!!       use M_framework, only: almost
 !!
 !!       implicit none
 !!       integer :: i
@@ -558,7 +577,7 @@ end subroutine unit_test
 !!   Sample program:
 !!
 !!     program demo_unit_test_start
-!!     use M_framework__verify, only: unit_test_start, unit_test, &
+!!     use M_framework, only: unit_test_start, unit_test, &
 !!      & unit_test_end, unit_test_mode, unit_test_stop
 !!     implicit none
 !!     integer :: ival
@@ -682,7 +701,7 @@ end subroutine unit_test_start
 !!   Sample program:
 !!
 !!     program demo_unit_test_stop
-!!     use M_framework__verify, only: unit_test_start, unit_test_end, &
+!!     use M_framework, only: unit_test_start, unit_test_end, &
 !!     & unit_test, unit_test_stop, unit_test_mode
 !!     use,intrinsic :: iso_fortran_env, stdout=>OUTPUT_UNIT
 !!     implicit none
@@ -796,9 +815,9 @@ end subroutine unit_test_stop
 !!   Sample program:
 !!
 !!     program demo_unit_test_end
-!!     use M_framework__verify, only: unit_test_start
-!!     use M_framework__verify, only: unit_test
-!!     use M_framework__verify, only: unit_test_end
+!!     use M_framework, only: unit_test_start
+!!     use M_framework, only: unit_test
+!!     use M_framework, only: unit_test_end
 !!     implicit none
 !!     integer :: x
 !!     x=10
@@ -933,9 +952,9 @@ end subroutine unit_test_end
 !!   Sample program:
 !!
 !!     program demo_unit_test_bad
-!!     use M_framework__verify, only: unit_test_start, unit_test
-!!     use M_framework__verify, only: unit_test_end, unit_test_stop
-!!     use M_framework__verify, only: unit_test_bad
+!!     use M_framework, only: unit_test_start, unit_test
+!!     use M_framework, only: unit_test_end, unit_test_stop
+!!     use M_framework, only: unit_test_bad
 !!
 !!     implicit none
 !!     integer :: x
@@ -1016,8 +1035,8 @@ end subroutine unit_test_bad
 !!   Sample program:
 !!
 !!     program demo_unit_test_good
-!!     use M_framework__verify, only: unit_test_start, unit_test_end
-!!     use M_framework__verify, only: unit_test, unit_test_good
+!!     use M_framework, only: unit_test_start, unit_test_end
+!!     use M_framework, only: unit_test, unit_test_good
 !!
 !!     implicit none
 !!     integer :: x
@@ -1299,7 +1318,7 @@ integer :: i, j, k, iostat, equal_pos, iend
       '--debug                                                                         ', &
       '                                                                                ', &
       'Note flags => unit_test_flags(:) and level => unit_test_level, which are        ', &
-      'public members of M_framework__verify.                                          ', &
+      'public members of M_framework.                                                  ', &
       'EXAMPLES                                                                        ', &
       ' sample commands:                                                               ', &
       '  fpm test                                                                      ', &
@@ -1342,7 +1361,7 @@ end subroutine cmdline_
 !!##OPTIONS
 !!    keep_going   keep running if a test fails. Default to TRUE
 !!    flags        a list of integer values that can be accessed from
-!!                 M_framework__verify as unit_test_flags(:) for use in
+!!                 M_framework as unit_test_flags(:) for use in
 !!                 selecting various tests conditionally
 !!    luns         list of Fortran units to unit test messages to. Defaults
 !!                 to the the value of ERROR_UNIT from the intrinsic module
@@ -1448,7 +1467,7 @@ end subroutine unit_test_mode
 !!   Sample program:
 !!
 !!    program demo_unit_test_system
-!!    use M_framework__verify, only: &
+!!    use M_framework, only: &
 !!       unit_test_start,  &
 !!       unit_test,        &
 !!       unit_test_system, &
@@ -1847,6 +1866,136 @@ logical :: paws
       endif
    endif
 end function paws
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!
+!!##NAME
+!!    unit_test_expected(3f) - [M_framework__verify] report if two scalar values
+!!    of like type and kind are equal.
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    impure elemental subroutine unit_test_example(name,result,expected)
+!!
+!!     character(len=*),intent(in)  :: name
+!!     class(*),intent(in)          :: result
+!!     class(*),intent(in),optional :: expected
+!!
+!!##DESCRIPTION
+!!    A shortcut for a common call to unit_test(3f) tests the two values
+!!    of like type and kind. It is equivalent to
+!!
+!!        call unit_test(name,result,expected,'result=',result,'expected=',.true.)
+!!
+!!##OPTIONS
+!!     RESULT    A generated value or expression of integer, real, character,
+!!               or complex type.
+!!     EXPECTED  The expected value for RESULT, of the same type and kind
+!!               as RESULT. If not present, it is equivalent to .TRUE.
+!!
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!       program demo_unit_test_expected
+!!       use, intrinsic :: iso_fortran_env, only: &
+!!       & stdin => input_unit, stdout => output_unit, stderr => error_unit
+!!       use M_framework, only:                &
+!!       &  unit_test_mode,                    &
+!!       &  start     =>  unit_test_start,     &
+!!       &  expected  =>  unit_test_expected,  &
+!!       &  stop      =>  unit_test_stop,      &
+!!       & unit_test_level, unit_test_flags
+!!       implicit none
+!!       logical, parameter :: T=.true., F=.false.
+!!       ! optional call to change default modes
+!!          call unit_test_mode(  &
+!!              keep_going=T,     &
+!!              flags=[0],        &
+!!              luns=[stderr],    &
+!!              command='',       &
+!!              brief=F,          &
+!!              match='',         &
+!!              interactive=F,    &
+!!              CMDLINE=T,        &
+!!              debug=F)
+!!
+!!          unit_test_level=0
+!!          ! unit tests for ABS(3f) intrinsic
+!!          call start('abs')
+!!          ! integer
+!!          call expected('abs',abs(-10),10)
+!!          call expected('abs',abs( 10),10)
+!!          ! real and elemental
+!!          call expected('abs',abs( [-10.0, 10.0]),10.0)
+!!          ! complex
+!!          call expected('abs',abs(( 3.0,-4.0)),5.0)
+!!          call expected('abs',abs((-3.0, 4.0)),5.0)
+!!          call expected('abs',abs((-3.0,-4.0)),5.0)
+!!          call expected('abs',abs(( 3.0, 4.0)),5.0)
+!!          call stop('abs')
+!!       end program demo_unit_test_expected
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+impure elemental subroutine unit_test_expected_int32(name,result,expected)
+character(len=*),intent(in) :: name
+integer(kind=int32),intent(in) :: result,expected
+   call unit_test(name,result == expected,'result=',result,'expected=',expected)
+end subroutine unit_test_expected_int32
+
+impure elemental subroutine unit_test_expected_int64(name,result,expected)
+character(len=*),intent(in) :: name
+integer(kind=int64),intent(in) :: result,expected
+   call unit_test(name,result == expected,'result=',result,'expected=',expected)
+end subroutine unit_test_expected_int64
+
+impure elemental subroutine unit_test_expected_real32(name,result,expected)
+character(len=*),intent(in) :: name
+real(kind=real32),intent(in) :: result,expected
+   call unit_test(name,result == expected,'result=',result,'expected=',expected)
+end subroutine unit_test_expected_real32
+
+impure elemental subroutine unit_test_expected_real64(name,result,expected)
+character(len=*),intent(in) :: name
+real(kind=real64),intent(in) :: result,expected
+   call unit_test(name,result == expected,'result=',result,'expected=',expected)
+end subroutine unit_test_expected_real64
+
+impure elemental subroutine unit_test_expected_cmplx32(name,result,expected)
+character(len=*),intent(in) :: name
+complex(kind=real32),intent(in) :: result,expected
+   call unit_test(name,result == expected,'result=',result,'expected=',expected)
+end subroutine unit_test_expected_cmplx32
+
+impure elemental subroutine unit_test_expected_cmplx64(name,result,expected)
+character(len=*),intent(in) :: name
+complex(kind=real64),intent(in) :: result,expected
+   call unit_test(name,result == expected,'result=',result,'expected=',expected)
+end subroutine unit_test_expected_cmplx64
+
+impure elemental subroutine unit_test_expected_char(name,result,expected)
+character(len=*),intent(in) :: name
+character(len=*),intent(in) :: result,expected
+   call unit_test(name,result == expected,'result=',result,'expected=',expected)
+end subroutine unit_test_expected_char
+
+impure elemental subroutine unit_test_expected_boolean(name,result,expected)
+character(len=*),intent(in) :: name
+logical,intent(in) :: result,expected
+   call unit_test(name,result .eqv. expected,'result=',result,'expected=',expected)
+end subroutine unit_test_expected_boolean
+
+impure elemental subroutine unit_test_expected_onoff(name,result)
+character(len=*),intent(in) :: name
+logical,intent(in) :: result
+   call unit_test(name,result,'result=',result,'expected=',.true.)
+end subroutine unit_test_expected_onoff
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

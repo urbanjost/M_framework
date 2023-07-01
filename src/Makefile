@@ -4,7 +4,16 @@ NULL=
 
 TESTPROGFILES = ../test/test_suite_M_framework__journal.f90 ../test/test_suite_M_framework__msg.f90 ../test/test_suite_M_framework__verify.f90 $(NULL)
 
-PROGFILES = ../example/demo_str.f90 ../example/demo_assert.f90 ../example/demo_fstop.f90 ../example/demo_M_framework__verify.f90 ../example/demo_pdec.f90 ../example/demo_wrt.f90 ../example/demo_stderr.f90 ../example/demo_unit_test.f90 ../example/demo_unit_test_bad.f90 ../example/demo_unit_test_done.f90 ../example/demo_unit_test_good.f90 ../example/demo_unit_test_msg.f90 ../example/demo_unit_test_start.f90 ../example/demo_journal.f90 ../example/demo_M_framework__journal.f90 ../example/demo_help_command.f90 $(NULL)
+PROGFILES = ../example/demo_str.f90 ../example/demo_assert.f90 \
+../example/demo_fstop.f90 ../example/demo_M_framework__verify.f90 \
+../example/demo_pdec.f90 ../example/demo_wrt.f90 \
+../example/demo_stderr.f90 \
+../example/demo_unit_test.f90 \
+../example/demo_unit_test_expected.f90 \
+../example/demo_unit_test_end.f90 ../example/demo_unit_test_msg.f90 \
+../example/demo_unit_test_start.f90 ../example/demo_journal.f90 \
+../example/demo_M_framework__journal.f90 ../example/demo_help_command.f90
+$(NULL)
 
 CPROGFILES =
 PROG = ${PROGFILES:.f90=}

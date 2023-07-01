@@ -1,7 +1,7 @@
       program demo_unit_test_end
-      use M_framework__verify, only: unit_test_start
-      use M_framework__verify, only: unit_test
-      use M_framework__verify, only: unit_test_end
+      use M_framework, only: unit_test_start
+      use M_framework, only: unit_test
+      use M_framework, only: unit_test_end
       implicit none
       integer :: x
       x=10

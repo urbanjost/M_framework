@@ -1,11 +1,11 @@
         program demo_unit_test
-        use M_framework__verify, only: &
+        use M_framework, only: &
            & unit_test_mode,     &
            & unit_test_start,    &
            & unit_test,          &
            & unit_test_end,      &
            & unit_test_stop
-        use M_framework__approx, only: almost
+        use M_framework, only: almost
 
         implicit none
         integer :: i

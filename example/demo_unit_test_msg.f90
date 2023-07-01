@@ -1,5 +1,5 @@
      program demo_unit_test_msg
-     use M_framework__verify, only : unit_test_start,unit_test_msg, &
+     use M_framework, only : unit_test_start,unit_test_msg, &
              & unit_test_end
      implicit none
 

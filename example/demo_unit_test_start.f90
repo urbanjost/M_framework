@@ -1,5 +1,5 @@
       program demo_unit_test_start
-      use M_framework__verify, only: unit_test_start, unit_test, &
+      use M_framework, only: unit_test_start, unit_test, &
        & unit_test_end, unit_test_mode, unit_test_stop
       implicit none
       integer :: ival

@@ -48,7 +48,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>unit_test_stop (3m_framework__verify)</NOBR><HR></H1>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>unit_test_expected (3m_framework__verify)</NOBR><HR></H1>
 </CENTER>
 <P>
 <A name=0>
@@ -57,8 +57,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-unit_test_stop(3f) - [M_framework__verify] report tally of all checks
-and stop program
+unit_test_expected(3f) - [M_framework__verify] report if two scalar values
+of like type and kind are equal.
 (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
@@ -77,11 +77,12 @@ and stop program
 
 </A>
 <BLOCKQUOTE>
-subroutine unit_test_stop(msg,opts)
+impure elemental subroutine unit_test_example(name,result,expected)
 <P>
 <PRE>
-    character(len=*),intent(in),optional :: msg
-    character(len=*),intent(in),optional :: opts
+    character(len=*),intent(in)  :: name
+    class(*),intent(in)          :: result
+    class(*),intent(in),optional :: expected
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,12 +92,13 @@ subroutine unit_test_stop(msg,opts)
 
 </A>
 <BLOCKQUOTE>
+A shortcut for a common call to unit_test(3f) tests the two values
+of like type and kind. It is equivalent to
 <P>
-give a tally of all calls to unit_test(3f) and stop program.
+<PRE>
+       call unit_test(name,result,expected,&#146;result=&#146;,result,&#146;expected=&#146;,.true.)
 <P>
-Tally up the test result totals and stop the program.
-If a command is set via unit_test_mode(3f) or the command line
-call it appending OPTS to the end of the command.
+</PRE>
 </BLOCKQUOTE>
 <A name=3>
 
@@ -106,9 +108,14 @@ call it appending OPTS to the end of the command.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B>MSG</B> </TD><TD valign=bottom>
-additional message to display
-OPTS add string to filter command line if any is specified.
+<B>RESULT</B> </TD><TD valign=bottom>
+A generated value or expression of integer, real, character,
+or complex type.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>EXPECTED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The expected value for RESULT, of the same type and kind
+as RESULT. If not present, it is equivalent to .TRUE.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -120,29 +127,44 @@ OPTS add string to filter command line if any is specified.
 Sample program:
 <P>
 <PRE>
-    program demo_unit_test_stop
-    use M_framework, only: unit_test_start, unit_test_end, &
-    & unit_test, unit_test_stop, unit_test_mode
-    use,intrinsic :: iso_fortran_env, stdout=&gt;OUTPUT_UNIT
-    implicit none
-    integer :: x
-    x=10
-    call unit_test_mode(luns=[stdout])
-    ! do a test
-    call unit_test_start(&#146;proc1&#146;)
-    call unit_test(&#146;proc1&#146;, x &gt; 3 , &#146;if big enough&#146;)
-    call unit_test(&#146;proc1&#146;, x &lt; 100 , &#146;if small enough&#146;)
-    call unit_test_end  (&#146;proc1&#146;,msg=&#146;checks all done&#146; )
-    ! do another test
-    call unit_test_start(&#146;proc2&#146;)
-    call unit_test(&#146;proc2&#146;, x &gt; 3 , &#146;if big enough&#146;)
-    call unit_test(&#146;proc2&#146;, x &lt; 100 , &#146;if small enough&#146;)
-    call unit_test_end  (&#146;proc2&#146;,msg=&#146;checks all done&#146; )
+      program demo_unit_test_expected
+      use, intrinsic :: iso_fortran_env, only: &
+      & stdin =&gt; input_unit, stdout =&gt; output_unit, stderr =&gt; error_unit
+      use M_framework, only:                &
+      &  unit_test_mode,                    &
+      &  start     =&gt;  unit_test_start,     &
+      &  expected  =&gt;  unit_test_expected,  &
+      &  stop      =&gt;  unit_test_stop,      &
+      & unit_test_level, unit_test_flags
+      implicit none
+      logical, parameter :: T=.true., F=.false.
+      ! optional call to change default modes
+         call unit_test_mode(  &
+             keep_going=T,     &
+             flags=[0],        &
+             luns=[stderr],    &
+             command=&#146;&#146;,       &
+             brief=F,          &
+             match=&#146;&#146;,         &
+             interactive=F,    &
+             CMDLINE=T,        &
+             debug=F)
 <P>
-    ! tally up test results and stop program
-    call unit_test_stop()
-<P>
-    end program demo_unit_test_stop
+         unit_test_level=0
+         ! unit tests for ABS(3f) intrinsic
+         call start(&#146;abs&#146;)
+         ! integer
+         call expected(&#146;abs&#146;,abs(-10),10)
+         call expected(&#146;abs&#146;,abs( 10),10)
+         ! real and elemental
+         call expected(&#146;abs&#146;,abs( [-10.0, 10.0]),10.0)
+         ! complex
+         call expected(&#146;abs&#146;,abs(( 3.0,-4.0)),5.0)
+         call expected(&#146;abs&#146;,abs((-3.0, 4.0)),5.0)
+         call expected(&#146;abs&#146;,abs((-3.0,-4.0)),5.0)
+         call expected(&#146;abs&#146;,abs(( 3.0, 4.0)),5.0)
+         call stop(&#146;abs&#146;)
+      end program demo_unit_test_expected
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -163,8 +185,8 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_test_stop (3m_framework__verify)</TD> <TD align=right width=33%><I>July 01, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5890a645-9ad3-4466-98e3-26977b758975 using man macros.</FONT>
-<br><br><center><img src="images/unit_test_stop.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_test_expected (3m_framework__verify)</TD> <TD align=right width=33%><I>July 01, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 139b8536-6d24-4ff5-9347-5e4e331b0142 using man macros.</FONT>
+<br><br><center><img src="images/unit_test_expected.gif"></center>
 </div>
 </div>
 </body>
