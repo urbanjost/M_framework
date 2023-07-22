@@ -12,15 +12,15 @@ PROGFILES = ../example/demo_str.f90 ../example/demo_assert.f90 \
 ../example/demo_unit_test_expected.f90 \
 ../example/demo_unit_test_end.f90 ../example/demo_unit_test_msg.f90 \
 ../example/demo_unit_test_start.f90 ../example/demo_journal.f90 \
-../example/demo_M_framework__journal.f90 ../example/demo_help_command.f90
+../example/demo_M_framework__journal.f90 
 $(NULL)
 
 CPROGFILES =
 PROG = ${PROGFILES:.f90=}
 CPROG = ${CPROGFILES:.c=}
 TPROG = ${TESTPROGFILES:.f90=}
-SRCS = M_framework.f90 M_framework__msg.F90 M_framework__journal.f90 M_framework__verify.F90 M_framework__help.f90 M_framework__utility.f90 M_framework__approx.F90
-OBJS = M_framework.o M_framework__msg.o M_framework__journal.o M_framework__verify.o M_framework__help.o M_framework__utility.o M_framework__approx.o
+SRCS = M_framework.f90 M_framework__msg.F90 M_framework__journal.f90 M_framework__verify.F90 M_framework__utility.f90 M_framework__approx.F90
+OBJS = M_framework.o M_framework__msg.o M_framework__journal.o M_framework__verify.o M_framework__utility.o M_framework__approx.o
 LIBRARY = libM__framework.a
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # platform-specific values you will probably change
@@ -109,6 +109,5 @@ doxygen:
 	doxygen dox.in
 #=================================================================================
 M_framework__journal.o: M_framework__msg.o
-M_framework__help.o: M_framework__journal.o
 M_framework__verify.o: M_framework__journal.o M_framework__msg.o
-M_framework.o: M_framework__journal.o M_framework__msg.o M_framework__verify.o M_framework__help.o M_framework__utility.o M_framework__approx.o
+M_framework.o: M_framework__journal.o M_framework__msg.o M_framework__verify.o M_framework__utility.o M_framework__approx.o

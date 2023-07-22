@@ -36,12 +36,5 @@ auto-examples = true
 
 # demo programs
 [install]
-#library=true
+library=true
 
-[[executable]]
-name = "hlp"
-source-dir = "app_demos"
-main = "hlp.f90"
-#link = "z"
-[executable.dependencies]
-M_io   = { git = "https://github.com/urbanjost/M_io.git" }

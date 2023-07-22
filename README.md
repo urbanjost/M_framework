@@ -1,5 +1,6 @@
-![framework](docs/images/framework.gif)
-# M\_framework
+[![](docs/images/framework.gif)](https://urbanjost.github.io/M_framework/fpm-ford/index.html)
+# [M\_framework](https://urbanjost.github.io/M_framework/man3.html)
+
 ## Synopsis
 M\_framework(3f) is an aggregate of Fortran modules useful for creating
 terminal messages, comparing expected values to results, writing logfiles
@@ -541,7 +542,6 @@ fpm test -- command=bookkeeper
     + [BOOK_M_framework__approx](https://urbanjost.github.io/M_framework/BOOK_M_framework__approx.html)
     + [BOOK_M_framework__journal](https://urbanjost.github.io/M_framework/BOOK_M_framework__journal.html)
     + [BOOK_M_framework__msg](https://urbanjost.github.io/M_framework/BOOK_M_framework__msg.html)
-    + [BOOK_M_framework__help](https://urbanjost.github.io/M_framework/BOOK_M_framework__help.html)
 
  - man-pages in
     + [manpages.zip](https://urbanjost.github.io/M_framework/manpages.zip)
