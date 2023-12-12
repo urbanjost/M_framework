@@ -655,7 +655,7 @@ end subroutine wrt
 !===================================================================================================================================
 !>
 !!##NAME
-!!    set(3f) - [M_set] set scalars from an array
+!!    set(3f) - [M_msg] set scalars from an array
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -670,7 +670,6 @@ end subroutine wrt
 !!
 !!##DESCRIPTION
 !!    set(3f) sets up to twenty scalars to elements from an array.
-!!    Sort of like an equivalence.
 !!
 !!##OPTIONS
 !!    g0(:)       array to read values from. Can be of type INTEGER or REAL
@@ -693,8 +692,7 @@ end subroutine wrt
 !!    integer(kind=int16)  :: j; namelist /all/j
 !!    integer(kind=int32)  :: k; namelist /all/k
 !!    integer(kind=int64)  :: l; namelist /all/l
-!!    integer              :: iarr(7)=[1,2,3,4,5,6,7]
-!!       call set(iarr,a,b,c,i,j,k,l)
+!!       call set([1,2,3,4,5,6,7],a,b,c,i,j,k,l)
 !!       write(*,nml=all)
 !!       call set(10,a)
 !!       call set(100,l)

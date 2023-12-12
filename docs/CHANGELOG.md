@@ -1,7 +1,7 @@
 ## GPF Changelog
 
 The intent of this changelog is to keep everyone in the loop about
-what's new in the M_calculator project. It is a curated, chronologically ordered
+what's new in the M_framework project. It is a curated, chronologically ordered
 list of notable changes including records of change such as bug fixes,
 new features, changes, and relevant notifications.
 
@@ -19,7 +19,7 @@ checked ...
    - [x] demo program for public procedures
    - [x] developer documents (ford(1))
    - [x] CI/CD(Continious Integration/Development) verification (github actions)
-   - [x] registered in fpm(1) repository
+   - [ ] registered in fpm(1) repository
 
 ---
 **2023-07-01**  John S. Urban  <https://github.com/urbanjost>

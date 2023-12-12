@@ -42,13 +42,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
 <!--
-<h5><a href="https://github.com/urbanjost/M_framework__verify">[UP]</a></h5>
+<h5><a href="https://github.com/urbanjost/M_framework__msg">[UP]</a></h5>
 <button type="button" onclick="javascript:history.back()">Back</button>
 -->
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>unit_test_system (3m_framework__verify)</NOBR><HR></H1>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>set (3m_framework__msg)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-unit_test_system(3f) - [M_framework__verify] return status from
-system command
+set(3f) - [M_msg] set scalars from an array
 (LICENSE:PD)
+<P>
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
@@ -75,11 +75,15 @@ system command
 
 </A>
 <BLOCKQUOTE>
-function unit_test_system(cmd,verbose)
+Syntax:
 <P>
 <PRE>
-    character(len=*),intent(in)  :: cmd
-    logical,intent(in),optional  :: verbose
+     function set(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+     & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,gk)
+     class(*),intent(in)           :: g0
+     class(*),intent(out),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga
+     class(*),intent(out),optional  :: gb,gc,gd,ge,gf,gg,gh,gi,gj,gk
+<P>
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
@@ -88,8 +92,7 @@ function unit_test_system(cmd,verbose)
 
 </A>
 <BLOCKQUOTE>
-unit_test_system(3f) executes a system command and returns the
-exit status of the command.
+set(3f) sets up to twenty scalars to elements from an array.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -98,17 +101,14 @@ exit status of the command.
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>command</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-system command to execute. If it starts with "* " the
-asterisk is replaced by the name of the current command.
-If it starts with "** " the asterisks are replaced by
-the current command including arguments.
+<TR valign=top><TD width=6% nowrap>
+<B>g0(:)</B> </TD><TD valign=bottom>
+array to read values from. Can be of type INTEGER or REAL
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>verbose</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-if .true. the executed command is echoed to output. The
-default is .false.
+<B>g[1-9a-k]</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+optional values to set to an array element. Can
+be of type INTEGER or REAL
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -120,26 +120,48 @@ default is .false.
 Sample program:
 <P>
 <PRE>
-   program demo_unit_test_system
-   use M_framework, only: &
-      unit_test_start,  &
-      unit_test,        &
-      unit_test_system, &
-      unit_test_end
+   program demo_set
+   use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+   use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+   use M_framework__msg, only : set
    implicit none
-   if (command_argument_count()  ==  0) then
-      call unit_test_start(&#146;myroutine&#146;)
-      call unit_test(&#146;false&#146;, unit_test_system(&#146;false&#146;) == 0, &#146;check false&#146;)
-      call unit_test(&#146;true&#146;, unit_test_system(&#146;true&#146;) == 0, &#146;check true&#146;)
-      call unit_test(&#146;notthere&#146;, unit_test_system(&#146;notthere&#146;) == 0, &
-      & &#146;check notthere&#146;)
-      call unit_test(&#146;*&#146;,&
-      & unit_test_system(&#146;* and options&#146;, verbose=.true.) == 0, &#146;check "*"&#146;)
-      call unit_test_end(&#146;myroutine&#146;)
-   else
-      write (*, *) &#146;called with an option&#146;
-   endif
-   end program demo_unit_test_system
+   real(kind=real32)    :: a; namelist /all/a
+   real(kind=real64)    :: b; namelist /all/b
+   real(kind=real128)   :: c; namelist /all/c
+   integer(kind=int8)   :: i; namelist /all/i
+   integer(kind=int16)  :: j; namelist /all/j
+   integer(kind=int32)  :: k; namelist /all/k
+   integer(kind=int64)  :: l; namelist /all/l
+      call set([1,2,3,4,5,6,7],a,b,c,i,j,k,l)
+      write(*,nml=all)
+      call set(10,a)
+      call set(100,l)
+      write(*,nml=all)
+   end program demo_set
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    &ALL
+    A       =   1.000000    ,
+    B       =   2.00000000000000     ,
+    C       =   3.00000000000000000000000000000000      ,
+    I       =    4,
+    J       =      5,
+    K       =           6,
+    L       =                     7
+    /
+    &ALL
+    A       =   10.00000    ,
+    B       =   2.00000000000000     ,
+    C       =   3.00000000000000000000000000000000      ,
+    I       =    4,
+    J       =      5,
+    K       =           6,
+    L       =                   100
+    /
+<P>
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -160,8 +182,8 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unit_test_system (3m_framework__verify)</TD> <TD align=right width=33%><I>December 11, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0129472f-ae6b-4290-bced-1b18c97fa366 using man macros.</FONT>
-<br><br><center><img src="images/unit_test_system.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>set (3m_framework__msg)</TD> <TD align=right width=33%><I>December 11, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 10908a82-9f3d-4641-b3ad-e2cab3357ed1 using man macros.</FONT>
+<br><br><center><img src="images/set.gif"></center>
 </div>
 </div>
 </body>

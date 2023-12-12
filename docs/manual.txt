@@ -8,6 +8,7 @@ journal (3m_framework__journal) - [M_framework__journal] provides public message
 M_framework__journal (3m_framework__journal) - [M_framework__journal::INTRO] write program messages to stdout and/or a log file (LICENSE:PD)
 M_framework__verify (3m_framework__verify) - [M_framework__verify::INTRO] unit test framework (LICENSE:PD)
 pdec (3m_framework__msg) - [M_framework__msg] write out string with ASCII decimal equivalent vertically under it (LICENSE:PD)
+set (3m_framework__msg) - [M_msg] set scalars from an array (LICENSE:PD)
 significant (3m_framework__approx) - [M_framework__approx] round val to specified number of significant digits
 stderr (3m_framework__msg) - [M_framework__msg] write message to stderr (LICENSE:PD)
 str (3m_framework__msg) - [M_framework__msg] converts up to twenty standard scalar type values to a string (LICENSE:PD)
@@ -111,7 +112,7 @@ LICENSE
 
 
 
-				 July 22, 2023	  almost(3m_framework__approx)
+			       December 11, 2023  almost(3m_framework__approx)
 in_margin(3m_framework__approx) 	       in_margin(3m_framework__approx)
 
 
@@ -189,7 +190,108 @@ EXAMPLE
 
 
 
-				 July 22, 2023 in_margin(3m_framework__approx)
+			       December 11, 202in_margin(3m_framework__approx)
+significant(3m_framework__approx)	     significant(3m_framework__approx)
+
+
+
+NAME
+  significant(3f) - [M_framework__approx] round val to specified number of
+  significant digits
+
+
+SYNOPSIS
+  pure elemental function significant(val,digits,round)
+
+       real,intent(in)			    :: val
+       integer,intent(in)		    :: digits
+       character(len=*),intent(in),optional :: round
+       real				    :: significant
+
+
+DESCRIPTION
+  Round real value to specified number of significant digits
+
+OPTIONS
+  val
+    value to round
+
+  digits
+    number of significant digits to produce
+
+  round
+    Use the round edit descriptor
+
+	    RU	UP : the value resulting from conversion shall be the
+		     smallest representable value that is greater than or
+		     equal to the original value
+	    RD	DOWN : the value resulting from conversion shall be the
+		     largest representable value that is less than or
+		     equal to the original value
+	    RZ	ZERO : the value resulting from conversion shall be the value
+		     closest to the original value and no greater in
+		     magnitude than the original value.
+	    RN	NEAREST : modeis NEAREST,thevalueresulting from conversion
+			 shall be the closer of the two nearest
+			 representable values if one is closer than the
+			 other. If the two nearest representable values
+			 are equidistant from the original value, it is
+			 processor dependent which one of them is chosen.
+	    RC	COMPATIBLE : the value resulting from conversion shall be
+			   the closer of the two nearest representable
+			   values or the value away from zero if halfway
+			   between them.
+	    RP	PROCESSOR_DEFINED : rounding during conversion shall be
+				    a processor-dependent default mode,
+				    which may correspond to one of the
+				    other modes.
+
+
+EXAMPLE
+  Sample program
+
+     program demo_significant
+     use M_framework__approx, only : significant
+     implicit none
+     integer :: i
+     real :: r, v
+     character(len=*),parameter :: g='(*(g0.7,1x))'
+
+	write(*,g)significant([8765.43210,0.1234567890],5)
+
+	write(*,*)'default:',1.23456789012345
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9])
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RU'),'RU'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RD'),'RD'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RZ'),'RZ'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RN'),'RN'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RC'),'RC'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RP'),'RP'
+     end program demo_significant
+
+  Results:
+
+	> 8765.400 .1234600
+	>  default:   1.234568
+	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568
+	> 2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568 RU
+	> 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
+	> 1.234567 1.234568 1.234568 RD
+	> 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
+	> 1.234567 1.234568 1.234568 RZ
+	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568 RN
+	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568 RC
+	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568 RP
+
+
+
+
+			       December 11, 2significant(3m_framework__approx)
 accdig(3m_framework__approx)			  accdig(3m_framework__approx)
 
 
@@ -332,108 +434,7 @@ LICENSE
 
 
 
-				 July 22, 2023	  accdig(3m_framework__approx)
-significant(3m_framework__approx)	     significant(3m_framework__approx)
-
-
-
-NAME
-  significant(3f) - [M_framework__approx] round val to specified number of
-  significant digits
-
-
-SYNOPSIS
-  pure elemental function significant(val,digits,round)
-
-       real,intent(in)			    :: val
-       integer,intent(in)		    :: digits
-       character(len=*),intent(in),optional :: round
-       real				    :: significant
-
-
-DESCRIPTION
-  Round real value to specified number of significant digits
-
-OPTIONS
-  val
-    value to round
-
-  digits
-    number of significant digits to produce
-
-  round
-    Use the round edit descriptor
-
-	    RU	UP : the value resulting from conversion shall be the
-		     smallest representable value that is greater than or
-		     equal to the original value
-	    RD	DOWN : the value resulting from conversion shall be the
-		     largest representable value that is less than or
-		     equal to the original value
-	    RZ	ZERO : the value resulting from conversion shall be the value
-		     closest to the original value and no greater in
-		     magnitude than the original value.
-	    RN	NEAREST : modeis NEAREST,thevalueresulting from conversion
-			 shall be the closer of the two nearest
-			 representable values if one is closer than the
-			 other. If the two nearest representable values
-			 are equidistant from the original value, it is
-			 processor dependent which one of them is chosen.
-	    RC	COMPATIBLE : the value resulting from conversion shall be
-			   the closer of the two nearest representable
-			   values or the value away from zero if halfway
-			   between them.
-	    RP	PROCESSOR_DEFINED : rounding during conversion shall be
-				    a processor-dependent default mode,
-				    which may correspond to one of the
-				    other modes.
-
-
-EXAMPLE
-  Sample program
-
-     program demo_significant
-     use M_framework__approx, only : significant
-     implicit none
-     integer :: i
-     real :: r, v
-     character(len=*),parameter :: g='(*(g0.7,1x))'
-
-	write(*,g)significant([8765.43210,0.1234567890],5)
-
-	write(*,*)'default:',1.23456789012345
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9])
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RU'),'RU'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RD'),'RD'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RZ'),'RZ'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RN'),'RN'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RC'),'RC'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RP'),'RP'
-     end program demo_significant
-
-  Results:
-
-	> 8765.400 .1234600
-	>  default:   1.234568
-	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568
-	> 2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568 RU
-	> 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
-	> 1.234567 1.234568 1.234568 RD
-	> 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
-	> 1.234567 1.234568 1.234568 RZ
-	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568 RN
-	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568 RC
-	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568 RP
-
-
-
-
-				 July 22, 202significant(3m_framework__approx)
+			       December 11, 2023  accdig(3m_framework__approx)
 journal(3m_framework__journal)			journal(3m_framework__journal)
 
 
@@ -670,7 +671,7 @@ LICENSE
 
 
 
-				 July 22, 2023	journal(3m_framework__journal)
+			       December 11, 2023journal(3m_framework__journal)
 M_framework__journal(3m_framework__M_framework__journal(3m_framework__journal)
 
 
@@ -824,7 +825,137 @@ LICENSE
 
 
 
-				 JuM_framework__journal(3m_framework__journal)
+			       DeceM_framework__journal(3m_framework__journal)
+assert(3m_framework__msg)			     assert(3m_framework__msg)
+
+
+
+NAME
+  assert(3f) - [M_framework__msg] print filename, linenumber, and message to
+  stderr and stop program (LICENSE:PD)
+
+SYNOPSIS
+  function assert(file,linenum,expr,g1,g2g3,g4,g5,g6,g7,g8,g9)
+
+      character(len=*),intent(in)  :: file
+      character(len=*),intent(in)  :: linenum
+      logical,intent(in)	   :: expr
+      class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
+
+DESCRIPTION
+  assert(3f) prints strings to stderr and then stops program with exit code 1
+  It labels the first string as the filename, the next integer parameter as
+  the linenumber, and then up to nine scalar values.
+
+  It is primarily intended for use by the prep(1) preprocessor $ASSERT
+  directive
+
+OPTIONS
+  filename
+    a string assumed to be the current filename when compiling
+
+  linenum
+    assumed to be the line number of the source code the ASSERT(3f) procedure
+    was called at.
+
+  expr
+    logical value
+
+  g[1-9]
+    optional value(s) to print as a message before stopping. May be of type
+    INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
+
+EXAMPLES
+  Sample program:
+
+     program demo_assert
+     use M_framework__msg, only : assert
+     implicit none
+     real :: a, toobig=1024
+     a=2000
+     call assert('myroutine', 101, a > toobig, &
+	     & 'The value is too large', a, ' > ', toobig)
+     end program demo_assert
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December 11, 2023     assert(3m_framework__msg)
+fmt(3m_framework__msg)					fmt(3m_framework__msg)
+
+
+
+NAME
+  fmt(3f) - [M_framework__msg] convert any intrinsic to a string using
+  specified format (LICENSE:PD)
+
+SYNOPSIS
+  function fmt(value,format) result(string)
+
+      class(*),intent(in),optional :: value
+      character(len=*),intent(in),optional  :: format
+      character(len=:),allocatable :: string
+
+DESCRIPTION
+  FMT(3f) converts any standard intrinsic value to a string using the
+  specified format.
+
+OPTIONS
+  value
+    value to print the value of. May be of type INTEGER, LOGICAL, REAL,
+    DOUBLEPRECISION, COMPLEX, or CHARACTER.
+
+  format
+    format to use to print value. It is up to the user to use an appropriate
+    format. The format does not require being surrounded by parenthesis. If
+    not present a default is selected similar to what would be produced with
+    free format.
+
+RETURNS
+  string
+    A string value
+
+EXAMPLES
+  Sample program:
+
+      program demo_fmt
+      use :: M_framework__msg, only : fmt
+      implicit none
+      character(len=:),allocatable :: output
+
+	 output=fmt(10,"'[',i0,']'")
+	 write(*,*)'result is ',output
+
+	 output=fmt(10.0/3.0,"'[',g0.5,']'")
+	 write(*,*)'result is ',output
+
+	 output=fmt(.true.,"'The final answer is [',g0,']'")
+	 write(*,*)'result is ',output
+
+      end program demo_fmt
+
+  Results:
+
+      result is [10]
+      result is [3.3333]
+      result is The final answer is [T]
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December 11, 2023	fmt(3m_framework__msg)
 pdec(3m_framework__msg) 			       pdec(3m_framework__msg)
 
 
@@ -883,7 +1014,89 @@ LICENSE
 
 
 
-				 July 22, 2023	       pdec(3m_framework__msg)
+			       December 11, 2023       pdec(3m_framework__msg)
+set(3m_framework__msg)					set(3m_framework__msg)
+
+
+
+NAME
+  set(3f) - [M_msg] set scalars from an array (LICENSE:PD)
+
+
+SYNOPSIS
+  Syntax:
+
+       function set(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+       & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,gk)
+       class(*),intent(in)	     :: g0
+       class(*),intent(out),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga
+       class(*),intent(out),optional  :: gb,gc,gd,ge,gf,gg,gh,gi,gj,gk
+
+
+DESCRIPTION
+  set(3f) sets up to twenty scalars to elements from an array.
+
+OPTIONS
+  g0(:)
+    array to read values from. Can be of type INTEGER or REAL
+
+  g[1-9a-k]
+    optional values to set to an array element. Can be of type INTEGER or REAL
+
+EXAMPLES
+  Sample program:
+
+     program demo_set
+     use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+     use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+     use M_framework__msg, only : set
+     implicit none
+     real(kind=real32)	  :: a; namelist /all/a
+     real(kind=real64)	  :: b; namelist /all/b
+     real(kind=real128)   :: c; namelist /all/c
+     integer(kind=int8)   :: i; namelist /all/i
+     integer(kind=int16)  :: j; namelist /all/j
+     integer(kind=int32)  :: k; namelist /all/k
+     integer(kind=int64)  :: l; namelist /all/l
+	call set([1,2,3,4,5,6,7],a,b,c,i,j,k,l)
+	write(*,nml=all)
+	call set(10,a)
+	call set(100,l)
+	write(*,nml=all)
+     end program demo_set
+
+  Results:
+
+      &ALL
+      A       =   1.000000    ,
+      B       =   2.00000000000000     ,
+      C       =   3.00000000000000000000000000000000	  ,
+      I       =    4,
+      J       =      5,
+      K       = 	  6,
+      L       = 		    7
+      /
+      &ALL
+      A       =   10.00000    ,
+      B       =   2.00000000000000     ,
+      C       =   3.00000000000000000000000000000000	  ,
+      I       =    4,
+      J       =      5,
+      K       = 	  6,
+      L       = 		  100
+      /
+
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December 11, 2023	set(3m_framework__msg)
 stderr(3m_framework__msg)			     stderr(3m_framework__msg)
 
 
@@ -979,7 +1192,7 @@ LICENSE
 
 
 
-				 July 22, 2023	     stderr(3m_framework__msg)
+			       December 11, 2023     stderr(3m_framework__msg)
 str(3m_framework__msg)					str(3m_framework__msg)
 
 
@@ -1078,7 +1291,7 @@ LICENSE
 
 
 
-				 July 22, 2023		str(3m_framework__msg)
+			       December 11, 2023	str(3m_framework__msg)
 wrt(3m_framework__msg)					wrt(3m_framework__msg)
 
 
@@ -1171,137 +1384,7 @@ LICENSE
 
 
 
-				 July 22, 2023		wrt(3m_framework__msg)
-assert(3m_framework__msg)			     assert(3m_framework__msg)
-
-
-
-NAME
-  assert(3f) - [M_framework__msg] print filename, linenumber, and message to
-  stderr and stop program (LICENSE:PD)
-
-SYNOPSIS
-  function assert(file,linenum,expr,g1,g2g3,g4,g5,g6,g7,g8,g9)
-
-      character(len=*),intent(in)  :: file
-      character(len=*),intent(in)  :: linenum
-      logical,intent(in)	   :: expr
-      class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
-
-DESCRIPTION
-  assert(3f) prints strings to stderr and then stops program with exit code 1
-  It labels the first string as the filename, the next integer parameter as
-  the linenumber, and then up to nine scalar values.
-
-  It is primarily intended for use by the prep(1) preprocessor $ASSERT
-  directive
-
-OPTIONS
-  filename
-    a string assumed to be the current filename when compiling
-
-  linenum
-    assumed to be the line number of the source code the ASSERT(3f) procedure
-    was called at.
-
-  expr
-    logical value
-
-  g[1-9]
-    optional value(s) to print as a message before stopping. May be of type
-    INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
-
-EXAMPLES
-  Sample program:
-
-     program demo_assert
-     use M_framework__msg, only : assert
-     implicit none
-     real :: a, toobig=1024
-     a=2000
-     call assert('myroutine', 101, a > toobig, &
-	     & 'The value is too large', a, ' > ', toobig)
-     end program demo_assert
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				 July 22, 2023	     assert(3m_framework__msg)
-fmt(3m_framework__msg)					fmt(3m_framework__msg)
-
-
-
-NAME
-  fmt(3f) - [M_framework__msg] convert any intrinsic to a string using
-  specified format (LICENSE:PD)
-
-SYNOPSIS
-  function fmt(value,format) result(string)
-
-      class(*),intent(in),optional :: value
-      character(len=*),intent(in),optional  :: format
-      character(len=:),allocatable :: string
-
-DESCRIPTION
-  FMT(3f) converts any standard intrinsic value to a string using the
-  specified format.
-
-OPTIONS
-  value
-    value to print the value of. May be of type INTEGER, LOGICAL, REAL,
-    DOUBLEPRECISION, COMPLEX, or CHARACTER.
-
-  format
-    format to use to print value. It is up to the user to use an appropriate
-    format. The format does not require being surrounded by parenthesis. If
-    not present a default is selected similar to what would be produced with
-    free format.
-
-RETURNS
-  string
-    A string value
-
-EXAMPLES
-  Sample program:
-
-      program demo_fmt
-      use :: M_framework__msg, only : fmt
-      implicit none
-      character(len=:),allocatable :: output
-
-	 output=fmt(10,"'[',i0,']'")
-	 write(*,*)'result is ',output
-
-	 output=fmt(10.0/3.0,"'[',g0.5,']'")
-	 write(*,*)'result is ',output
-
-	 output=fmt(.true.,"'The final answer is [',g0,']'")
-	 write(*,*)'result is ',output
-
-      end program demo_fmt
-
-  Results:
-
-      result is [10]
-      result is [3.3333]
-      result is The final answer is [T]
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				 July 22, 2023		fmt(3m_framework__msg)
+			       December 11, 2023	wrt(3m_framework__msg)
 fstop(3m_framework__utility)			  fstop(3m_framework__utility)
 
 
@@ -1368,7 +1451,7 @@ LICENSE
 
 
 
-				 July 22, 2023	  fstop(3m_framework__utility)
+			       December 11, 2023  fstop(3m_framework__utility)
 unit_test_end(3m_framework__verify)	   unit_test_end(3m_framework__verify)
 
 
@@ -1423,7 +1506,449 @@ LICENSE
 
 
 
-				 July 22, 2unit_test_end(3m_framework__verify)
+			       December 11,unit_test_end(3m_framework__verify)
+unit_test_expected(3m_framework__verifunit_test_expected(3m_framework__verify)
+
+
+
+NAME
+  unit_test_expected(3f) - [M_framework__verify] report if two scalar values
+  of like type and kind are equal.  (LICENSE:PD)
+
+
+SYNOPSIS
+  impure elemental subroutine unit_test_example(name,result,expected)
+
+      character(len=*),intent(in)  :: name
+      class(*),intent(in)	   :: result
+      class(*),intent(in),optional :: expected
+
+
+DESCRIPTION
+  A shortcut for a common call to unit_test(3f) tests the two values of like
+  type and kind. It is equivalent to
+
+	 call unit_test(name,result,expected,'result=',result,'expected=',.true.)
+
+
+OPTIONS
+  RESULT
+    A generated value or expression of integer, real, character, or complex
+    type.
+
+  EXPECTED
+    The expected value for RESULT, of the same type and kind as RESULT. If not
+    present, it is equivalent to .TRUE.
+
+EXAMPLES
+  Sample program:
+
+	program demo_unit_test_expected
+	use, intrinsic :: iso_fortran_env, only: &
+	& stdin => input_unit, stdout => output_unit, stderr => error_unit
+	use M_framework, only:		      &
+	&  unit_test_mode,		      &
+	&  start     =>  unit_test_start,     &
+	&  expected  =>  unit_test_expected,  &
+	&  stop      =>  unit_test_stop,      &
+	& unit_test_level, unit_test_flags
+	implicit none
+	logical, parameter :: T=.true., F=.false.
+	! optional call to change default modes
+	   call unit_test_mode(  &
+	       keep_going=T,	 &
+	       flags=[0],	 &
+	       luns=[stderr],	 &
+	       command='',	 &
+	       brief=F, 	 &
+	       match='',	 &
+	       interactive=F,	 &
+	       CMDLINE=T,	 &
+	       debug=F)
+
+	   unit_test_level=0
+	   ! unit tests for ABS(3f) intrinsic
+	   call start('abs')
+	   ! integer
+	   call expected('abs',abs(-10),10)
+	   call expected('abs',abs( 10),10)
+	   ! real and elemental
+	   call expected('abs',abs( [-10.0, 10.0]),10.0)
+	   ! complex
+	   call expected('abs',abs(( 3.0,-4.0)),5.0)
+	   call expected('abs',abs((-3.0, 4.0)),5.0)
+	   call expected('abs',abs((-3.0,-4.0)),5.0)
+	   call expected('abs',abs(( 3.0, 4.0)),5.0)
+	   call stop('abs')
+	end program demo_unit_test_expected
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       Decembeunit_test_expected(3m_framework__verify)
+unit_test_mode(3m_framework__verify)	  unit_test_mode(3m_framework__verify)
+
+
+
+NAME
+  unit_test_mode(3f) - [M_framework__verify] set testing modes (LICENSE:PD)
+
+SYNOPSIS
+  subroutine unit_test_mode( keep_going, flags, luns, command, & brief,
+  interactive, CMDLINE, debug, match)
+
+  logical,intent(in) :: keep_going, brief, interactive,debug
+  integer,intent(in),allocatable :: luns(:), flags(:)
+  character(len=*),intent(in) :: command
+
+DESCRIPTION
+  unit_test_mode(3f) changes testing mode defaults
+
+OPTIONS
+  keep_going
+    keep running if a test fails. Default to TRUE
+
+  flags
+    a list of integer values that can be accessed from M_framework as
+    unit_test_flags(:) for use in selecting various tests conditionally
+
+  luns
+    list of Fortran units to unit test messages to. Defaults to the the value
+    of ERROR_UNIT from the intrinsic module ISO_FORTRAN_ENV (ie. defaults to
+    "stderr"). It is Assumed the units have been opened by the program.
+
+  match
+    the string that is tested against the name and msg specified on
+    unit_test_start() to set the "matched" argument.
+
+  command
+    filter command, typically to generate reports. It is passed data on the
+    command line. See the example filter "bookkeeper" for examples.
+
+  brief
+    If present only "FAIL" messages are produced.
+
+  brief
+    Only display FAIL messages and related information
+
+  verbose
+    verbose mode displays compiler version and options and all standard
+    messages.
+
+  silent
+    no output from unit_test_*(3f) procedures
+
+  interactive
+    prompt as each test case starts as to continue.
+
+  cmdline
+    If set to .false. do not parse command line for options.
+
+  debug
+    Debug mode for the M_framework package
+
+EXAMPLES
+  Sample program:
+
+     program demo_unit_test_mode
+     use M_framework
+     implicit none
+
+     call unit_test_mode(keep_going=.false.,luns=[6], &
+	     & brief=.true.)
+
+     end program demo_unit_test_mode
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December 11unit_test_mode(3m_framework__verify)
+unit_test_msg(3m_framework__verify)	   unit_test_msg(3m_framework__verify)
+
+
+
+NAME
+  unit_test_msg(3f) - [M_framework__verify] converts up to twenty standard
+  scalar values to a message for unit testing (LICENSE:PD)
+
+SYNOPSIS
+  function unit_test_msg(name, msg, & &
+  g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,if)
+
+      character(len=*),intent(in)  :: name
+      class(*),intent(in),optional :: msg, &
+      & g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+
+DESCRIPTION
+  unit_test_msg(3f) builds a string from up to twenty scalar values and prints
+  it to the error log.
+
+OPTIONS
+  name
+    name of unit being tested
+
+  msg,g[1-j]
+    optional values to print the value of. May be of type INTEGER, LOGICAL,
+    REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
+
+  if
+    expression must be true or message is not output.  Must be specified by
+    keyword as "if=expression".
+
+EXAMPLES
+  Sample program:
+
+     program demo_unit_test_msg
+     use M_framework, only : unit_test_start,unit_test_msg, &
+	     & unit_test_end
+     implicit none
+
+     call unit_test_start('myroutine')
+     call unit_test_msg('myroutine','HUGE(3f) integers', &
+	     & huge(0),'and real',huge(0.0),'and double',huge(0.0d0))
+     call unit_test_msg('myroutine','real	     :', &
+	     & huge(0.0),0.0,12345.6789,tiny(0.0) )
+     call unit_test_msg('myroutine','doubleprecision :', &
+	     & huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
+     call unit_test_msg('myroutine','complex	     :', &
+	     & cmplx(huge(0.0),tiny(0.0)) )
+     call unit_test_end('myroutine')
+
+     end program demo_unit_test_msg
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December 11,unit_test_msg(3m_framework__verify)
+unit_test_start(3m_framework__verify)	 unit_test_start(3m_framework__verify)
+
+
+
+NAME
+  unit_test_start(3f) - [M_framework__verify] reset counters and start a new
+  test block (LICENSE:PD)
+
+
+SYNOPSIS
+  subroutine unit_test_start(name,msg,opts,matched)
+
+      character(len=*),intent(in)	   :: name
+      character(len=*),intent(in),optional :: msg
+      character(len=*),intent(in),optional :: opts
+      logical,intent(out),optional	   :: matched
+
+
+DESCRIPTION
+  unit_test_start(3f) is an initialization procedure for starting a new
+  procedure test.
+
+OPTIONS
+  NAME
+    name of the procedure to test
+
+  MSG
+    message to print
+
+  OPTS
+    pass additional options to the optional shell command that can be assigned
+    on the command line or by unit_test_mode(3f).
+
+  MATCHED
+    if the match string has been set with unit_test_mode(3f) or on the command
+    line this will return true if the name and msg concatenated with a space
+    match the entire match string, where "*" matches any string and "?"
+    matches any single character. This allows you to skip a test set if you
+    wish by exiting.
+
+EXAMPLES
+  Sample program:
+
+      program demo_unit_test_start
+      use M_framework, only: unit_test_start, unit_test, &
+       & unit_test_end, unit_test_mode, unit_test_stop
+      implicit none
+      integer :: ival
+      logical :: matched
+      call unit_test_mode()
+      call test_mysub1()
+      call test_mysub2()
+      call unit_test_stop()
+      contains
+      subroutine test_mysub1() ! first test
+      call unit_test_start('mysub1')
+      ! the example goodbad(1) command called here takes many options
+      ! used to build an SQLite3 entry
+      ival=10
+      call unit_test('mysub1', ival > 3 ,   msg=' if big enough')
+      call unit_test('mysub1', ival < 100 , msg=' if small enough')
+      call unit_test_end('mysub1',msg='completed checks of "mysub1"')
+      end subroutine test_mysub1
+
+      subroutine test_mysub2() ! second test
+      call unit_test_start('mysub1','',matched=matched)
+      ival=200
+	 if(.not.matched)return ! makes it skippable
+	 call unit_test('mysub1', ival > 3 ,   msg=' if big enough')
+	 call unit_test('mysub1', ival < 100 , msg=' if small enough')
+	 call unit_test_end('mysub1',msg='completed checks of "mysub2"')
+      end subroutine test_mysub2
+
+      end program demo_unit_test_start
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December 1unit_test_start(3m_framework__verify)
+unit_test_stop(3m_framework__verify)	  unit_test_stop(3m_framework__verify)
+
+
+
+NAME
+  unit_test_stop(3f) - [M_framework__verify] report tally of all checks and
+  stop program (LICENSE:PD)
+
+
+SYNOPSIS
+  subroutine unit_test_stop(msg,opts)
+
+      character(len=*),intent(in),optional :: msg
+      character(len=*),intent(in),optional :: opts
+
+
+DESCRIPTION
+  give a tally of all calls to unit_test(3f) and stop program.
+
+  Tally up the test result totals and stop the program.  If a command is set
+  via unit_test_mode(3f) or the command line call it appending OPTS to the end
+  of the command.
+
+OPTIONS
+  MSG
+    additional message to display OPTS add string to filter command line if
+    any is specified.
+
+EXAMPLES
+  Sample program:
+
+      program demo_unit_test_stop
+      use M_framework, only: unit_test_start, unit_test_end, &
+      & unit_test, unit_test_stop, unit_test_mode
+      use,intrinsic :: iso_fortran_env, stdout=>OUTPUT_UNIT
+      implicit none
+      integer :: x
+      x=10
+      call unit_test_mode(luns=[stdout])
+      ! do a test
+      call unit_test_start('proc1')
+      call unit_test('proc1', x > 3 , 'if big enough')
+      call unit_test('proc1', x < 100 , 'if small enough')
+      call unit_test_end  ('proc1',msg='checks all done' )
+      ! do another test
+      call unit_test_start('proc2')
+      call unit_test('proc2', x > 3 , 'if big enough')
+      call unit_test('proc2', x < 100 , 'if small enough')
+      call unit_test_end  ('proc2',msg='checks all done' )
+
+      ! tally up test results and stop program
+      call unit_test_stop()
+
+      end program demo_unit_test_stop
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December 11unit_test_stop(3m_framework__verify)
+unit_test_system(3m_framework__verify)	unit_test_system(3m_framework__verify)
+
+
+
+NAME
+  unit_test_system(3f) - [M_framework__verify] return status from system
+  command (LICENSE:PD)
+
+SYNOPSIS
+  function unit_test_system(cmd,verbose)
+
+      character(len=*),intent(in)  :: cmd
+      logical,intent(in),optional  :: verbose
+
+DESCRIPTION
+  unit_test_system(3f) executes a system command and returns the exit status
+  of the command.
+
+OPTIONS
+  command
+    system command to execute. If it starts with "* " the asterisk is replaced
+    by the name of the current command.  If it starts with "** " the asterisks
+    are replaced by the current command including arguments.
+
+  verbose
+    if .true. the executed command is echoed to output. The default is .false.
+
+EXAMPLES
+  Sample program:
+
+     program demo_unit_test_system
+     use M_framework, only: &
+	unit_test_start,  &
+	unit_test,	  &
+	unit_test_system, &
+	unit_test_end
+     implicit none
+     if (command_argument_count()  ==  0) then
+	call unit_test_start('myroutine')
+	call unit_test('false', unit_test_system('false') == 0, 'check false')
+	call unit_test('true', unit_test_system('true') == 0, 'check true')
+	call unit_test('notthere', unit_test_system('notthere') == 0, &
+	& 'check notthere')
+	call unit_test('*',&
+	& unit_test_system('* and options', verbose=.true.) == 0, 'check "*"')
+	call unit_test_end('myroutine')
+     else
+	write (*, *) 'called with an option'
+     endif
+     end program demo_unit_test_system
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December unit_test_system(3m_framework__verify)
 M_framework__verify(3m_framework__verM_framework__verify(3m_framework__verify)
 
 
@@ -1615,449 +2140,7 @@ LICENSE
 
 
 
-				 JulyM_framework__verify(3m_framework__verify)
-unit_test_expected(3m_framework__verifunit_test_expected(3m_framework__verify)
-
-
-
-NAME
-  unit_test_expected(3f) - [M_framework__verify] report if two scalar values
-  of like type and kind are equal.  (LICENSE:PD)
-
-
-SYNOPSIS
-  impure elemental subroutine unit_test_example(name,result,expected)
-
-      character(len=*),intent(in)  :: name
-      class(*),intent(in)	   :: result
-      class(*),intent(in),optional :: expected
-
-
-DESCRIPTION
-  A shortcut for a common call to unit_test(3f) tests the two values of like
-  type and kind. It is equivalent to
-
-	 call unit_test(name,result,expected,'result=',result,'expected=',.true.)
-
-
-OPTIONS
-  RESULT
-    A generated value or expression of integer, real, character, or complex
-    type.
-
-  EXPECTED
-    The expected value for RESULT, of the same type and kind as RESULT. If not
-    present, it is equivalent to .TRUE.
-
-EXAMPLES
-  Sample program:
-
-	program demo_unit_test_expected
-	use, intrinsic :: iso_fortran_env, only: &
-	& stdin => input_unit, stdout => output_unit, stderr => error_unit
-	use M_framework, only:		      &
-	&  unit_test_mode,		      &
-	&  start     =>  unit_test_start,     &
-	&  expected  =>  unit_test_expected,  &
-	&  stop      =>  unit_test_stop,      &
-	& unit_test_level, unit_test_flags
-	implicit none
-	logical, parameter :: T=.true., F=.false.
-	! optional call to change default modes
-	   call unit_test_mode(  &
-	       keep_going=T,	 &
-	       flags=[0],	 &
-	       luns=[stderr],	 &
-	       command='',	 &
-	       brief=F, 	 &
-	       match='',	 &
-	       interactive=F,	 &
-	       CMDLINE=T,	 &
-	       debug=F)
-
-	   unit_test_level=0
-	   ! unit tests for ABS(3f) intrinsic
-	   call start('abs')
-	   ! integer
-	   call expected('abs',abs(-10),10)
-	   call expected('abs',abs( 10),10)
-	   ! real and elemental
-	   call expected('abs',abs( [-10.0, 10.0]),10.0)
-	   ! complex
-	   call expected('abs',abs(( 3.0,-4.0)),5.0)
-	   call expected('abs',abs((-3.0, 4.0)),5.0)
-	   call expected('abs',abs((-3.0,-4.0)),5.0)
-	   call expected('abs',abs(( 3.0, 4.0)),5.0)
-	   call stop('abs')
-	end program demo_unit_test_expected
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				 July unit_test_expected(3m_framework__verify)
-unit_test_mode(3m_framework__verify)	  unit_test_mode(3m_framework__verify)
-
-
-
-NAME
-  unit_test_mode(3f) - [M_framework__verify] set testing modes (LICENSE:PD)
-
-SYNOPSIS
-  subroutine unit_test_mode( keep_going, flags, luns, command, & brief,
-  interactive, CMDLINE, debug, match)
-
-  logical,intent(in) :: keep_going, brief, interactive,debug
-  integer,intent(in),allocatable :: luns(:), flags(:)
-  character(len=*),intent(in) :: command
-
-DESCRIPTION
-  unit_test_mode(3f) changes testing mode defaults
-
-OPTIONS
-  keep_going
-    keep running if a test fails. Default to TRUE
-
-  flags
-    a list of integer values that can be accessed from M_framework as
-    unit_test_flags(:) for use in selecting various tests conditionally
-
-  luns
-    list of Fortran units to unit test messages to. Defaults to the the value
-    of ERROR_UNIT from the intrinsic module ISO_FORTRAN_ENV (ie. defaults to
-    "stderr"). It is Assumed the units have been opened by the program.
-
-  match
-    the string that is tested against the name and msg specified on
-    unit_test_start() to set the "matched" argument.
-
-  command
-    filter command, typically to generate reports. It is passed data on the
-    command line. See the example filter "bookkeeper" for examples.
-
-  brief
-    If present only "FAIL" messages are produced.
-
-  brief
-    Only display FAIL messages and related information
-
-  verbose
-    verbose mode displays compiler version and options and all standard
-    messages.
-
-  silent
-    no output from unit_test_*(3f) procedures
-
-  interactive
-    prompt as each test case starts as to continue.
-
-  cmdline
-    If set to .false. do not parse command line for options.
-
-  debug
-    Debug mode for the M_framework package
-
-EXAMPLES
-  Sample program:
-
-     program demo_unit_test_mode
-     use M_framework
-     implicit none
-
-     call unit_test_mode(keep_going=.false.,luns=[6], &
-	     & brief=.true.)
-
-     end program demo_unit_test_mode
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				 July 22, unit_test_mode(3m_framework__verify)
-unit_test_msg(3m_framework__verify)	   unit_test_msg(3m_framework__verify)
-
-
-
-NAME
-  unit_test_msg(3f) - [M_framework__verify] converts up to twenty standard
-  scalar values to a message for unit testing (LICENSE:PD)
-
-SYNOPSIS
-  function unit_test_msg(name, msg, & &
-  g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,if)
-
-      character(len=*),intent(in)  :: name
-      class(*),intent(in),optional :: msg, &
-      & g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-
-DESCRIPTION
-  unit_test_msg(3f) builds a string from up to twenty scalar values and prints
-  it to the error log.
-
-OPTIONS
-  name
-    name of unit being tested
-
-  msg,g[1-j]
-    optional values to print the value of. May be of type INTEGER, LOGICAL,
-    REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
-
-  if
-    expression must be true or message is not output.  Must be specified by
-    keyword as "if=expression".
-
-EXAMPLES
-  Sample program:
-
-     program demo_unit_test_msg
-     use M_framework, only : unit_test_start,unit_test_msg, &
-	     & unit_test_end
-     implicit none
-
-     call unit_test_start('myroutine')
-     call unit_test_msg('myroutine','HUGE(3f) integers', &
-	     & huge(0),'and real',huge(0.0),'and double',huge(0.0d0))
-     call unit_test_msg('myroutine','real	     :', &
-	     & huge(0.0),0.0,12345.6789,tiny(0.0) )
-     call unit_test_msg('myroutine','doubleprecision :', &
-	     & huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
-     call unit_test_msg('myroutine','complex	     :', &
-	     & cmplx(huge(0.0),tiny(0.0)) )
-     call unit_test_end('myroutine')
-
-     end program demo_unit_test_msg
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				 July 22, 2unit_test_msg(3m_framework__verify)
-unit_test_start(3m_framework__verify)	 unit_test_start(3m_framework__verify)
-
-
-
-NAME
-  unit_test_start(3f) - [M_framework__verify] reset counters and start a new
-  test block (LICENSE:PD)
-
-
-SYNOPSIS
-  subroutine unit_test_start(name,msg,opts,matched)
-
-      character(len=*),intent(in)	   :: name
-      character(len=*),intent(in),optional :: msg
-      character(len=*),intent(in),optional :: opts
-      logical,intent(out),optional	   :: matched
-
-
-DESCRIPTION
-  unit_test_start(3f) is an initialization procedure for starting a new
-  procedure test.
-
-OPTIONS
-  NAME
-    name of the procedure to test
-
-  MSG
-    message to print
-
-  OPTS
-    pass additional options to the optional shell command that can be assigned
-    on the command line or by unit_test_mode(3f).
-
-  MATCHED
-    if the match string has been set with unit_test_mode(3f) or on the command
-    line this will return true if the name and msg concatenated with a space
-    match the entire match string, where "*" matches any string and "?"
-    matches any single character. This allows you to skip a test set if you
-    wish by exiting.
-
-EXAMPLES
-  Sample program:
-
-      program demo_unit_test_start
-      use M_framework, only: unit_test_start, unit_test, &
-       & unit_test_end, unit_test_mode, unit_test_stop
-      implicit none
-      integer :: ival
-      logical :: matched
-      call unit_test_mode()
-      call test_mysub1()
-      call test_mysub2()
-      call unit_test_stop()
-      contains
-      subroutine test_mysub1() ! first test
-      call unit_test_start('mysub1')
-      ! the example goodbad(1) command called here takes many options
-      ! used to build an SQLite3 entry
-      ival=10
-      call unit_test('mysub1', ival > 3 ,   msg=' if big enough')
-      call unit_test('mysub1', ival < 100 , msg=' if small enough')
-      call unit_test_end('mysub1',msg='completed checks of "mysub1"')
-      end subroutine test_mysub1
-
-      subroutine test_mysub2() ! second test
-      call unit_test_start('mysub1','',matched=matched)
-      ival=200
-	 if(.not.matched)return ! makes it skippable
-	 call unit_test('mysub1', ival > 3 ,   msg=' if big enough')
-	 call unit_test('mysub1', ival < 100 , msg=' if small enough')
-	 call unit_test_end('mysub1',msg='completed checks of "mysub2"')
-      end subroutine test_mysub2
-
-      end program demo_unit_test_start
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				 July 22,unit_test_start(3m_framework__verify)
-unit_test_stop(3m_framework__verify)	  unit_test_stop(3m_framework__verify)
-
-
-
-NAME
-  unit_test_stop(3f) - [M_framework__verify] report tally of all checks and
-  stop program (LICENSE:PD)
-
-
-SYNOPSIS
-  subroutine unit_test_stop(msg,opts)
-
-      character(len=*),intent(in),optional :: msg
-      character(len=*),intent(in),optional :: opts
-
-
-DESCRIPTION
-  give a tally of all calls to unit_test(3f) and stop program.
-
-  Tally up the test result totals and stop the program.  If a command is set
-  via unit_test_mode(3f) or the command line call it appending OPTS to the end
-  of the command.
-
-OPTIONS
-  MSG
-    additional message to display OPTS add string to filter command line if
-    any is specified.
-
-EXAMPLES
-  Sample program:
-
-      program demo_unit_test_stop
-      use M_framework, only: unit_test_start, unit_test_end, &
-      & unit_test, unit_test_stop, unit_test_mode
-      use,intrinsic :: iso_fortran_env, stdout=>OUTPUT_UNIT
-      implicit none
-      integer :: x
-      x=10
-      call unit_test_mode(luns=[stdout])
-      ! do a test
-      call unit_test_start('proc1')
-      call unit_test('proc1', x > 3 , 'if big enough')
-      call unit_test('proc1', x < 100 , 'if small enough')
-      call unit_test_end  ('proc1',msg='checks all done' )
-      ! do another test
-      call unit_test_start('proc2')
-      call unit_test('proc2', x > 3 , 'if big enough')
-      call unit_test('proc2', x < 100 , 'if small enough')
-      call unit_test_end  ('proc2',msg='checks all done' )
-
-      ! tally up test results and stop program
-      call unit_test_stop()
-
-      end program demo_unit_test_stop
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				 July 22, unit_test_stop(3m_framework__verify)
-unit_test_system(3m_framework__verify)	unit_test_system(3m_framework__verify)
-
-
-
-NAME
-  unit_test_system(3f) - [M_framework__verify] return status from system
-  command (LICENSE:PD)
-
-SYNOPSIS
-  function unit_test_system(cmd,verbose)
-
-      character(len=*),intent(in)  :: cmd
-      logical,intent(in),optional  :: verbose
-
-DESCRIPTION
-  unit_test_system(3f) executes a system command and returns the exit status
-  of the command.
-
-OPTIONS
-  command
-    system command to execute. If it starts with "* " the asterisk is replaced
-    by the name of the current command.  If it starts with "** " the asterisks
-    are replaced by the current command including arguments.
-
-  verbose
-    if .true. the executed command is echoed to output. The default is .false.
-
-EXAMPLES
-  Sample program:
-
-     program demo_unit_test_system
-     use M_framework, only: &
-	unit_test_start,  &
-	unit_test,	  &
-	unit_test_system, &
-	unit_test_end
-     implicit none
-     if (command_argument_count()  ==  0) then
-	call unit_test_start('myroutine')
-	call unit_test('false', unit_test_system('false') == 0, 'check false')
-	call unit_test('true', unit_test_system('true') == 0, 'check true')
-	call unit_test('notthere', unit_test_system('notthere') == 0, &
-	& 'check notthere')
-	call unit_test('*',&
-	& unit_test_system('* and options', verbose=.true.) == 0, 'check "*"')
-	call unit_test_end('myroutine')
-     else
-	write (*, *) 'called with an option'
-     endif
-     end program demo_unit_test_system
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				 July 22unit_test_system(3m_framework__verify)
+			       DecembM_framework__verify(3m_framework__verify)
 unit_test(3m_framework__verify) 	       unit_test(3m_framework__verify)
 
 
@@ -2188,4 +2271,4 @@ LICENSE
 
 
 
-				 July 22, 2023 unit_test(3m_framework__verify)
+			       December 11, 202unit_test(3m_framework__verify)
