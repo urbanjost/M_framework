@@ -1,10 +1,14 @@
 accdig (3m_framework__approx) - [M_framework__approx] compare two numbers only up to a specified number of digits (LICENSE:PD)
 almost (3m_framework__approx) - [M_framework__approx] return true or false if two numbers agree up to specified number of digits (LICENSE:PD)
 assert (3m_framework__msg) - [M_framework__msg] print filename, linenumber, and message to stderr and stop program (LICENSE:PD)
+attr (3m_framework__attr) - [M_framework__attr] substitute escape sequences for HTML-like syntax in strings (LICENSE:MIT)
+attr_mode (3m_framework__attr) - [M_framework__attr] select processing mode for output from attr(3f) (LICENSE:MIT)
+attr_update (3m_framework__attr) - [M_framework__attr] update internal dictionary given keyword and value (LICENSE:MIT)
 fmt (3m_framework__msg) - [M_framework__msg] convert any intrinsic to a string using specified format (LICENSE:PD)
 fstop (3m_framework__utility) - [M_framework__utility] call stop with both a number and a message (LICENSE:PD)
 in_margin (3m_framework__approx) - [M_framework__approx] check if two reals are approximately equal using a relative margin
 journal (3m_framework__journal) - [M_framework__journal] provides public message routine, no paging or graphic mode change (LICENSE:PD)
+M_framework__attr (3m_framework__attr) - [M_framework__attr::INTRO] control text attributes on terminals (LICENSE:MIT)
 M_framework__journal (3m_framework__journal) - [M_framework__journal::INTRO] write program messages to stdout and/or a log file (LICENSE:PD)
 M_framework__verify (3m_framework__verify) - [M_framework__verify::INTRO] unit test framework (LICENSE:PD)
 pdec (3m_framework__msg) - [M_framework__msg] write out string with ASCII decimal equivalent vertically under it (LICENSE:PD)
@@ -112,85 +116,7 @@ LICENSE
 
 
 
-			       December 11, 2023  almost(3m_framework__approx)
-in_margin(3m_framework__approx) 	       in_margin(3m_framework__approx)
-
-
-
-NAME
-  in_margin(3f) - [M_framework__approx] check if two reals are approximately
-  equal using a relative margin
-
-
-SYNOPSIS
-  elemental pure function in_margin( expected_value, measured_value,
-  allowed_margin )
-
-       real, intent(in)    :: expected_value
-       real, intent(in)    :: measured_value
-       real, intent(in)    :: allowed_margin
-       class(*),intent(in) :: invalue
-
-
-DESCRIPTION
-  Compare two values to see if they are relatively equal using the specified
-  allowed margin. That is, see if VALUE_MEASURED is in the range
-  VALUE_EXPECTED +- ALLOWED_ERROR where the allowed error varies with the
-  magnitude of the values, such that the allowed error is margin * average
-  magnitude of measured and expected).
-
-  So the allowed error is smaller when the magnitudes are smaller.
-
-OPTIONS
-  expected_value
-    First value
-
-  measured_value
-    Second value
-
-  allowed_margin
-    Allowed relative margin
-
-EXAMPLE
-  Sample program:
-
-     program demo_in_margin
-     use :: M_framework__approx, only : in_margin
-     implicit none
-     write(*,*) in_margin(4.00000,3.99999,0.000000001)
-     write(*,*) in_margin(4.00000,3.99999,0.00000001)
-     write(*,*) in_margin(4.00000,3.99999,0.0000001)
-     write(*,*) in_margin(4.00000,3.99999,0.000001)
-
-     write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], &
-	     & [3.9,39.9,399.9,3999.9,39999.9] ,0.000001)
-     write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], &
-	     & [3.9,39.9,399.9,3999.9,39999.9] ,0.00001)
-
-     write(*,*) in_margin(4.00000,3.99999,0.00001)
-     write(*,*) in_margin(4.00000,3.99999,0.0001)
-     write(*,*) in_margin(4.00000,3.99999,0.001)
-     write(*,*) in_margin(4.00000,3.99999,0.01)
-
-     end program demo_in_margin
-
-  Results:
-
-	 > F
-	 > F
-	 > F
-	 > F
-	 > F F F F F
-	 > F F F F T
-	 > T
-	 > T
-	 > T
-	 > T
-
-
-
-
-			       December 11, 202in_margin(3m_framework__approx)
+			       December 12, 2023  almost(3m_framework__approx)
 significant(3m_framework__approx)	     significant(3m_framework__approx)
 
 
@@ -291,7 +217,85 @@ EXAMPLE
 
 
 
-			       December 11, 2significant(3m_framework__approx)
+			       December 12, 2significant(3m_framework__approx)
+in_margin(3m_framework__approx) 	       in_margin(3m_framework__approx)
+
+
+
+NAME
+  in_margin(3f) - [M_framework__approx] check if two reals are approximately
+  equal using a relative margin
+
+
+SYNOPSIS
+  elemental pure function in_margin( expected_value, measured_value,
+  allowed_margin )
+
+       real, intent(in)    :: expected_value
+       real, intent(in)    :: measured_value
+       real, intent(in)    :: allowed_margin
+       class(*),intent(in) :: invalue
+
+
+DESCRIPTION
+  Compare two values to see if they are relatively equal using the specified
+  allowed margin. That is, see if VALUE_MEASURED is in the range
+  VALUE_EXPECTED +- ALLOWED_ERROR where the allowed error varies with the
+  magnitude of the values, such that the allowed error is margin * average
+  magnitude of measured and expected).
+
+  So the allowed error is smaller when the magnitudes are smaller.
+
+OPTIONS
+  expected_value
+    First value
+
+  measured_value
+    Second value
+
+  allowed_margin
+    Allowed relative margin
+
+EXAMPLE
+  Sample program:
+
+     program demo_in_margin
+     use :: M_framework__approx, only : in_margin
+     implicit none
+     write(*,*) in_margin(4.00000,3.99999,0.000000001)
+     write(*,*) in_margin(4.00000,3.99999,0.00000001)
+     write(*,*) in_margin(4.00000,3.99999,0.0000001)
+     write(*,*) in_margin(4.00000,3.99999,0.000001)
+
+     write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], &
+	     & [3.9,39.9,399.9,3999.9,39999.9] ,0.000001)
+     write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], &
+	     & [3.9,39.9,399.9,3999.9,39999.9] ,0.00001)
+
+     write(*,*) in_margin(4.00000,3.99999,0.00001)
+     write(*,*) in_margin(4.00000,3.99999,0.0001)
+     write(*,*) in_margin(4.00000,3.99999,0.001)
+     write(*,*) in_margin(4.00000,3.99999,0.01)
+
+     end program demo_in_margin
+
+  Results:
+
+	 > F
+	 > F
+	 > F
+	 > F
+	 > F F F F F
+	 > F F F F T
+	 > T
+	 > T
+	 > T
+	 > T
+
+
+
+
+			       December 12, 202in_margin(3m_framework__approx)
 accdig(3m_framework__approx)			  accdig(3m_framework__approx)
 
 
@@ -434,7 +438,507 @@ LICENSE
 
 
 
-			       December 11, 2023  accdig(3m_framework__approx)
+			       December 12, 2023  accdig(3m_framework__approx)
+attr(3m_framework__attr)			      attr(3m_framework__attr)
+
+
+
+NAME
+  attr(3f) - [M_framework__attr] substitute escape sequences for HTML-like
+  syntax in strings (LICENSE:MIT)
+
+
+SYNOPSIS
+  function attr(string,reset) result (expanded)
+
+	 ! scalar
+	 character(len=*),intent(in)  :: string
+	 logical,intent(in),optional  :: reset
+	 character(len=:),allocatable :: expanded
+	 ! or array
+	 character(len=*),intent(in)  :: string(:)
+	 logical,intent(in),optional  :: reset
+	 character(len=:),allocatable :: expanded(:)
+	 integer,intent(in),optional  :: chars
+
+
+DESCRIPTION
+  Use HTML-like syntax to add attributes to terminal output such as color on
+  devices that recognize ANSI escape sequences.
+
+OPTIONS
+  string
+    input string  of form
+
+		     "<attribute_name>string</attribute_name> ...".
+
+  where the current attributes are color names, bold, italic, underline, ...
+
+  reset
+    By default, a sequence to clear all text attributes is sent at the end of
+    each returned line if an escape character appears in the output string.
+    This can be turned off by setting RESET to .false. .
+
+    Note if turning off the reset attributes may be continued across lines,
+    but if each line is not self-contained attributes may not display properly
+    when filtered with commands such as grep(1).
+
+  chars
+    For arrays, a reset will be placed after the Nth displayable column count
+    in order to make it easier to generate consistent right borders for non-
+    default background colors for a text block.
+
+KEYWORDS
+  primary default keywords
+
+       colors:
+	 r,	    red,       R,  RED
+	 g,	    green,     G,  GREEN
+	 b,	    blue,      B,  BLUE
+	 m,	    magenta,   M,  MAGENTA
+	 c,	    cyan,      C,  CYAN
+	 y,	    yellow,    Y,  YELLOW
+	 e,	    ebony,     E,  EBONY
+	 w,	    white,     W,  WHITE
+
+       attributes:
+	 it,	    italic
+	 bo,	    bold
+	 un,	    underline
+
+       basic control characters:
+	nul
+	bel  (0x07, ^G) beeps;
+	bs   (0x08, ^H) backspaces one column (but not past the beginning of
+			the line);
+	ht   (0x09, ^I) goes to the next tab stop or to the end of the line if
+			there is no earlier tab stop;
+	lf   (0x0A, ^J),
+	vt   (0x0B, ^K)
+	ff   (0x0C, ^L) all give a linefeed, and if LF/NL (new-line mode) is
+			set also a carriage return
+	cr   (0x0D, ^M) gives a carriage return;
+	so   (0x0E, ^N) activates the G1 character set;
+	si   (0x0F, ^O) activates the G0 character set;
+	can  (0x18, ^X) and SUB (0x1A, ^Z) interrupt escape sequences;
+	sub
+	esc  (0x1B, ^[) starts an escape sequence;
+	del  (0x7F) is ignored;
+
+       other:
+	 clear
+	 default
+	 reset
+	 gt
+	 lt
+	 save,DECSC	Save  current state (cursor coordinates, attributes,
+			character sets pointed at by G0, G1).
+	 restore,DECRC	Restore state most recently saved by ESC 7.
+	 CSI		"Control Sequence Introducer"(0x9B) is equivalent to
+			"ESC [".
+
+       dual-value (one for color, one for mono):
+
+	 write(*,*)attr('<ERROR>an error message')
+	 write(*,*)attr('<WARNING>a warning message')
+	 write(*,*)attr('<INFO>an informational message')
+
+  By default, if the color mnemonics (ie. the keywords) are uppercase they
+  change the background color. If lowercase, the foreground color.  When
+  preceded by a "/" character the attribute is returned to the default.
+
+  The "default" keyword is typically used explicitly when reset=.false, and
+  sets all text attributes to their initial defaults.
+
+LIMITATIONS
+  •  colors are not nestable, keywords are case-sensitive,
+
+  •  not all terminals obey the sequences. On Windows, it is best if you use
+     Windows 10+ and/or the Linux mode; although it has worked with all CygWin
+     and MinGW and Putty windows and mintty.
+
+  •  you should use "<gt>" and "<lt>" instead of ">" and "<" in a string
+     processed by attr(3f) instead of in any plain text output so that the raw
+     mode will create correct input for the attr(3f) function if read back in.
+
+EXAMPLE
+  Sample program
+
+      program demo_attr
+      use M_framework__attr, only : attr, attr_mode, attr_update
+	 call printstuff('defaults')
+
+	 call attr_mode(manner='plain')
+	 call printstuff('plain:')
+
+	 call printstuff('raw')
+
+	 call attr_mode(manner='color')
+	 call printstuff('')
+
+	 write(*,'(a)') attr('TEST ADDING A CUSTOM SEQUENCE:')
+	 call attr_update('blink',char(27)//'[5m')
+	 call attr_update('/blink',char(27)//'[25m')
+	 write(*,'(a)') attr('<blink>Items for Friday</blink>')
+
+      contains
+      subroutine printstuff(label)
+      character(len=*),intent(in)  :: label
+      character(len=:),allocatable :: array(:)
+	call attr_mode(manner=label)
+
+	array=[character(len=60) ::    &
+	 'TEST MANNER='//label, 		     &
+	 '<r>RED</r>,<g>GREEN</g>,<b>BLUE</b>',      &
+	 '<c>CYAN</c>,<m>MAGENTA</g>,<y>YELLOW</y>', &
+	 '<w>WHITE</w> and <e>EBONY</e>']
+	write(*,'(a)') attr(array)
+
+	write(*,'(a)') attr('Adding <bo>bold</bo>')
+	write(*,'(a)') attr('<bo><r>RED</r>,<g>GREEN</g>,<b>BLUE</b></bo>')
+	write(*,'(a)') attr('<bo><c>CYAN</c>,<m>MAGENTA</g>,<y>YELLOW</y></bo>')
+	write(*,'(a)') attr('<bo><w>WHITE</w> and <e>EBONY</e></bo>')
+
+	write(*,'(a)') attr('Adding <ul>underline</ul>')
+	write(*,'(a)') attr(&
+	 &'<bo><ul><r>RED</r>,<g>GREEN</g>,<b>BLUE</b></ul></bo>')
+	write(*,'(a)') attr(&
+	 &'<bo><ul><c>CYAN</c>,<m>MAGENTA</g>,<y>YELLOW</y></ul></bo>')
+	write(*,'(a)') attr('<bo><ul><w>WHITE</w> and <e>EBONY</e></ul></bo>')
+
+	write(*,'(a)') attr('Adding <ul>italic</ul>')
+	write(*,'(a)') attr(&
+	 &'<bo><ul><it><r>RED</r>,<g>GREEN</g>,<b>BLUE</b></it></ul></bo>')
+	write(*,'(a)') attr(&
+	 &'<bo><ul><it><c>CYAN</c>,<m>MAGENTA</g>,<y>YELLOW</it></y></ul></bo>')
+	write(*,'(a)') attr('<bo><ul><it><w>WHITE</w> and <e>EBONY</e></ul></bo>')
+
+	write(*,'(a)') attr('Adding <in>inverse</in>')
+	write(*,'(a)') attr('<in><bo><ul><it><r>RED</r>,<g>GREEN</g>,&
+	 &<b>BLUE</b></it></ul></bo></in>')
+	write(*,'(a)') attr('<in><bo><ul><it><c>CYAN</c>,<m>MAGENTA</g>,&
+	 &<y>YELLOW</it></y></ul></bo></in>')
+	write(*,'(a)') attr(&
+	 &'<in><bo><ul><it><w>WHITE</w> and <e>EBONY</e></ul></bo></in>')
+      end subroutine printstuff
+      end program demo_attr
+
+
+AUTHOR
+  John S. Urban, 2021
+
+LICENSE
+   MIT
+SEE ALSO
+  attr_mode(3f), attr_update(3f)
+
+
+
+			       December 12, 2023      attr(3m_framework__attr)
+attr_mode(3m_framework__attr)			 attr_mode(3m_framework__attr)
+
+
+
+	      !>
+
+NAME
+  attr_mode(3f) - [M_framework__attr] select processing mode for output from
+  attr(3f) (LICENSE:MIT)
+
+
+SYNOPSIS
+  subroutine attr_mode(manner)
+
+	 character(len=*),intent(in) :: manner
+
+
+DESCRIPTION
+  Turn off the generation of strings associated with the HTML keywords in the
+  string generated by the attr(3f) function, or display the text in raw mode
+  as it was passed to attr(3f) or return to ANSI escape control sequence
+  generation.
+
+OPTIONS
+  MANNER
+    The current manners or modes supported via the attr_mode(3f) procedure are
+
+    plain
+      suppress the output associated with keywords color(default) commonly
+      supported escape sequences
+
+    raw
+      echo the input to attr(3f) as its output
+
+    reload
+      restore original keyword meanings deleted or replaced by calls to
+      attr_update(3f).
+
+EXAMPLE
+  Sample program
+
+      program demo_attr_mode
+      use M_framework__attr, only : attr, attr_mode
+      implicit none
+      character(len=:),allocatable :: lines(:)
+      character(len=:),allocatable :: outlines(:)
+      integer :: i
+	 lines=[character(len=110):: &
+	 &'<M><y>',&
+	 &'<M><y>  Suffice it to say that black and white are also colors',&
+	 &'<M><y>  for their simultaneous contrast is as striking as that ',&
+	 &'<M><y>  of green and red, for instance. &
+	 & --- <y><bo>Vincent van Gogh</bo></y>',&
+	 &' ']
+
+	 outlines=attr(lines,chars=57)
+	 write(*,'(a)')(trim(outlines(i)),i=1,size(outlines))
+
+	 call attr_mode(manner='plain') ! write as plain text
+	 write(*,'(a)')attr(lines)
+
+	 call attr_mode(manner='raw')	! write as-is
+	 write(*,'(a)')attr(lines)
+
+	 call attr_mode(manner='ansi')	! return to default mode
+
+      end program demo_attr_mode
+
+
+AUTHOR
+  John S. Urban, 2021
+
+LICENSE
+   MIT
+			       December 12, 2023 attr_mode(3m_framework__attr)
+M_framework__attr(3m_framework__attr)	 M_framework__attr(3m_framework__attr)
+
+
+
+NAME
+  M_framework__attr(3f) - [M_framework__attr::INTRO] control text attributes
+  on terminals (LICENSE:MIT)
+
+
+SYNOPSIS
+  use M_framework__attr, only : attr, attr_mode, attr_update
+
+DESCRIPTION
+  M_framework__attr(3f) is a Fortran module that uses common ANSI escape
+  sequences to control terminal text attributes.
+
+	  use M_framework__attr
+	  write(*,*)attr('<red>Red Text!</red> <green>Green Text!</green>')
+	  end
+
+  It is designed to use three simple procedures to
+
+      + Specify attributes using simple HTML-like syntax
+      + allow the sequences to be suppressed when desired
+      + permit the  user program to completely customize the keywords.
+	The user can add, delete and replace the sequences associated with
+	a keyword without changing the code.
+
+  One advantage of the approach of using formatting directives which are
+  replaced with in-band escape sequences is that it is easy to turn off when
+  running batch.
+
+  Another important capability is that programs can be run in "raw" mode and
+  create a simple text file with the formatting directives in it that can then
+  be read back in by a simple filter program that strips it back to plain
+  text( see app/plain.f90), or displays it to a screen in color(see
+  app/light.f90) or perhaps converts it to another format.
+
+  So this approach makes it trivial to read specially-formatted data from a
+  file like a message catalog (perhaps with various versions in different
+  languages) and colorize it or display it as plain text
+
+  By making each line self-contained (by default) lines can be filtered by
+  external utilities and still display correctly.
+
+ACCESS
+  Via git(1):
+
+	 git clone https://github.com/urbanjost/M_framework__attr.git
+	 cd M_framework__attr/src
+	 # change Makefile if not using one of the listed compilers
+	 make clean; make gfortran    # for gfortran
+	 make clean; make ifort       # for ifort
+	 make clean; make nvfortran   # for nvfortran
+
+  This will compile the M_framework__attr module and example programs.
+
+  Alternatively, via fpm (see https://github.com/fortran-lang/fpm):
+
+	  git clone https://github.com/urbanjost/M_framework__attr.git
+
+  or just list it as a dependency in your fpm.toml project file.
+
+	  [dependencies]
+	  M_framework__attr = { git = "https://github.com/urbanjost/M_framework__attr.git" }
+
+
+LIMITATIONS
+  •  colors are not nestable.
+
+  •  keywords are case-sensitive,
+
+  •  ANSI escape sequences are not universally supported by all terminal
+     emulators; and normally should be suppressed when not going to a tty
+     device. Therefore, you should use M_system::system_istty(3f) or the
+     common Fortran extension ISATTY() to set the default to "plain" instead
+     of "color" when the output file is not a conforming terminal. On basic
+     MSWindows console windows, it is best to use Windows 10+ and/or the Linux
+     mode; you may have to enable ANSI escape sequence mode on MSWindows. It
+     does work as-is with CygWin and MinGW and Putty windows and mintty(1) as
+     tested.
+
+EXAMPLE
+  Sample program
+
+      program demo_M_framework__attr
+      use M_framework__attr, only : attr, attr_mode, attr_update
+      implicit none
+      character(len=256) :: line
+      character(len=*),parameter :: f='( &
+       &"   <bo><w><G> GREAT: </G></w>&
+       &The new value <Y><b>",f8.4,1x,"</b></Y> is in range"&
+       &)'
+      real :: value
+
+	 write(*,'(a)')&
+	 &attr('   <r><W><bo> ERROR: </W>red text on a white background</y>')
+
+	 value=3.4567
+	 write(line,fmt=f) value
+	 write(*,'(a)')attr(trim(line))
+
+	 ! write same string as plain text
+	 write(*,*)
+	 call attr_mode(manner='plain')
+	 write(*,'(a)')attr(trim(line))
+
+	 call attr_mode(manner='color')
+	 ! use pre-defined or user defined strings
+	 write(*,*)
+	 write(*,'(a)')attr('<ERROR> Woe is nigh.')
+	 write(*,'(a)')attr('<WARNING> The night is young.')
+	 write(*,'(a)')attr('<INFO> It is Monday')
+
+	 ! create a custom mnemonic
+	 call attr_update('MYERROR',attr(&
+	 ' <R><e> E<w>-<e>R<w>-<e>R<w>-<e>O<w>-<e>R: </e></R></bo>'&
+	 ))
+	 write(*,*)
+	 write(*,'(a)')attr('<MYERROR> my custom message style')
+
+      end program demo_M_framework__attr
+
+
+AUTHOR
+  John S. Urban, 2021
+
+LICENSE
+   MIT
+SEE ALSO
+  attr(3f), attr_mode(3f), attr_update(3f)
+
+  Related information:
+
+      terminfo(3c), termlib(3c), tput(1), reset(1), clear(1),
+      console_codes(4), ECMA-48,
+      https://en.wikipedia.org/wiki/ANSI_escape_code
+
+
+
+			       December 1M_framework__attr(3m_framework__attr)
+attr_update(3m_framework__attr) 	       attr_update(3m_framework__attr)
+
+
+
+	      !>
+
+NAME
+  attr_update(3f) - [M_framework__attr] update internal dictionary given
+  keyword and value (LICENSE:MIT)
+
+
+SYNOPSIS
+  subroutine attr_update(key,val)
+
+      character(len=*),intent(in)	    :: key
+      character(len=*),intent(in),optional  :: val
+      character(len=*),intent(in),optional  :: mono_val
+
+
+DESCRIPTION
+  Update internal dictionary in M_framework__attr(3fm) module.
+
+OPTIONS
+  key
+    name of keyword to add, replace, or delete from dictionary
+
+  val
+    if present add or replace value associated with keyword. If not present
+    remove keyword entry from dictionary.
+
+  mono_val
+    if present add or replace second value associated with keyword used for
+    plain text mode.  Must only be specified if VAL is also specified.
+
+KEYWORDS
+  The following keywords are defined by default
+
+  colors:
+
+       r,red	 c,cyan     w,white
+       g,green	 m,magenta  e,ebony
+       b,blue	 y,yellow
+
+  If the color keywords are capitalized they control the text background
+  instead of the text color.
+
+  attributes:
+
+       ul,underline
+       it,italics (often produces inverse colors on many devices
+
+
+EXAMPLE
+  Sample program
+
+       program demo_update
+       use M_framework__attr, only : attr, attr_update
+	  write(*,'(a)') attr('<clear>TEST CUSTOMIZATIONS:')
+	  ! add custom keywords
+	  call attr_update('blink',char(27)//'[5m')
+	  call attr_update('/blink',char(27)//'[25m')
+	  write(*,*)
+	  write(*,'(a)') attr('<blink>Items for Friday</blink>')
+	  call attr_update('ouch',attr( &
+	  ' <R><bo><w>BIG mistake!</R></w> '))
+	  write(*,*)
+	  write(*,'(a)') attr('<ouch> Did not see that coming.')
+	  write(*,*)
+	  write(*,'(a)') attr( &
+	  'ORIGINALLY: <r>Apple</r>, <b>Sky</b>, <g>Grass</g>')
+	  ! delete
+	  call attr_update('r')
+	  call attr_update('/r')
+	  ! replace (or create)
+	  call attr_update('b','<<<<')
+	  call attr_update('/b','>>>>')
+	  write(*,*)
+	  write(*,'(a)') attr( &
+	  'CUSTOMIZED: <r>Apple</r>, <b>Sky</b>, <g>Grass</g>')
+       end program demo_update
+
+
+AUTHOR
+  John S. Urban, 2021
+
+LICENSE
+   MIT
+			       December 12, 202attr_update(3m_framework__attr)
 journal(3m_framework__journal)			journal(3m_framework__journal)
 
 
@@ -671,7 +1175,7 @@ LICENSE
 
 
 
-			       December 11, 2023journal(3m_framework__journal)
+			       December 12, 2023journal(3m_framework__journal)
 M_framework__journal(3m_framework__M_framework__journal(3m_framework__journal)
 
 
@@ -886,7 +1390,7 @@ LICENSE
 
 
 
-			       December 11, 2023     assert(3m_framework__msg)
+			       December 12, 2023     assert(3m_framework__msg)
 fmt(3m_framework__msg)					fmt(3m_framework__msg)
 
 
@@ -955,7 +1459,7 @@ LICENSE
 
 
 
-			       December 11, 2023	fmt(3m_framework__msg)
+			       December 12, 2023	fmt(3m_framework__msg)
 pdec(3m_framework__msg) 			       pdec(3m_framework__msg)
 
 
@@ -1014,7 +1518,7 @@ LICENSE
 
 
 
-			       December 11, 2023       pdec(3m_framework__msg)
+			       December 12, 2023       pdec(3m_framework__msg)
 set(3m_framework__msg)					set(3m_framework__msg)
 
 
@@ -1096,7 +1600,7 @@ LICENSE
 
 
 
-			       December 11, 2023	set(3m_framework__msg)
+			       December 12, 2023	set(3m_framework__msg)
 stderr(3m_framework__msg)			     stderr(3m_framework__msg)
 
 
@@ -1192,7 +1696,7 @@ LICENSE
 
 
 
-			       December 11, 2023     stderr(3m_framework__msg)
+			       December 12, 2023     stderr(3m_framework__msg)
 str(3m_framework__msg)					str(3m_framework__msg)
 
 
@@ -1291,7 +1795,7 @@ LICENSE
 
 
 
-			       December 11, 2023	str(3m_framework__msg)
+			       December 12, 2023	str(3m_framework__msg)
 wrt(3m_framework__msg)					wrt(3m_framework__msg)
 
 
@@ -1384,7 +1888,7 @@ LICENSE
 
 
 
-			       December 11, 2023	wrt(3m_framework__msg)
+			       December 12, 2023	wrt(3m_framework__msg)
 fstop(3m_framework__utility)			  fstop(3m_framework__utility)
 
 
@@ -1451,7 +1955,7 @@ LICENSE
 
 
 
-			       December 11, 2023  fstop(3m_framework__utility)
+			       December 12, 2023  fstop(3m_framework__utility)
 unit_test_end(3m_framework__verify)	   unit_test_end(3m_framework__verify)
 
 
@@ -1506,7 +2010,133 @@ LICENSE
 
 
 
-			       December 11,unit_test_end(3m_framework__verify)
+			       December 12,unit_test_end(3m_framework__verify)
+unit_test_stop(3m_framework__verify)	  unit_test_stop(3m_framework__verify)
+
+
+
+NAME
+  unit_test_stop(3f) - [M_framework__verify] report tally of all checks and
+  stop program (LICENSE:PD)
+
+
+SYNOPSIS
+  subroutine unit_test_stop(msg,opts)
+
+      character(len=*),intent(in),optional :: msg
+      character(len=*),intent(in),optional :: opts
+
+
+DESCRIPTION
+  give a tally of all calls to unit_test(3f) and stop program.
+
+  Tally up the test result totals and stop the program.  If a command is set
+  via unit_test_mode(3f) or the command line call it appending OPTS to the end
+  of the command.
+
+OPTIONS
+  MSG
+    additional message to display OPTS add string to filter command line if
+    any is specified.
+
+EXAMPLES
+  Sample program:
+
+      program demo_unit_test_stop
+      use M_framework, only: unit_test_start, unit_test_end, &
+      & unit_test, unit_test_stop, unit_test_mode
+      use,intrinsic :: iso_fortran_env, stdout=>OUTPUT_UNIT
+      implicit none
+      integer :: x
+      x=10
+      call unit_test_mode(luns=[stdout])
+      ! do a test
+      call unit_test_start('proc1')
+      call unit_test('proc1', x > 3 , 'if big enough')
+      call unit_test('proc1', x < 100 , 'if small enough')
+      call unit_test_end  ('proc1',msg='checks all done' )
+      ! do another test
+      call unit_test_start('proc2')
+      call unit_test('proc2', x > 3 , 'if big enough')
+      call unit_test('proc2', x < 100 , 'if small enough')
+      call unit_test_end  ('proc2',msg='checks all done' )
+
+      ! tally up test results and stop program
+      call unit_test_stop()
+
+      end program demo_unit_test_stop
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December 12unit_test_stop(3m_framework__verify)
+unit_test_system(3m_framework__verify)	unit_test_system(3m_framework__verify)
+
+
+
+NAME
+  unit_test_system(3f) - [M_framework__verify] return status from system
+  command (LICENSE:PD)
+
+SYNOPSIS
+  function unit_test_system(cmd,verbose)
+
+      character(len=*),intent(in)  :: cmd
+      logical,intent(in),optional  :: verbose
+
+DESCRIPTION
+  unit_test_system(3f) executes a system command and returns the exit status
+  of the command.
+
+OPTIONS
+  command
+    system command to execute. If it starts with "* " the asterisk is replaced
+    by the name of the current command.  If it starts with "** " the asterisks
+    are replaced by the current command including arguments.
+
+  verbose
+    if .true. the executed command is echoed to output. The default is .false.
+
+EXAMPLES
+  Sample program:
+
+     program demo_unit_test_system
+     use M_framework, only: &
+	unit_test_start,  &
+	unit_test,	  &
+	unit_test_system, &
+	unit_test_end
+     implicit none
+     if (command_argument_count()  ==  0) then
+	call unit_test_start('myroutine')
+	call unit_test('false', unit_test_system('false') == 0, 'check false')
+	call unit_test('true', unit_test_system('true') == 0, 'check true')
+	call unit_test('notthere', unit_test_system('notthere') == 0, &
+	& 'check notthere')
+	call unit_test('*',&
+	& unit_test_system('* and options', verbose=.true.) == 0, 'check "*"')
+	call unit_test_end('myroutine')
+     else
+	write (*, *) 'called with an option'
+     endif
+     end program demo_unit_test_system
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       December unit_test_system(3m_framework__verify)
 unit_test_expected(3m_framework__verifunit_test_expected(3m_framework__verify)
 
 
@@ -1674,7 +2304,7 @@ LICENSE
 
 
 
-			       December 11unit_test_mode(3m_framework__verify)
+			       December 12unit_test_mode(3m_framework__verify)
 unit_test_msg(3m_framework__verify)	   unit_test_msg(3m_framework__verify)
 
 
@@ -1737,7 +2367,7 @@ LICENSE
 
 
 
-			       December 11,unit_test_msg(3m_framework__verify)
+			       December 12,unit_test_msg(3m_framework__verify)
 unit_test_start(3m_framework__verify)	 unit_test_start(3m_framework__verify)
 
 
@@ -1823,132 +2453,6 @@ LICENSE
 
 
 			       December 1unit_test_start(3m_framework__verify)
-unit_test_stop(3m_framework__verify)	  unit_test_stop(3m_framework__verify)
-
-
-
-NAME
-  unit_test_stop(3f) - [M_framework__verify] report tally of all checks and
-  stop program (LICENSE:PD)
-
-
-SYNOPSIS
-  subroutine unit_test_stop(msg,opts)
-
-      character(len=*),intent(in),optional :: msg
-      character(len=*),intent(in),optional :: opts
-
-
-DESCRIPTION
-  give a tally of all calls to unit_test(3f) and stop program.
-
-  Tally up the test result totals and stop the program.  If a command is set
-  via unit_test_mode(3f) or the command line call it appending OPTS to the end
-  of the command.
-
-OPTIONS
-  MSG
-    additional message to display OPTS add string to filter command line if
-    any is specified.
-
-EXAMPLES
-  Sample program:
-
-      program demo_unit_test_stop
-      use M_framework, only: unit_test_start, unit_test_end, &
-      & unit_test, unit_test_stop, unit_test_mode
-      use,intrinsic :: iso_fortran_env, stdout=>OUTPUT_UNIT
-      implicit none
-      integer :: x
-      x=10
-      call unit_test_mode(luns=[stdout])
-      ! do a test
-      call unit_test_start('proc1')
-      call unit_test('proc1', x > 3 , 'if big enough')
-      call unit_test('proc1', x < 100 , 'if small enough')
-      call unit_test_end  ('proc1',msg='checks all done' )
-      ! do another test
-      call unit_test_start('proc2')
-      call unit_test('proc2', x > 3 , 'if big enough')
-      call unit_test('proc2', x < 100 , 'if small enough')
-      call unit_test_end  ('proc2',msg='checks all done' )
-
-      ! tally up test results and stop program
-      call unit_test_stop()
-
-      end program demo_unit_test_stop
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       December 11unit_test_stop(3m_framework__verify)
-unit_test_system(3m_framework__verify)	unit_test_system(3m_framework__verify)
-
-
-
-NAME
-  unit_test_system(3f) - [M_framework__verify] return status from system
-  command (LICENSE:PD)
-
-SYNOPSIS
-  function unit_test_system(cmd,verbose)
-
-      character(len=*),intent(in)  :: cmd
-      logical,intent(in),optional  :: verbose
-
-DESCRIPTION
-  unit_test_system(3f) executes a system command and returns the exit status
-  of the command.
-
-OPTIONS
-  command
-    system command to execute. If it starts with "* " the asterisk is replaced
-    by the name of the current command.  If it starts with "** " the asterisks
-    are replaced by the current command including arguments.
-
-  verbose
-    if .true. the executed command is echoed to output. The default is .false.
-
-EXAMPLES
-  Sample program:
-
-     program demo_unit_test_system
-     use M_framework, only: &
-	unit_test_start,  &
-	unit_test,	  &
-	unit_test_system, &
-	unit_test_end
-     implicit none
-     if (command_argument_count()  ==  0) then
-	call unit_test_start('myroutine')
-	call unit_test('false', unit_test_system('false') == 0, 'check false')
-	call unit_test('true', unit_test_system('true') == 0, 'check true')
-	call unit_test('notthere', unit_test_system('notthere') == 0, &
-	& 'check notthere')
-	call unit_test('*',&
-	& unit_test_system('* and options', verbose=.true.) == 0, 'check "*"')
-	call unit_test_end('myroutine')
-     else
-	write (*, *) 'called with an option'
-     endif
-     end program demo_unit_test_system
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       December unit_test_system(3m_framework__verify)
 M_framework__verify(3m_framework__verM_framework__verify(3m_framework__verify)
 
 
@@ -2271,4 +2775,4 @@ LICENSE
 
 
 
-			       December 11, 202unit_test(3m_framework__verify)
+			       December 12, 202unit_test(3m_framework__verify)

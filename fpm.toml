@@ -1,7 +1,7 @@
 # TOML file for fpm as described at https://github.com/fortran-lang/fpm/blob/master/manifest-reference.md
 name = "M_framework"
 version = "2.0.0"
-license = "Public Domain"
+license = "CC0-1.0"
 author = "John S. Urban"
 maintainer = "urbanjost@comcast.net"
 copyright = "2020 John S. Urban"
@@ -11,30 +11,29 @@ keywords = ["fortran", "unit testing"]
 homepage = "https://github.com/urbanjost/M_framework.git"
 
 [build]
-#auto-executables = true
-auto-tests = true
-auto-examples = true
-# UNIQUE NAMESPACE  (required for registered projects) 
-# new force module naming rules to avoid collisions with other packages
-# to enforce prefixing all module names begin with a prefix, that by default is the package name, and can be changed in fpm.toml
-# a logical (true|false) or a string "name"
-# if true, modules must be of form packagename__modulename
-# # if a custom string, modules must be named customname_modulename
-#module-naming = true
-# traditional where user can use any module name
-#module-naming = false
+   #auto-executables = true
+   auto-tests = true
+   auto-examples = true
+   # UNIQUE NAMESPACE  (required for registered projects) 
+   # new force module naming rules to avoid collisions with other packages
+   # to enforce prefixing all module names begin with a prefix, that by default is the package name, and can be changed in fpm.toml
+   # a logical (true|false) or a string "name"
+   # if true, modules must be of form packagename__modulename
+   # # if a custom string, modules must be named customname_modulename
+   module-naming = true
+   # traditional where user can use any module name
+   #module-naming = false
 
 # new default
-#[fortran]
-#implicit-typing = false
-#implicit-external = false
-#source-form = "free"
-# traditional pre-version8 compatibility
-#implicit-typing = true
-#implicit-external = true
-#source-form = "default"
+[fortran]
+   implicit-typing = false
+   implicit-external = false
+   source-form = "free"
+   # traditional pre-version8 compatibility
+   #implicit-typing = true
+   #implicit-external = true
+   #source-form = "default"
 
 # demo programs
 [install]
-library=true
-
+   library=true
