@@ -1,6 +1,6 @@
 name = "M_Compare_Float_Numbers"
 version = "0.1.0"
-license = "license"
+license = "MIT"
 author = "Jane Doe"
 maintainer = "jane.doe@example.com"
 copyright = "Copyright 2021, Jane Doe"

@@ -1,6 +1,6 @@
 name = "M_units"
 version = "0.1.0"
-license = "license"
+license = "MIT"
 author = "John S. Urban"
 maintainer = "urbanjost@comcast.net"
 copyright = "Copyright 2022, John S. Urban"
