@@ -1,0 +1,34 @@
+NAME
+   atand(3f) - [M_units:TRIGONOMETRY] calculate arctangent of value in degrees
+   (LICENSE:PD)
+SYNOPSIS
+   elemental real function atand(value)
+
+    class(*),intent(in) :: value
+DESCRIPTION
+   Calculate arctangent of input value in degrees. It calls atan(3f) and
+   converts the output to degrees from radians.
+
+OPTIONS
+   value    any standard scalar value supported by anyscalar_to_double(3f)
+
+EXAMPLE
+
+  Sample program:
+
+   program demo_atand
+   use M_units, only :  atand, tand
+   implicit none
+      write(*, *)       tand(0.0),tand(45.0),tand(120.0),tand(180.0),tand(720.0)
+      write(*, *)atand([tand(0.0),tand(45.0),tand(120.0),tand(180.0),tand(720.0) ])
+   end program demo_atand
+
+  Results:
+
+      0.00000000       1.00000000      -1.73205078      -1.22464685E-16  -4.89858741E-16
+      0.00000000       45.0000000      -60.0000000      -7.01670955E-15  -2.80668382E-14
+
+AUTHOR
+   John S. Urban
+LICENSE
+   Public Domain

@@ -1,0 +1,38 @@
+NAME
+   is_even(3f) - [M_units] determine if integer is even
+   (LICENSE:PD)
+SYNOPSIS
+   elemental pure logical is_even(int)
+
+    integer(kind=int8|int16|int32|int64) :: int
+DESCRIPTION
+    Determine if an integer is even or not.
+OPTIONS
+    int      The integer to test
+RETURNS
+    is_even  logical value is .true. if the input value INT is even
+EXAMPLE
+  simple example
+
+    program demo_is_even
+    use M_units, only : is_even
+    implicit none
+    integer :: i
+       write(*,*)is_even(0)
+       write(*,*)is_even(-1)
+       write(*,*)is_even(-2)
+       write(*,*)is_even(+1)
+       write(*,*)is_even(+2)
+       write(*,*)is_even([10,11,17,19,22])
+       write(*,*)(is_even(i),i=-10,10)
+    end program demo_is_even
+  Expected output
+    T
+    F
+    T
+    F
+    T
+    T F F F T
+    T F T F T F T F T F T F T F T F T F T F T
+LICENSE
+   Public Domain

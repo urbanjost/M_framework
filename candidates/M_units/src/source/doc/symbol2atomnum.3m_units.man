@@ -1,0 +1,39 @@
+NAME
+   symbol2atomnum(3f) - [M_units:SYMBOLS] return atomic number given element symbol name
+   (LICENSE:PD)
+SYNOPSIS
+  subroutine symbol2atomnum(symbol,atomnum)
+
+   character(len=2),intent(in) :: symbol
+   integer,intent(out)         :: atomnum
+
+DESCRIPTION
+   Given a two-character element symbol name return the corresponding atomic number
+
+OPTIONS
+   symbol     two-character symbol name corresponding to atomic number ATOMNUM
+
+RETURNS
+   atomnum    an atomic number from 1 to 109
+
+EXAMPLE
+  Sample program
+
+   program demo_symbol2atomnum
+   use M_units, only :  symbol2atomnum
+   implicit none
+   integer           :: atomnum
+   character(len=2)  :: name
+   name='Ne'
+   call symbol2atomnum(name,atomnum)
+   write(*,*)atomnum,name
+   end program demo_symbol2atomnum
+
+  Results:
+
+   10 Ne
+
+AUTHOR
+   John S. Urban
+LICENSE
+   Public Domain

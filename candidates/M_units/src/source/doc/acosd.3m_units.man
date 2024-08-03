@@ -1,0 +1,33 @@
+NAME
+   acosd(3f) - [M_units:TRIGONOMETRY] calculate arccosine of value in degrees
+   (LICENSE:PD)
+SYNOPSIS
+   elemental real function acosd(value)
+
+    class(*),intent(in) :: value
+DESCRIPTION
+   Calculate arcsine of input value in degrees. It converts the input value
+   from degrees to radians and calls acos(3f).
+
+OPTIONS
+   value    any standard scalar value supported by anyscalar_to_double(3f)
+
+EXAMPLE
+  Sample program
+
+   program demo_acosd
+   use M_units, only :  acosd, cosd
+   implicit none
+      write(*, *)       cosd(0.0),cosd(45.0),cosd(120.0),cosd(180.0),cosd(720.0)
+      write(*, *)acosd([cosd(0.0),cosd(45.0),cosd(120.0),cosd(180.0),cosd(720.0) ])
+   end program demo_acosd
+
+  Results
+
+      1.00000000      0.707106769     -0.500000000      -1.00000000       1.00000000
+      0.00000000       45.0000000       120.000000       180.000000       0.00000000
+
+AUTHOR
+   John S. Urban
+LICENSE
+   Public Domain

@@ -317,26 +317,26 @@ end function msg_one
 !===================================================================================================================================
 !>
 !!##NAME
-!!    fmt(3f) - [M_framework__msg] convert any intrinsic to a string using
-!!    specified format
+!!    fmt(3f) - [M_framework__msg] convert any intrinsic to a string using specified format
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
 !!    function fmt(value,format) result(string)
 !!
 !!     class(*),intent(in),optional :: value
-!!     character(len=*),intent(in),optional  :: format
+!!     character(len=*),intent(in),optional :: format
 !!     character(len=:),allocatable :: string
 !!##DESCRIPTION
-!!    FMT(3f) converts any standard intrinsic value to a string using the
-!!    specified format.
+!!    FMT(3f) converts any standard intrinsic value to a string using the specified
+!!    format.
 !!##OPTIONS
 !!    value    value to print the value of. May be of type INTEGER, LOGICAL,
 !!             REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
 !!    format   format to use to print value. It is up to the user to use an
 !!             appropriate format. The format does not require being
 !!             surrounded by parenthesis. If not present a default is selected
-!!             similar to what would be produced with free format.
+!!             similar to what would be produced with free format, with
+!!             trailing zeros removed.
 !!##RETURNS
 !!    string   A string value
 !!##EXAMPLES
@@ -375,18 +375,22 @@ use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real
 
 ! ident_4="@(#) M_framework__msg fmt(3f) convert any intrinsic to a string using specified format"
 
-class(*),intent(in)          :: generic
+class(*),intent(in)                   :: generic
 character(len=*),intent(in),optional  :: format
-character(len=:),allocatable :: line
-character(len=:),allocatable :: fmt_local
-integer                      :: ios
-character(len=255)           :: msg
-character(len=1),parameter   :: null=char(0)
-integer                      :: ilen
+character(len=:),allocatable          :: line
+character(len=:),allocatable          :: fmt_local
+character(len=:),allocatable          :: re,im
+integer                               :: iostat
+character(len=255)                    :: iomsg
+character(len=1),parameter            :: null=char(0)
+integer                               :: ilen
+logical                               :: trimit
    if(present(format))then
       fmt_local=format
+      trimit=.false.
    else
       fmt_local=''
+      trimit=.true.
    endif
    ! add ",a" and print null and use position of null to find length of output
    ! add cannot use SIZE= or POS= or ADVANCE='NO' on WRITE() on INTERNAL READ,
@@ -415,30 +419,142 @@ integer                      :: ilen
       endif
    endif
    allocate(character(len=256) :: line) ! cannot currently write into allocatable variable
-   ios=0
+   iostat=0
    select type(generic)
-      type is (integer(kind=int8));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (integer(kind=int16));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (integer(kind=int32));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (integer(kind=int64));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (real(kind=real32));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (real(kind=real64));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (integer(kind=int8));     write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (integer(kind=int16));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (integer(kind=int32));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (integer(kind=int64));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (real(kind=real32));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (real(kind=real64));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
 #ifdef __NVCOMPILER
 #else
-      type is (real(kind=real128));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (real(kind=real128));     write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
 #endif
-      type is (logical);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (character(len=*));       write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (complex);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (logical);                write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (character(len=*));       write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (complex);
+              if(trimit)then
+                 re=fmt(generic%re)
+                 im=fmt(generic%im)
+                 call trimzeros_(re)
+                 call trimzeros_(im)
+                 fmt_local='("(",g0,",",g0,")",a)'
+                 write(line,fmt_local,iostat=iostat,iomsg=iomsg) trim(re),trim(im),null
+                 trimit=.false.
+              else
+                 write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+              endif
    end select
-   if(ios /= 0)then
-      line='<ERROR>'//trim(msg)
+   if(iostat /= 0)then
+      line='<ERROR>'//trim(iomsg)
    else
       ilen=index(line,null,back=.true.)
       if(ilen == 0)ilen=len(line)
       line=line(:ilen-1)
    endif
+
+   if(index(line,'.') /= 0 .and. trimit) call trimzeros_(line)
+
 end function fmt
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    trimzeros_(3fp) - [M_framework__msg:TYPE] Delete trailing zeros from
+!!    numeric decimal string
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    subroutine trimzeros_(str)
+!!
+!!     character(len=*)  :: str
+!!
+!!##DESCRIPTION
+!!    TRIMZEROS_(3f) deletes trailing zeros from a string representing a
+!!    number. If the resulting string would end in a decimal point, one
+!!    trailing zero is added.
+!!
+!!##OPTIONS
+!!    str   input string will be assumed to be a numeric value and have
+!!          trailing zeros removed
+!!##EXAMPLES
+!!
+!!    Sample program:
+!!
+!!       program demo_trimzeros_
+!!       !use M_framework__msg, only : trimzeros_
+!!       character(len=:),allocatable :: string
+!!          string= '123.450000000000'
+!!          call trimzeros_(string)
+!!          write(*,*)string
+!!          string='12345'
+!!          call trimzeros_(string)
+!!          write(*,*)string
+!!          string='12345.'
+!!          call trimzeros_(string)
+!!          write(*,*)string
+!!          string='12345.00e3'
+!!          call trimzeros_(string)
+!!          write(*,*)string
+!!       end program demo_trimzeros_
+!!
+!!   Results:
+!!
+!!     > 123.45
+!!     > 12345
+!!     > 12345
+!!     > 12345e3
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+subroutine trimzeros_(string)
+
+! ident_5="@(#) M_framework__msg trimzeros_(3fp) Delete trailing zeros from numeric decimal string"
+
+! if zero needs added at end assumes input string has room
+character(len=*)               :: string
+character(len=len(string) + 2) :: str
+character(len=len(string))     :: exp        ! the exponent string if present
+integer                        :: ipos       ! where exponent letter appears if present
+integer                        :: i, ii
+   str = string                              ! working copy of string
+   ipos = scan(str, 'eEdD')                  ! find end of real number if string uses exponent notation
+   if (ipos > 0) then                        ! letter was found
+      exp = str(ipos:)                       ! keep exponent string so it can be added back as a suffix
+      str = str(1:ipos - 1)                  ! just the real part, exponent removed will not have trailing zeros removed
+   endif
+   if (index(str, '.') == 0) then            ! if no decimal character in original string add one to end of string
+      ii = len_trim(str)
+      str(ii + 1:ii + 1) = '.'               ! add decimal to end of string
+   endif
+   do i = len_trim(str), 1, -1               ! scanning from end find a non-zero character
+      select case (str(i:i))
+      case ('0')                             ! found a trailing zero so keep trimming
+         cycle
+      case ('.')                             ! found a decimal character at end of remaining string
+         if (i <= 1) then
+            str = '0'
+         else
+            str = str(1:i - 1)
+         endif
+         exit
+      case default
+         str = str(1:i)                      ! found a non-zero character so trim string and exit
+         exit
+      end select
+   end do
+   if (ipos > 0) then                        ! if originally had an exponent place it back on
+      string = trim(str)//trim(exp)
+   else
+      string = str
+   endif
+end subroutine trimzeros_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -535,7 +651,7 @@ end function fmt
 subroutine stderr(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj)
 implicit none
 
-! ident_5="@(#) M_framework__msg stderr(3f) writes a message to standard error using a standard f2003 method"
+! ident_6="@(#) M_framework__msg stderr(3f) writes a message to standard error using a standard f2003 method"
 
 class(*),intent(in),optional :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9
 class(*),intent(in),optional :: ga, gb, gc, gd, ge, gf, gg, gh, gi, gj
@@ -626,10 +742,10 @@ end subroutine stderr
 !!
 !!##LICENSE
 !!    Public Domain
-subroutine wrt(luns,g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj,iostat)
+subroutine wrt(luns,g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj, iostat)
 implicit none
 
-! ident_6="@(#) M_framework__msg write(3f) writes a message to any number of open files with any scalar values"
+! ident_7="@(#) M_framework__msg write(3f) writes a message to any number of open files with any scalar values"
 
 integer,intent(in)           :: luns(:)
 class(*),intent(in),optional :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9
@@ -662,7 +778,7 @@ end subroutine wrt
 !!
 !!    Syntax:
 !!
-!!      function set(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+!!      function set(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9, &
 !!      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,gk)
 !!      class(*),intent(in)           :: g0
 !!      class(*),intent(out),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga
@@ -1029,7 +1145,7 @@ end subroutine set_scalar
 !!    Public Domain
 subroutine pdec(string)
 
-! ident_7="@(#) M_framework__msg pdec(3f) write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
+! ident_8="@(#) M_framework__msg pdec(3f) write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
 
 character(len=*),intent(in) :: string   ! the string to print
 integer                     :: ilen     ! number of characters in string to print
@@ -1060,16 +1176,18 @@ end subroutine pdec
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    function assert(file,linenum,expr,g1,g2g3,g4,g5,g6,g7,g8,g9)
+!!    function assert(file,linenum,expr,g1,g2,g3,g4,g5,g6,g7,g8,g9, &
+!!                    & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 !!
 !!     character(len=*),intent(in)  :: file
 !!     character(len=*),intent(in)  :: linenum
 !!     logical,intent(in)           :: expr
 !!     class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
+!!     class(*),intent(in),optional :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
 !!##DESCRIPTION
 !!    assert(3f) prints strings to stderr and then stops program with exit
 !!    code 1 It labels the first string as the filename, the next integer
-!!    parameter as the linenumber, and then up to nine scalar values.
+!!    parameter as the linenumber, and then up to twenty scalar values.
 !!
 !!    It is primarily intended for use by the prep(1) preprocessor $ASSERT
 !!    directive
@@ -1080,9 +1198,9 @@ end subroutine pdec
 !!    linenum    assumed to be the line number of the source code the ASSERT(3f)
 !!               procedure was called at.
 !!    expr       logical value
-!!    g[1-9]  optional value(s) to print as a message before stopping. May
-!!            be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
-!!            or CHARACTER.
+!!    g[1-9a-j]  optional value(s) to print as a message before stopping. May
+!!               be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
+!!               or CHARACTER.
 !!
 !!##EXAMPLES
 !!
@@ -1101,19 +1219,21 @@ end subroutine pdec
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine assert(filename, linen, expr, g1, g2, g3, g4, g5, g6, g7, g8, g9)
+subroutine assert(filename, linen, expr, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj)
 implicit none
 
-! ident_8="@(#) M_framework__msg assert(3f) writes a message to a string composed of any standard scalar types"
+! ident_9="@(#) M_framework__msg assert(3f) writes a message to a string composed of any standard scalar types"
 
 character(len=*), intent(in)   :: filename
 integer, intent(in)            :: linen
 logical, intent(in)            :: expr
 class(*), intent(in), optional  :: g1, g2, g3, g4, g5, g6, g7, g8, g9
+class(*), intent(in), optional  :: ga, gb, gc, gd, ge, gf, gg, gh, gi, gj
 
    ! write message to standard error
    if (.not. expr) then
-      call stderr('ERROR:filename:', filename, ':line number:', linen, ':', str(g1, g2, g3, g4, g5, g6, g7, g8, g9))
+      call stderr('ERROR:filename:', filename, ':line number:', linen, ':', &
+      & str( g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj ) )
       stop 1
    endif
 

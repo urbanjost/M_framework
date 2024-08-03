@@ -1,0 +1,38 @@
+NAME
+   norm_angle_rad(3f) - [M_units:TRIGONOMETRY] Return input angle given in radians as angle between 0 and 2pi
+   (LICENSE:PD)
+SYNOPSIS
+   elemental function norm_angle_rad(ang) result(rev)
+
+   class(*), intent(in) :: ang
+   doubleprecision      :: rev
+DESCRIPTION
+   Given an input angle specified in radians, normalize the value to fall in the
+   range 0 to 2*pi radians.
+OPTIONS
+   ang  Input angle (radians). May be INTEGER, REAL, or DOUBLEPRECISION
+RESULTS
+   rev  Return input angle (radians) normalized to range 0>= REV <=2*pi radians
+EXAMPLE
+  Sample program:
+
+   program demo_norm_angle_rad
+   use M_units, only : norm_angle_rad
+   implicit none
+   real,parameter :: PI=4*atan(1.0)
+   real           :: val
+   integer        :: i
+   do i=-2,2
+      val=i*2*pi;   write(*,*)val,norm_angle_rad(val)
+      val=i*pi;     write(*,*)val,norm_angle_rad(val)
+      write(*,*)
+   enddo
+   write(*,*)norm_angle_rad([-PI/8.0,-PI/4.0,-PI/2.0,-PI,-0.0,PI/8.0,PI/4.0,PI/2.0,PI,0.0])
+   end program demo_norm_angle_rad
+
+  Results:
+
+AUTHOR
+   John S. Urban
+LICENSE
+   Public Domain

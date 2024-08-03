@@ -9,67 +9,71 @@
 !!     use, M_framework__journal , only : journal
 !!##DESCRIPTION
 !!
-!!    For interactive programs in particular it is useful if all messages
-!!    go thru the JOURNAL(3f) routine. This makes it easy to write messages
-!!    to a log file as well as standard output; to toggle time prefixes
-!!    on and off; to turn on and off debug-mode messages; control output
-!!    paging and create replayable input journals.
+!!    For large interactive programs in particular it is useful if all
+!!    messages go thru a JOURNAL(3f) call. This makes it easy to
+!!    write messages to a log file as well as standard output; to toggle
+!!    time prefixes on and off; to turn on and off debug-mode messages;
+!!    control output paging and create replayable input journals.
 !!
 !!    The primary use of JOURNAL(3f) is to create journal files for
-!!    interactive programs that can be replayed and/or be used to verify
-!!    program executions. Typically, you would echo what the user typed to
+!!    interactive programs that
+!!
+!!        + provide various levels of verbosity on demand, often for
+!!          debugging purposes.
+!!        + can be replayed even when interactive input was provided
+!!        + and/or be used to verify program executions
+!!
+!!    Typically, you would echo what the user typed to
 !!    the trail file as-is, and write output you write to stdout as comments
 !!    to the trail file so that the trail file can easily be read back in
-!!    (by ignoring comments). So usually things that are read from user
-!!    input are using output with WHERE='T' and output that usually goes
+!!    (by ignoring comments).
+!!
+!!    Even though there is essentially one procedure (journal(3f) calls
+!!    that are more than just a single message have an action specified
+!!    as the first parameter. This action might specify to open a log file,
+!!    to change the "level" required by messages for them to appear, whether
+!!    output it written as a comment or not, and on what files the output
+!!    shoud appear. So the interface can be used in a very simple manner but
+!!    has more options than is evident at first glance, as detailed in the
+!!    man-page for journal(3f).
+!!
 !!    to stdout is written with WHERE='SC' in the JOURNAL(3f) call.
 !!
 !!     >      :
 !!     >      :
-!!     > character(len=256) userline, output
 !!     > call journal('O','my_trail_file')  ! open trail file
-!!     >      :
-!!     >      :
-!!     > do
-!!     >    read(*,'(a)',iostat=ios) userline  ! read user input
-!!     >    if(ios /= 0)exit
-!!     >    ! echo user input to trail file
-!!     >    call journal('T',userline)
-!!     >    ! assume user input causes values i1, i2, and i3 to be calculated
-!!     >    write(output,'(i0,1x,i0,1x)')i1,i2,i3 ! build an output line
-!!     >    ! write output to stdout and as comment to trail file
-!!     >    call journal(output)
-!!     >    !or you can specify the WHERE parameter and up to ten scalar values
-!!     >    call journal('SC','i1=',i1,'i2=',i2,'i3=',i3)
-!!     > enddo
-!!
-!!    In this example an output line was built with an internal write; but
-!!    calls to journal(3f) with numeric values with and without advancing
-!!    I/O turned on are often used for simpler output:
+!!     > ! write output to stdout as-is and as comment to trail file
+!!     > call journal(output)
+!!     > ! echo message to trail/log file only
+!!     > call journal('T',userline)
+!!     > ! write to stdout as-is and trail as a comment.
+!!     > ! up to twenty scalar values of any intrinsic type are allowed
+!!     > call journal('SC','i1=',i1,'i2=',i2,'i3=',i3)
+!!     > ! for more complex messages you can build them with non-advancing
+!!     > ! I/O journal calls, or build the message with internal writes
+!!     > ! into a string and print that.
 !!
 !!       I=10
 !!       R=20.3
 !!       ! write to stdout and trail file without advancing I/O
 !!       call journal('+SC','I=',i)
+!!       ! write to stdout and trail file without advancing I/O
 !!       call journal('SC','AND R=',r)
 !!
-!!    writes to the trail file are ignored unless a trail file was opened
-!!    with
+!!    writes to the trail file(s) are ignored unless a trail file was opened,
+!!    but output continues to stdout by default.
 !!
-!!       CALL JOURNAL('O',filename)
+!!    That is, destinations 'T' and 'C' are ignored unless a trail file
+!!    has been requested, allowing journal to be used with programs that
+!!    do not generate trails or journals.
 !!
-!!
-!!    So that routines that do their output via JOURNAL(3f) can be used with
-!!    and without programs generating trail files. That is, destinations
-!!    'T' and 'C' are ignored unless a trail file has been requested.
-!!
-!!    With no parameters, the trail file is flushed.
+!!    Note that with no parameters, the trail file is flushed.
 !!
 !!##EXAMPLES
 !!
 !!
 !!    The man(1) page for journal(3f) describes all the options for the
-!!    WHERE field.  In addition to being used to generate a journal,
+!!    action field WHERE.  In addition to being used to generate a journal,
 !!    the routine can be used for producing optional debug messages and
 !!    timing information.
 !!
@@ -88,16 +92,20 @@
 !!      call journal('D','*demo* DEBUG MESSAGE 002 ON STDOUT')
 !!      !! open trail file
 !!      call journal('O','mytrail.txt')
-!!      !! debug messages now go to the trail file
+!!      !! debug messages now go to the trail file only
 !!      call journal('D','*demo* DEBUG MESSAGE 003 TO TRAIL')
-!!      !! close trail file so messages go to stdout again
+!!      !! or always to stdout and trail file only if on
+!!      call journal('DS','*demo* DEBUG MESSAGE 003 TO TRAIL')
+!!      !! close trail file so messages go only to stdout again
 !!      call journal('O','')
 !!      !! debug on stdout now
 !!      call journal('D','*demo* DEBUG MESSAGE 004 TO STDOUT')
+!!      !! turn off debug messages
 !!      call journal('<','debug off')
 !!      !! back to no output from the next message
 !!      call journal('D','*demo* DEBUG MESSAGE 005 IGNORED')
 !!      end program demo_journal
+!!
 !!
 !!   Sample program for trail messages with optional timing information:
 !!
@@ -108,8 +116,11 @@
 !!
 !!      ! add time prefix to output
 !!      call journal('%','%Y-%M-%DT%h:%m:%s.%x%u:%b')
+!!      !
 !!      call journal('a single string B -should be on S with prefix')
-!!      call journal('%','CPU_TIME: %c:CALLS: %C: %b')  ! change time prefix
+!!      ! change to CPU time and number of calls prefix
+!!      call journal('%','CPU_TIME: %c:CALLS: %C: %b')
+!!      !
 !!      call journal('a single string B-1 -should be on S with prefix')
 !!      call journal('a single string B-2 -should be on S with prefix')
 !!      call journal('a single string B-3 -should be on S with prefix')
@@ -167,7 +178,7 @@ private
 !!    subroutine journal([where,],[VALUE(s)])
 !!
 !!     character(len=*),intent(in) :: where
-!!     class(*),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
+!!     class(*),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
 !!
 !!   WRITE MESSAGES
 !!    basic messages
@@ -253,7 +264,7 @@ private
 !!
 !!   VALUES(S)   message to write to stdout, stderr, and the trail file.
 !!               a numeric or character value to optionally be appended
-!!               to the message. Up to nine values are allowed. The WHERE
+!!               to the message. Up to twenty values are allowed. The WHERE
 !!               field is required if values are added.
 !!   FILENAME    when WHERE="O" to turn the trail file on or off, the "message"
 !!               field becomes the trail filename to open. If blank, writing
@@ -437,7 +448,6 @@ character(len=:),allocatable       :: prefix            ! the prefix string to a
 logical,save                       :: prefix_it=.false. ! flag whether time prefix mode is on or not
 character(len=4096)                :: mssge
 !-----------------------------------------------------------------------------------------------------------------------------------
-!-----------------------------------------------------------------------------------------------------------------------------------
    adv='yes'
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(prefix_it)then
@@ -567,25 +577,27 @@ end subroutine set_stdout_lun
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine where_write_message_all(where,g0,g1,g2g3,g4,g5,g6,g7,g8,g9,sep)
+!!   subroutine where_write_message_all(where,g0,g1,g2,..,gj,sep)
 !!
 !!     character(len=*),intent(in)   :: where
 !!     class(*),intent(in)           :: g0
 !!     class(*),intent(in),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9
+!!     class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
 !!     character,intent(in),optional :: sep
 !!
 !!##DESCRIPTION
 !!    where_write_message_all(3f) builds and writes a space-separated string
-!!    from up to nine scalar values.
+!!    from up to twenty scalar values.
 !!
 !!##OPTIONS
 !!
-!!    where    string designating where to write message, as with journal(3f)
-!!    g0       value to print. May
-!!             be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
-!!             or CHARACTER.
-!!    g[1-9]   optional additional values to print the value of after g0.
-!!    sep      separator to add between values. Default is a space
+!!    where       string designating where to write message, as with journal(3f)
+!!    g0          value to print. May
+!!                be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
+!!                or CHARACTER.
+!!    g[1-9a-j]   optional additional values to print the value of after g0.
+!!    sep         separator to add between values. Default is a space. Should
+!!                always be called with a keyword, as in "sep=VALUE".
 !!##RETURNS
 !!    where_write_message_all  description to print
 !!
@@ -601,7 +613,7 @@ end subroutine set_stdout_lun
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine where_write_message_all(where, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, sep)
+subroutine where_write_message_all(where,g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep)
 implicit none
 
 ! ident_5="@(#) M_framework__journal where_write_message_all(3f) writes a message to a string composed of any standard scalar types"
@@ -609,8 +621,9 @@ implicit none
 character(len=*),intent(in)   :: where
 class(*),intent(in)           :: g0
 class(*),intent(in),optional  :: g1, g2, g3, g4, g5, g6, g7, g8 ,g9
+class(*),intent(in),optional  :: ga, gb, gc, gd, ge, gf, gg, gh, gi, gj
 character,intent(in),optional :: sep
-call where_write_message(where,str(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9,sep))
+call where_write_message(where,str(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj, sep=sep))
 end subroutine where_write_message_all
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

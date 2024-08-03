@@ -245,16 +245,16 @@ public unit_test_expected  ! shortcut for common call to unit_test with expressi
 
 private atleast_
 private cmdline_
-private getname_
+private getarg0_
 private getall_
 private glob_
 
-type :: force_kwargs_hack  ! force keywords, using @awvwgk method
-end type force_kwargs_hack
-! so then any argument that comes afer "force_kwargs" is a compile time error
+type :: force_keywd_hack  ! force keywords, using @awvwgk method
+end type force_keywd_hack
+! so then any argument that comes afer "force_keywd" is a compile time error
 ! if not done with a keyword unless someone "breaks" it by passing something
 ! of this type:
-!    type(force_kwargs_hack), optional, intent(in) :: force_kwargs
+!    type(force_keywd_hack), optional, intent(in) :: force_keywd
 
 !===================================================
 ! for backward compatibility 2023-04-30. Otherwise, ignore these
@@ -286,7 +286,29 @@ end interface
 public unit_check_level
 integer :: unit_check_level
 equivalence (unit_test_level, unit_check_level)
-!===================================================
+
+! labels for PREFIX COLUMN OF MESSAGES
+
+type prefix
+   character(len=:),allocatable :: CHECK_MSG    !  'check_msg:    '
+   character(len=:),allocatable :: CHECK        !  'check:        '
+   character(len=:),allocatable :: CHECK_START  !  'check_start:  '
+   character(len=:),allocatable :: CHECK_STOP   !  'check_stop:   '
+   character(len=:),allocatable :: CHECK_END    !  'check_end:    '
+end type prefix
+
+!type(prefix),save :: CHECK_PREFIX=prefix( &
+!   CHECK_MSG    =  'check_msg:   ', &
+!   CHECK        =  'check:       ', &
+!   CHECK_START  =  'check_start: ', &
+!   CHECK_STOP   =  'check_stop:  ', &
+!   CHECK_END    =  'check_end:   '  &
+!&)
+
+type(prefix),save :: CHECK_PREFIX=prefix( null(),null(),null(),null(),null())
+
+public :: CHECK_PREFIX
+
 contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -342,14 +364,14 @@ contains
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_test_msg(name,msg, g1, g2, g3, g4, g5, g6, g7, g8, g9 ,ga, gb, gc, gd, ge, gf, gg, gh, gi, gj,force_kwargs,if)
+subroutine unit_test_msg(name,msg, g1, g2, g3, g4, g5, g6, g7, g8, g9 ,ga, gb, gc, gd, ge, gf, gg, gh, gi, gj,force_keywd,if)
 implicit none
 
 ! ident_1="@(#) M_framework__verify unit_test_msg(3f) writes a message to a string composed of any standard scalar types"
 
 character(len=*),intent(in)   :: name
 class(*),intent(in),optional  :: msg, g1 ,g2 ,g3 ,g4 ,g5, g6 ,g7 ,g8 ,g9, ga ,gb ,gc ,gd ,ge, gf ,gg ,gh ,gi, gj
-type(force_kwargs_hack), optional, intent(in) :: force_kwargs
+type(force_keywd_hack), optional, intent(in) :: force_keywd
 logical,intent(in),optional   :: if
 character(len=:),allocatable  :: msg_all
 logical                       :: if_local
@@ -368,7 +390,7 @@ endif
 
       if(.not.G_brief)then
          ! write message to standard error
-         call wrt(G_luns,'check_msg:   '//atleast_(name,G_LONGEST)//' INFO    : '// msg_all)
+         call wrt(G_luns,CHECK_PREFIX%check_msg//atleast_(name,G_LONGEST)//' INFO    : '// msg_all)
       endif
       if(G_command /= '') call run(G_command//' type="message"  name="'//trim(name)//'" msg="'//ndq(msg_all)//'"')
    endif
@@ -495,14 +517,14 @@ end subroutine unit_test_msg
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_test(name,logical_expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,force_kwargs,wordy)
+subroutine unit_test(name,logical_expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,force_keywd,wordy)
 
 ! ident_2="@(#) M_framework__verify unit_test(3f) assert if expression is .true. or .false. and optionally call command or stop on .false."
 
 character(len=*),intent(in)          :: name
 logical,intent(in)                   :: logical_expression
 class(*),intent(in),optional         :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-type(force_kwargs_hack),optional,intent(in) :: force_kwargs
+type(force_keywd_hack),optional,intent(in) :: force_keywd
 logical,intent(in),optional          :: wordy
 character(len=:),allocatable         :: msg_all
 logical                              :: wordy_local
@@ -520,17 +542,17 @@ logical                              :: wordy_local
    msg_all=str(msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 
    if(.not.logical_expression)then
-      call wrt(G_luns,'check:       '//atleast_(name,G_LONGEST)//' FAILURE : '//msg_all)
+      call wrt(G_luns,CHECK_PREFIX%check//atleast_(name,G_LONGEST)//' FAILURE : '//msg_all)
       if(G_command /= '') call run(G_command//' type="check" name="'//trim(name)//'" passed="failed" msg="'//ndq(msg_all)//'"')
       if(.not.G_keep_going) then
-         call wrt(G_luns,'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
+         call wrt(G_luns,CHECK_PREFIX%check//'STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
          stop 1
       endif
       IFAILED_G=IFAILED_G+1
       IFAILED_ALL_G=IFAILED_ALL_G+1
    else
       if(.not.G_brief)then
-         if(wordy_local)call wrt(G_luns,'check:       '//atleast_(name,G_LONGEST)//' SUCCESS : '//msg_all)
+         if(wordy_local)call wrt(G_luns,CHECK_PREFIX%check//atleast_(name,G_LONGEST)//' SUCCESS : '//msg_all)
       endif
       if(G_command /= '') call run(G_command//' type="check" name="'//trim(name)//'" passed="passed" msg="'//ndq(msg_all)//'"')
       IPASSED_G=IPASSED_G+1
@@ -612,14 +634,14 @@ end subroutine unit_test
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine unit_test_start(name,msg,opts,force_kwargs,matched)
+subroutine unit_test_start(name,msg,opts,force_keywd,matched)
 
 ! ident_3="@(#) M_framework__verify unit_test_start(3f) start testing procedure "name""
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: msg
 character(len=*),intent(in),optional :: opts
-type(force_kwargs_hack), optional, intent(in) :: force_kwargs
+type(force_keywd_hack), optional, intent(in) :: force_keywd
 logical,intent(out),optional         :: matched
 character(len=:),allocatable         :: msg_local
 logical,save                         :: called=.false.
@@ -660,7 +682,7 @@ logical,save                         :: called=.false.
    endif
 
    if(.not.G_brief)then
-      call wrt(G_luns,'check_start: '//atleast_(name,G_LONGEST)//' START   : '//msg_local)
+      call wrt(G_luns,CHECK_PREFIX%check_start//atleast_(name,G_LONGEST)//' START   : '//msg_local)
    endif
 
    IPASSED_G=0
@@ -754,7 +776,7 @@ integer(kind=int64)                  :: clicks_now
    if(PF == 'PASSED  :'.and.ipassed_all_G == 0)then
       PF='UNTESTED:'
    endif
-      write(out,'("check_stop:  ",a,1x,a," GOOD: ",a," BAD: ",a," DURATION: ",i14.14)') &
+      write(out,'("'//CHECK_PREFIX%check_stop//'",a,1x,a," GOOD: ",a," BAD: ",a," DURATION: ",i14.14)') &
        & atleast_("TALLY",G_LONGEST),     &
        & PF,                              &
        & atleast_(str(IPASSED_ALL_G),9),  &
@@ -873,7 +895,7 @@ integer(kind=int64)                  :: clicks_now
       call system_clock(clicks_now)
       milliseconds=(julian()-duration)*1000
       milliseconds=clicks_now-clicks
-      write(out,'("check_end:   ",a,      &
+      write(out,'("'//CHECK_PREFIX%check_end//'",a,  &
        & 1x,a,                            &
        & " GOOD: ",a,                     &
        & " BAD: " ,a,                     &
@@ -886,15 +908,19 @@ integer(kind=int64)                  :: clicks_now
        & milliseconds
    else
       milliseconds=0
-      write(out,'("check_end:   ",a,1x,a," GOOD: ",a,1x," BAD: ",a)') &
+      write(out,'("'//CHECK_PREFIX%check_end//'",a,1x,a," GOOD: ",a,1x," BAD: ",a)') &
        & atleast_(name,G_LONGEST),PF,atleast_(str(IPASSED_G),9),atleast_(str(IFAILED_G),9)
    endif
    if(present(msg))then
-      if(.not.G_brief.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
-       & call wrt(G_luns,trim(out)//': '//trim(msg))
+      if(.not.G_brief.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) then
+         call wrt(G_luns,trim(out)//': '//trim(msg))
+         call wrt(G_luns,'')
+      endif
    else
-      if(.not.G_brief.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) &
-       & call wrt(G_luns,out)
+      if(.not.G_brief.or.(IFAILED_G+IPASSED_G.eq.0).or.IFAILED_G.ne.0) then
+         call wrt(G_luns,out)
+         call wrt(G_luns,'')
+      endif
    endif
 
    if(G_command /= '')then                           ! if system command name is not blank call system command
@@ -1133,17 +1159,43 @@ end function julian
 !===================================================================================================================================
 subroutine preset_globals()
 integer :: iostat
+character(len=:),allocatable :: arg0
    G_virgin%preset_globals=.false.
    G_cmdline=.true.
    G_debug=.false.
    G_keep_going=.true.
    unit_test_level=0
    unit_test_flags=[integer :: ]
-   G_luns=[stderr]
+   !x!G_luns=[stderr]
+   G_luns=[stdout]
    G_interactive=.false.
    G_match=repeat(' ',4096)
    G_command=repeat(' ',4096)
    open(unit=999,status='scratch',iostat=iostat)
+   !  values used in prefix column for various messages
+   !CHECK_PREFIX=prefix( null(),null(),null(),null(),null())
+   !x!CHECK_PREFIX=prefix(                  &
+   !x! check_MSG    =  'check_msg:   ', &
+   !x! check        =  'check:       ', &
+   !x! check_START  =  'check_start: ', &
+   !x! check_STOP   =  'check_stop:  ', &
+   !x! check_END    =  'check_end:   '  &
+   !x!)
+   !x!CHECK_PREFIX=prefix(             &
+   !x! check_MSG    =  ':       ', &
+   !x! check        =  ':       ', &
+   !x! check_START  =  ':start: ', &
+   !x! check_STOP   =  ':stop:  ', &
+   !x! check_END    =  ':end:   '  &
+   !x!)
+   arg0=getarg0_()//': '
+   CHECK_PREFIX=prefix(   &
+    check_MSG    =  arg0, &
+    check        =  arg0, &
+    check_START  =  arg0, &
+    check_STOP   =  arg0, &
+    check_END    =  arg0  &
+   )
 end subroutine preset_globals
 !===================================================================================================================================
 subroutine cmdline_()
@@ -1434,6 +1486,8 @@ character(len=*), optional, intent(in) :: match
 !integer,parameter,public   :: realtime=kind(0.0d0)    ! type for julian days
 !integer,parameter,public   :: EXIT_SUCCESS=0
 !integer,parameter,public   :: EXIT_FAILURE=1
+
+
 end subroutine unit_test_mode
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -1520,7 +1574,7 @@ character(len=:),allocatable :: command_
    endif
    command_=adjustl(command)//'   '
    if(index(command_,'* ') == 1)then
-      command_=getname_()//command_(2:)
+      command_=getarg0_()//command_(2:)
    elseif(index(command_,'** ') == 1)then
       command_=getall_()//command_(2:)
    endif
@@ -1540,64 +1594,77 @@ end function unit_test_system
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getname_(3f) - [M_io:QUERY] get name of the current executable
+!!    getarg0_(3f) - [M_io:QUERY] get basename of the current executable
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!    function getname_() result(name)
+!!    function getarg0_() result(name)
 !!
-!!     character(len=:),allocatable         :: getname_
+!!     character(len=:),allocatable         :: getarg0_
 !!
 !!##DESCRIPTION
-!!    getname_(3f) returns the name of the current executable using
-!!    get_command_argument(3f) and inquire(3f).
+!!    getarg0_(3f) returns the name of the current executable using
+!!    get_command_argument(3f) and inquire(3f). It returns only
+!!    the leaf name past the last backslash or slash and trims
+!!    the suffix ".exe" as well.
 !!
 !!##EXAMPLE
 !!
 !!    Sample getting a pathname of current executable:
 !!
-!!      program demo_getname_
-!!      use M_io, only : getname_
+!!      program demo_getarg0_
+!!      use M_io, only : getarg0_
 !!      implicit none
-!!         write(*,'(*(a))')'Running ',getname_()
-!!      end program demo_getname_
+!!         write(*,'(*(a))')'Running ',getarg0_()
+!!      end program demo_getarg0_
 !!
 !!##AUTHOR
 !!        John S. Urban
 !!
 !!##LICENSE
 !!        Public Domain
-function getname_() result(name)
-! get the pathname of arg0
+function getarg0_()
+! get the pathname of getarg0_
 implicit none
-character(len=:),allocatable :: arg0
-integer                      :: arg0_length
+integer                      :: getarg0__length
 integer                      :: ios
+integer                      :: iend
 character(len=4096)          :: long_name
-character(len=:),allocatable :: name
-   arg0_length=0
-   name=''
+character(len=:),allocatable :: getarg0_
+   getarg0__length=0
+   getarg0_=''
    long_name=''
-   call get_command_argument(0,length=arg0_length,status=ios)
+   call get_command_argument(0,length=getarg0__length,status=ios)
    if(ios == 0)then
-      if(allocated(arg0))deallocate(arg0)
-      allocate(character(len=arg0_length) :: arg0)
-      call get_command_argument(0,arg0,status=ios)
+      if(allocated(getarg0_))deallocate(getarg0_)
+      allocate(character(len=getarg0__length) :: getarg0_)
+      call get_command_argument(0,getarg0_,status=ios)
       if(ios == 0)then
-         inquire(file=arg0,iostat=ios,name=long_name)
+         inquire(file=getarg0_,iostat=ios,name=long_name)
          if(ios == 0)then
-            name=trim(long_name)
+            getarg0_=trim(long_name)
          else
-            name=arg0
+            getarg0_=getarg0_
          endif
       else
-         arg0=''
+         getarg0_=''
       endif
    else
-      arg0=''
+      getarg0_=''
    endif
-end function getname_
+   iend=index(getarg0_,'\',back=.true.)
+   if(iend.ne.0) then
+      getarg0_=getarg0_(iend+1:)
+   else
+      iend=index(getarg0_,'/',back=.true.)
+      if(iend.ne.0)getarg0_=getarg0_(iend+1:)
+   endif
+   iend=len_trim(getarg0_)
+   if(iend.gt.4)then
+      if(getarg0_(iend-3:iend)=='.exe')getarg0_=getarg0_(:iend-4)
+   endif
+end function getarg0_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -1652,7 +1719,7 @@ character(len=:),allocatable :: command
          endif
       endif
    enddo
-   command=getname_()//command
+   command=getarg0_()//command
 end function getall_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

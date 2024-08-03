@@ -19,7 +19,7 @@ CPROGFILES =
 PROG = ${PROGFILES:.f90=}
 CPROG = ${CPROGFILES:.c=}
 TPROG = ${TESTPROGFILES:.f90=}
-SRCS = M_framework.f90 M_framework__msg.F90 M_framework__journal.f90 M_framework__verify.F90 M_framework__utility.f90 M_framework__approx.F90
+SRCS = M_framework.F90 M_framework__msg.F90 M_framework__journal.f90 M_framework__verify.F90 M_framework__utility.f90 M_framework__approx.F90
 OBJS = M_framework.o M_framework__msg.o M_framework__journal.o M_framework__verify.o M_framework__utility.o M_framework__approx.o
 LIBRARY = libM__framework.a
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

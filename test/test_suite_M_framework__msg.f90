@@ -39,10 +39,9 @@ contains
 subroutine test_suite_str   ()
 logical             :: allpassed=.true.
 logical,allocatable :: tests(:)
-   call unit_test_start("str   ",msg="",matched=matched)
-   if(.not.matched)return
 
-  call unit_test_start('str','test building message strings')
+  call unit_test_start('str','test building message strings',matched=matched)
+   if(.not.matched)return
 
   tests=[logical :: ]
 
@@ -82,31 +81,31 @@ subroutine test_suite_stderr()
 end subroutine test_suite_stderr
 
 subroutine test_suite_wrt   ()
-   call unit_test_start("wrt   ",msg="",matched=matched)
+   call unit_test_start("wrt",msg="",matched=matched)
    if(.not.matched)return
    !!call unit_test("wrt   ", 0 .eq. 0, "checking",100)
-   call unit_test_end("wrt   ",msg="")
+   call unit_test_end("wrt",msg="")
 end subroutine test_suite_wrt   
 
 subroutine test_suite_fmt   ()
-   call unit_test_start("fmt   ",msg="",matched=matched)
+   call unit_test_start("fmt",msg="",matched=matched)
    if(.not.matched)return
    !!call unit_test("fmt   ", 0 .eq. 0, "checking",100)
-   call unit_test_end("fmt   ",msg="")
+   call unit_test_end("fmt",msg="")
 end subroutine test_suite_fmt   
 
 subroutine test_suite_set   ()
-   call unit_test_start("set   ",msg="",matched=matched)
+   call unit_test_start("set",msg="",matched=matched)
    if(.not.matched)return
    !!call unit_test("set   ", 0 .eq. 0, "checking",100)
-   call unit_test_end("set   ",msg="")
+   call unit_test_end("set",msg="")
 end subroutine test_suite_set   
 
 subroutine test_suite_pdec  ()
-   call unit_test_start("pdec  ",msg="",matched=matched)
+   call unit_test_start("pdec",msg="",matched=matched)
    if(.not.matched)return
    !!call unit_test("pdec  ", 0 .eq. 0, "checking",100)
-   call unit_test_end("pdec  ",msg="")
+   call unit_test_end("pdec",msg="")
 end subroutine test_suite_pdec  
 
 subroutine test_suite_assert()

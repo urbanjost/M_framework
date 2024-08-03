@@ -1,0 +1,87 @@
+NAME
+   M_constants(3f) - [M_constants:INTRO] Useful constants
+
+SYNOPSIS
+   use M_constants,  only : uc
+
+      ! real128 constants
+      uc%qp%pi
+      uc%qp%gamma
+      uc%qp%e
+      uc%qp%golden_ratio
+      uc%qp%euler
+
+      ! real64 constants
+      uc%dp%pi
+      uc%dp%gamma
+      uc%dp%e
+      uc%dp%golden_ratio
+      uc%dp%euler
+
+      ! real32 constants
+      uc%sp%pi
+      uc%sp%gamma
+      uc%sp%e
+      uc%sp%golden_ratio
+      uc%sp%euler
+
+   use M_constants,  only : f
+      ! formats
+
+      f%all
+
+DESCRIPTION
+ Useful universal constants, physical constants, formats, ...
+
+
+ UNIVERSAL CONSTANTS
+
+     "e"              The base of the natural logarithm system. "e"
+                      was named in honor of Euler, but is known as
+                      Napier's constant.
+     "euler"
+     "gamma"          The Euler-Mascheroni constant is often denoted by
+                      a lower-case Gamma.
+     "golden_ratio"   In mathematics, two quantities are in the golden
+                      ratio if their ratio is the same as the ratio of
+                      their sum to the larger of the two quantities. so
+                      for a > b > 0, (a + b)/ a = a/b where the Greek
+                      letter phi often denotes the golden ratio.
+
+     "pi"             The ratio of the circumference of a circle to the
+                      diameter of the circle
+
+ PHYSICAL CONSTANTS
+
+
+     "deg_per_rad"
+     "rad_per_deg"
+     "c__m_per_sec"   Speed of light in a vacuum
+     "c__ft_per_sec"  Speed of light in a vacuum
+
+NOTES
+
+  Gamma is defined as
+
+   Gamma = limit ( M -> Infinity ) ( Sum ( 1 <= N <= M ) 1 / N ) - Log ( M )
+
+EXAMPLE
+ Sample program:
+
+    program test_universal_constants
+    use M_constants, only : uc, f
+    ! give a local name to a constant
+    real,parameter :: e=uc%sp%e ! universal constant, single-precision, e
+    character(len=*),parameter :: all=f%all
+
+    ! just use it
+    print f%all, 'gamma=',uc%qp%gamma    ! universal constant, quad-precision, gamma
+    print all, 'e=',e
+
+    ! or rename it with ASSOCIATE
+    associate (gamma => uc%dp%gamma)
+       print all,'gamma=',gamma
+    end associate
+
+    end program test_universal_constants
+

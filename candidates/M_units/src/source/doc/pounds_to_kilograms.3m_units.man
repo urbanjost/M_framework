@@ -1,0 +1,51 @@
+NAME
+   pounds_to_kilograms(3f) - [M_units:MASS] - converts a measurement in pounds-mass to kilograms.
+   (LICENSE:PD)
+
+SYNOPSIS
+   elemental function pounds_to_kilograms ( pounds )
+
+    class(*),intent(in) ::  pounds
+    doubleprecision     :: pounds_to_kilograms
+
+DESCRIPTION
+   Converts pounds-mass to kilograms using the formula:
+
+      kilograms = 0.45359237 * pounds
+
+   The pound (or more properly pound-mass) is a unit of mass used in the
+   Imperial, United States Customary, and other systems of measurement. A
+   number of different definitions have been used; the most common today
+   is the international avoirdupois pound, which is legally defined as
+   exactly 0.45359237 kilograms. The international standard symbol for
+   the avoirdupois pound is lb (from the Roman "libra"); an alternative
+   symbol is lbm).
+
+OPTIONS
+   POUNDS  The weight in pounds.
+           POUNDS may be any standard scalar value supported by anyscalar_to_double(3f).
+           This at least includes REAL, INTEGER, and DOUBLEPRECISION.
+RETURN
+   POUNDS_TO_KILOGRAMS   the corresponding weight in kilograms.
+EXAMPLE
+  Sample program
+
+   program demo_pounds_to_kilograms
+   use M_units, only : pounds_to_kilograms
+   implicit none
+      write(*,*)'REAL            ', pounds_to_kilograms(1.0)
+      write(*,*)'INTEGER array   ', pounds_to_kilograms([ 0, 1, 100, 200 ])
+      write(*,*)'DOUBLEPRECISION ', pounds_to_kilograms(1.0d0)
+   end program demo_pounds_to_kilograms
+
+  Typical Results
+
+    REAL              0.45359237000000002
+    INTEGER array     0.0000000000000000    0.45359237000000002
+                     45.359237000000000    90.718474000000001
+    DOUBLEPRECISION   0.45359237000000002
+
+AUTHOR
+   John S. Urban
+LICENSE
+   Public Domain

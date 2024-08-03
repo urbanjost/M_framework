@@ -1,0 +1,91 @@
+NAME
+   nan(3f) - [M_units] return a NaN (Not a number)
+   (LICENSE:PD)
+SYNOPSIS
+   function nan(value)
+   use,intrinsic :: iso_fortran_env, only: real32, real64, real128
+   real(kind=real32|real64|real128) :: nan
+   real(kind=real32|real64|real128) :: value
+DESCRIPTION
+   Return a NaN (Not a number) value. The type returned will be the same
+   kind as the passed value.
+
+   At some point, the IEEE interface should work, with something like
+
+    use,intrinsic :: ieee_arithmetic, only : ieee_value, ieee_quiet_nan
+    use,intrinsic :: ieee_arithmetic, only : ieee_support_nan
+
+    if(IEEE_SUPPORT_NAN(x))then        ! Are IEEE NaNs supported?
+       x=IEEE_VALUE(x,ieee_quiet_nan)  ! Generate an IEEE value.
+    endif
+
+OPTIONS
+   value  A real value whose kind is used to define the kind of the
+          returned value.
+RETURNS
+   nan    returns a Nan value ("Not a number") on platforms that support
+          NaN values. The kind is determined by the kind of the input
+          value.
+EXAMPLE
+  Sample program
+
+   program demo_nan
+   use,intrinsic :: iso_fortran_env, only: real32, real64, real128
+   use M_units, only : nan
+   implicit none
+   real(kind=real32)  :: r32
+   real(kind=real64)  :: r64
+   real(kind=real128) :: r128
+   character(len=256) :: message
+   integer            :: ios
+
+      r32=nan(0.0_real32)
+      r64=nan(0.0_real64)
+      r128=nan(0.0_real128)
+
+      ! examples printing the NaN values
+      ! list directed format
+      write(*,*,iomsg=message,iostat=ios)r32,r64,r128
+      if(ios.ne.0)write(*,*)trim(message)
+      ! hexadecimal format to show different kinds
+      write(*,'(*(z0,1x))',iomsg=message,iostat=ios)r32,r64,r128
+      if(ios.ne.0)write(*,*)trim(message)
+      ! G0 format
+      write(*,'(*(g0,1x))',iomsg=message,iostat=ios)r32,r64,r128
+      if(ios.ne.0)write(*,*)trim(message)
+      ! if a specific numeric field is used
+      write(*,'(*(f3.1,1x))',iomsg=message,iostat=ios)r32,r64,r128
+      if(ios.ne.0)write(*,*)trim(message)
+      ! if format is less than three characters
+      write(*,'(*(f2.1,1x))',iomsg=message,iostat=ios)r32,r64,r128
+      if(ios.ne.0)write(*,*)trim(message)
+
+      ! an option to terminate a program when a NaN is encountered
+      ! (if X is NaN the comparison with 0. is always false.)
+      if (.not.(r32<=0.0) .and. .not.(r32>=0.0))then
+         write(*,*)'found nan'
+         stop
+      endif
+
+      ALT1: block
+         integer :: x = 2143289344
+         print *, transfer(x, 1.0)    ! prints "nan" on i686
+      endblock ALT1
+
+   end program demo_nan
+
+  Results:
+
+   NaN      NaN              NaN
+   7FC00000 7FF8000000000000 7FFF8000000000000000000000000000
+   NaN NaN NaN
+   NaN NaN NaN
+   ** ** **
+    found nan
+
+SEE ALSO
+     IS_NAN(3f)
+AUTHOR
+   John S. Urban
+LICENSE
+   Public Domain
