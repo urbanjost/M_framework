@@ -23,19 +23,18 @@
 !!        + can be replayed even when interactive input was provided
 !!        + and/or be used to verify program executions
 !!
-!!    Typically, you would echo what the user typed to
-!!    the trail file as-is, and write output you write to stdout as comments
-!!    to the trail file so that the trail file can easily be read back in
-!!    (by ignoring comments).
+!!    Typically, you would echo what the user typed to the trail file as-is,
+!!    and write output you write to stdout as comments to the trail file so
+!!    that the trail file can easily be read back in (by ignoring comments).
 !!
 !!    Even though there is essentially one procedure (journal(3f) calls
-!!    that are more than just a single message have an action specified
-!!    as the first parameter. This action might specify to open a log file,
-!!    to change the "level" required by messages for them to appear, whether
+!!    that are more than just a single message have an action specified as
+!!    the first parameter. This action might specify to open a log file, to
+!!    change the "level" required by messages for them to appear, whether
 !!    output it written as a comment or not, and on what files the output
-!!    shoud appear. So the interface can be used in a very simple manner but
-!!    has more options than is evident at first glance, as detailed in the
-!!    man-page for journal(3f).
+!!    shoud appear. So the interface can be used in a very simple manner
+!!    but has more options than is evident at first glance, as detailed in
+!!    the man-page for journal(3f).
 !!
 !!    to stdout is written with WHERE='SC' in the JOURNAL(3f) call.
 !!
@@ -72,7 +71,7 @@
 !!##EXAMPLES
 !!
 !!
-!!    The man(1) page for journal(3f) describes all the options for the
+!!    The man-page for journal(3f) describes all the options for the
 !!    action field WHERE.  In addition to being used to generate a journal,
 !!    the routine can be used for producing optional debug messages and
 !!    timing information.
@@ -265,11 +264,12 @@ private
 !!   VALUES(S)   message to write to stdout, stderr, and the trail file.
 !!               a numeric or character value to optionally be appended
 !!               to the message. Up to twenty values are allowed. The WHERE
-!!               field is required if values are added.
+!!               field is required if there is anything other than a single
+!!               character string or not values at all.
 !!   FILENAME    when WHERE="O" to turn the trail file on or off, the "message"
 !!               field becomes the trail filename to open. If blank, writing
 !!               to the trail file is turned off.
-!!   TFORMAT     when WHERE="%" the message is treated as a time format
+!!   TIMEFORMAT  when WHERE="%" the message is treated as a time format
 !!               specification as described under now(3f).
 !!
 !!##EXAMPLE

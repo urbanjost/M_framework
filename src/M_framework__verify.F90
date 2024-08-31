@@ -1594,7 +1594,7 @@ end function unit_test_system
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getarg0_(3f) - [M_io:QUERY] get basename of the current executable
+!!    getarg0_(3f) - [M_framework__verify:QUERY] get basename of the current executable
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -1614,7 +1614,7 @@ end function unit_test_system
 !!    Sample getting a pathname of current executable:
 !!
 !!      program demo_getarg0_
-!!      use M_io, only : getarg0_
+!!      use M_framework__verify, only : getarg0_
 !!      implicit none
 !!         write(*,'(*(a))')'Running ',getarg0_()
 !!      end program demo_getarg0_
@@ -1670,7 +1670,7 @@ end function getarg0_
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getall_(3f) - [M_io:QUERY] get name of the current executable and options
+!!    getall_(3f) - [M_framework__verify:QUERY] get name of the current executable and options
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -1688,7 +1688,7 @@ end function getarg0_
 !!    Sample getting a pathname of current executable:
 !!
 !!      program demo_getall_
-!!      use M_io, only : getall_
+!!      use M_framework__verify, only : getall_
 !!      implicit none
 !!         write(*,'(*(a))')'Running ',getall_()
 !!      end program demo_getall_

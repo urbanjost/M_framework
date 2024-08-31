@@ -1,3 +1,8 @@
+#ifdef __NVCOMPILER
+#undef HAS_REAL128
+#else
+#define HAS_REAL128
+#endif
 module M_framework__approx
 use, intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64 !  1           2           4           8
 use, intrinsic :: iso_fortran_env,  only : real32, real64, real128   !  4           8          10
@@ -11,6 +16,10 @@ public  :: in_margin       ! check if two reals are approximately equal using a 
 public  :: round_to_power  ! round val to specified number of digits after the decimal point
 public  :: round           ! round val to specified number of significant digits
 public  :: significant     ! round val to specified number of significant digits
+public  :: compare_float
+public  :: operator (.equalto.)
+public  :: operator (.greaterthan.)
+public  :: operator (.lessthan.)
 !===========================
 ! deprecated
 public  :: sp_accdig       ! compare two real numbers only up to a specified number of digits
@@ -27,6 +36,39 @@ end interface significant
 
 private :: anyscalar_to_realbig_
 private :: anyscalar_to_double_
+
+
+interface compare_float
+   module procedure compare_float_real32
+   module procedure compare_float_real64
+#ifdef HAS_REAL128
+   module procedure compare_float_real128
+#endif
+end interface compare_float
+
+interface operator (.equalto.)
+   module procedure is_equal_to_real32
+   module procedure is_equal_to_real64
+#ifdef HAS_REAL128
+   module procedure is_equal_to_real128
+#endif
+end interface operator (.equalto.)
+
+interface operator (.greaterthan.)
+   module procedure is_greater_than_real32
+   module procedure is_greater_than_real64
+#ifdef HAS_REAL128
+   module procedure is_greater_than_real128
+#endif
+end interface operator (.greaterthan.)
+
+interface operator (.lessthan.)
+   module procedure is_less_than_real32
+   module procedure is_less_than_real64
+#ifdef HAS_REAL128
+   module procedure is_less_than_real128
+#endif
+end interface operator (.lessthan.)
 contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -490,10 +532,10 @@ END SUBROUTINE sp_accdig
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental impure SUBROUTINE accdig(x,y,digi0,ACURCY,IND)
-#ifdef __NVCOMPILER
-use,intrinsic :: iso_fortran_env, only : wp=>real64
-#else
+#ifdef HAS_REAL128
 use,intrinsic :: iso_fortran_env, only : wp=>real128
+#else
+use,intrinsic :: iso_fortran_env, only : wp=>real64
 #endif
 use M_framework__journal,  only : journal
 implicit none
@@ -809,10 +851,10 @@ end function significant_real64
 !===================================================================================================================================
 pure elemental function anyscalar_to_realbig_(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
-#ifdef __NVCOMPILER
-use,intrinsic :: iso_fortran_env, only : wp=>real64
-#else
+#ifdef HAS_REAL128
 use,intrinsic :: iso_fortran_env, only : wp=>real128
+#else
+use,intrinsic :: iso_fortran_env, only : wp=>real64
 #endif
 implicit none
 
@@ -828,8 +870,7 @@ character(len=3)             :: readable
    type is (integer(kind=int64));  d_out=real(valuein,kind=wp)
    type is (real(kind=real32));    d_out=real(valuein,kind=wp)
    type is (real(kind=real64));    d_out=real(valuein,kind=wp)
-#ifdef __NVCOMPILER
-#else
+#ifdef HAS_REAL128
    Type is (real(kind=real128));   d_out=valuein
 #endif
    type is (logical);              d_out=merge(0.0_wp,1.0_wp,valuein)
@@ -860,8 +901,7 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
-#ifdef __NVCOMPILER
-#else
+#ifdef HAS_REAL128
    Type is (real(kind=real128))
 #endif
       !!if(valuein > big)then
@@ -881,4 +921,292 @@ doubleprecision,parameter :: big=huge(0.0d0)
    end select
 end function anyscalar_to_double_
 
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!##NAME
+!!    compare_float(3f) - [M_framework__approx] compare floating point
+!!    values with adjustable tolerance.
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!     result = compare_float( x, y,ulp = SCALING_VALUE)
+!!
+!!      elemental function (x,y,ulp)
+!!      real(kind=KIND),intent(in) :: x,y
+!!      real|integer,intent(in),optional :: ulp
+!!
+!!     Additional convenience operators:
+!!
+!!        X.equalto.Y
+!!        X.lessthan.Y
+!!        X.greaterthan.Y
+!!
+!!##DESCRIPTION
+!!    compare_float(3f) is a function for comparing floating point numbers
+!!    within an automatically adjusted tolerance.
+!!
+!!    The test performed is
+!!
+!!        abs( x - y ) < ( ulp * spacing( max(abs(x),abs(y)) ) )
+!!
+!!    If the result is .TRUE., the numbers are considered equal.
+!!    Both single and double precision scalar and array numbers can
+!!    be compared, as the function is elemental.
+!!
+!!    As a convenience relational operators .EqualTo., .GreaterThan.,
+!!    and .LessThan. are provided. These are based on the
+!!    compare_float(3f) function using the commonly used default
+!!    scaling of ULP=1.
+!!
+!!##DETAILS
+!!
+!!    It is generally acknowledged that real numbers should not be
+!!    compared directly but within some tolerance. However, the magnitude
+!!    of an appropriate tolerance value will vary depending on the
+!!    magnitudes of the numbers being compared and the precision of the
+!!    computing environment.
+!!
+!!    The Fortran standard does not specify functions or operators
+!!    specifically for comparing float values, but leaves some latitude in
+!!    how the compilers address floating point comparisions. It does
+!!    specify functions that return platform-specific values useful in
+!!    applying different methods to the problem such as
+!!
+!!     + digits(3f)        - Significant digits in the numeric model
+!!     + epsilon(3f)       - Epsilon function
+!!     + exponent(3f)      - Exponent of floating-point number
+!!     + fraction(3f)      - Fractional part of the model representation
+!!     + huge(3f)          - Largest number of a type and kind
+!!     + maxexponent(3f)   - Maximum exponent of a real kind
+!!     + minexponent(3f)   - Minimum exponent of a real kind
+!!     + nearest(3f)       - Nearest representable number
+!!     + precision(3f)     - Decimal precision of a real kind
+!!     + radix(3f)         - Base of a numeric model
+!!     + range(3f)         - Decimal exponent range of a numeric kind
+!!     + rrspacing(3f)     - Reciprocal of the relative spacing of a numeric type
+!!     + scale(3f)         - Scale a real value by a whole power of the radix
+!!     + set_exponent(3f)  - real value with specified exponent
+!!     + spacing(3f)       - Smallest distance between two numbers of a given type
+!!     + tiny(3f)          - Smallest positive number of a real kind
+!!
+!!    Books have been written on the behavior of floating point math.
+!!
+!!    As is used here, a commonly used simple general floating point
+!!    comparison algorithm is
+!!
+!!        if(abs(x < y) < (ulp * spacing(max(abs(x),abs(y))))) then
+!!          :
+!!        endif
+!!
+!!    where the intrinsic function SPACING(3f) determines the distance
+!!    between the argument X and the nearest adjacent representable number
+!!    of the same type and ULP is an optional user-supplied scaling factor.
+!!
+!!##OPTIONS
+!!
+!!    x,y   Two congruent floating point values to compare.
+!!
+!!    ulp   The ULP ("unit in the last place") scaling value allows for
+!!          users to control the scaling of the value returned by SPACING(3f)
+!!          in order to relax or tighten what is considered "equal". That
+!!          is, the ULP value can be used to scale the comparison based
+!!          on knowledge of the "numerical quality" of the values being used
+!!          in the comparision.
+!!
+!!          The value should be positive. The absolute value of the value is
+!!          taken if it is negative.
+!!
+!!          The default ULP scaling value is 1.0.
+!!
+!!          The value may be of type integer or real.
+!!
+!!          A 0.5 ULP maximum error is the best you could hope for, since
+!!          this corresponds to always rounding to the nearest representable
+!!          floating point number.
+!!##RESULT
+!!
+!!    The return value is a logical value indicating whether the inputs
+!!    are equal to within the requested precision.
+!!
+!!##OPERATORS
+!!
+!! Additional operators based on compare_float(3f) are included:
+!!
+!! X.equalto.Y  If the result is .TRUE., the numbers are considered equal.
+!!              The test performed is
+!!
+!!                abs( x - y ) < spacing( max(abs(x),abs(y)) )
+!!
+!! X.greaterthan.Y  If the result is .TRUE., x is considered greater than y.
+!!                  The result is a logical value indicating whether the
+!!                  operand x is greater than y by more than the spacing
+!!                  between representable floating point numbers.
+!!
+!!                  The test performed is
+!!
+!!                   ( x - y ) >= SPACING( MAX(ABS(x),ABS(y)) )
+!! X.lessthan.Y  Test if one operand is less than another.
+!!               The result is a logical value indicating whether
+!!               the operand x is less than y by more than the
+!!               spacing between representable floating point
+!!               numbers.
+!!
+!!               The test performed is
+!!
+!!                  ( y - x ) >= SPACING( MAX(ABS(x),ABS(y)) )
+!!
+!!               If the result is .TRUE., x is considered less than y.
+!!
+!!##EXAMPLES
+!!
+!!
+!!   use m_compare_float_numbers
+!!   real :: x, y
+!!   if ( compare_float( x, y, ulp=5.0 ) ) ) then
+!!     ! what to do when x effectively equals y
+!!   endif
+!!
+!!   For no ULP scaling (ULP=1.0), the relational operators can be used
+!!   instead
+!!
+!!   use m_compare_float_numbers
+!!   real :: x, y
+!!   if ( x .equalto. y ) then
+!!     ! -- x effectively equals y, so perform some operation
+!!     ....
+!!   endif
+elemental function compare_float_real32( x, y, ulp ) result( compare )
+integer,parameter            ::  wp=real32
+real(kind=wp),intent(in)     ::  x
+real(kind=wp),intent(in)     ::  y
+class(*),optional,intent(in) ::  ulp
+logical                      ::  compare
+real(kind=wp)                ::  rel
+   if ( present( ulp ) ) then
+     rel = abs(anyscalar_to_double_(ulp))
+   else
+     rel = 1.0_wp
+   endif
+   compare = abs( x - y ) < ( rel * spacing( max(abs(x),abs(y)) ) )
+end function compare_float_real32
+elemental function is_less_than_real32( x, y ) result ( less_than )
+integer,parameter         ::  wp=real32
+real(kind=wp),intent(in)  ::  x, y
+logical :: less_than
+    if ( (y - x) >= spacing( max( abs(x), abs(y) ) ) ) then
+      less_than = .true.
+    else
+      less_than = .false.
+    endif
+  end function is_less_than_real32
+elemental function is_greater_than_real32( x, y ) result ( greater_than )
+integer,parameter         ::  wp=real32
+real(kind=wp),intent(in)  ::  x, y
+logical                   ::  greater_than
+   if ( (x - y) >= spacing( max( abs(x), abs(y) ) ) ) then
+     greater_than = .true.
+   else
+     greater_than = .false.
+   endif
+end function is_greater_than_real32
+elemental function is_equal_to_real32( x, y ) result( equal_to )
+integer,parameter         ::  wp=real32
+real(kind=wp),intent(in)  ::  x, y
+logical                   ::  equal_to
+    equal_to = abs( x - y ) < spacing( max(abs(x),abs(y)) )
+end function is_equal_to_real32
+
+elemental function compare_float_real64( x, y, ulp ) result( compare )
+integer,parameter            ::  wp=real64
+real(kind=wp),intent(in)     ::  x
+real(kind=wp),intent(in)     ::  y
+class(*),optional,intent(in) ::  ulp
+logical                      ::  compare
+real(kind=wp)                ::  rel
+   if ( present( ulp ) ) then
+     rel = abs(anyscalar_to_double_(ulp))
+   else
+     rel = 1.0_wp
+   endif
+   compare = abs( x - y ) < ( rel * spacing( max(abs(x),abs(y)) ) )
+end function compare_float_real64
+elemental function is_less_than_real64( x, y ) result ( less_than )
+integer,parameter         ::  wp=real64
+real(kind=wp),intent(in)  ::  x, y
+logical :: less_than
+    if ( (y - x) >= spacing( max( abs(x), abs(y) ) ) ) then
+      less_than = .true.
+    else
+      less_than = .false.
+    endif
+  end function is_less_than_real64
+elemental function is_greater_than_real64( x, y ) result ( greater_than )
+integer,parameter         ::  wp=real64
+real(kind=wp),intent(in)  ::  x, y
+logical                   ::  greater_than
+   if ( (x - y) >= spacing( max( abs(x), abs(y) ) ) ) then
+     greater_than = .true.
+   else
+     greater_than = .false.
+   endif
+end function is_greater_than_real64
+elemental function is_equal_to_real64( x, y ) result( equal_to )
+integer,parameter         ::  wp=real64
+real(kind=wp),intent(in)  ::  x, y
+logical                   ::  equal_to
+    equal_to = abs( x - y ) < spacing( max(abs(x),abs(y)) )
+end function is_equal_to_real64
+
+#ifdef HAS_REAL128
+elemental function compare_float_real128( x, y, ulp ) result( compare )
+integer,parameter            ::  wp=real128
+real(kind=wp),intent(in)     ::  x
+real(kind=wp),intent(in)     ::  y
+class(*),optional,intent(in) ::  ulp
+logical                      ::  compare
+real(kind=wp)                ::  rel
+   if ( present( ulp ) ) then
+     rel = abs(anyscalar_to_double_(ulp))
+   else
+     rel = 1.0_wp
+   endif
+   compare = abs( x - y ) < ( rel * spacing( max(abs(x),abs(y)) ) )
+end function compare_float_real128
+elemental function is_less_than_real128( x, y ) result ( less_than )
+integer,parameter         ::  wp=real128
+real(kind=wp),intent(in)  ::  x, y
+logical :: less_than
+    if ( (y - x) >= spacing( max( abs(x), abs(y) ) ) ) then
+      less_than = .true.
+    else
+      less_than = .false.
+    endif
+  end function is_less_than_real128
+elemental function is_greater_than_real128( x, y ) result ( greater_than )
+integer,parameter         ::  wp=real128
+real(kind=wp),intent(in)  ::  x, y
+logical                   ::  greater_than
+   if ( (x - y) >= spacing( max( abs(x), abs(y) ) ) ) then
+     greater_than = .true.
+   else
+     greater_than = .false.
+   endif
+end function is_greater_than_real128
+elemental function is_equal_to_real128( x, y ) result( equal_to )
+integer,parameter         ::  wp=real128
+real(kind=wp),intent(in)  ::  x, y
+logical                   ::  equal_to
+    equal_to = abs( x - y ) < spacing( max(abs(x),abs(y)) )
+end function is_equal_to_real128
+#endif
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
 end module M_framework__approx
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================

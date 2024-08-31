@@ -4,6 +4,7 @@ assert (3m_framework__msg) - [M_framework__msg] print filename, linenumber, and 
 attr (3m_framework__attr) - [M_framework__attr] substitute escape sequences for HTML-like syntax in strings (LICENSE:MIT)
 attr_mode (3m_framework__attr) - [M_framework__attr] select processing mode for output from attr(3f) (LICENSE:MIT)
 attr_update (3m_framework__attr) - [M_framework__attr] update internal dictionary given keyword and value (LICENSE:MIT)
+compare_float (3m_framework__approx) - [M_framework__approx] compare floating point values with adjustable tolerance. (LICENSE:PD)
 fmt (3m_framework__msg) - [M_framework__msg] convert any intrinsic to a string using specified format (LICENSE:PD)
 fstop (3m_framework__utility) - [M_framework__utility] call stop with both a number and a message (LICENSE:PD)
 in_margin (3m_framework__approx) - [M_framework__approx] check if two reals are approximately equal using a relative margin
@@ -671,7 +672,7 @@ LICENSE
 
 
 
-				August 02, 2024      M_framework(3m_framework)
+				August 31, 2024      M_framework(3m_framework)
 almost(3m_framework__approx)			  almost(3m_framework__approx)
 
 
@@ -763,7 +764,7 @@ LICENSE
 
 
 
-				August 02, 2024   almost(3m_framework__approx)
+				August 31, 2024   almost(3m_framework__approx)
 in_margin(3m_framework__approx) 	       in_margin(3m_framework__approx)
 
 
@@ -841,7 +842,258 @@ EXAMPLE
 
 
 
-				August 02, 2024in_margin(3m_framework__approx)
+				August 31, 2024in_margin(3m_framework__approx)
+significant(3m_framework__approx)	     significant(3m_framework__approx)
+
+
+
+NAME
+  significant(3f) - [M_framework__approx] round val to specified number of
+  significant digits
+
+
+SYNOPSIS
+  pure elemental function significant(val,digits,round)
+
+       real,intent(in)			    :: val
+       integer,intent(in)		    :: digits
+       character(len=*),intent(in),optional :: round
+       real				    :: significant
+
+
+DESCRIPTION
+  Round real value to specified number of significant digits
+
+OPTIONS
+  val
+    value to round
+
+  digits
+    number of significant digits to produce
+
+  round
+    Use the round edit descriptor
+
+	    RU	UP : the value resulting from conversion shall be the
+		     smallest representable value that is greater than or
+		     equal to the original value
+	    RD	DOWN : the value resulting from conversion shall be the
+		     largest representable value that is less than or
+		     equal to the original value
+	    RZ	ZERO : the value resulting from conversion shall be the value
+		     closest to the original value and no greater in
+		     magnitude than the original value.
+	    RN	NEAREST : modeis NEAREST,thevalueresulting from conversion
+			 shall be the closer of the two nearest
+			 representable values if one is closer than the
+			 other. If the two nearest representable values
+			 are equidistant from the original value, it is
+			 processor dependent which one of them is chosen.
+	    RC	COMPATIBLE : the value resulting from conversion shall be
+			   the closer of the two nearest representable
+			   values or the value away from zero if halfway
+			   between them.
+	    RP	PROCESSOR_DEFINED : rounding during conversion shall be
+				    a processor-dependent default mode,
+				    which may correspond to one of the
+				    other modes.
+
+
+EXAMPLE
+  Sample program
+
+     program demo_significant
+     use M_framework__approx, only : significant
+     implicit none
+     integer :: i
+     real :: r, v
+     character(len=*),parameter :: g='(*(g0.7,1x))'
+
+	write(*,g)significant([8765.43210,0.1234567890],5)
+
+	write(*,*)'default:',1.23456789012345
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9])
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RU'),'RU'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RD'),'RD'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RZ'),'RZ'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RN'),'RN'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RC'),'RC'
+	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RP'),'RP'
+     end program demo_significant
+
+  Results:
+
+	> 8765.400 .1234600
+	>  default:   1.234568
+	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568
+	> 2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568 RU
+	> 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
+	> 1.234567 1.234568 1.234568 RD
+	> 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
+	> 1.234567 1.234568 1.234568 RZ
+	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568 RN
+	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568 RC
+	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+	> 1.234568 1.234568 1.234568 RP
+
+
+
+
+				August 31, 20significant(3m_framework__approx)
+compare_float(3m_framework__approx)	   compare_float(3m_framework__approx)
+
+
+
+NAME
+NAME
+  compare_float(3f) - [M_framework__approx] compare floating point values with
+  adjustable tolerance.  (LICENSE:PD)
+
+
+SYNOPSIS
+  result = compare_float( x, y,ulp = SCALING_VALUE)
+
+       elemental function (x,y,ulp)
+       real(kind=KIND),intent(in) :: x,y
+       real|integer,intent(in),optional :: ulp
+
+  Additional convenience operators:
+
+	 X.equalto.Y
+	 X.lessthan.Y
+	 X.greaterthan.Y
+
+
+DESCRIPTION
+  compare_float(3f) is a function for comparing floating point numbers within
+  an automatically adjusted tolerance.
+
+  The test performed is
+
+	 abs( x - y ) < ( ulp * spacing( max(abs(x),abs(y)) ) )
+
+  If the result is .TRUE., the numbers are considered equal.  Both single and
+  double precision scalar and array numbers can be compared, as the function
+  is elemental.
+
+  As a convenience relational operators .EqualTo., .GreaterThan., and
+  .LessThan. are provided. These are based on the compare_float(3f) function
+  using the commonly used default scaling of ULP=1.
+
+DETAILS
+  It is generally acknowledged that real numbers should not be compared
+  directly but within some tolerance. However, the magnitude of an appropriate
+  tolerance value will vary depending on the magnitudes of the numbers being
+  compared and the precision of the computing environment.
+
+  The Fortran standard does not specify functions or operators specifically
+  for comparing float values, but leaves some latitude in how the compilers
+  address floating point comparisions. It does specify functions that return
+  platform-specific values useful in applying different methods to the problem
+  such as
+
+      + digits(3f)	  - Significant digits in the numeric model
+      + epsilon(3f)	  - Epsilon function
+      + exponent(3f)	  - Exponent of floating-point number
+      + fraction(3f)	  - Fractional part of the model representation
+      + huge(3f)	  - Largest number of a type and kind
+      + maxexponent(3f)   - Maximum exponent of a real kind
+      + minexponent(3f)   - Minimum exponent of a real kind
+      + nearest(3f)	  - Nearest representable number
+      + precision(3f)	  - Decimal precision of a real kind
+      + radix(3f)	  - Base of a numeric model
+      + range(3f)	  - Decimal exponent range of a numeric kind
+      + rrspacing(3f)	  - Reciprocal of the relative spacing of a numeric type
+      + scale(3f)	  - Scale a real value by a whole power of the radix
+      + set_exponent(3f)  - real value with specified exponent
+      + spacing(3f)	  - Smallest distance between two numbers of a given type
+      + tiny(3f)	  - Smallest positive number of a real kind
+
+  Books have been written on the behavior of floating point math.
+
+  As is used here, a commonly used simple general floating point comparison
+  algorithm is
+
+	 if(abs(x < y) < (ulp * spacing(max(abs(x),abs(y))))) then
+	   :
+	 endif
+
+  where the intrinsic function SPACING(3f) determines the distance between the
+  argument X and the nearest adjacent representable number of the same type
+  and ULP is an optional user-supplied scaling factor.
+
+OPTIONS
+  x,y
+    Two congruent floating point values to compare.
+
+  ulp
+    The ULP ("unit in the last place") scaling value allows for users to
+    control the scaling of the value returned by SPACING(3f) in order to relax
+    or tighten what is considered "equal". That is, the ULP value can be used
+    to scale the comparison based on knowledge of the "numerical quality" of
+    the values being used in the comparision.
+
+    The value should be positive. The absolute value of the value is taken if
+    it is negative.
+
+    The default ULP scaling value is 1.0.
+
+    The value may be of type integer or real.
+
+    A 0.5 ULP maximum error is the best you could hope for, since this
+    corresponds to always rounding to the nearest representable floating point
+    number.
+
+RESULT
+  The return value is a logical value indicating whether the inputs are equal
+  to within the requested precision.
+
+OPERATORS
+  Additional operators based on compare_float(3f) are included:
+
+  X.equalto.Y
+    If the result is .TRUE., the numbers are considered equal.	The test
+    performed is
+
+		 abs( x - y ) < spacing( max(abs(x),abs(y)) )
+
+
+  X.greaterthan.Y
+    If the result is .TRUE., x is considered greater than y.  The result is a
+    logical value indicating whether the operand x is greater than y by more
+    than the spacing between representable floating point numbers.
+
+    The test performed is
+
+		      ( x - y ) >= SPACING( MAX(ABS(x),ABS(y)) )
+
+  X.lessthan.Y
+    Test if one operand is less than another.  The result is a logical value
+    indicating whether the operand x is less than y by more than the spacing
+    between representable floating point numbers.
+
+    The test performed is
+
+		     ( y - x ) >= SPACING( MAX(ABS(x),ABS(y)) )
+
+    If the result is .TRUE., x is considered less than y.
+
+EXAMPLES
+  use m_compare_float_numbers real :: x, y if ( compare_float( x, y, ulp=5.0 )
+  ) ) then ! what to do when x effectively equals y endif
+
+  For no ULP scaling (ULP=1.0), the relational operators can be used instead
+
+  use m_compare_float_numbers real :: x, y if ( x .equalto. y ) then ! -- x
+  effectively equals y, so perform some operation endif
+
+
+
+				August 31, compare_float(3m_framework__approx)
 accdig(3m_framework__approx)			  accdig(3m_framework__approx)
 
 
@@ -984,412 +1236,7 @@ LICENSE
 
 
 
-				August 02, 2024   accdig(3m_framework__approx)
-significant(3m_framework__approx)	     significant(3m_framework__approx)
-
-
-
-NAME
-  significant(3f) - [M_framework__approx] round val to specified number of
-  significant digits
-
-
-SYNOPSIS
-  pure elemental function significant(val,digits,round)
-
-       real,intent(in)			    :: val
-       integer,intent(in)		    :: digits
-       character(len=*),intent(in),optional :: round
-       real				    :: significant
-
-
-DESCRIPTION
-  Round real value to specified number of significant digits
-
-OPTIONS
-  val
-    value to round
-
-  digits
-    number of significant digits to produce
-
-  round
-    Use the round edit descriptor
-
-	    RU	UP : the value resulting from conversion shall be the
-		     smallest representable value that is greater than or
-		     equal to the original value
-	    RD	DOWN : the value resulting from conversion shall be the
-		     largest representable value that is less than or
-		     equal to the original value
-	    RZ	ZERO : the value resulting from conversion shall be the value
-		     closest to the original value and no greater in
-		     magnitude than the original value.
-	    RN	NEAREST : modeis NEAREST,thevalueresulting from conversion
-			 shall be the closer of the two nearest
-			 representable values if one is closer than the
-			 other. If the two nearest representable values
-			 are equidistant from the original value, it is
-			 processor dependent which one of them is chosen.
-	    RC	COMPATIBLE : the value resulting from conversion shall be
-			   the closer of the two nearest representable
-			   values or the value away from zero if halfway
-			   between them.
-	    RP	PROCESSOR_DEFINED : rounding during conversion shall be
-				    a processor-dependent default mode,
-				    which may correspond to one of the
-				    other modes.
-
-
-EXAMPLE
-  Sample program
-
-     program demo_significant
-     use M_framework__approx, only : significant
-     implicit none
-     integer :: i
-     real :: r, v
-     character(len=*),parameter :: g='(*(g0.7,1x))'
-
-	write(*,g)significant([8765.43210,0.1234567890],5)
-
-	write(*,*)'default:',1.23456789012345
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9])
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RU'),'RU'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RD'),'RD'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RZ'),'RZ'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RN'),'RN'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RC'),'RC'
-	write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RP'),'RP'
-     end program demo_significant
-
-  Results:
-
-	> 8765.400 .1234600
-	>  default:   1.234568
-	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568
-	> 2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568 RU
-	> 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
-	> 1.234567 1.234568 1.234568 RD
-	> 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
-	> 1.234567 1.234568 1.234568 RZ
-	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568 RN
-	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568 RC
-	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
-	> 1.234568 1.234568 1.234568 RP
-
-
-
-
-				August 02, 20significant(3m_framework__approx)
-attr_mode(3m_framework__attr)			 attr_mode(3m_framework__attr)
-
-
-
-	      !>
-
-NAME
-  attr_mode(3f) - [M_framework__attr] select processing mode for output from
-  attr(3f) (LICENSE:MIT)
-
-
-SYNOPSIS
-  subroutine attr_mode(manner)
-
-	 character(len=*),intent(in) :: manner
-
-
-DESCRIPTION
-  Turn off the generation of strings associated with the HTML keywords in the
-  string generated by the attr(3f) function, or display the text in raw mode
-  as it was passed to attr(3f) or return to ANSI escape control sequence
-  generation.
-
-OPTIONS
-  MANNER
-    The current manners or modes supported via the attr_mode(3f) procedure are
-
-    plain
-      suppress the output associated with keywords color(default) commonly
-      supported escape sequences
-
-    raw
-      echo the input to attr(3f) as its output
-
-    reload
-      restore original keyword meanings deleted or replaced by calls to
-      attr_update(3f).
-
-EXAMPLE
-  Sample program
-
-      program demo_attr_mode
-      use M_framework__attr, only : attr, attr_mode
-      implicit none
-      character(len=:),allocatable :: lines(:)
-      character(len=:),allocatable :: outlines(:)
-      integer :: i
-	 lines=[character(len=110):: &
-	 &'<M><y>',&
-	 &'<M><y>  Suffice it to say that black and white are also colors',&
-	 &'<M><y>  for their simultaneous contrast is as striking as that ',&
-	 &'<M><y>  of green and red, for instance. &
-	 & --- <y><bo>Vincent van Gogh</bo></y>',&
-	 &' ']
-
-	 outlines=attr(lines,chars=57)
-	 write(*,'(a)')(trim(outlines(i)),i=1,size(outlines))
-
-	 call attr_mode(manner='plain') ! write as plain text
-	 write(*,'(a)')attr(lines)
-
-	 call attr_mode(manner='raw')	! write as-is
-	 write(*,'(a)')attr(lines)
-
-	 call attr_mode(manner='ansi')	! return to default mode
-
-      end program demo_attr_mode
-
-
-AUTHOR
-  John S. Urban, 2021
-
-LICENSE
-   MIT
-				August 02, 2024  attr_mode(3m_framework__attr)
-attr_update(3m_framework__attr) 	       attr_update(3m_framework__attr)
-
-
-
-	      !>
-
-NAME
-  attr_update(3f) - [M_framework__attr] update internal dictionary given
-  keyword and value (LICENSE:MIT)
-
-
-SYNOPSIS
-  subroutine attr_update(key,val)
-
-      character(len=*),intent(in)	    :: key
-      character(len=*),intent(in),optional  :: val
-      character(len=*),intent(in),optional  :: mono_val
-
-
-DESCRIPTION
-  Update internal dictionary in M_framework__attr(3fm) module.
-
-OPTIONS
-  key
-    name of keyword to add, replace, or delete from dictionary
-
-  val
-    if present add or replace value associated with keyword. If not present
-    remove keyword entry from dictionary.
-
-  mono_val
-    if present add or replace second value associated with keyword used for
-    plain text mode.  Must only be specified if VAL is also specified.
-
-KEYWORDS
-  The following keywords are defined by default
-
-  colors:
-
-       r,red	 c,cyan     w,white
-       g,green	 m,magenta  e,ebony
-       b,blue	 y,yellow
-
-  If the color keywords are capitalized they control the text background
-  instead of the text color.
-
-  attributes:
-
-       ul,underline
-       it,italics (often produces inverse colors on many devices
-
-
-EXAMPLE
-  Sample program
-
-       program demo_update
-       use M_framework__attr, only : attr, attr_update
-	  write(*,'(a)') attr('<clear>TEST CUSTOMIZATIONS:')
-	  ! add custom keywords
-	  call attr_update('blink',char(27)//'[5m')
-	  call attr_update('/blink',char(27)//'[25m')
-	  write(*,*)
-	  write(*,'(a)') attr('<blink>Items for Friday</blink>')
-	  call attr_update('ouch',attr( &
-	  ' <R><bo><w>BIG mistake!</R></w> '))
-	  write(*,*)
-	  write(*,'(a)') attr('<ouch> Did not see that coming.')
-	  write(*,*)
-	  write(*,'(a)') attr( &
-	  'ORIGINALLY: <r>Apple</r>, <b>Sky</b>, <g>Grass</g>')
-	  ! delete
-	  call attr_update('r')
-	  call attr_update('/r')
-	  ! replace (or create)
-	  call attr_update('b','<<<<')
-	  call attr_update('/b','>>>>')
-	  write(*,*)
-	  write(*,'(a)') attr( &
-	  'CUSTOMIZED: <r>Apple</r>, <b>Sky</b>, <g>Grass</g>')
-       end program demo_update
-
-
-AUTHOR
-  John S. Urban, 2021
-
-LICENSE
-   MIT
-				August 02, 2024attr_update(3m_framework__attr)
-M_framework__attr(3m_framework__attr)	 M_framework__attr(3m_framework__attr)
-
-
-
-NAME
-  M_framework__attr(3f) - [M_framework__attr::INTRO] control text attributes
-  on terminals (LICENSE:MIT)
-
-
-SYNOPSIS
-  use M_framework__attr, only : attr, attr_mode, attr_update
-
-DESCRIPTION
-  M_framework__attr(3f) is a Fortran module that uses common ANSI escape
-  sequences to control terminal text attributes.
-
-	  use M_framework__attr
-	  write(*,*)attr('<red>Red Text!</red> <green>Green Text!</green>')
-	  end
-
-  It is designed to use three simple procedures to
-
-      + Specify attributes using simple HTML-like syntax
-      + allow the sequences to be suppressed when desired
-      + permit the  user program to completely customize the keywords.
-	The user can add, delete and replace the sequences associated with
-	a keyword without changing the code.
-
-  One advantage of the approach of using formatting directives which are
-  replaced with in-band escape sequences is that it is easy to turn off when
-  running batch.
-
-  Another important capability is that programs can be run in "raw" mode and
-  create a simple text file with the formatting directives in it that can then
-  be read back in by a simple filter program that strips it back to plain
-  text( see app/plain.f90), or displays it to a screen in color(see
-  app/light.f90) or perhaps converts it to another format.
-
-  So this approach makes it trivial to read specially-formatted data from a
-  file like a message catalog (perhaps with various versions in different
-  languages) and colorize it or display it as plain text
-
-  By making each line self-contained (by default) lines can be filtered by
-  external utilities and still display correctly.
-
-ACCESS
-  Via git(1):
-
-	 git clone https://github.com/urbanjost/M_framework__attr.git
-	 cd M_framework__attr/src
-	 # change Makefile if not using one of the listed compilers
-	 make clean; make gfortran    # for gfortran
-	 make clean; make ifort       # for ifort
-	 make clean; make nvfortran   # for nvfortran
-
-  This will compile the M_framework__attr module and example programs.
-
-  Alternatively, via fpm (see https://github.com/fortran-lang/fpm):
-
-	  git clone https://github.com/urbanjost/M_framework__attr.git
-
-  or just list it as a dependency in your fpm.toml project file.
-
-	  [dependencies]
-	  M_framework__attr = { git = "https://github.com/urbanjost/M_framework__attr.git" }
-
-
-LIMITATIONS
-  •  colors are not nestable.
-
-  •  keywords are case-sensitive,
-
-  •  ANSI escape sequences are not universally supported by all terminal
-     emulators; and normally should be suppressed when not going to a tty
-     device. Therefore, you should use M_system::system_istty(3f) or the
-     common Fortran extension ISATTY() to set the default to "plain" instead
-     of "color" when the output file is not a conforming terminal. On basic
-     MSWindows console windows, it is best to use Windows 10+ and/or the Linux
-     mode; you may have to enable ANSI escape sequence mode on MSWindows. It
-     does work as-is with CygWin and MinGW and Putty windows and mintty(1) as
-     tested.
-
-EXAMPLE
-  Sample program
-
-      program demo_M_framework__attr
-      use M_framework__attr, only : attr, attr_mode, attr_update
-      implicit none
-      character(len=256) :: line
-      character(len=*),parameter :: f='( &
-       &"   <bo><w><G> GREAT: </G></w>&
-       &The new value <Y><b>",f8.4,1x,"</b></Y> is in range"&
-       &)'
-      real :: value
-
-	 write(*,'(a)')&
-	 &attr('   <r><W><bo> ERROR: </W>red text on a white background</y>')
-
-	 value=3.4567
-	 write(line,fmt=f) value
-	 write(*,'(a)')attr(trim(line))
-
-	 ! write same string as plain text
-	 write(*,*)
-	 call attr_mode(manner='plain')
-	 write(*,'(a)')attr(trim(line))
-
-	 call attr_mode(manner='color')
-	 ! use pre-defined or user defined strings
-	 write(*,*)
-	 write(*,'(a)')attr('<ERROR> Woe is nigh.')
-	 write(*,'(a)')attr('<WARNING> The night is young.')
-	 write(*,'(a)')attr('<INFO> It is Monday')
-
-	 ! create a custom mnemonic
-	 call attr_update('MYERROR',attr(&
-	 ' <R><e> E<w>-<e>R<w>-<e>R<w>-<e>O<w>-<e>R: </e></R></bo>'&
-	 ))
-	 write(*,*)
-	 write(*,'(a)')attr('<MYERROR> my custom message style')
-
-      end program demo_M_framework__attr
-
-
-AUTHOR
-  John S. Urban, 2021
-
-LICENSE
-   MIT
-SEE ALSO
-  attr(3f), attr_mode(3f), attr_update(3f)
-
-  Related information:
-
-      terminfo(3c), termlib(3c), tput(1), reset(1), clear(1),
-      console_codes(4), ECMA-48,
-      https://en.wikipedia.org/wiki/ANSI_escape_code
-
-
-
-				August 02M_framework__attr(3m_framework__attr)
+				August 31, 2024   accdig(3m_framework__approx)
 attr(3m_framework__attr)			      attr(3m_framework__attr)
 
 
@@ -1585,172 +1432,311 @@ SEE ALSO
 
 
 
-				August 02, 2024       attr(3m_framework__attr)
-M_framework__journal(3m_framework__M_framework__journal(3m_framework__journal)
+				August 31, 2024       attr(3m_framework__attr)
+attr_mode(3m_framework__attr)			 attr_mode(3m_framework__attr)
+
+
+
+	      !>
+
+NAME
+  attr_mode(3f) - [M_framework__attr] select processing mode for output from
+  attr(3f) (LICENSE:MIT)
+
+
+SYNOPSIS
+  subroutine attr_mode(manner)
+
+	 character(len=*),intent(in) :: manner
+
+
+DESCRIPTION
+  Turn off the generation of strings associated with the HTML keywords in the
+  string generated by the attr(3f) function, or display the text in raw mode
+  as it was passed to attr(3f) or return to ANSI escape control sequence
+  generation.
+
+OPTIONS
+  MANNER
+    The current manners or modes supported via the attr_mode(3f) procedure are
+
+    plain
+      suppress the output associated with keywords color(default) commonly
+      supported escape sequences
+
+    raw
+      echo the input to attr(3f) as its output
+
+    reload
+      restore original keyword meanings deleted or replaced by calls to
+      attr_update(3f).
+
+EXAMPLE
+  Sample program
+
+      program demo_attr_mode
+      use M_framework__attr, only : attr, attr_mode
+      implicit none
+      character(len=:),allocatable :: lines(:)
+      character(len=:),allocatable :: outlines(:)
+      integer :: i
+	 lines=[character(len=110):: &
+	 &'<M><y>',&
+	 &'<M><y>  Suffice it to say that black and white are also colors',&
+	 &'<M><y>  for their simultaneous contrast is as striking as that ',&
+	 &'<M><y>  of green and red, for instance. &
+	 & --- <y><bo>Vincent van Gogh</bo></y>',&
+	 &' ']
+
+	 outlines=attr(lines,chars=57)
+	 write(*,'(a)')(trim(outlines(i)),i=1,size(outlines))
+
+	 call attr_mode(manner='plain') ! write as plain text
+	 write(*,'(a)')attr(lines)
+
+	 call attr_mode(manner='raw')	! write as-is
+	 write(*,'(a)')attr(lines)
+
+	 call attr_mode(manner='ansi')	! return to default mode
+
+      end program demo_attr_mode
+
+
+AUTHOR
+  John S. Urban, 2021
+
+LICENSE
+   MIT
+				August 31, 2024  attr_mode(3m_framework__attr)
+M_framework__attr(3m_framework__attr)	 M_framework__attr(3m_framework__attr)
 
 
 
 NAME
-  M_framework__journal(3fm) - [M_framework__journal::INTRO] write program
-  messages to stdout and/or a log file (LICENSE:PD)
+  M_framework__attr(3f) - [M_framework__attr::INTRO] control text attributes
+  on terminals (LICENSE:MIT)
+
 
 SYNOPSIS
-  use, M_framework__journal , only : journal
+  use M_framework__attr, only : attr, attr_mode, attr_update
 
 DESCRIPTION
-  For large interactive programs in particular it is useful if all messages go
-  thru a JOURNAL(3f) call. This makes it easy to write messages to a log file
-  as well as standard output; to toggle time prefixes on and off; to turn on
-  and off debug-mode messages; control output paging and create replayable
-  input journals.
+  M_framework__attr(3f) is a Fortran module that uses common ANSI escape
+  sequences to control terminal text attributes.
 
-  The primary use of JOURNAL(3f) is to create journal files for interactive
-  programs that
+	  use M_framework__attr
+	  write(*,*)attr('<red>Red Text!</red> <green>Green Text!</green>')
+	  end
 
-	 + provide various levels of verbosity on demand, often for
-	   debugging purposes.
-	 + can be replayed even when interactive input was provided
-	 + and/or be used to verify program executions
+  It is designed to use three simple procedures to
 
-  Typically, you would echo what the user typed to the trail file as-is, and
-  write output you write to stdout as comments to the trail file so that the
-  trail file can easily be read back in (by ignoring comments).
+      + Specify attributes using simple HTML-like syntax
+      + allow the sequences to be suppressed when desired
+      + permit the  user program to completely customize the keywords.
+	The user can add, delete and replace the sequences associated with
+	a keyword without changing the code.
 
-  Even though there is essentially one procedure (journal(3f) calls that are
-  more than just a single message have an action specified as the first
-  parameter. This action might specify to open a log file, to change the
-  "level" required by messages for them to appear, whether output it written
-  as a comment or not, and on what files the output shoud appear. So the
-  interface can be used in a very simple manner but has more options than is
-  evident at first glance, as detailed in the man-page for journal(3f).
+  One advantage of the approach of using formatting directives which are
+  replaced with in-band escape sequences is that it is easy to turn off when
+  running batch.
 
-  to stdout is written with WHERE='SC' in the JOURNAL(3f) call.
+  Another important capability is that programs can be run in "raw" mode and
+  create a simple text file with the formatting directives in it that can then
+  be read back in by a simple filter program that strips it back to plain
+  text( see app/plain.f90), or displays it to a screen in color(see
+  app/light.f90) or perhaps converts it to another format.
 
-      >      :
-      >      :
-      > call journal('O','my_trail_file')  ! open trail file
-      > ! write output to stdout as-is and as comment to trail file
-      > call journal(output)
-      > ! echo message to trail/log file only
-      > call journal('T',userline)
-      > ! write to stdout as-is and trail as a comment.
-      > ! up to twenty scalar values of any intrinsic type are allowed
-      > call journal('SC','i1=',i1,'i2=',i2,'i3=',i3)
-      > ! for more complex messages you can build them with non-advancing
-      > ! I/O journal calls, or build the message with internal writes
-      > ! into a string and print that.
+  So this approach makes it trivial to read specially-formatted data from a
+  file like a message catalog (perhaps with various versions in different
+  languages) and colorize it or display it as plain text
 
-	I=10
-	R=20.3
-	! write to stdout and trail file without advancing I/O
-	call journal('+SC','I=',i)
-	! write to stdout and trail file without advancing I/O
-	call journal('SC','AND R=',r)
+  By making each line self-contained (by default) lines can be filtered by
+  external utilities and still display correctly.
 
-  writes to the trail file(s) are ignored unless a trail file was opened, but
-  output continues to stdout by default.
+ACCESS
+  Via git(1):
 
-  That is, destinations 'T' and 'C' are ignored unless a trail file has been
-  requested, allowing journal to be used with programs that do not generate
-  trails or journals.
+	 git clone https://github.com/urbanjost/M_framework__attr.git
+	 cd M_framework__attr/src
+	 # change Makefile if not using one of the listed compilers
+	 make clean; make gfortran    # for gfortran
+	 make clean; make ifort       # for ifort
+	 make clean; make nvfortran   # for nvfortran
 
-  Note that with no parameters, the trail file is flushed.
+  This will compile the M_framework__attr module and example programs.
 
-EXAMPLES
-  The man(1) page for journal(3f) describes all the options for the
+  Alternatively, via fpm (see https://github.com/fortran-lang/fpm):
 
-  action field WHERE.
-    In addition to being used to generate a journal, the routine can be used
-    for producing optional debug messages and timing information.
+	  git clone https://github.com/urbanjost/M_framework__attr.git
 
-  Sample program for debug messages:
+  or just list it as a dependency in your fpm.toml project file.
 
-       program demo_journal
-       !! showing creating debug messages
-       use M_framework__journal, only : journal
-       implicit none
-       !! produces no output because trail is not on
-       call journal('D','*demo* DEBUG MESSAGE 001 IGNORED')
-       !! turn on debug messages
-       call journal('>','debug on')
-       !! produces output on stdout because debug mode
-       !! is on but no named trail file
-       call journal('D','*demo* DEBUG MESSAGE 002 ON STDOUT')
-       !! open trail file
-       call journal('O','mytrail.txt')
-       !! debug messages now go to the trail file only
-       call journal('D','*demo* DEBUG MESSAGE 003 TO TRAIL')
-       !! or always to stdout and trail file only if on
-       call journal('DS','*demo* DEBUG MESSAGE 003 TO TRAIL')
-       !! close trail file so messages go only to stdout again
-       call journal('O','')
-       !! debug on stdout now
-       call journal('D','*demo* DEBUG MESSAGE 004 TO STDOUT')
-       !! turn off debug messages
-       call journal('<','debug off')
-       !! back to no output from the next message
-       call journal('D','*demo* DEBUG MESSAGE 005 IGNORED')
-       end program demo_journal
+	  [dependencies]
+	  M_framework__attr = { git = "https://github.com/urbanjost/M_framework__attr.git" }
 
 
-  Sample program for trail messages with optional timing information:
+LIMITATIONS
+  •  colors are not nestable.
 
-       program testit
-       use M_framework__journal,only : journal
-       implicit none
-       call journal('a single string A -should be on S')
+  •  keywords are case-sensitive,
 
-       ! add time prefix to output
-       call journal('%','%Y-%M-%DT%h:%m:%s.%x%u:%b')
-       !
-       call journal('a single string B -should be on S with prefix')
-       ! change to CPU time and number of calls prefix
-       call journal('%','CPU_TIME: %c:CALLS: %C: %b')
-       !
-       call journal('a single string B-1 -should be on S with prefix')
-       call journal('a single string B-2 -should be on S with prefix')
-       call journal('a single string B-3 -should be on S with prefix')
-       !  Other useful time formats:
-       !     %E -- Unix Epoch time
-       !     %e -- integer value of Unix Epoch time
-       !     %C -- number of times this format is used
-       !     %c -- CPU_time(3f) output
-       !     %S -- seconds since last use of this format
-       !     %k -- CPU time in seconds from system_clock
-       call journal('%','') ! turn off time prefix
-       !
-       call journal('a single string C -should be on S')
-       !
-       call journal('O','aaa.out') ! turn on trail file
-       call journal('a single string D -should be on SC')
-       call journal('a single string E -should be on SC')
-       call journal('a single string F -should be on SC')
-       call journal('O','') ! turn off trail file
-       !
-       call journal('a single string G -should be on S')
-       call journal('a single string H -should be on S')
-       call journal('a single string I -should be on S')
+  •  ANSI escape sequences are not universally supported by all terminal
+     emulators; and normally should be suppressed when not going to a tty
+     device. Therefore, you should use M_system::system_istty(3f) or the
+     common Fortran extension ISATTY() to set the default to "plain" instead
+     of "color" when the output file is not a conforming terminal. On basic
+     MSWindows console windows, it is best to use Windows 10+ and/or the Linux
+     mode; you may have to enable ANSI escape sequence mode on MSWindows. It
+     does work as-is with CygWin and MinGW and Putty windows and mintty(1) as
+     tested.
 
-       ! build one line of output with intrinsic scalar values added
-       call journal('+sc','APPEND:')
-       call journal('+sc',' integer',	      1234)
-       call journal('+sc',' and real',	      1234.5678)
-       call journal('+sc',' and double',1234567890.123456d0)
-       call journal('+sc',' and logical',    .true.)
-       call journal('sc','')
-       !
-       end program testit
+EXAMPLE
+  Sample program
+
+      program demo_M_framework__attr
+      use M_framework__attr, only : attr, attr_mode, attr_update
+      implicit none
+      character(len=256) :: line
+      character(len=*),parameter :: f='( &
+       &"   <bo><w><G> GREAT: </G></w>&
+       &The new value <Y><b>",f8.4,1x,"</b></Y> is in range"&
+       &)'
+      real :: value
+
+	 write(*,'(a)')&
+	 &attr('   <r><W><bo> ERROR: </W>red text on a white background</y>')
+
+	 value=3.4567
+	 write(line,fmt=f) value
+	 write(*,'(a)')attr(trim(line))
+
+	 ! write same string as plain text
+	 write(*,*)
+	 call attr_mode(manner='plain')
+	 write(*,'(a)')attr(trim(line))
+
+	 call attr_mode(manner='color')
+	 ! use pre-defined or user defined strings
+	 write(*,*)
+	 write(*,'(a)')attr('<ERROR> Woe is nigh.')
+	 write(*,'(a)')attr('<WARNING> The night is young.')
+	 write(*,'(a)')attr('<INFO> It is Monday')
+
+	 ! create a custom mnemonic
+	 call attr_update('MYERROR',attr(&
+	 ' <R><e> E<w>-<e>R<w>-<e>R<w>-<e>O<w>-<e>R: </e></R></bo>'&
+	 ))
+	 write(*,*)
+	 write(*,'(a)')attr('<MYERROR> my custom message style')
+
+      end program demo_M_framework__attr
 
 
 AUTHOR
-  John S. Urban
+  John S. Urban, 2021
 
 LICENSE
-  Public Domain
+   MIT
+SEE ALSO
+  attr(3f), attr_mode(3f), attr_update(3f)
+
+  Related information:
+
+      terminfo(3c), termlib(3c), tput(1), reset(1), clear(1),
+      console_codes(4), ECMA-48,
+      https://en.wikipedia.org/wiki/ANSI_escape_code
 
 
 
-				AugM_framework__journal(3m_framework__journal)
+				August 31M_framework__attr(3m_framework__attr)
+attr_update(3m_framework__attr) 	       attr_update(3m_framework__attr)
+
+
+
+	      !>
+
+NAME
+  attr_update(3f) - [M_framework__attr] update internal dictionary given
+  keyword and value (LICENSE:MIT)
+
+
+SYNOPSIS
+  subroutine attr_update(key,val)
+
+      character(len=*),intent(in)	    :: key
+      character(len=*),intent(in),optional  :: val
+      character(len=*),intent(in),optional  :: mono_val
+
+
+DESCRIPTION
+  Update internal dictionary in M_framework__attr(3fm) module.
+
+OPTIONS
+  key
+    name of keyword to add, replace, or delete from dictionary
+
+  val
+    if present add or replace value associated with keyword. If not present
+    remove keyword entry from dictionary.
+
+  mono_val
+    if present add or replace second value associated with keyword used for
+    plain text mode.  Must only be specified if VAL is also specified.
+
+KEYWORDS
+  The following keywords are defined by default
+
+  colors:
+
+       r,red	 c,cyan     w,white
+       g,green	 m,magenta  e,ebony
+       b,blue	 y,yellow
+
+  If the color keywords are capitalized they control the text background
+  instead of the text color.
+
+  attributes:
+
+       ul,underline
+       it,italics (often produces inverse colors on many devices
+
+
+EXAMPLE
+  Sample program
+
+       program demo_update
+       use M_framework__attr, only : attr, attr_update
+	  write(*,'(a)') attr('<clear>TEST CUSTOMIZATIONS:')
+	  ! add custom keywords
+	  call attr_update('blink',char(27)//'[5m')
+	  call attr_update('/blink',char(27)//'[25m')
+	  write(*,*)
+	  write(*,'(a)') attr('<blink>Items for Friday</blink>')
+	  call attr_update('ouch',attr( &
+	  ' <R><bo><w>BIG mistake!</R></w> '))
+	  write(*,*)
+	  write(*,'(a)') attr('<ouch> Did not see that coming.')
+	  write(*,*)
+	  write(*,'(a)') attr( &
+	  'ORIGINALLY: <r>Apple</r>, <b>Sky</b>, <g>Grass</g>')
+	  ! delete
+	  call attr_update('r')
+	  call attr_update('/r')
+	  ! replace (or create)
+	  call attr_update('b','<<<<')
+	  call attr_update('/b','>>>>')
+	  write(*,*)
+	  write(*,'(a)') attr( &
+	  'CUSTOMIZED: <r>Apple</r>, <b>Sky</b>, <g>Grass</g>')
+       end program demo_update
+
+
+AUTHOR
+  John S. Urban, 2021
+
+LICENSE
+   MIT
+				August 31, 2024attr_update(3m_framework__attr)
 journal(3m_framework__journal)			journal(3m_framework__journal)
 
 
@@ -1860,14 +1846,15 @@ OPTIONS
   VALUES(S)
     message to write to stdout, stderr, and the trail file.  a numeric or
     character value to optionally be appended to the message. Up to twenty
-    values are allowed. The WHERE field is required if values are added.
+    values are allowed. The WHERE field is required if there is anything other
+    than a single character string or not values at all.
 
   FILENAME
     when WHERE="O" to turn the trail file on or off, the "message" field
     becomes the trail filename to open. If blank, writing to the trail file is
     turned off.
 
-  TFORMAT
+  TIMEFORMAT
     when WHERE="%" the message is treated as a time format specification as
     described under now(3f).
 
@@ -1987,63 +1974,161 @@ LICENSE
 
 
 
-				August 02, 2024 journal(3m_framework__journal)
-assert(3m_framework__msg)			     assert(3m_framework__msg)
+				August 31, 2024 journal(3m_framework__journal)
+M_framework__journal(3m_framework__M_framework__journal(3m_framework__journal)
 
 
 
 NAME
-  assert(3f) - [M_framework__msg] print filename, linenumber, and message to
-  stderr and stop program (LICENSE:PD)
+  M_framework__journal(3fm) - [M_framework__journal::INTRO] write program
+  messages to stdout and/or a log file (LICENSE:PD)
 
 SYNOPSIS
-  function assert(file,linenum,expr,g1,g2,g3,g4,g5,g6,g7,g8,g9, & &
-  ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
-
-    character(len=*),intent(in)
-      :: file
-
-    character(len=*),intent(in)
-      :: linenum
-
-    logical,intent(in)
-      :: expr class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
-      class(*),intent(in),optional :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+  use, M_framework__journal , only : journal
 
 DESCRIPTION
-  assert(3f) prints strings to stderr and then stops program with exit code 1
-  It labels the first string as the filename, the next integer parameter as
-  the linenumber, and then up to twenty scalar values.
+  For large interactive programs in particular it is useful if all messages go
+  thru a JOURNAL(3f) call. This makes it easy to write messages to a log file
+  as well as standard output; to toggle time prefixes on and off; to turn on
+  and off debug-mode messages; control output paging and create replayable
+  input journals.
 
-  It is primarily intended for use by the prep(1) preprocessor $ASSERT
-  directive
+  The primary use of JOURNAL(3f) is to create journal files for interactive
+  programs that
 
-OPTIONS
-  filename
-    a string assumed to be the current filename when compiling
+	 + provide various levels of verbosity on demand, often for
+	   debugging purposes.
+	 + can be replayed even when interactive input was provided
+	 + and/or be used to verify program executions
 
-  linenum
-    assumed to be the line number of the source code the ASSERT(3f) procedure
-    was called at.
+  Typically, you would echo what the user typed to the trail file as-is, and
+  write output you write to stdout as comments to the trail file so that the
+  trail file can easily be read back in (by ignoring comments).
 
-  expr
-    logical value
+  Even though there is essentially one procedure (journal(3f) calls that are
+  more than just a single message have an action specified as the first
+  parameter. This action might specify to open a log file, to change the
+  "level" required by messages for them to appear, whether output it written
+  as a comment or not, and on what files the output shoud appear. So the
+  interface can be used in a very simple manner but has more options than is
+  evident at first glance, as detailed in the man-page for journal(3f).
 
-  g[1-9a-j]
-    optional value(s) to print as a message before stopping. May be of type
-    INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
+  to stdout is written with WHERE='SC' in the JOURNAL(3f) call.
+
+      >      :
+      >      :
+      > call journal('O','my_trail_file')  ! open trail file
+      > ! write output to stdout as-is and as comment to trail file
+      > call journal(output)
+      > ! echo message to trail/log file only
+      > call journal('T',userline)
+      > ! write to stdout as-is and trail as a comment.
+      > ! up to twenty scalar values of any intrinsic type are allowed
+      > call journal('SC','i1=',i1,'i2=',i2,'i3=',i3)
+      > ! for more complex messages you can build them with non-advancing
+      > ! I/O journal calls, or build the message with internal writes
+      > ! into a string and print that.
+
+	I=10
+	R=20.3
+	! write to stdout and trail file without advancing I/O
+	call journal('+SC','I=',i)
+	! write to stdout and trail file without advancing I/O
+	call journal('SC','AND R=',r)
+
+  writes to the trail file(s) are ignored unless a trail file was opened, but
+  output continues to stdout by default.
+
+  That is, destinations 'T' and 'C' are ignored unless a trail file has been
+  requested, allowing journal to be used with programs that do not generate
+  trails or journals.
+
+  Note that with no parameters, the trail file is flushed.
 
 EXAMPLES
-  Sample program:
+  The man-page for journal(3f) describes all the options for the
 
-     program demo_assert
-     use M_framework__msg, only : assert
-     implicit none
-     real :: a, toobig=1024
-     a=2000
-     call assert('myroutine', 101, a > toobig, &
-	     & 'The value is too large', a, ' > ', toobig)
-     end program demo_assert
+  action field WHERE.
+    In addition to being used to generate a journal, the routine can be used
+    for producing optional debug messages and timing information.
+
+  Sample program for debug messages:
+
+       program demo_journal
+       !! showing creating debug messages
+       use M_framework__journal, only : journal
+       implicit none
+       !! produces no output because trail is not on
+       call journal('D','*demo* DEBUG MESSAGE 001 IGNORED')
+       !! turn on debug messages
+       call journal('>','debug on')
+       !! produces output on stdout because debug mode
+       !! is on but no named trail file
+       call journal('D','*demo* DEBUG MESSAGE 002 ON STDOUT')
+       !! open trail file
+       call journal('O','mytrail.txt')
+       !! debug messages now go to the trail file only
+       call journal('D','*demo* DEBUG MESSAGE 003 TO TRAIL')
+       !! or always to stdout and trail file only if on
+       call journal('DS','*demo* DEBUG MESSAGE 003 TO TRAIL')
+       !! close trail file so messages go only to stdout again
+       call journal('O','')
+       !! debug on stdout now
+       call journal('D','*demo* DEBUG MESSAGE 004 TO STDOUT')
+       !! turn off debug messages
+       call journal('<','debug off')
+       !! back to no output from the next message
+       call journal('D','*demo* DEBUG MESSAGE 005 IGNORED')
+       end program demo_journal
+
+
+  Sample program for trail messages with optional timing information:
+
+       program testit
+       use M_framework__journal,only : journal
+       implicit none
+       call journal('a single string A -should be on S')
+
+       ! add time prefix to output
+       call journal('%','%Y-%M-%DT%h:%m:%s.%x%u:%b')
+       !
+       call journal('a single string B -should be on S with prefix')
+       ! change to CPU time and number of calls prefix
+       call journal('%','CPU_TIME: %c:CALLS: %C: %b')
+       !
+       call journal('a single string B-1 -should be on S with prefix')
+       call journal('a single string B-2 -should be on S with prefix')
+       call journal('a single string B-3 -should be on S with prefix')
+       !  Other useful time formats:
+       !     %E -- Unix Epoch time
+       !     %e -- integer value of Unix Epoch time
+       !     %C -- number of times this format is used
+       !     %c -- CPU_time(3f) output
+       !     %S -- seconds since last use of this format
+       !     %k -- CPU time in seconds from system_clock
+       call journal('%','') ! turn off time prefix
+       !
+       call journal('a single string C -should be on S')
+       !
+       call journal('O','aaa.out') ! turn on trail file
+       call journal('a single string D -should be on SC')
+       call journal('a single string E -should be on SC')
+       call journal('a single string F -should be on SC')
+       call journal('O','') ! turn off trail file
+       !
+       call journal('a single string G -should be on S')
+       call journal('a single string H -should be on S')
+       call journal('a single string I -should be on S')
+
+       ! build one line of output with intrinsic scalar values added
+       call journal('+sc','APPEND:')
+       call journal('+sc',' integer',	      1234)
+       call journal('+sc',' and real',	      1234.5678)
+       call journal('+sc',' and double',1234567890.123456d0)
+       call journal('+sc',' and logical',    .true.)
+       call journal('sc','')
+       !
+       end program testit
 
 
 AUTHOR
@@ -2054,313 +2139,7 @@ LICENSE
 
 
 
-				August 02, 2024      assert(3m_framework__msg)
-fmt(3m_framework__msg)					fmt(3m_framework__msg)
-
-
-
-NAME
-  fmt(3f) - [M_framework__msg] convert any intrinsic to a string using
-  specified format (LICENSE:PD)
-
-SYNOPSIS
-  function fmt(value,format) result(string)
-
-      class(*),intent(in),optional :: value
-      character(len=*),intent(in),optional :: format
-      character(len=:),allocatable :: string
-
-DESCRIPTION
-  FMT(3f) converts any standard intrinsic value to a string using the
-  specified format.
-
-OPTIONS
-  value
-    value to print the value of. May be of type INTEGER, LOGICAL, REAL,
-    DOUBLEPRECISION, COMPLEX, or CHARACTER.
-
-  format
-    format to use to print value. It is up to the user to use an appropriate
-    format. The format does not require being surrounded by parenthesis. If
-    not present a default is selected similar to what would be produced with
-    free format, with trailing zeros removed.
-
-RETURNS
-  string
-    A string value
-
-EXAMPLES
-  Sample program:
-
-      program demo_fmt
-      use :: M_framework__msg, only : fmt
-      implicit none
-      character(len=:),allocatable :: output
-
-	 output=fmt(10,"'[',i0,']'")
-	 write(*,*)'result is ',output
-
-	 output=fmt(10.0/3.0,"'[',g0.5,']'")
-	 write(*,*)'result is ',output
-
-	 output=fmt(.true.,"'The final answer is [',g0,']'")
-	 write(*,*)'result is ',output
-
-      end program demo_fmt
-
-  Results:
-
-      result is [10]
-      result is [3.3333]
-      result is The final answer is [T]
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				August 02, 2024 	fmt(3m_framework__msg)
-pdec(3m_framework__msg) 			       pdec(3m_framework__msg)
-
-
-
-NAME
-  pdec(3f) - [M_framework__msg] write out string with ASCII decimal equivalent
-  vertically under it (LICENSE:PD)
-
-
-SYNOPSIS
-  Usage:
-
-      subroutine pdec(string)
-      character(len=*),intent(in) :: string
-
-
-DESCRIPTION
-  Given a string to print, PDEC() writes out the ASCII Decimal equivalent of
-  the string directly underneath it. This can help you to locate unprintable
-  characters or non-standard white-space such as a backspace character or tab
-  character in input strings that your program could not interpret. On output,
-  non-printable characters are replaced with a space, and trailing spaces are
-  ignored.
-
-  You read the numbers vertically.
-
-  1.  ignore trailing spaces
-
-  2.  print the character if it has an ADE of 32 on up
-
-  3.  print a space if it has an ADE of less than 32
-
-  4.  underneath each character print the ADE value vertically
-
-EXAMPLES
-  Sample program:
-
-	program demo_pdec
-	use M_framework__msg, only : pdec
-	call pdec(' ABCDEFG abcdefg    ')
-	end program demo_pdec
-
-  would produce (notice trailing space is trimmed):
-
-       > ABCDEFG abcdefg
-       >0000000000001111
-       >3666667739990000
-       >2567890127890123
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				August 02, 2024        pdec(3m_framework__msg)
-set(3m_framework__msg)					set(3m_framework__msg)
-
-
-
-NAME
-  set(3f) - [M_msg] set scalars from an array (LICENSE:PD)
-
-
-SYNOPSIS
-  Syntax:
-
-       function set(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9, &
-       & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,gk)
-       class(*),intent(in)	     :: g0
-       class(*),intent(out),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga
-       class(*),intent(out),optional  :: gb,gc,gd,ge,gf,gg,gh,gi,gj,gk
-
-
-DESCRIPTION
-  set(3f) sets up to twenty scalars to elements from an array.
-
-OPTIONS
-  g0(:)
-    array to read values from. Can be of type INTEGER or REAL
-
-  g[1-9a-k]
-    optional values to set to an array element. Can be of type INTEGER or REAL
-
-EXAMPLES
-  Sample program:
-
-     program demo_set
-     use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-     use,intrinsic :: iso_fortran_env, only : real32, real64, real128
-     use M_framework__msg, only : set
-     implicit none
-     real(kind=real32)	  :: a; namelist /all/a
-     real(kind=real64)	  :: b; namelist /all/b
-     real(kind=real128)   :: c; namelist /all/c
-     integer(kind=int8)   :: i; namelist /all/i
-     integer(kind=int16)  :: j; namelist /all/j
-     integer(kind=int32)  :: k; namelist /all/k
-     integer(kind=int64)  :: l; namelist /all/l
-	call set([1,2,3,4,5,6,7],a,b,c,i,j,k,l)
-	write(*,nml=all)
-	call set(10,a)
-	call set(100,l)
-	write(*,nml=all)
-     end program demo_set
-
-  Results:
-
-      &ALL
-      A       =   1.000000    ,
-      B       =   2.00000000000000     ,
-      C       =   3.00000000000000000000000000000000	  ,
-      I       =    4,
-      J       =      5,
-      K       = 	  6,
-      L       = 		    7
-      /
-      &ALL
-      A       =   10.00000    ,
-      B       =   2.00000000000000     ,
-      C       =   3.00000000000000000000000000000000	  ,
-      I       =    4,
-      J       =      5,
-      K       = 	  6,
-      L       = 		  100
-      /
-
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				August 02, 2024 	set(3m_framework__msg)
-stderr(3m_framework__msg)			     stderr(3m_framework__msg)
-
-
-
-NAME
-  stderr(3f) - [M_framework__msg] write message to stderr (LICENSE:PD)
-
-SYNOPSIS
-  subroutine stderr(msg,[generic(s)])
-
-      class(*),intent(in),optional :: msg
-      class(*),intent(in),optional :: &
-		      & generic0,generic1,generic2,generic3,generic4
-      class(*),intent(in),optional :: &
-		      & generic5,generic6,generic7,generic8,generic9
-      class(*),intent(in),optional :: &
-		      & generica,genericb,genericc,genericd,generice
-      class(*),intent(in),optional :: &
-		      & genericf,genericg,generich,generici,genericj
-
-DESCRIPTION
-  STDERR(3f) writes a message to standard error using a standard
-
-  f2003 method.
-    Up to twenty generic options are available.
-
-OPTIONS
-  msg
-    - description to print
-
-  generic[0-j]
-    - optional value to print the value of after the message. May be of type
-    INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
-
-EXAMPLES
-  Sample program:
-
-     program demo_stderr
-     use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-     use,intrinsic :: iso_fortran_env, only : real32, real64, real128
-     use,intrinsic :: iso_fortran_env, only : real=> real32, integer=> int32
-     use M_framework__msg, only: stderr
-     implicit none
-
-     call stderr('A simple message')
-     call stderr('error: RVALUE=',3.0/4.0)
-     call stderr('error: IVALUE=',123456789)
-     call stderr('error: LVALUE=',.true.)
-
-     SEVERAL: block
-     integer :: least=10, most=999, ival=-10
-     call stderr('error: value',ival, &
-	     & 'should be between',least,'and',most)
-     endblock SEVERAL
-
-     call stderr('real32  :',huge(0.0_real32),0.0_real32, &
-	     & 12345.6789_real32,tiny(0.0_real32))
-     call stderr('real64  :',huge(0.0_real64),0.0_real64, &
-	     & 12345.6789_real64,tiny(0.0_real64))
-     !#ifdef __NVCOMPILER
-     !#else
-     call stderr('real128 :',huge(0.0_real128),0.0_real128, &
-	     & 12345.6789_real128,tiny(0.0_real128))
-     !#endif
-     call stderr('complex :',cmplx(huge(0.0_real),tiny(0.0_real)))
-
-     call stderr('error: program will now stop')
-     stop 1
-
-     end program demo_stderr
-
-  Results: A simple message error: RVALUE= 0.750000000 error: IVALUE=
-  123456789 error: LVALUE= T error: value -10 should be between 10 and 999
-
-    real32
-      : 3.40282347E+38 ...  0.00000000 ...  12345.6787 ...  1.17549435E-38
-
-    real64
-      : 1.7976931348623157E+308 ...  0.0000000000000000 ...
-      12345.678900000001 ...  2.2250738585072014E-308 real128 :
-      1.18973149535723176508575932662800702E+4932 ...
-
-      0.00000000000000000000000000000000000
-	12345.6789000000000000000000000000002 ...
-	3.36210314311209350626267781732175260E-4932 complex :
-	(3.40282347E+38,1.17549435E-38) error: program will now stop STOP 1
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				August 02, 2024      stderr(3m_framework__msg)
+				AugM_framework__journal(3m_framework__journal)
 str(3m_framework__msg)					str(3m_framework__msg)
 
 
@@ -2459,7 +2238,7 @@ LICENSE
 
 
 
-				August 02, 2024 	str(3m_framework__msg)
+				August 31, 2024 	str(3m_framework__msg)
 wrt(3m_framework__msg)					wrt(3m_framework__msg)
 
 
@@ -2552,7 +2331,380 @@ LICENSE
 
 
 
-				August 02, 2024 	wrt(3m_framework__msg)
+				August 31, 2024 	wrt(3m_framework__msg)
+pdec(3m_framework__msg) 			       pdec(3m_framework__msg)
+
+
+
+NAME
+  pdec(3f) - [M_framework__msg] write out string with ASCII decimal equivalent
+  vertically under it (LICENSE:PD)
+
+
+SYNOPSIS
+  Usage:
+
+      subroutine pdec(string)
+      character(len=*),intent(in) :: string
+
+
+DESCRIPTION
+  Given a string to print, PDEC() writes out the ASCII Decimal equivalent of
+  the string directly underneath it. This can help you to locate unprintable
+  characters or non-standard white-space such as a backspace character or tab
+  character in input strings that your program could not interpret. On output,
+  non-printable characters are replaced with a space, and trailing spaces are
+  ignored.
+
+  You read the numbers vertically.
+
+  1.  ignore trailing spaces
+
+  2.  print the character if it has an ADE of 32 on up
+
+  3.  print a space if it has an ADE of less than 32
+
+  4.  underneath each character print the ADE value vertically
+
+EXAMPLES
+  Sample program:
+
+	program demo_pdec
+	use M_framework__msg, only : pdec
+	call pdec(' ABCDEFG abcdefg    ')
+	end program demo_pdec
+
+  would produce (notice trailing space is trimmed):
+
+       > ABCDEFG abcdefg
+       >0000000000001111
+       >3666667739990000
+       >2567890127890123
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+				August 31, 2024        pdec(3m_framework__msg)
+set(3m_framework__msg)					set(3m_framework__msg)
+
+
+
+NAME
+  set(3f) - [M_msg] set scalars from an array (LICENSE:PD)
+
+
+SYNOPSIS
+  Syntax:
+
+       function set(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9, &
+       & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,gk)
+       class(*),intent(in)	     :: g0
+       class(*),intent(out),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga
+       class(*),intent(out),optional  :: gb,gc,gd,ge,gf,gg,gh,gi,gj,gk
+
+
+DESCRIPTION
+  set(3f) sets up to twenty scalars to elements from an array.
+
+OPTIONS
+  g0(:)
+    array to read values from. Can be of type INTEGER or REAL
+
+  g[1-9a-k]
+    optional values to set to an array element. Can be of type INTEGER or REAL
+
+EXAMPLES
+  Sample program:
+
+     program demo_set
+     use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+     use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+     use M_framework__msg, only : set
+     implicit none
+     real(kind=real32)	  :: a; namelist /all/a
+     real(kind=real64)	  :: b; namelist /all/b
+     real(kind=real128)   :: c; namelist /all/c
+     integer(kind=int8)   :: i; namelist /all/i
+     integer(kind=int16)  :: j; namelist /all/j
+     integer(kind=int32)  :: k; namelist /all/k
+     integer(kind=int64)  :: l; namelist /all/l
+	call set([1,2,3,4,5,6,7],a,b,c,i,j,k,l)
+	write(*,nml=all)
+	call set(10,a)
+	call set(100,l)
+	write(*,nml=all)
+     end program demo_set
+
+  Results:
+
+      &ALL
+      A       =   1.000000    ,
+      B       =   2.00000000000000     ,
+      C       =   3.00000000000000000000000000000000	  ,
+      I       =    4,
+      J       =      5,
+      K       = 	  6,
+      L       = 		    7
+      /
+      &ALL
+      A       =   10.00000    ,
+      B       =   2.00000000000000     ,
+      C       =   3.00000000000000000000000000000000	  ,
+      I       =    4,
+      J       =      5,
+      K       = 	  6,
+      L       = 		  100
+      /
+
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+				August 31, 2024 	set(3m_framework__msg)
+stderr(3m_framework__msg)			     stderr(3m_framework__msg)
+
+
+
+NAME
+  stderr(3f) - [M_framework__msg] write message to stderr (LICENSE:PD)
+
+SYNOPSIS
+  subroutine stderr(msg,[generic(s)])
+
+      class(*),intent(in),optional :: msg
+      class(*),intent(in),optional :: &
+		      & generic0,generic1,generic2,generic3,generic4
+      class(*),intent(in),optional :: &
+		      & generic5,generic6,generic7,generic8,generic9
+      class(*),intent(in),optional :: &
+		      & generica,genericb,genericc,genericd,generice
+      class(*),intent(in),optional :: &
+		      & genericf,genericg,generich,generici,genericj
+
+DESCRIPTION
+  STDERR(3f) writes a message to standard error using a standard
+
+  f2003 method.
+    Up to twenty generic options are available.
+
+OPTIONS
+  msg
+    - description to print
+
+  generic[0-j]
+    - optional value to print the value of after the message. May be of type
+    INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
+
+EXAMPLES
+  Sample program:
+
+     program demo_stderr
+     use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+     use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+     use,intrinsic :: iso_fortran_env, only : real=> real32, integer=> int32
+     use M_framework__msg, only: stderr
+     implicit none
+
+     call stderr('A simple message')
+     call stderr('error: RVALUE=',3.0/4.0)
+     call stderr('error: IVALUE=',123456789)
+     call stderr('error: LVALUE=',.true.)
+
+     SEVERAL: block
+     integer :: least=10, most=999, ival=-10
+     call stderr('error: value',ival, &
+	     & 'should be between',least,'and',most)
+     endblock SEVERAL
+
+     call stderr('real32  :',huge(0.0_real32),0.0_real32, &
+	     & 12345.6789_real32,tiny(0.0_real32))
+     call stderr('real64  :',huge(0.0_real64),0.0_real64, &
+	     & 12345.6789_real64,tiny(0.0_real64))
+     !#ifdef __NVCOMPILER
+     !#else
+     call stderr('real128 :',huge(0.0_real128),0.0_real128, &
+	     & 12345.6789_real128,tiny(0.0_real128))
+     !#endif
+     call stderr('complex :',cmplx(huge(0.0_real),tiny(0.0_real)))
+
+     call stderr('error: program will now stop')
+     stop 1
+
+     end program demo_stderr
+
+  Results: A simple message error: RVALUE= 0.750000000 error: IVALUE=
+  123456789 error: LVALUE= T error: value -10 should be between 10 and 999
+
+    real32
+      : 3.40282347E+38 ...  0.00000000 ...  12345.6787 ...  1.17549435E-38
+
+    real64
+      : 1.7976931348623157E+308 ...  0.0000000000000000 ...
+      12345.678900000001 ...  2.2250738585072014E-308 real128 :
+      1.18973149535723176508575932662800702E+4932 ...
+
+      0.00000000000000000000000000000000000
+	12345.6789000000000000000000000000002 ...
+	3.36210314311209350626267781732175260E-4932 complex :
+	(3.40282347E+38,1.17549435E-38) error: program will now stop STOP 1
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+				August 31, 2024      stderr(3m_framework__msg)
+fmt(3m_framework__msg)					fmt(3m_framework__msg)
+
+
+
+NAME
+  fmt(3f) - [M_framework__msg] convert any intrinsic to a string using
+  specified format (LICENSE:PD)
+
+SYNOPSIS
+  function fmt(value,format) result(string)
+
+      class(*),intent(in),optional :: value
+      character(len=*),intent(in),optional :: format
+      character(len=:),allocatable :: string
+
+DESCRIPTION
+  FMT(3f) converts any standard intrinsic value to a string using the
+  specified format.
+
+OPTIONS
+  value
+    value to print the value of. May be of type INTEGER, LOGICAL, REAL,
+    DOUBLEPRECISION, COMPLEX, or CHARACTER.
+
+  format
+    format to use to print value. It is up to the user to use an appropriate
+    format. The format does not require being surrounded by parenthesis. If
+    not present a default is selected similar to what would be produced with
+    free format, with trailing zeros removed.
+
+RETURNS
+  string
+    A string value
+
+EXAMPLES
+  Sample program:
+
+      program demo_fmt
+      use :: M_framework__msg, only : fmt
+      implicit none
+      character(len=:),allocatable :: output
+
+	 output=fmt(10,"'[',i0,']'")
+	 write(*,*)'result is ',output
+
+	 output=fmt(10.0/3.0,"'[',g0.5,']'")
+	 write(*,*)'result is ',output
+
+	 output=fmt(.true.,"'The final answer is [',g0,']'")
+	 write(*,*)'result is ',output
+
+      end program demo_fmt
+
+  Results:
+
+      result is [10]
+      result is [3.3333]
+      result is The final answer is [T]
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+				August 31, 2024 	fmt(3m_framework__msg)
+assert(3m_framework__msg)			     assert(3m_framework__msg)
+
+
+
+NAME
+  assert(3f) - [M_framework__msg] print filename, linenumber, and message to
+  stderr and stop program (LICENSE:PD)
+
+SYNOPSIS
+  function assert(file,linenum,expr,g1,g2,g3,g4,g5,g6,g7,g8,g9, & &
+  ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+
+    character(len=*),intent(in)
+      :: file
+
+    character(len=*),intent(in)
+      :: linenum
+
+    logical,intent(in)
+      :: expr class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9
+      class(*),intent(in),optional :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+
+DESCRIPTION
+  assert(3f) prints strings to stderr and then stops program with exit code 1
+  It labels the first string as the filename, the next integer parameter as
+  the linenumber, and then up to twenty scalar values.
+
+  It is primarily intended for use by the prep(1) preprocessor $ASSERT
+  directive
+
+OPTIONS
+  filename
+    a string assumed to be the current filename when compiling
+
+  linenum
+    assumed to be the line number of the source code the ASSERT(3f) procedure
+    was called at.
+
+  expr
+    logical value
+
+  g[1-9a-j]
+    optional value(s) to print as a message before stopping. May be of type
+    INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
+
+EXAMPLES
+  Sample program:
+
+     program demo_assert
+     use M_framework__msg, only : assert
+     implicit none
+     real :: a, toobig=1024
+     a=2000
+     call assert('myroutine', 101, a > toobig, &
+	     & 'The value is too large', a, ' > ', toobig)
+     end program demo_assert
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+				August 31, 2024      assert(3m_framework__msg)
 fstop(3m_framework__utility)			  fstop(3m_framework__utility)
 
 
@@ -2619,7 +2771,138 @@ LICENSE
 
 
 
-				August 02, 2024   fstop(3m_framework__utility)
+				August 31, 2024   fstop(3m_framework__utility)
+unit_test(3m_framework__verify) 	       unit_test(3m_framework__verify)
+
+
+
+NAME
+  unit_test(3f) - [M_framework__verify] report if logical expression is true
+  or false, optionally call command and/or stop program.  (LICENSE:PD)
+
+
+SYNOPSIS
+  subroutine unit_test(name,expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,& &
+  ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,only_on_fail)
+
+      character(len=*),intent(in) :: name
+      logical,intent(in) :: expression
+      class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+      logical,intent(in),optional :: only_on_fail
+
+
+DESCRIPTION
+  unit_test(3f) tests the expression and displays a message composed of the
+  generic intrinsic values msg, and g1 thorough gj. Additionally, if the
+  expression is false
+
+  •  if unit_test_mode(command) is not blank calls the specified shell command
+
+	$COMMAND name="NAME" type="check" passed="passed|failed" ...
+	msg="all messages"
+
+
+  •  if keep_going = .false. stop the program on a failed test
+
+OPTIONS
+  NAME
+    the unit test name
+
+  EXPRESSION
+    the logical expression to evaluate
+
+  msg,g1...gj
+    optional message to display when performing test, composed of any scalar
+    intrinsics of type INTEGER, REAL, DOUBLEPRECISION, COMPLEX, LOGICAL, or
+    CHARACTER. A space is placed between each value.
+
+  wordy
+    If .false. The message MSG is only displayed if the expression is .false.
+    . Must be used as a keyword. Default is .true. .
+
+EXAMPLES
+  Sample program:
+
+	program demo_unit_test
+	use M_framework, only: &
+	   & unit_test_mode,	 &
+	   & unit_test_start,	 &
+	   & unit_test, 	 &
+	   & unit_test_end,	 &
+	   & unit_test_stop
+	use M_framework, only: almost
+
+	implicit none
+	integer :: i
+	integer :: x
+	integer,allocatable :: arr(:)
+	real,allocatable :: arr1(:)
+	real,allocatable :: arr2(:)
+
+	   call unit_test_mode(keep_going=.true.,debug=.false.,command='')
+
+	   x=10
+	   arr1=[1.0,10.0,100.0]
+	   arr2=[1.0001,10.001,100.01]
+	   call unit_test_start('myroutine')
+
+	   call unit_test('myroutine', x > 3 ,' if big enough')
+	   call unit_test('myroutine', x < 100 ,' if small enough')
+
+	   do i=1,size(arr1)
+	      call unit_test('myroutine', &
+	      & almost(arr1(i),arr2(i),3.9,verbose=.true.) )
+	   enddo
+
+	   arr=[10,20,30]
+	   call unit_test('myroutine', .not.any(arr < 0) , &
+	   & 'fail if any negative values in array ARR')
+	   call unit_test('myroutine', all(arr < 100) , &
+	   & 'fail unless all values are less than 100 in array ARR')
+
+	   call unit_test_end('myroutine', &
+	   & msg='checks on "myroutine" all passed')
+
+	   call unit_test_stop()
+
+	end program demo_unit_test
+
+  Results:
+
+   Sample output (varies with what optional command or modes is used):
+
+       >check_start: myroutine		  START   :
+       >check:	     myroutine		  SUCCESS :  if big enough
+       >check:	     myroutine		  SUCCESS :  if small enough
+       >*almost* for values 1.00000000 1.00010002 agreement of 3.99997139 ...
+       >digits out of requested 3.90000010
+       >check:	     myroutine		  SUCCESS :
+       >*almost* for values 10.0000000 10.0010004 agreement of 3.99986792 ...
+       >digits out of requested 3.90000010
+       >check:	     myroutine		  SUCCESS :
+       >*almost* for values 100.000000 100.010002 agreement of 3.99995065 ...
+       >digits out of requested 3.90000010
+       >check:	     myroutine		  SUCCESS :
+       >check:	     myroutine		  SUCCESS : fail if any negative ...
+       >values in array ARR
+       >check:	     myroutine		  SUCCESS : fail unless all values ...
+       >are less than 100 in array ARR
+       >check_end:   myroutine		  PASSED  : GOOD:7	   BAD: ...
+       >0 DURATION:00000000294709: checks on "myroutine" all passed
+       >check_stop:  TALLY		  PASSED  : GOOD:7	   BAD: ...
+       >0 DURATION:00000000267059
+
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+				August 31, 2024unit_test(3m_framework__verify)
 unit_test_end(3m_framework__verify)	   unit_test_end(3m_framework__verify)
 
 
@@ -2674,7 +2957,7 @@ LICENSE
 
 
 
-				August 02, unit_test_end(3m_framework__verify)
+				August 31, unit_test_end(3m_framework__verify)
 unit_test_expected(3m_framework__verifunit_test_expected(3m_framework__verify)
 
 
@@ -2842,7 +3125,7 @@ LICENSE
 
 
 
-				August 02,unit_test_mode(3m_framework__verify)
+				August 31,unit_test_mode(3m_framework__verify)
 unit_test_msg(3m_framework__verify)	   unit_test_msg(3m_framework__verify)
 
 
@@ -2905,7 +3188,7 @@ LICENSE
 
 
 
-				August 02, unit_test_msg(3m_framework__verify)
+				August 31, unit_test_msg(3m_framework__verify)
 unit_test_start(3m_framework__verify)	 unit_test_start(3m_framework__verify)
 
 
@@ -2990,7 +3273,7 @@ LICENSE
 
 
 
-				August 02unit_test_start(3m_framework__verify)
+				August 31unit_test_start(3m_framework__verify)
 unit_test_stop(3m_framework__verify)	  unit_test_stop(3m_framework__verify)
 
 
@@ -3055,7 +3338,7 @@ LICENSE
 
 
 
-				August 02,unit_test_stop(3m_framework__verify)
+				August 31,unit_test_stop(3m_framework__verify)
 unit_test_system(3m_framework__verify)	unit_test_system(3m_framework__verify)
 
 
@@ -3116,7 +3399,7 @@ LICENSE
 
 
 
-				August 0unit_test_system(3m_framework__verify)
+				August 3unit_test_system(3m_framework__verify)
 M_framework__verify(3m_framework__verM_framework__verify(3m_framework__verify)
 
 
@@ -3309,134 +3592,3 @@ LICENSE
 
 
 				AugusM_framework__verify(3m_framework__verify)
-unit_test(3m_framework__verify) 	       unit_test(3m_framework__verify)
-
-
-
-NAME
-  unit_test(3f) - [M_framework__verify] report if logical expression is true
-  or false, optionally call command and/or stop program.  (LICENSE:PD)
-
-
-SYNOPSIS
-  subroutine unit_test(name,expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,& &
-  ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,only_on_fail)
-
-      character(len=*),intent(in) :: name
-      logical,intent(in) :: expression
-      class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
-      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-      logical,intent(in),optional :: only_on_fail
-
-
-DESCRIPTION
-  unit_test(3f) tests the expression and displays a message composed of the
-  generic intrinsic values msg, and g1 thorough gj. Additionally, if the
-  expression is false
-
-  •  if unit_test_mode(command) is not blank calls the specified shell command
-
-	$COMMAND name="NAME" type="check" passed="passed|failed" ...
-	msg="all messages"
-
-
-  •  if keep_going = .false. stop the program on a failed test
-
-OPTIONS
-  NAME
-    the unit test name
-
-  EXPRESSION
-    the logical expression to evaluate
-
-  msg,g1...gj
-    optional message to display when performing test, composed of any scalar
-    intrinsics of type INTEGER, REAL, DOUBLEPRECISION, COMPLEX, LOGICAL, or
-    CHARACTER. A space is placed between each value.
-
-  wordy
-    If .false. The message MSG is only displayed if the expression is .false.
-    . Must be used as a keyword. Default is .true. .
-
-EXAMPLES
-  Sample program:
-
-	program demo_unit_test
-	use M_framework, only: &
-	   & unit_test_mode,	 &
-	   & unit_test_start,	 &
-	   & unit_test, 	 &
-	   & unit_test_end,	 &
-	   & unit_test_stop
-	use M_framework, only: almost
-
-	implicit none
-	integer :: i
-	integer :: x
-	integer,allocatable :: arr(:)
-	real,allocatable :: arr1(:)
-	real,allocatable :: arr2(:)
-
-	   call unit_test_mode(keep_going=.true.,debug=.false.,command='')
-
-	   x=10
-	   arr1=[1.0,10.0,100.0]
-	   arr2=[1.0001,10.001,100.01]
-	   call unit_test_start('myroutine')
-
-	   call unit_test('myroutine', x > 3 ,' if big enough')
-	   call unit_test('myroutine', x < 100 ,' if small enough')
-
-	   do i=1,size(arr1)
-	      call unit_test('myroutine', &
-	      & almost(arr1(i),arr2(i),3.9,verbose=.true.) )
-	   enddo
-
-	   arr=[10,20,30]
-	   call unit_test('myroutine', .not.any(arr < 0) , &
-	   & 'fail if any negative values in array ARR')
-	   call unit_test('myroutine', all(arr < 100) , &
-	   & 'fail unless all values are less than 100 in array ARR')
-
-	   call unit_test_end('myroutine', &
-	   & msg='checks on "myroutine" all passed')
-
-	   call unit_test_stop()
-
-	end program demo_unit_test
-
-  Results:
-
-   Sample output (varies with what optional command or modes is used):
-
-       >check_start: myroutine		  START   :
-       >check:	     myroutine		  SUCCESS :  if big enough
-       >check:	     myroutine		  SUCCESS :  if small enough
-       >*almost* for values 1.00000000 1.00010002 agreement of 3.99997139 ...
-       >digits out of requested 3.90000010
-       >check:	     myroutine		  SUCCESS :
-       >*almost* for values 10.0000000 10.0010004 agreement of 3.99986792 ...
-       >digits out of requested 3.90000010
-       >check:	     myroutine		  SUCCESS :
-       >*almost* for values 100.000000 100.010002 agreement of 3.99995065 ...
-       >digits out of requested 3.90000010
-       >check:	     myroutine		  SUCCESS :
-       >check:	     myroutine		  SUCCESS : fail if any negative ...
-       >values in array ARR
-       >check:	     myroutine		  SUCCESS : fail unless all values ...
-       >are less than 100 in array ARR
-       >check_end:   myroutine		  PASSED  : GOOD:7	   BAD: ...
-       >0 DURATION:00000000294709: checks on "myroutine" all passed
-       >check_stop:  TALLY		  PASSED  : GOOD:7	   BAD: ...
-       >0 DURATION:00000000267059
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-				August 02, 2024unit_test(3m_framework__verify)
