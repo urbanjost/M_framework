@@ -23,7 +23,7 @@ character(len=*),parameter   :: g='(*(g0,1x))'
 character(len=*),parameter   :: g0='(*(g0))'
 character(len=1),parameter   :: comma=',', quote='"'
 character(len=:),allocatable :: color
-logical                      :: intable
+logical                      :: intable=.true.
 integer :: i 
 integer :: htmlfile, csvfile, clicksfile, nmlfile
 interface exists        ! for backward compatibility, accdig(3f) preferred
@@ -53,7 +53,7 @@ end interface exists
    name = repeat(' ',4096)
    passed = repeat(' ',4096)
    msg = repeat(' ',4096)
-   intable=.false.
+   !intable=.false.
    date=here_and_now()
    clicks=-1
 !   flags = [(-1, i=1, 1000)]
@@ -77,11 +77,11 @@ end interface exists
    select case(type)
 
    case("start")
-      intable=.true.
+      !intable=.true.
       write(htmlfile,g0)'<table id="',name,'">'
       write(htmlfile,g0)'<caption class="caption" style="text-align:left">',name,str(' -',if=msg.ne.''),' ',msg,'</caption>'
       write(htmlfile,g0)'<tbody>'
-      write(htmlfile,g0)'<tr class="odd" class="header"><!-- line -->'
+      write(htmlfile,g0)'<tr class="header" class="odd"><!-- start -->'
       write(htmlfile,g0)' <th style="width:25%;text-align:center;"> name   </th>'
       write(htmlfile,g0)' <th style="width:10%;text-align:center;"> passed </th>'
       write(htmlfile,g0)' <th style="width:40%;text-align:center;"> msg    </th>'
@@ -91,7 +91,7 @@ end interface exists
    case("check")
       write(csvfile,g0),quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
 
-      write(htmlfile,g0)'<tr class="even" class="',passed,'"><!-- line -->'
+      write(htmlfile,g0)'<tr class="',passed,'" class="even"><!-- check -->'
       write(htmlfile,g0)' <td >', name    ,' </td>'
       write(htmlfile,g0)' <td style="text-align:center;" bgcolor="',color,'">', passed  ,' </td>'
       write(htmlfile,g0)' <td >', msg     ,' </td>'
@@ -99,19 +99,19 @@ end interface exists
       write(htmlfile,g0)'</tr>'
    case("message")
       if(intable)then
-         write(htmlfile,g0)'<tr class="message"><!-- line -->'
+         write(htmlfile,g0)'<tr class="message"><!-- message -->'
          write(htmlfile,g0)'<td colspan="4" bgcolor="#AAF" style="text-align:center;">',msg,'</td>'
          write(htmlfile,g0)'</tr>'
       else
-         write(htmlfile,g0)msg
+         !write(htmlfile,g0)msg
       endif
 
    case("end")
-      intable=.false.
+      !intable=.false.
       if(passed.eq.'untested')then
          write(csvfile,g0),quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
 
-         write(htmlfile,g0)'<tr class="odd" class="',passed,'"><!-- line -->'
+         write(htmlfile,g0)'<tr class="',passed,'" class="odd"><!-- end -->'
          write(htmlfile,g0)' <td >', name    ,' </td>'
          write(htmlfile,g0)' <td bgcolor="',color,'" style="text-align:center;">', passed  ,' </td>'
          write(htmlfile,g0)' <td >', msg     ,' </td>'
@@ -119,7 +119,7 @@ end interface exists
          write(htmlfile,g0)'</tr>'
       endif
       if(clicks.ne.0)then
-         write(htmlfile,g0)'<tr class="clicks" class="',passed,'"><!-- line -->'
+         write(htmlfile,g0)'<tr class="clicks" class="',passed,'"><!-- clicks -->'
          write(htmlfile,g0)'<td colspan="4" bgcolor="#AAF" style="text-align:center;"> clicks:',clicks,' for ',name,'</td>'
          write(htmlfile,g0)'</tr>'
       endif
@@ -133,7 +133,8 @@ end interface exists
 
 
    case("stop")
-      intable=.false.
+      !intable=.false.
+      write(htmlfile,g0)'<!-- STOP -->'
 
    end select
 contains
