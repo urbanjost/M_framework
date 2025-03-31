@@ -44,7 +44,7 @@
 !!    If default modes need changed it can be done via the unit_test_mode(3f)
 !!    procedure or as command line options.
 !!
-!!    messages by default are writting to stderr, but may be written to any
+!!    messages by default are writing to stderr, but may be written to any
 !!    list of LUNs of preassigned or open files.
 !!
 !!    SET MODES
@@ -251,7 +251,7 @@ private glob_
 
 type :: force_keywd_hack  ! force keywords, using @awvwgk method
 end type force_keywd_hack
-! so then any argument that comes afer "force_keywd" is a compile time error
+! so then any argument that comes after "force_keywd" is a compile time error
 ! if not done with a keyword unless someone "breaks" it by passing something
 ! of this type:
 !    type(force_keywd_hack), optional, intent(in) :: force_keywd
@@ -776,7 +776,7 @@ integer(kind=int64)                  :: clicks_now
    if(PF == 'PASSED  :'.and.ipassed_all_G == 0)then
       PF='UNTESTED:'
    endif
-      write(out,'("'//CHECK_PREFIX%check_stop//'",a,1x,a," GOOD: ",a," BAD: ",a," DURATION: ",i14.14)') &
+      write(out,'("'//CHECK_PREFIX%check_stop//'",a,1x,a," GOOD: ",a," BAD: ",a," DURATION: ",i20.20)') &
        & atleast_("TALLY",G_LONGEST),     &
        & PF,                              &
        & atleast_(str(IPASSED_ALL_G),9),  &
@@ -899,7 +899,7 @@ integer(kind=int64)                  :: clicks_now
        & 1x,a,                            &
        & " GOOD: ",a,                     &
        & " BAD: " ,a,                     &
-       & " DURATION: ",i14.14             &
+       & " DURATION: ",i20.20             &
        & )')                              &
        & atleast_(name,G_LONGEST),        &
        & PF,                              &
@@ -1458,7 +1458,7 @@ logical,optional, intent(in)           :: keep_going     ! logical variable that
 logical,optional, intent(in)           :: cmdline        ! flag whether to parse command line for arguments or not
 logical,optional, intent(in)           :: interactive
 logical,optional, intent(in)           :: brief          ! flag on whether to display SUCCESS: messages
-logical,optional, intent(in)           :: verbose        ! flag on whether to display all messages including addtional information
+logical,optional, intent(in)           :: verbose        ! flag on whether to display all messages including additional information
 logical,optional, intent(in)           :: silent         ! do not output any messages from unit_test_*(3f) procedures
 character(len=*),optional, intent(in)  :: command        ! name of command to execute. Defaults to the name
 integer,optional, intent(in)           :: flags(:)       ! an  array that can be used to select different options
@@ -1609,7 +1609,7 @@ end function unit_test_system
 !!    the leaf name past the last backslash or slash and trims
 !!    the suffix ".exe" as well.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample getting a pathname of current executable:
 !!
@@ -1683,7 +1683,7 @@ end function getarg0_
 !!    getall_(3f) returns the name of the current executable
 !!    and all the arguments surrounded with double-quotes
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample getting a pathname of current executable:
 !!

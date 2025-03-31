@@ -76,7 +76,7 @@
 !!     mode on MSWindows. It does work as-is with CygWin and MinGW and
 !!     Putty windows and mintty(1) as tested.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -379,7 +379,7 @@ contains
 !!      the raw mode will create correct input for the attr(3f) function
 !!      if read back in.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -751,7 +751,6 @@ subroutine vt102()
 
 end subroutine vt102
 !>
-!! !>
 !!##NAME
 !!    attr_mode(3f) - [M_framework__attr] select processing mode for output from attr(3f)
 !!    (LICENSE:MIT)
@@ -778,7 +777,7 @@ end subroutine vt102
 !!         reload         restore original keyword meanings deleted or
 !!                        replaced by calls to attr_update(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -854,7 +853,6 @@ subroutine wipe_dictionary()
 end subroutine wipe_dictionary
 
 !>
-!! !>
 !!##NAME
 !!    attr_update(3f) - [M_framework__attr] update internal dictionary given keyword
 !!                      and value
@@ -896,7 +894,7 @@ end subroutine wipe_dictionary
 !!      ul,underline
 !!      it,italics (often produces inverse colors on many devices
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!

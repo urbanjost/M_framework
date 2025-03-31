@@ -1,0 +1,2688 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>M_framework__timing</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="https://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="https://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">M_framework__timing</h1>
+</div>
+<div id="name" class="slide section level1">
+<h1>NAME</h1>
+<p>accdig(3f) - [M_framework__approx] compare two numbers only up to a specified number of digits (LICENSE:PD)</p>
+<h2 id="synopsis">SYNOPSIS</h2>
+<p>elemental impure subroutine accdig(x,y,digio,acurcy,ind)</p>
+<pre><code>       class(*),intent(in)  :: X
+       class(*),intent(in)  :: Y
+       class(*),intent(in)  :: DIGI0
+       real,intent(out)     :: acurcy
+       integer,intent(out)  :: ind
+</code></pre>
+<h2 id="description">DESCRIPTION</h2>
+<p>This procedure is used to check how closely two numbers agree.</p>
+<pre><code>      call accdig(X,Y,DIGI0,ACURCY,IND)
+</code></pre>
+<p>The values X and Y are the numbers to compare, and DIGI0 is the threshold number of digits to consider significant in returning IND.</p>
+<p>If X and Y are considered equal within DIGI0 relative tolerance,</p>
+<pre><code>       IND    = 0, if tolerance is     satisfied.
+              = 1, if tolerance is not satisfied.
+</code></pre>
+<p>The result ACURCY gives a measure of the number of leading digits in X which are the same as the number of leading digits in Y.</p>
+<pre><code>        ACURCY=-log10((X-Y)/Y)   if X != Y and Y != 0
+        ACURCY=-log10(X-Y)       if X != Y and Y = 0
+        ACURCY=8                 if X=Y
+
+        ACURCY is never less than -8 or greater than 8 for 32-bit REAL values
+</code></pre>
+<p>TOLERANCE ``` X and Y are considered equal within DIGI0 relative tolerance, if ACURCY is greater than DIGI0.</p>
+<ul>
+<li><strong>For example, Take some numbers and compare them</strong><br />
+to 1.2345678 ```</li>
+</ul>
+<!-- end list -->
+
+<pre><code>      &gt;  ================================================
+      &gt;  A number     |    ACURCY       |   ACURCY
+      &gt;               |    1.2345678=Y  |   1.2345678=X
+      &gt;  ================================================
+      &gt;   1.234680    |    3.7900571    |   3.7901275
+      &gt;   1.2345378   |    4.6144510    |   4.6144404
+      &gt;   2.2234568   |    0.096367393  |   0.35188114
+      &gt;   1.2345678   |    8.0000000    |   8.0000000
+      &gt;   1.2345679   |    7.0732967    |   7.0731968
+      &gt;  -1.2345678   |   -0.30103000   |  -0.30103000
+      &gt;  76.234567    |   -1.7835463    |   0.0070906729
+      &gt;   2.4691356   |    0.0          |   0.3010300
+      &gt;   0.0         |    0.0          |  -0.91514942.
+</code></pre>
+<p>Due to the typical limits of the log function, the number of significant digits in the result is best considered to be three.</p>
+<p>Notice that 1.2345678=Y produces different values than 1.2345678=X</p>
+<p>A negative result indicates the two values being compared either do not agree in the first digit or they differ with respect to sign. An example of two numbers which do not agree in their leading digit (and actually differ in order of magnitude) is given above by X=76.234567 and Y=1.2345678; the accuracy reported is <strong>-1.7835463</strong>. An example of two numbers which do not agree in sign in X=<strong>-1.2345678</strong> and Y=1.2345678; here the accuracy reported is <strong>-0.30103000</strong>.</p>
+<h2 id="examples">EXAMPLES</h2>
+<p>Example program:</p>
+<pre><code>   program demo_accdig ! fortran 90 example
+   use M_framework__approx, only : accdig
+   implicit none
+   integer         :: digi
+   doubleprecision :: a, b
+   integer         :: i10, i20, i30
+   integer         :: ind, ind1, ind2
+   real            :: acurcy, acurcy1, acurcy2
+   doubleprecision :: vals(9)
+   data vals/ &amp;
+     &amp;1.234680d0,   1.2345378d0,  2.2234568d0, 1.2345678d0, &amp;
+     &amp;1.2345679d0, -1.2345678d0, 76.234567d0,  2.4691356d0, &amp;
+     &amp;0.0d0/
+      write(*,*)&#39;=========================&#39;
+      do i10=0,16
+         a=1.0d0
+         b=a+1.0d0/(10.0d0**i10)
+         call accdig(a,b,8.0,acurcy,ind)
+         write(*,*)i10,a,b,acurcy,ind
+      enddo
+      write(*,*)&#39;=========================&#39;
+      digi=16
+      do i20=0,digi
+         a=1.0d0
+         b=a+1.0d0/(10.0d0**i20)
+         call accdig(a,b,dble(digi),acurcy,ind)
+         write(*,*)i20,a,b,acurcy,ind
+      enddo
+      write(*,*)&#39;=========================&#39;
+      do i30=1,9
+         call accdig(1.2345678d0,vals(i30),8.0,acurcy1,ind1)
+         call accdig(vals(i30),1.2345678d0,8.0,acurcy2,ind2)
+         write(*,*)i30,vals(i30),acurcy1,acurcy2,ind1,ind2
+      enddo
+   end program demo_accdig
+</code></pre>
+<h2 id="notes">NOTES</h2>
+<h2 id="references">REFERENCES</h2>
+<p>based on ```</p>
+<pre><code>   NBS OMNITAB 1980 VERSION 6.01  1/ 1/81. dp_accdig V 7.00  2/14/90. **
+      David Hogben,
+      Statistical Engineering Division,
+      Center for Computing and Applied Mathematics,
+      A337 Administration Building,
+      National Institute of Standards and Technology,
+      Gaithersburg, MD 20899
+                     TELEPHONE 301-975-2845
+          ORIGINAL VERSION -  October, 1969.
+           CURRENT VERSION - February, 1990.
+           JSU     VERSION - February, 1991.
+</code></pre>
+<h2 id="dependencies">DEPENDENCIES</h2>
+<ul>
+<li>M_framework__journal(), log10(), abs(1)</li>
+</ul>
+<h2 id="authors">AUTHORS</h2>
+<p>David Hogben, John S. Urban</p>
+<h2 id="license">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-1" class="slide section level1">
+<h1>NAME</h1>
+<p>almost(3f) - [M_framework__approx] return true or false if two numbers agree up to specified number of digits (LICENSE:PD)</p>
+<h2 id="synopsis-1">SYNOPSIS</h2>
+<p>elemental impure function almost(x,y,digits,verbose)</p>
+<pre><code>    class(*),intent(in)         :: x,y
+    class(*),intent(in)         :: rdigits
+    logical,intent(in),optional :: verbose
+    logical                     :: almost
+</code></pre>
+<h2 id="description-1">DESCRIPTION</h2>
+<p>Returns true or false depending on whether the two numbers given agree to within the specified number of digits as calculated by ACCDIG(3f).</p>
+<h2 id="options">OPTIONS</h2>
+<ul>
+<li><p><strong>x,y</strong><br />
+expected and calculated values to be compared. May be of type REAL, INTEGER, or DOUBLEPRECISION.</p></li>
+<li><p><strong>rdigits</strong><br />
+number of digits of precision to compare. May be INTEGER or REAL.</p></li>
+<li><p><strong>verbose</strong><br />
+optional value that specifies to print the results of the comparison when set to .TRUE..</p></li>
+</ul>
+<h2 id="returns">RETURNS</h2>
+<ul>
+<li><strong>almost</strong><br />
+TRUE if the input values compare up to the specified number of values</li>
+</ul>
+<h2 id="examples-1">EXAMPLES</h2>
+<p>sample:</p>
+<pre><code>   program demo_almost
+   use M_framework__approx, only : almost
+   implicit none
+   real    :: x, y
+   logical :: z
+   integer :: i
+   x=1.2345678
+   y=1.2300000
+   do i=1,8
+      z=almost(x,y,i,verbose=.true.)
+      write(*,*)i,z
+   enddo
+   end program demo_almost
+</code></pre>
+<p>Results:</p>
+<pre><code>    &gt; *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 ```
+    &gt; digits out of requested 1.00000000
+    &gt;            1 T
+    &gt; *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 ```
+    &gt; digits out of requested 2.00000000
+    &gt;            2 T
+    &gt; *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 ```
+    &gt; digits out of requested 3.00000000
+    &gt;            3 F
+    &gt; *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 ```
+    &gt; digits out of requested 4.00000000
+    &gt;            4 F
+    &gt; *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 ```
+    &gt; digits out of requested 5.00000000
+    &gt;            5 F
+    &gt; *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 ```
+    &gt; digits out of requested 6.00000000
+    &gt;            6 F
+    &gt; *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 ```
+    &gt; digits out of requested 7.00000000
+    &gt;            7 F
+    &gt; *sp_accdig* significant digit request too high= 8.00000000
+    &gt; *almost* for values 1.23456776 1.23000002 agreement of 2.43020344 ```
+    &gt; digits out of requested 8.00000000
+    &gt;            8 F
+</code></pre>
+<h2 id="author">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-1">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-2" class="slide section level1">
+<h1>NAME</h1>
+<p>assert(3f) - [M_framework__msg] print filename, linenumber, and message to stderr and stop program (LICENSE:PD)</p>
+<h2 id="synopsis-2">SYNOPSIS</h2>
+<p>function assert(file,linenum,expr,g1,g2,g3,g4,g5,g6,g7,g8,g9, &amp; &amp; ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)</p>
+<ul class="incremental">
+<li><p><strong>character(len=*),intent(in)</strong><br />
+:: file</p></li>
+<li><p><strong>character(len=*),intent(in)</strong><br />
+:: linenum</p></li>
+<li><p><strong>logical,intent(in)</strong><br />
+:: expr class(*),intent(in),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9 class(*),intent(in),optional :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj</p></li>
+</ul>
+<h2 id="description-2">DESCRIPTION</h2>
+<p>assert(3f) prints strings to stderr and then stops program with exit code 1 It labels the first string as the filename, the next integer parameter as the linenumber, and then up to twenty scalar values.</p>
+<p>It is primarily intended for use by the prep(1) preprocessor $ASSERT directive</p>
+<h2 id="options-1">OPTIONS</h2>
+<ul>
+<li><p><strong>filename</strong><br />
+a string assumed to be the current filename when compiling</p></li>
+<li><p><strong>linenum</strong><br />
+assumed to be the line number of the source code the ASSERT(3f) procedure was called at.</p></li>
+<li><p><strong>expr</strong><br />
+logical value</p></li>
+<li><p><strong>g[1-9a-j]</strong><br />
+optional value(s) to print as a message before stopping. May be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.</p></li>
+</ul>
+<h2 id="examples-2">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_assert
+   use M_framework__msg, only : assert
+   implicit none
+   real :: a, toobig=1024
+   a=2000
+   call assert(&#39;myroutine&#39;, 101, a &gt; toobig, &amp;
+           &amp; &#39;The value is too large&#39;, a, &#39; &gt; &#39;, toobig)
+   end program demo_assert
+</code></pre>
+<h2 id="author-1">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-2">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-3" class="slide section level1">
+<h1>NAME</h1>
+<p>attr(3f) - [M_framework__attr] substitute escape sequences for HTML-like syntax in strings (LICENSE:MIT)</p>
+<h2 id="synopsis-3">SYNOPSIS</h2>
+<p>function attr(string,reset) result (expanded)</p>
+<pre><code>       ! scalar
+       character(len=*),intent(in)  :: string
+       logical,intent(in),optional  :: reset
+       character(len=:),allocatable :: expanded
+       ! or array
+       character(len=*),intent(in)  :: string(:)
+       logical,intent(in),optional  :: reset
+       character(len=:),allocatable :: expanded(:)
+       integer,intent(in),optional  :: chars
+</code></pre>
+<h2 id="description-3">DESCRIPTION</h2>
+<p>Use HTML-like syntax to add attributes to terminal output such as color on devices that recognize ANSI escape sequences.</p>
+<h2 id="options-2">OPTIONS</h2>
+<ul>
+<li><strong>string</strong><br />
+input string of form</li>
+</ul>
+<!-- end list -->
+
+<pre><code>                   &quot;&lt;attribute_name&gt;string&lt;/attribute_name&gt; ```&quot;.
+</code></pre>
+<p>where the current attributes are color names, bold, italic, underline, ```</p>
+<ul>
+<li><p><strong>reset</strong><br />
+By default, a sequence to clear all text attributes is sent at the end of each returned line if an escape character appears in the output string. This can be turned off by setting RESET to .false. .</p>
+<p>Note if turning off the reset attributes may be continued across lines, but if each line is not self-contained attributes may not display properly when filtered with commands such as grep(1).</p></li>
+<li><p><strong>chars</strong><br />
+For arrays, a reset will be placed after the Nth displayable column count in order to make it easier to generate consistent right borders for non-default background colors for a text block.</p></li>
+</ul>
+<h2 id="keywords">KEYWORDS</h2>
+<p>primary default keywords</p>
+<pre><code>     colors:
+       r,         red,       R,  RED
+       g,         green,     G,  GREEN
+       b,         blue,      B,  BLUE
+       m,         magenta,   M,  MAGENTA
+       c,         cyan,      C,  CYAN
+       y,         yellow,    Y,  YELLOW
+       e,         ebony,     E,  EBONY
+       w,         white,     W,  WHITE
+
+     attributes:
+       it,        italic
+       bo,        bold
+       un,        underline
+
+     basic control characters:
+      nul
+      bel  (0x07, ^G) beeps;
+      bs   (0x08, ^H) backspaces one column (but not past the beginning of
+                      the line);
+      ht   (0x09, ^I) goes to the next tab stop or to the end of the line if
+                      there is no earlier tab stop;
+      lf   (0x0A, ^J),
+      vt   (0x0B, ^K)
+      ff   (0x0C, ^L) all give a linefeed, and if LF/NL (new-line mode) is
+                      set also a carriage return
+      cr   (0x0D, ^M) gives a carriage return;
+      so   (0x0E, ^N) activates the G1 character set;
+      si   (0x0F, ^O) activates the G0 character set;
+      can  (0x18, ^X) and SUB (0x1A, ^Z) interrupt escape sequences;
+      sub
+      esc  (0x1B, ^[) starts an escape sequence;
+      del  (0x7F) is ignored;
+
+     other:
+       clear
+       default
+       reset
+       gt
+       lt
+       save,DECSC     Save  current state (cursor coordinates, attributes,
+                      character sets pointed at by G0, G1).
+       restore,DECRC  Restore state most recently saved by ESC 7.
+       CSI            &quot;Control Sequence Introducer&quot;(0x9B) is equivalent to
+                      &quot;ESC [&quot;.
+
+     dual-value (one for color, one for mono):
+
+       write(*,*)attr(&#39;&lt;ERROR&gt;an error message&#39;)
+       write(*,*)attr(&#39;&lt;WARNING&gt;a warning message&#39;)
+       write(*,*)attr(&#39;&lt;INFO&gt;an informational message&#39;)
+</code></pre>
+<p>By default, if the color mnemonics (ie. the keywords) are uppercase they change the background color. If lowercase, the foreground color. When preceded by a "/" character the attribute is returned to the default.</p>
+<p>The "default" keyword is typically used explicitly when reset=.false, and sets all text attributes to their initial defaults.</p>
+<h2 id="limitations">LIMITATIONS</h2>
+<ul>
+<li><p>colors are not nestable, keywords are case-sensitive,</p></li>
+<li><p>not all terminals obey the sequences. On Windows, it is best if you use Windows 10+ and/or the Linux mode; although it has worked with all CygWin and MinGW and Putty windows and mintty.</p></li>
+<li><p>you should use "&lt;gt&gt;" and "&lt;lt&gt;" instead of "&gt;" and "&lt;" in a string processed by attr(3f) instead of in any plain text output so that the raw mode will create correct input for the attr(3f) function if read back in.</p></li>
+</ul>
+<h2 id="examples-3">EXAMPLES</h2>
+<p>Sample program</p>
+<pre><code>    program demo_attr
+    use M_framework__attr, only : attr, attr_mode, attr_update
+       call printstuff(&#39;defaults&#39;)
+
+       call attr_mode(manner=&#39;plain&#39;)
+       call printstuff(&#39;plain:&#39;)
+
+       call printstuff(&#39;raw&#39;)
+
+       call attr_mode(manner=&#39;color&#39;)
+       call printstuff(&#39;&#39;)
+
+       write(*,&#39;(a)&#39;) attr(&#39;TEST ADDING A CUSTOM SEQUENCE:&#39;)
+       call attr_update(&#39;blink&#39;,char(27)//&#39;[5m&#39;)
+       call attr_update(&#39;/blink&#39;,char(27)//&#39;[25m&#39;)
+       write(*,&#39;(a)&#39;) attr(&#39;&lt;blink&gt;Items for Friday&lt;/blink&gt;&#39;)
+
+    contains
+    subroutine printstuff(label)
+    character(len=*),intent(in)  :: label
+    character(len=:),allocatable :: array(:)
+      call attr_mode(manner=label)
+
+      array=[character(len=60) ::    &amp;
+       &#39;TEST MANNER=&#39;//label,                      &amp;
+       &#39;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&lt;b&gt;BLUE&lt;/b&gt;&#39;,      &amp;
+       &#39;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&lt;y&gt;YELLOW&lt;/y&gt;&#39;, &amp;
+       &#39;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&#39;]
+      write(*,&#39;(a)&#39;) attr(array)
+
+      write(*,&#39;(a)&#39;) attr(&#39;Adding &lt;bo&gt;bold&lt;/bo&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&#39;&lt;bo&gt;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&lt;b&gt;BLUE&lt;/b&gt;&lt;/bo&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&#39;&lt;bo&gt;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&lt;y&gt;YELLOW&lt;/y&gt;&lt;/bo&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&#39;&lt;bo&gt;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&lt;/bo&gt;&#39;)
+
+      write(*,&#39;(a)&#39;) attr(&#39;Adding &lt;ul&gt;underline&lt;/ul&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&amp;
+       &amp;&#39;&lt;bo&gt;&lt;ul&gt;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&lt;b&gt;BLUE&lt;/b&gt;&lt;/ul&gt;&lt;/bo&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&amp;
+       &amp;&#39;&lt;bo&gt;&lt;ul&gt;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&lt;y&gt;YELLOW&lt;/y&gt;&lt;/ul&gt;&lt;/bo&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&#39;&lt;bo&gt;&lt;ul&gt;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&lt;/ul&gt;&lt;/bo&gt;&#39;)
+
+      write(*,&#39;(a)&#39;) attr(&#39;Adding &lt;ul&gt;italic&lt;/ul&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&amp;
+       &amp;&#39;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&lt;b&gt;BLUE&lt;/b&gt;&lt;/it&gt;&lt;/ul&gt;&lt;/bo&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&amp;
+       &amp;&#39;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&lt;y&gt;YELLOW&lt;/it&gt;&lt;/y&gt;&lt;/ul&gt;&lt;/bo&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&#39;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&lt;/ul&gt;&lt;/bo&gt;&#39;)
+
+      write(*,&#39;(a)&#39;) attr(&#39;Adding &lt;in&gt;inverse&lt;/in&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&#39;&lt;in&gt;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&amp;
+       &amp;&lt;b&gt;BLUE&lt;/b&gt;&lt;/it&gt;&lt;/ul&gt;&lt;/bo&gt;&lt;/in&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&#39;&lt;in&gt;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&amp;
+       &amp;&lt;y&gt;YELLOW&lt;/it&gt;&lt;/y&gt;&lt;/ul&gt;&lt;/bo&gt;&lt;/in&gt;&#39;)
+      write(*,&#39;(a)&#39;) attr(&amp;
+       &amp;&#39;&lt;in&gt;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&lt;/ul&gt;&lt;/bo&gt;&lt;/in&gt;&#39;)
+    end subroutine printstuff
+    end program demo_attr
+</code></pre>
+<h2 id="author-2">AUTHOR</h2>
+<p>John S. Urban, 2021</p>
+<h2 id="license-3">LICENSE</h2>
+<h3 id="mit">MIT</h3>
+<h2 id="see-also">SEE ALSO</h2>
+<p>attr_mode(3f), attr_update(3f)</p>
+</div>
+<div id="name-4" class="slide section level1">
+<h1>NAME</h1>
+<p>attr_mode(3f) - [M_framework__attr] select processing mode for output from attr(3f) (LICENSE:MIT)</p>
+<h2 id="synopsis-4">SYNOPSIS</h2>
+<p>subroutine attr_mode(manner)</p>
+<pre><code>       character(len=*),intent(in) :: manner
+</code></pre>
+<h2 id="description-4">DESCRIPTION</h2>
+<p>Turn off the generation of strings associated with the HTML keywords in the string generated by the attr(3f) function, or display the text in raw mode as it was passed to attr(3f) or return to ANSI escape control sequence generation.</p>
+<h2 id="options-3">OPTIONS</h2>
+<ul>
+<li><p><strong>MANNER</strong><br />
+The current manners or modes supported via the attr_mode(3f) procedure are</p>
+<ul>
+<li><p><strong>plain</strong><br />
+suppress the output associated with keywords color(default) commonly supported escape sequences</p></li>
+<li><p><strong>raw</strong><br />
+echo the input to attr(3f) as its output</p></li>
+<li><p><strong>reload</strong><br />
+restore original keyword meanings deleted or replaced by calls to attr_update(3f).</p></li>
+</ul></li>
+</ul>
+<h2 id="examples-4">EXAMPLES</h2>
+<p>Sample program</p>
+<pre><code>    program demo_attr_mode
+    use M_framework__attr, only : attr, attr_mode
+    implicit none
+    character(len=:),allocatable :: lines(:)
+    character(len=:),allocatable :: outlines(:)
+    integer :: i
+       lines=[character(len=110):: &amp;
+       &amp;&#39;&lt;M&gt;&lt;y&gt;&#39;,&amp;
+       &amp;&#39;&lt;M&gt;&lt;y&gt;  Suffice it to say that black and white are also colors&#39;,&amp;
+       &amp;&#39;&lt;M&gt;&lt;y&gt;  for their simultaneous contrast is as striking as that &#39;,&amp;
+       &amp;&#39;&lt;M&gt;&lt;y&gt;  of green and red, for instance. &amp;
+       &amp; --- &lt;y&gt;&lt;bo&gt;Vincent van Gogh&lt;/bo&gt;&lt;/y&gt;&#39;,&amp;
+       &amp;&#39; &#39;]
+
+       outlines=attr(lines,chars=57)
+       write(*,&#39;(a)&#39;)(trim(outlines(i)),i=1,size(outlines))
+
+       call attr_mode(manner=&#39;plain&#39;) ! write as plain text
+       write(*,&#39;(a)&#39;)attr(lines)
+
+       call attr_mode(manner=&#39;raw&#39;)   ! write as-is
+       write(*,&#39;(a)&#39;)attr(lines)
+
+       call attr_mode(manner=&#39;ansi&#39;)  ! return to default mode
+
+    end program demo_attr_mode
+</code></pre>
+<h2 id="author-3">AUTHOR</h2>
+<p>John S. Urban, 2021</p>
+<h2 id="license-4">LICENSE</h2>
+<h3 id="mit-1">MIT</h3>
+</div>
+<div id="name-5" class="slide section level1">
+<h1>NAME</h1>
+<p>attr_update(3f) - [M_framework__attr] update internal dictionary given keyword and value (LICENSE:MIT)</p>
+<h2 id="synopsis-5">SYNOPSIS</h2>
+<p>subroutine attr_update(key,val)</p>
+<pre><code>    character(len=*),intent(in)           :: key
+    character(len=*),intent(in),optional  :: val
+    character(len=*),intent(in),optional  :: mono_val
+</code></pre>
+<h2 id="description-5">DESCRIPTION</h2>
+<p>Update internal dictionary in M_framework__attr(3fm) module.</p>
+<h2 id="options-4">OPTIONS</h2>
+<ul>
+<li><p><strong>key</strong><br />
+name of keyword to add, replace, or delete from dictionary</p></li>
+<li><p><strong>val</strong><br />
+if present add or replace value associated with keyword. If not present remove keyword entry from dictionary.</p></li>
+<li><p><strong>mono_val</strong><br />
+if present add or replace second value associated with keyword used for plain text mode. Must only be specified if VAL is also specified.</p></li>
+</ul>
+<h2 id="keywords-1">KEYWORDS</h2>
+<p>The following keywords are defined by default</p>
+<p>colors:</p>
+<pre><code>     r,red     c,cyan     w,white
+     g,green   m,magenta  e,ebony
+     b,blue    y,yellow
+</code></pre>
+<p>If the color keywords are capitalized they control the text background instead of the text color.</p>
+<p>attributes:</p>
+<pre><code>     ul,underline
+     it,italics (often produces inverse colors on many devices
+</code></pre>
+<h2 id="examples-5">EXAMPLES</h2>
+<p>Sample program</p>
+<pre><code>     program demo_update
+     use M_framework__attr, only : attr, attr_update
+        write(*,&#39;(a)&#39;) attr(&#39;&lt;clear&gt;TEST CUSTOMIZATIONS:&#39;)
+        ! add custom keywords
+        call attr_update(&#39;blink&#39;,char(27)//&#39;[5m&#39;)
+        call attr_update(&#39;/blink&#39;,char(27)//&#39;[25m&#39;)
+        write(*,*)
+        write(*,&#39;(a)&#39;) attr(&#39;&lt;blink&gt;Items for Friday&lt;/blink&gt;&#39;)
+        call attr_update(&#39;ouch&#39;,attr( &amp;
+        &#39; &lt;R&gt;&lt;bo&gt;&lt;w&gt;BIG mistake!&lt;/R&gt;&lt;/w&gt; &#39;))
+        write(*,*)
+        write(*,&#39;(a)&#39;) attr(&#39;&lt;ouch&gt; Did not see that coming.&#39;)
+        write(*,*)
+        write(*,&#39;(a)&#39;) attr( &amp;
+        &#39;ORIGINALLY: &lt;r&gt;Apple&lt;/r&gt;, &lt;b&gt;Sky&lt;/b&gt;, &lt;g&gt;Grass&lt;/g&gt;&#39;)
+        ! delete
+        call attr_update(&#39;r&#39;)
+        call attr_update(&#39;/r&#39;)
+        ! replace (or create)
+        call attr_update(&#39;b&#39;,&#39;&lt;&lt;&lt;&lt;&#39;)
+        call attr_update(&#39;/b&#39;,&#39;&gt;&gt;&gt;&gt;&#39;)
+        write(*,*)
+        write(*,&#39;(a)&#39;) attr( &amp;
+        &#39;CUSTOMIZED: &lt;r&gt;Apple&lt;/r&gt;, &lt;b&gt;Sky&lt;/b&gt;, &lt;g&gt;Grass&lt;/g&gt;&#39;)
+     end program demo_update
+</code></pre>
+<h2 id="author-4">AUTHOR</h2>
+<p>John S. Urban, 2021</p>
+<h2 id="license-5">LICENSE</h2>
+<h3 id="mit-2">MIT</h3>
+</div>
+<div id="name-6" class="slide section level1">
+<h1>NAME</h1>
+<p>compare_float(3f) - [M_framework__approx] compare floating point values with adjustable tolerance. (LICENSE:PD)</p>
+<h2 id="synopsis-6">SYNOPSIS</h2>
+<p>result = compare_float( x, y,ulp = SCALING_VALUE)</p>
+<pre><code>     elemental function (x,y,ulp)
+     real(kind=KIND),intent(in) :: x,y
+     real|integer,intent(in),optional :: ulp
+</code></pre>
+<p>Additional convenience operators:</p>
+<pre><code>       X.equalto.Y
+       X.lessthan.Y
+       X.greaterthan.Y
+</code></pre>
+<p>Developer procedure (Do not use in production):</p>
+<pre><code>      change_default_ulp(ulp)
+</code></pre>
+<h2 id="description-6">DESCRIPTION</h2>
+<p>compare_float(3f) is a function for comparing floating point numbers within an automatically adjusted tolerance.</p>
+<p>The test performed is</p>
+<pre><code>       abs( x - y ) &lt; ( ulp * spacing( max(abs(x),abs(y)) ) )
+</code></pre>
+<p>where ULP is a user-selected scaling factor that defaults to 1. The default is intentionally low so that default behavior is close to that of the default operators. Setting it to zero(0.0) essentially causes no values to compare equal.</p>
+<p>If the result is .TRUE., the numbers are considered equal. Both single and double precision scalar and array values can be compared, as the function is elemental.</p>
+<p>By definition of an elemental function the returned data entity is the same shape as the input array size or scalar if all values are scalar.</p>
+<p>It can be useful to empirically test your code for numeric sensitivities by changing the value of the ULP scaling factor and noting any result changes.</p>
+<p>As a convenience relational operators .EqualTo., .GreaterThan., and .LessThan. are provided. Note the comparisons return .TRUE&gt; if the difference between the two values is .lt., .ge., and .le. . The algorithm for each operator is shown in the following OPERATORS section.</p>
+<p>The default ULP value is 1.0. A procedure is available to change the default but it should only be used for examining code behavior during development, as it changes the default for calls from all procedures (even those in other modules or procedures).</p>
+<pre><code>      call default_ulp(ulp=VALUE)
+</code></pre>
+<h2 id="details">DETAILS</h2>
+<p>It is generally acknowledged that real numbers should not be compared directly but within some tolerance. However, the magnitude of an appropriate tolerance value will vary depending on the magnitudes of the numbers being compared and the precision of the computing environment.</p>
+<p>The Fortran standard does not specify functions or operators specifically for comparing float values, but leaves some latitude in how the compilers address floating point comparisons. It does specify functions that return platform-specific values useful in applying different methods to the problem such as</p>
+<pre><code>    + epsilon(3f)       - Epsilon function
+    + nearest(3f)       - Nearest representable number
+    + spacing(3f)       - Smallest distance between two numbers of a given type
+    + rrspacing(3f)     - Reciprocal of the relative spacing of a numeric type
+</code></pre>
+<p>and in some cases</p>
+<pre><code>    + scale(3f)         - Scale a real value by a whole power of the radix
+    + digits(3f)        - Significant digits in the numeric model
+    + exponent(3f)      - Exponent of floating-point number
+    + fraction(3f)      - Fractional part of the model representation
+    + huge(3f)          - Largest number of a type and kind
+    + maxexponent(3f)   - Maximum exponent of a real kind
+    + minexponent(3f)   - Minimum exponent of a real kind
+    + precision(3f)     - Decimal precision of a real kind
+    + radix(3f)         - Base of a numeric model
+    + range(3f)         - Decimal exponent range of a numeric kind
+    + set_exponent(3f)  - real value with specified exponent
+    + tiny(3f)          - Smallest positive number of a real kind
+</code></pre>
+<p>Books have been written on the behavior of floating point math.</p>
+<p>As is used here, a commonly used simple floating point comparison algorithm is</p>
+<pre><code>       if(abs(x &lt; y) &lt; (ulp * spacing(max(abs(x),abs(y))))) then
+         :
+       endif
+</code></pre>
+<p>where the intrinsic function SPACING(3f) determines the distance between the argument X and the nearest adjacent representable number of the same type and ULP is an optional user-supplied scaling factor.</p>
+<h2 id="options-5">OPTIONS</h2>
+<ul>
+<li><p><strong>x,y</strong><br />
+Two congruent floating point values to compare.</p></li>
+<li><p><strong>ulp</strong><br />
+The ULP ("unit in the last place") scaling value allows for users to control the scaling of the value returned by SPACING(3f) in order to relax or tighten what is considered "equal". That is, the ULP value can be used to scale the comparison based on knowledge of the "numerical quality" of the values being used in the comparison.</p>
+<p>The value should be positive. The absolute value of the value is taken if it is negative.</p>
+<p>The default ULP scaling value is 1.0.</p>
+<p>The value may be of type integer or real.</p>
+<p>A 0.5 ULP maximum error is the best you could hope for, since this corresponds to always rounding to the nearest representable floating point number.</p></li>
+</ul>
+<h2 id="result">RESULT</h2>
+<p>The return value is a logical value indicating whether the inputs are equal to within the requested precision.</p>
+<h2 id="operators">OPERATORS</h2>
+<p>Additional operators based on compare_float(3f) are included:</p>
+<ul>
+<li><strong>X.equalto.Y</strong><br />
+If the result is .TRUE., the numbers are considered equal. The test performed is</li>
+</ul>
+<!-- end list -->
+
+<pre><code>               abs( x - y ) &lt; spacing( max(abs(x),abs(y)) )
+</code></pre>
+<ul>
+<li><p><strong>X.greaterthan.Y</strong><br />
+If the result is .TRUE., x is considered greater than y. The result is a logical value indicating whether the operand x is greater than y by more than the spacing between representable floating point numbers.</p>
+<p>The test performed is</p>
+<pre><code>                  ( x - y ) &gt;= SPACING( MAX(ABS(x),ABS(y)) )
+</code></pre></li>
+<li><p><strong>X.lessthan.Y</strong><br />
+Test if one operand is less than another. The result is a logical value indicating whether the operand x is less than y by more than the spacing between representable floating point numbers.</p>
+<p>The test performed is</p>
+<pre><code>                 ( y - x ) &gt;= SPACING( MAX(ABS(x),ABS(y)) )
+</code></pre>
+<p>If the result is .TRUE., x is considered less than y.</p></li>
+</ul>
+<h2 id="examples-6">EXAMPLES</h2>
+<p>Sample programs:</p>
+<pre><code>   program demo_compare_float
+   use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+   use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+   use,intrinsic :: iso_fortran_env, only : error_unit,output_unit
+   use M_framework__approx,          only : compare_float
+   use M_framework__approx,          only : &amp;
+   &amp; operator(.equalto.), operator(.greaterthan.), operator(.lessthan.)
+   implicit none
+   integer,parameter       :: wp=int32
+   integer                 :: i
+   character(len=80),save  :: line=&#39;10*0.1&#39;
+   real(kind=wp)           :: a(10), x, y, ulp
+      write(*,*)&#39;is 10*0.1 == 1.0?&#39;
+      ! sum up 0.1 ten times hopefully in a manner compiler does not
+      ! optimize it and in the process make it equal
+      a=0.1_wp
+      read(line,*)a
+      x=sum(a)
+      y=1.0_wp
+      write(*, *)merge(&#39;    EQUAL &#39;,&#39;NOT EQUAL!&#39;,x .eq. y)
+      write(*,&#39;(*(g0,1x,z0,1x))&#39;)x,x,y,y ! show decimal and hexadecimal value
+      write(*, *)&#39;regular&#39;,x .eq. y, x .gt. y, x .lt. y ! standard operators
+      ! For the default ULP=1.0, the relational operators can be used
+      write(*, *)&#39;compare&#39;,x .equalto. y, x .greaterthan. y, x .lessthan. y
+      do i=0,10
+         ulp=real(i,kind=wp)/2.0
+         write(*,*) i, compare_float( x, y, ulp=ulp ) ,&#39;ULP=&#39;,ulp
+      enddo
+   end program demo_compare_float
+</code></pre>
+<p>Results:</p>
+<pre><code>    &gt;  is 10*0.1 == 1.0?
+    &gt;  NOT EQUAL!
+    &gt; 1.00000012 3F800001 1.00000000 3F800000
+    &gt;  regular F T F
+    &gt;  compare F T F
+    &gt;            0 F ULP=   0.00000000
+    &gt;            1 F ULP=  0.500000000
+    &gt;            2 F ULP=   1.00000000
+    &gt;            3 T ULP=   1.50000000
+    &gt;            4 T ULP=   2.00000000
+    &gt;            5 T ULP=   2.50000000
+    &gt;            6 T ULP=   3.00000000
+    &gt;            7 T ULP=   3.50000000
+    &gt;            8 T ULP=   4.00000000
+    &gt;            9 T ULP=   4.50000000
+    &gt;           10 T ULP=   5.00000000
+
+</code></pre>
+</div>
+<div id="name-7" class="slide section level1">
+<h1>NAME</h1>
+<p>fmt(3f) - [M_framework__msg] convert any intrinsic to a string using specified format (LICENSE:PD)</p>
+<h2 id="synopsis-7">SYNOPSIS</h2>
+<p>function fmt(value,format) result(string)</p>
+<pre><code>    class(*),intent(in),optional :: value
+    character(len=*),intent(in),optional :: format
+    character(len=:),allocatable :: string
+</code></pre>
+<h2 id="description-7">DESCRIPTION</h2>
+<p>FMT(3f) converts any standard intrinsic value to a string using the specified format.</p>
+<h2 id="options-6">OPTIONS</h2>
+<ul>
+<li><p><strong>value</strong><br />
+value to print the value of. May be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.</p></li>
+<li><p><strong>format</strong><br />
+format to use to print value. It is up to the user to use an appropriate format. The format does not require being surrounded by parenthesis. If not present a default is selected similar to what would be produced with free format, with trailing zeros removed.</p></li>
+</ul>
+<h2 id="returns-1">RETURNS</h2>
+<ul>
+<li><strong>string</strong><br />
+A string value</li>
+</ul>
+<h2 id="examples-7">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>    program demo_fmt
+    use :: M_framework__msg, only : fmt
+    implicit none
+    character(len=:),allocatable :: output
+
+       output=fmt(10,&quot;&#39;[&#39;,i0,&#39;]&#39;&quot;)
+       write(*,*)&#39;result is &#39;,output
+
+       output=fmt(10.0/3.0,&quot;&#39;[&#39;,g0.5,&#39;]&#39;&quot;)
+       write(*,*)&#39;result is &#39;,output
+
+       output=fmt(.true.,&quot;&#39;The final answer is [&#39;,g0,&#39;]&#39;&quot;)
+       write(*,*)&#39;result is &#39;,output
+
+    end program demo_fmt
+</code></pre>
+<p>Results:</p>
+<pre><code>    result is [10]
+    result is [3.3333]
+    result is The final answer is [T]
+</code></pre>
+<h2 id="author-5">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-6">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-8" class="slide section level1">
+<h1>NAME</h1>
+<p>fstop(3f) - [M_framework__utility] call stop with both a number and a message (LICENSE:PD)</p>
+<h2 id="synopsis-8">SYNOPSIS</h2>
+<p>subroutine fstop(ierr,stdout,stderr)</p>
+<pre><code>    integer,intent(in)                   :: ierr
+    character(len=*),intent(in),optional :: stdout
+    character(len=*),intent(in),optional :: stderr
+</code></pre>
+<h2 id="description-8">DESCRIPTION</h2>
+<p>FSTOP(3f) call STOP(3f). What a call to STOP does is very system dependent, so using an abstraction layer is useful, as it allows just the fstop() routine to be changed; and STOP does not allow a variable to be used on the numeric access status (this has changed at f2015).</p>
+<h2 id="options-7">OPTIONS</h2>
+<ul>
+<li><p><strong>ierr</strong><br />
+- value in range 0 to 32</p></li>
+<li><p><strong>stdout</strong><br />
+- description to be printed to standard output</p></li>
+<li><p><strong>stderr</strong><br />
+- description to be printed to standard error</p></li>
+</ul>
+<h2 id="examples-8">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_fstop
+   use M_framework__utility, only: fstop
+   implicit none
+   integer :: int
+   !*!write(*,*)&#39;Enter stop value&#39;
+   !*!read(*,*) int
+   int=25
+   select case(int)
+   case(10) ; call fstop(int)
+   case(20) ; call fstop(int,stderr=&#39;error: program will now stop&#39;)
+   case(25) ; call fstop(int,stdout=&#39;stdout message&#39;, &amp;
+                   &amp; stderr=&#39;stderr message&#39;)
+   case(30) ; call fstop(int,stdout=&#39;error: program will now stop&#39;)
+   case default
+              call fstop(int)
+   endselect
+
+   end program demo_fstop
+</code></pre>
+<p>Results:</p>
+<h2 id="see-also-1">SEE ALSO</h2>
+<p>Look for common extensions, such as abort(3f), backtrace(3f)</p>
+<h2 id="author-6">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-7">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-9" class="slide section level1">
+<h1>NAME</h1>
+<p>in_margin(3f) - [M_framework__approx] check if two reals are approximately equal using a relative margin</p>
+<h2 id="synopsis-9">SYNOPSIS</h2>
+<p>elemental pure function in_margin( expected_value, measured_value, allowed_margin )</p>
+<pre><code>     real, intent(in)    :: expected_value
+     real, intent(in)    :: measured_value
+     real, intent(in)    :: allowed_margin
+     class(*),intent(in) :: invalue
+</code></pre>
+<h2 id="description-9">DESCRIPTION</h2>
+<p>Compare two values to see if they are relatively equal using the specified allowed margin. That is, see if VALUE_MEASURED is in the range VALUE_EXPECTED +- ALLOWED_ERROR where the allowed error varies with the magnitude of the values, such that the allowed error is margin * average magnitude of measured and expected).</p>
+<p>So the allowed error is smaller when the magnitudes are smaller.</p>
+<h2 id="options-8">OPTIONS</h2>
+<ul>
+<li><p><strong>expected_value</strong><br />
+First value</p></li>
+<li><p><strong>measured_value</strong><br />
+Second value</p></li>
+<li><p><strong>allowed_margin</strong><br />
+Allowed relative margin</p></li>
+</ul>
+<h2 id="examples-9">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_in_margin
+   use :: M_framework__approx, only : in_margin
+   implicit none
+   write(*,*) in_margin(4.00000,3.99999,0.000000001)
+   write(*,*) in_margin(4.00000,3.99999,0.00000001)
+   write(*,*) in_margin(4.00000,3.99999,0.0000001)
+   write(*,*) in_margin(4.00000,3.99999,0.000001)
+
+   write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], &amp;
+           &amp; [3.9,39.9,399.9,3999.9,39999.9] ,0.000001)
+   write(*,*) in_margin([4.0,40.0,400.0,4000.0,40000.0], &amp;
+           &amp; [3.9,39.9,399.9,3999.9,39999.9] ,0.00001)
+
+   write(*,*) in_margin(4.00000,3.99999,0.00001)
+   write(*,*) in_margin(4.00000,3.99999,0.0001)
+   write(*,*) in_margin(4.00000,3.99999,0.001)
+   write(*,*) in_margin(4.00000,3.99999,0.01)
+
+   end program demo_in_margin
+</code></pre>
+<p>Results:</p>
+<pre><code>       &gt; F
+       &gt; F
+       &gt; F
+       &gt; F
+       &gt; F F F F F
+       &gt; F F F F T
+       &gt; T
+       &gt; T
+       &gt; T
+       &gt; T
+
+</code></pre>
+</div>
+<div id="name-10" class="slide section level1">
+<h1>NAME</h1>
+<p>journal(3f) - [M_framework__journal] provides public message routine, no paging or graphic mode change (LICENSE:PD)</p>
+<h2 id="synopsis-10">SYNOPSIS</h2>
+<p>subroutine journal([where,],[VALUE(s)])</p>
+<pre><code>    character(len=*),intent(in) :: where
+    class(*),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+</code></pre>
+<h3 id="write-messages">WRITE MESSAGES</h3>
+<p>basic messages</p>
+<pre><code>      call journal(where,[VALUE(S)])
+      call journal(message) # a shortcut for &quot;call journal(&#39;sc&#39;,message)&quot;:
+</code></pre>
+<h3 id="open-or-close-trail-file">OPEN OR CLOSE TRAIL FILE</h3>
+<p>trail file</p>
+<pre><code>      call journal(&#39;O&#39;,trailfile_name) # open trail file
+      call journal(&#39;O&#39;,&#39;&#39;)             # close trail file
+</code></pre>
+<h3 id="set-output-time-prefix">SET OUTPUT TIME PREFIX</h3>
+<p>set the function display format for timestamps. See the NOW(3f) procedure for allowable timestamp macros</p>
+<pre><code>      call journal(&#39;%&#39;,time_stamp_prefix_specification)
+</code></pre>
+<h3 id="modes">MODES</h3>
+<p>Turn on/off writing DEBUG messages to trail file</p>
+<pre><code>      call journal(&#39;&gt;&#39;,&#39;debug on&#39;) # turn on debug mode
+      call journal(&#39;&lt;&#39;,&#39;debug off&#39;) # turn off debug mode
+</code></pre>
+<h3 id="assign-stdout-to-an-alternate-file">ASSIGN STDOUT TO AN ALTERNATE FILE</h3>
+<p>change stdout to iunit and open filename; or close unit and go back to stdout if filename=''</p>
+<pre><code>      call journal(iunit,filename)
+</code></pre>
+<p>change stdout to iunit to use a file already open</p>
+<pre><code>      call journal(iunit)
+</code></pre>
+<h2 id="description-10">DESCRIPTION</h2>
+<p>If a user procedure is used for outputting messages instead of calling WRITE(3f) it is easy to provide control of when messages are printed (ie. a "verbose" mode, or "quite" mode), creating files to replay program execution, duplicating output, ```</p>
+<h2 id="options-9">OPTIONS</h2>
+<ul>
+<li><p><strong>WHERE</strong><br />
+indicates where messages are written. A combination of the following characters can be used```</p>
+<p>Usually one of these to write to the standard output files ```</p>
+<ul>
+<li><p><strong>S</strong><br />
+write to stdout or iounit set with journal(unit) or journal(unit,filename).</p></li>
+<li><p><strong>E</strong><br />
+write to stderr</p></li>
+</ul>
+<p>And one of these to write to trail file (ignore if no trail file defined) ```</p>
+<ul>
+<li><p><strong>C</strong><br />
+write to trail file as a comment (if file is open) Writing output "as a comment" means it is preceded by a pound(#) character.</p></li>
+<li><p><strong>T</strong><br />
+write to trail file (if file is open)</p></li>
+</ul>
+<p>Usually used by itself</p>
+<ul>
+<li><strong>D</strong><br />
+write to trail file as a comment with "DEBUG:" prefix in front of message (if file is open) if debug mode is on. Write to stdout if no trail file and debug mode is on.</li>
+</ul>
+<p>Modifier for S|E|C|T|D specifiers</p>
+<ul>
+<li>subsequent files are written to with advance='no'. Position is important. '+sc' does an advance='no' on both files, 's+c' only does the advance='no' for the trail file.</li>
+</ul>
+<p>Mode changing options used by themselves:</p>
+<ul>
+<li><p><strong>&gt;</strong><br />
+turn off debug messages</p></li>
+<li><p><strong>&lt;</strong><br />
+turn on debug messages</p></li>
+<li><p><strong>O</strong><br />
+open trail file using value of "message" parameter or close trail file if no filename or a blank filename.</p></li>
+<li><p><strong>A</strong><br />
+Auxiliary programs that also want to write to the current log file (a2b, z2a, ```) call this routine to see if there is a trail file being generated and then add to it so that a program like ush(1f) can call the auxiliary programs and still just generate one log file, but if the auxiliary program is used as a stand-alone program no trail is generated.</p></li>
+</ul></li>
+<li><p><strong>VALUES(S)</strong><br />
+message to write to stdout, stderr, and the trail file. a numeric or character value to optionally be appended to the message. Up to twenty values are allowed. The WHERE field is required if there is anything other than a single character string or not values at all.</p></li>
+<li><p><strong>FILENAME</strong><br />
+when WHERE="O" to turn the trail file on or off, the "message" field becomes the trail filename to open. If blank, writing to the trail file is turned off.</p></li>
+<li><p><strong>TIMEFORMAT</strong><br />
+when WHERE="%" the message is treated as a time format specification as described under now(3f).</p></li>
+</ul>
+<h2 id="examples-10">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_journal
+   use M_framework__journal, only : journal
+   !! BASIC USAGE
+   call journal(&amp;
+   &amp; &#39;write to standard output as-is, and trail file as a comment if open&#39;)
+   ! since trail file is not yet open, only stdout will display output
+   call journal(&#39;c&#39;,&#39;ignored, as trail file is not open&#39;)
+   ! now open trail file &quot;trail&quot;
+   call journal(&#39;o&#39;,&#39;trail&#39;)
+   call journal(&#39;sc&#39;,&#39;same thing except now trail file is open&#39;)
+   ! only write to trail file if open
+   call journal(&#39;c&#39;,&amp;
+   &amp; &#39;not ignored, as trail file is open. Written with # suffix&#39;)
+   call journal(&#39;t&#39;,&amp;
+   &amp; &#39;not ignored, as trail file is open. Written as-is&#39;)
+   ! turn off trail file
+   call journal(&#39;o&#39;,&#39;&#39;)
+   end program demo_journal
+</code></pre>
+<p>Adding intrinsic scalar values to the message:</p>
+<pre><code>   program test_journal
+   use M_framework__journal, only: journal
+   implicit none
+      call journal(&#39;S&#39;,&#39;This is a test with no optional value&#39;)
+      call journal(&#39;S&#39;,&#39;This is a test with a logical value&#39;,.true.)
+      call journal(&#39;S&#39;, &amp;
+        &amp; &#39;This is a test with a double value&#39;,1234567890.123456789d0)
+      call journal(&#39;S&#39;, &amp;
+        &amp; &#39;This is a test with a real value&#39;,1234567890.123456789)
+      call journal(&#39;S&#39;,&#39;This is a test with an integer value&#39;,1234567890)
+      call journal(&#39;STDC&#39;,&#39;This is a test using STDC&#39;,1234567890)
+      call journal(&#39;stdc&#39;,&#39;This is a test using stdc&#39;,1234567890)
+      call journal(&#39;o&#39;,&#39;journal.txt&#39;)  ! open trail file
+      call journal(&#39;S&#39;, &amp;
+        &amp; 1,12.34,56789.111111111d0,.false.,&#39;a bunch of values&#39;)
+      ! the combinations that make sense
+      call journal(&#39;st&#39;,&#39;stdout and trail&#39;)
+      call journal(&#39;s&#39; ,&#39;stdout only&#39;)
+      call journal(&#39;t&#39; ,&#39;trail only&#39;)
+      call journal(&#39;sc&#39;,&#39;stdout and trail_comment&#39;)
+      call journal(&#39;c&#39; ,&#39;trail_comment only &#39;)
+      call journal(&#39;d&#39; ,&#39;debug only&#39;)
+      call journal(&#39;e&#39; ,&#39;stderr only&#39;)
+      call journal(&#39;o&#39; ,&#39; &#39;) ! closing trail file
+   end program test_journal
+
+   program testit
+   ! this is a utility program that calls the module routines. It is
+   ! typically built using ccall(1).
+   use M_framework__journal, only : journal
+   character(len=:),allocatable :: time_stamp_prefix
+    call journal(&#39;s&#39;, &amp;
+    &amp; &#39;------------------------------------------------------------&#39;)
+    call journal(&#39;s&#39;,&#39;SIMPLE WRITES&#39;)
+    call one()
+    call two()
+    call journal(&#39;sc&#39;, &amp;
+    &amp; &#39;called ONE() and TWO() but did not generate a log file&#39;)
+    call journal(&#39;s&#39;, &amp;
+    &amp; &#39;------------------------------------------------------------&#39;)
+    call journal(&#39;s&#39;,&#39;SIMPLE WRITES WITH LOG FILE&#39;)
+    call journal(&#39;o&#39;,&#39;journal.txt&#39;)     ! open trail file
+    call one()
+    call two()
+    call journal(&#39;sc&#39;, &amp;
+    &amp; &#39;called ONE() and TWO() and generated log file journal.txt&#39;)
+    call journal(&#39;&#39;,&#39;journal.txt&#39;)      ! close trail file
+    call journal(&#39;s&#39;, &amp;
+    &amp; &#39;------------------------------------------------------------&#39;)
+    call journal(&#39;s&#39;,&#39;SIMPLE WRITES WITH TIMING INFORMATION&#39;)
+    ! change time prefix
+    time_stamp_prefix=&#39;CPU_TIME=%c:CALLS=%C:SINCE=%S:%b&#39;
+    call journal(&#39;%&#39;,time_stamp_prefix) ! set a message time prefix
+    call journal(&#39;o&#39;,&#39;timed.txt&#39;)       ! open trail file
+    call one()
+    call two()
+    call journal(&#39;sc&#39;, &amp;
+    &amp; &#39;called ONE() and TWO() and generate log file timed.txt&#39;)
+    call journal(&#39;&#39;,&#39;timed.txt&#39;)        ! close trail file
+    call journal(&#39;%&#39;,&#39;&#39;)                ! turn off time prefix
+    call journal(&#39;o&#39;,&#39;timed.txt&#39;)       ! open trail file
+    call journal(&#39;s&#39;, &amp;
+    &amp; &#39;------------------------------------------------------------&#39;)
+
+   contains
+
+      subroutine two()
+         call journal(&#39;Entered subroutine two&#39;)
+         call journal(&#39;Exited subroutine two&#39;)
+      end subroutine two
+
+      subroutine one()
+         call journal(&#39;Entered subroutine one&#39;)
+         sum=-HUGE(1.0)
+         do i=1,10000000
+           sum=sum+sqrt(real(i))
+         enddo
+         write(*,*)&#39;SUM=&#39;,sum
+         call journal(&#39;Exited subroutine one&#39;)
+      end subroutine one
+
+   end program testit
+</code></pre>
+<h2 id="author-7">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-8">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-11" class="slide section level1">
+<h1>NAME</h1>
+<p>M_framework(3f) - [M_framework::INTRO] unit test framework (LICENSE:PD)</p>
+<h2 id="synopsis-11">SYNOPSIS</h2>
+<p>M_framework(3f) is an aggregate of Fortran modules brought together to provide unit testing for Fortran; and is particularly well suited for use with the Fortran Package Manager (fpm).</p>
+<p>The support modules are useful for creating terminal messages, comparing expected values to results, writing logfiles and playback journals independent of unit testing as well.</p>
+<p>Typically unit testing can be integrated seamlessly into the fpm(1) subcommand "test" making unit testing from github/gitlab CD/CI utilities as simple as "fpm test" in many cases.</p>
+<h3 id="basic-timing-is-included">BASIC TIMING IS INCLUDED</h3>
+<p>As well as the expected **pass/fail/skipped unit testing** report. basic **timing information** can be produced by the unit testing module M_framework__verify(3f).</p>
+<h3 id="hooks-are-provided-to-external-local-applications">HOOKS ARE PROVIDED TO EXTERNAL LOCAL APPLICATIONS</h3>
+<p>M_framework(3f) comes with a unique hook that allows calling your own programs to integrate with local logging tools, report generators, spreadsheets or other local infrastructure. The example program "bookkeeper" is included that uses the hook to write example report data files:</p>
+<pre><code> + [CSV](https://urbanjost.github.io/M_framework/bookkeeper.csv),
+ + [HTML](https://urbanjost.github.io/M_framework/bookkeeper.html)
+ + [NAMELIST](https://urbanjost.github.io/M_framework/bookkeeper.nml)
+</code></pre>
+<p>The hook can call any local program with an interface similar to "bookkeeper". This allows modifying the program for local needs such as sending e-mail alerts and so on without having to change the tests.</p>
+<pre><code>  MESSAGES CAN BE COMPOSED ALMOST LIKE LIST-DIRECTED I/O
+</code></pre>
+<p>Messages can be composed of up to twenty scalar intrinsic variables, allowing freedom in writing messages akin to that of list-directed I/O; but simultaneously to a list of output units. This easily lets messages go to stdout or stderr and a file of the user's choosing as well. Output can even be sent to a scratch file, essentially creating a quiet mode.</p>
+<pre><code>   DESIGNED FOR INTEGRATION WITH FPM(1)
+</code></pre>
+<p>In conjunction with fpm(1) it is easy to run the tests with the <strong>--runner</strong> option, allowing for integration with other utilities as well such as the GNU debugger gdb(1), valgrind(1), and other tools.</p>
+<h3 id="programs-included-to-generate-skeleton-test-program">PROGRAMS INCLUDED TO GENERATE SKELETON TEST PROGRAM</h3>
+<p>Example programs are provided to create unit test skeleton programs to ease usage.</p>
+<pre><code>   EASILY USED WITH GITHUB CD/CI
+</code></pre>
+<p>Example CD/CI scripts that can be used with github are in the .github/ directory that assume your tests can by run by using "fpm test".</p>
+<h3 id="motivation">MOTIVATION</h3>
+<p>Including **unit testing** is strongly encouraged for any software package, but particularly when it is to be used in programming environments the package was not developed in.</p>
+<p>This is the typical case for public fpm(1) packages on github.</p>
+<p>Additionally the proposed rules for registered fpm(1) package repositories include requiring package candidates themselves only have external dependencies that are also registered repository packages ( of course wrappers of C libraries or other existing libraries cannot easily be conformed to this).</p>
+<p>As a result -- this project concentrates on tools for a procedural unit testing framework based on nothing but standard Fortran that specifically can be used as a remote fpm(1) dependency in fpm(1) packages that may reside in public github repositories.</p>
+<p>That is, it is designed to be integrated with the fpm(1) "test" subcommand as an external dependency. It is intended to have little or no other dependencies and ultimately become a registered fpm(1) package to aid in the development of the fpm(1) repository.</p>
+<p>That being said, it can be used standalone as well.</p>
+<h2 id="description-11">DESCRIPTION</h2>
+<p>Unit testing allows you to automatically confirm changes are acceptable so you can quickly and confidently make and release changes. But many of the operations required for testing are useful generically. So this project is broken down into small general-purpose modules and one unit-testing-specific one.</p>
+<p>M_framework(3f) is composed of the following individual modules:</p>
+<pre><code> + **M\_framework__msg** is a small module that in particular
+   can convert a list of variables of any of the common default types
+   to a string.
+
+   It performs low-level operations that are often used by other larger
+   modules so it is its own module to prevent circular dependencies.
+
+ + **M\_framework__journal__** allows for creating log and journal files
+
+ + **M\_framework__approx** contains routines for rounding and comparing
+   floating-point values.
+
+ + **M\_framework__help** provides for creating a standard simple
+   interactive help facility
+
+ + **M\_framework__verify** is at the heart of the collection and
+   handles virtually all the unit-test-specific operations.
+</code></pre>
+<p>The procedures can be used in a variety of ways. After using them for a long time my typical usage has changed completely several times.</p>
+<p>As part of private software there was little problem calling the procedures directly from within the modules where they resided; and even auto-detecting the routines (a naming convention of "test\_suite\_$NAME" was used). The routines were pre-installed on virtually all platforms so using them was no more a burden than say, calling an intrinsic.</p>
+<p>Put autodetecting tools (at least the ones employed) are not generally portable; and with public packages there is a strong incentive to minimize the amount of infrastructure and external dependencies. It is generally imperative to make package use as simple and generic as possible.</p>
+<p>So the suggested scheme is to create a small test program for each procedure or closely related procedures in the fpm test/ directory.</p>
+<pre><code> + make a subroutine for each component to be tested
+ + in each test procedure start it with a call to UNIT\_CHECK\_START(3f)
+ + end each test procedure it with a call to UNIT\_CHECK\_END(3f)
+ + make multiple calls to UNIT\_CHECK(3f) in-between to generate
+   test results
+ + call each of those test routines from the main program
+ + end the main program with a call to UNIT\_CHECK\_STOP(3f)
+</code></pre>
+<p>Optionally, before starting set preferred non-default modes.</p>
+<p>Use the 'fpm test' command to run specific tests; all tests (the default); a list of tests or test names using simple globbing.</p>
+<p>As desired, command line options can be used to control various test behaviors.</p>
+<p>As an example, we can create a skeleton program to test a few routines. Using</p>
+<pre><code>     fpm test_suite sqrt cos sin &gt; test/test_suite.f90
+</code></pre>
+<p>to create the skeleton program and then adding a few actual calls to unit\_test\_check(3f) results in</p>
+<pre><code>  Sample program:
+
+   program M_test_suite_M_intrinsics
+   use,intrinsic :: iso_fortran_env, only : &amp;
+   &amp; stderr=&gt;ERROR_UNIT, stdin=&gt;INPUT_UNIT, stdout=&gt;OUTPUT_UNIT
+   !
+   use M_framework, only : unit_test_start,unit_test,unit_test_end, &amp;
+                    unit_test_mode, unit_test_level, unit_test_stop
+   use M_framework, only : CHECK_PREFIX ! change column one of messages
+   !
+   !use M_mymodule ! load any modules you will be testing
+   implicit none
+   double precision,allocatable :: expected(:), answers(:), input(:)
+   double precision,parameter :: PI=atan(1.0d0)*4
+   !! setup
+      !---------------------------------------------------
+      !OPTIONAL:
+      !  values used in prefix column for various messages
+      !  the default is to set them all to the basename of
+      !  the executable running tests, but they can be
+      !  altered. For example:
+      CHECK_PREFIX=prefix(                  &amp;
+       check_MSG    =  &#39;check_msg:   &#39;, &amp;
+       check        =  &#39;check:       &#39;, &amp;
+       check_START  =  &#39;check_start: &#39;, &amp;
+       check_STOP   =  &#39;check_stop:  &#39;, &amp;
+       check_END    =  &#39;check_end:   &#39;  &amp;
+      )
+      !---------------------------------------------------
+      !OPTIONAL:
+      ! the options available at run-time on the command
+      ! line can have their defaults selected. See the
+      ! man-page for the procedure for details.
+      call unit_check_mode(
+        ( keep_going=.true. ,
+        flags=[character(len=0) ::],
+        luns=[stdout],
+        command, &amp;
+        brief=.false. ,
+        interactive=.false. ,
+        CMDLINE=&#39;&#39;,
+        debug=.false. ,
+        match
+        )
+      !---------------------------------------------------
+   !! test each subroutine
+      call test_sqrt()
+      call test_cos()
+      call test_sin()
+   !! teardown
+      call unit_test_stop()
+   contains
+   subroutine test_sqrt()
+   integer :: i
+      call unit_test_start(&#39;sqrt&#39;,msg=&#39;calculate the square root&#39;)
+      input   =[1.0d0,4.0d0,9.0d0]
+      expected=[1.0d0,2.0d0,3.0d0]
+      answers=[(sqrt(input(i)),i=1,size(input))]
+      call unit_test(&#39;sqrt&#39;, all(expected.eq.answers),&amp;
+         &amp; &#39;check table of values&#39;)
+      call unit_test(&#39;sqrt&#39;, sqrt(25.0d0).eq.5.0d0,&amp;
+         &amp; &#39;got&#39;,sqrt(25.0d0),&#39;expected&#39;,5.0d0)
+      call unit_test_end(&#39;sqrt&#39;,msg=&#39;&#39;)
+   end subroutine test_sqrt
+
+   subroutine test_sin()
+      call unit_test_start(&#39;sin&#39;,msg=&#39;calculate the sine of a value&#39;)
+      call unit_test_end(&#39;sin&#39;,msg=&#39;&#39;)
+   end subroutine test_sin
+
+   subroutine test_cos()
+      call unit_test_start(&#39;cos&#39;,msg=&#39;calculate the cosine of a value&#39;)
+      call unit_test_end(&#39;cos&#39;,msg=&#39;&#39;)
+   end subroutine test_cos
+
+   end program M_test_suite_M_intrinsics
+</code></pre>
+<p>The output now looks like this (note if no calls to unit\_test routines are made between unit_test_start(3f) and unit_test_end(3f) the procedure gets an "UNTESTED" entry to remind you to make some tests ..).</p>
+<pre><code>   &gt; check:       sqrt   SUCCESS : check table of values
+   &gt; check:       sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
+   &gt; check_end:   sqrt   PASSED  : GOOD:        2 BAD:        0 DURATION:00000000012000:
+   &gt; check_end:   cos    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+   &gt; check_end:   sin    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+   &gt; check_stop:  TALLY  PASSED  : GOOD:        2 BAD:        0 DURATION:00000000000000
+   &gt; STOP 0
+</code></pre>
+<p>this is a model that works particularly well for basic numeric procedures.</p>
+<p>Now it is just a matter of adding more calls to unit\_test(3f). This is where procedures from the other modules become useful, as they provide methods for comparing float values, for example. Since Fortran has many powerful masking intrinsics usually just the unit\_test(3f) procedure is required. In particular, be familiar with the ALL(3f), ANY(3f), and PACK(3f) procedures.</p>
+<p>There are options to call a system command and use the initial string as options, to interactively pause after each check, and to change options like which output file to write on, what error level to use, and other things I will hopefully solidify and document here.</p>
+<h3 id="recommended-basic-usage">RECOMMENDED BASIC USAGE</h3>
+<p>So for an fpm(1) user a recommended process is to create and/or enter the test/ directory and use the "unit\_test" program. It will make a test program called "unit\_test\_$NAME.f90" for each name given on the command line.</p>
+<p>There is a case made for closely related groups of procedures to share a single test file that will be made a little bit later. For that, the command "test\_suite" is used instead of "unit\_test".</p>
+<p>For now lets assume we have or plan to have the procedures "a","b", and "c" in our package, and that we want to create a test for each ( and that unit\_test(1) has been installed in your path):</p>
+<pre><code>    cd $TOP_OF_FPM_PACKAGE
+    cd test
+    unit_test a b c
+</code></pre>
+<p>If you then run "fpm test" the skeleton should run indicating the procedures are not tested. Change the routines to actually call the "unit\_test" procedure and you have the beginnings of a unit test for your procedures.</p>
+<p>The "unit\_test(3f)" procedure in its simplest form takes a string that is usually the procedure name and a logical expression, along with up to twenty completely optional intrinsic scalar values which will be used to create an optional message.</p>
+<p>The example programs also contain a placeholder call to unit\_test\_mode(3f).</p>
+<h3 id="procedural-and-command-line-mode-options">PROCEDURAL AND COMMAND LINE MODE OPTIONS</h3>
+<p>The dummy skeleton routines all start with a call to unix\_check\_mode(3f). Its documentation describes a few default modes you can change with the routine. Essentially the same options are available on the command line of the test program(s) as well.</p>
+<pre><code>    # options may be specified in NAMELIST input format with no
+    # extraneous spaces on the command line
+    fpm test -- flags=100,200,300 keep_going=T
+    # a little more Unix-like or MSWindows-like syntax is allowed, as
+    # these are equivalent to the original command ```
+    fpm test -- --flags=100,200,300 --keep_going
+    fpm test -- /flags=100,200,300 /keep_going=T
+</code></pre>
+<p>M_framework(3f) uses a built-in command line parser instead of packages like M\_CLI or M\_CLI2 to minimize the number of dependencies required.</p>
+<h3 id="suggest-one-test-per-program">SUGGEST ONE TEST PER PROGRAM</h3>
+<p>There are advantages to each procedure being tested with a separate program.</p>
+<p>A large number of individual test programs works well with fpm(1). fpm defaults to running all the tests, but can execute subgroups easily because it can execute a list of tests and the names can use simple globbing.</p>
+<p>If you autogenerate a list of procedure names to test and call the sample program "unit_test" with the names of the procedures it will generate new names but skip existing files; allowing for a simple form of auto-generation assuming you have a way of listing all the procedure names to test.</p>
+<p>individual procedure tests can be deleted or added or moved easily when each is in its own file.</p>
+<p>It is easier to test with debuggers and other tools like gdb and valgrind on small units.</p>
+<p>This is true with other tools that you can use with <strong>--runner</strong> as well. See "fpm help runner" or "fpm manual \&gt;manual.txt" for more information.</p>
+<h3 id="testing-many-procedures-in-a-single-file">TESTING MANY PROCEDURES IN A SINGLE FILE</h3>
+<p>If it is preferred, one program can test multiple procedures. The main disadvantage is that the complete test suite is always run unless conditional coding is added. One of the uses of the unit\_test\_flags(:) array is to allow integer values to be passed at execution time that can be tested to provide such conditional testing. When many tests are in one file the unit_test_start(3f) procedure includes a "matched" argument which can detect if a simple globbing expression that can be given on the command line matches the string composed of the test name and message. This allows you to optionally select specific groups of tests from a set.</p>
+<h2 id="unique-features">UNIQUE FEATURES</h2>
+<h3 id="calling-an-external-program">CALLING AN EXTERNAL PROGRAM</h3>
+<p>A unique feature of the M\_framework(3f) test harness is a hook to call a custom program. You can ignore it is there, but it is a very powerful feature if you want to do bookkeeping on the test results or enter the results into a tracking tool. This allows you a way to sent alerts if something fails in automated tests, to create spreadsheets with the test results, to retain results in a database or SQLite3 file, or make a custom tool to convert the data to something else like TAP (Test Anywhere Protocol) reports.</p>
+<p>An example program called "bookkeeper" is included that shows how to parse the information passed to the program that generates several files:</p>
+<pre><code>   + bookkeeper.csv
+   + bookkeeper.html
+   + bookkeeper.nml
+   + bookkeeper\_clicks.csv
+</code></pre>
+<p>To use the defaults you simply enter</p>
+<pre><code>    fpm test -- command=bookkeeper
+</code></pre>
+<p>The CSV files can typically be read directly into a spreadsheet program.</p>
+<p>They can also be read using the SQLite3 tool. This is very powerful, letting you use SQL to select specific data, generate reports, and convert the subsequent results to HTML, CSV, flat text and other formats.</p>
+<p>The NAMELIST output file is essentially a record of the harness calls using the standardized NAMELIST format that is almost trivial to read in with a custom Fortran program. This might be considered a metafile format for a test run. You can replay the data and do whatever you want with it including generating alternate output file types; plotting timing data and so on.</p>
+<p>The HTML file is handy for importing into word processors or viewing via browsers. Example output files from an fpm(1) package that uses M_framemaker illustrate the different types of output that can be generated.</p>
+<ul class="incremental">
+<li><p>[CSV](<a href="https://urbanjost.github.io/M\_framework/bookkeeper.csv">https://urbanjost.github.io/M\_framework/bookkeeper.csv</a>). Generally. comma-separated files can be read directly into spreadsheet programs, sqlite3, and several common databases.</p></li>
+<li><p>[CSV runtimes](<a href="https://urbanjost.github.io/M\_framework/bookkeeper\_clicks.csv">https://urbanjost.github.io/M\_framework/bookkeeper\_clicks.csv</a>) Another CSV file that is a record of the runtimes between a unit test start and end.</p></li>
+<li><p>[HTML](<a href="https://urbanjost.github.io/M\_framework/bookkeeper.html">https://urbanjost.github.io/M\_framework/bookkeeper.html</a>) An example of a formatted report that can be displayed in a browser.</p></li>
+<li><p>[NAMELIST](<a href="https://urbanjost.github.io/M\_framework/bookkeeper.nml">https://urbanjost.github.io/M\_framework/bookkeeper.nml</a>). Essentially this is a metafile that records the unit test calls. It is very easy for a custom Fortran program to read back a NAMELIST file and generate custom outputs instead of modifying bookkeeper(1).</p></li>
+</ul>
+<p>The bookkeeper(1) program is an example program that is expected to be customized. It provides for parsing the parameters passed to a M_framemaker external program.</p>
+<pre><code>    IMPORTING INTO SQLLITE3
+</code></pre>
+<p>Here is an example SQLite3 Tool input file that if placed in "test.sql" can be run with</p>
+<pre><code>     sqlite3 -batch -init test.sql bookkeeper.db .quit
+</code></pre>
+<p>if you have sqlite3(1) installed.</p>
+<pre><code>   .mode csv
+   .import bookkeeper.csv unit_check
+   .schema unit_check
+   ---
+   --- show all data to show it worked
+   SELECT * FROM unit_check;
+   ---
+   --- example lists unique names
+   SELECT name FROM unit_check GROUP BY name ORDER BY name ;
+   ---
+   --- tally up passed, failed, skipped in a text table
+   .header on
+   .mode column unit_check
+   .width 64 9 9 9
+   SELECT name,
+   --- depending on SQL version a simpler IIF/IF, IFNULL, or TOTAL might be better but this works well
+   --- and is relatively &quot;standard&quot; as much as something like a standard is actually adhered to in
+   --- SQL-land.
+   CASE  sum( passed == &#39;passed&#39;  ) WHEN NULL THEN 0 ELSE sum ( passed == &#39;passed&#39;)  END  AS &#39;ok&#39;,
+   CASE  sum( passed == &#39;failed&#39;  ) WHEN NULL THEN 0 ELSE sum ( passed == &#39;failed&#39;)  END  AS &#39;not ok&#39;,
+   CASE  sum( passed == &#39;skipped&#39; ) WHEN NULL THEN 0 ELSE sum ( passed == &#39;skipped&#39;) END  AS &#39;skip&#39;
+   FROM unit_check
+   --- WHERE condition
+   GROUP BY name
+   ORDER BY name ;
+   ---
+   --- If the table already exists, the sqlite3 tool uses all the rows,
+   --- including the first row, in the CSV file as the actual data to import.
+   --- Therefore, you should delete the first row of the CSV file with the
+   --- header labels if adding to an existing table instead of creating
+   DROP TABLE IF EXISTS unit_check;
+   --- CREATE TABLE unit_check(
+   ---   name   TEXT NOT NULL,
+   ---   date   DATE NOT NULL,
+   ---   passed TEXT NOT NULL,
+   ---   msg    TEXT
+   --- );
+</code></pre>
+<p>The last select generates a little tally table showing for all the runs in the input DataBaseFile the number of pass, fail, and skips of the test names. you could tally over a particular date range, only show failures, display the last test status, generating output in HTML or CSV or ``` See the SQLite3 Tool documentation for sqlite3(3f) for more information.</p>
+<pre><code>   name                                          ok         not ok     skip
+   --------------------------------------------  ---------  ---------  ---------
+   accdig                                        3          0          0
+   almost                                        24         0          0
+   flush_trail                                   0          0          3
+   in_margin                                     30         0          0
+   round                                         0          0          3
+   set_stdout_lun                                0          0          3
+   significant                                   15         1          2
+   unit_test                                     0          0          3
+   unit_test_bad                                 0          0          3
+   unit_test_end                                 0          0          3
+   unit_test_good                                0          0          3
+   unit_test_start                               0          0          6
+   unit_test_stop                                0          0          3
+   where_write_message_all                       0          0          3
+   write_message_only                            4          2          4
+</code></pre>
+<h2 id="unique-features-1">UNIQUE FEATURES</h2>
+<p>fpm(1), gdb(1), and M\_framework(3f) work together</p>
+<p>It is easy to debug an individual test in a debugger. For example to run a test called "crash" with gdb(1) use</p>
+<pre><code>     fpm test --target crash --runner &quot;gdb -ex run --quiet&quot;
+</code></pre>
+<p>A more elaborate example passing arguments to M\_framework(3f) to change default behavior to for example write output to stdout instead of stderr and display compiler version and options and to run all the tests in the gdb(1) debugger (you can enter "q" after each test has run; or enter gdb commands at the prompt):</p>
+<pre><code>    &gt; fpm test --target &#39;*&#39; --verbose \
+    &gt; --runner &#39;gdb -ex &quot;list, 0&quot; -ex run --quiet --args&#39; \
+    &gt; -- flags=9997,9998,9999 luns=6 level=3
+</code></pre>
+<p>This is long enough that an alias or script would facilitate its use, with one changing it to use one's favorite options.</p>
+<pre><code>   EASILY CALLED BY STANDARDIZED CD/CI SCRIPTS
+</code></pre>
+<p>If a CD/CI github automated test script creates a Fortran environment including fpm and simply calls "fpm test" you can standardize your testing and use the same CD/CI scripts for any package. The testing framework is designed with just that scenario in mind.</p>
+<p>The .github subdirectory in M\_framework package contains examples of just such files that you can copy as-is into your fpm project. Activate test actions in your github repository after adding the .github directory and your package will be automatically tested on several different platforms by the scripts whenever a "push" to the repository occurs.</p>
+<p>------------------------------------------------------------------------------------------</p>
+<h2 id="supports-fpm">SUPPORTS FPM</h2>
+<p>The impatient can try this, assuming git(1) and fpm(1) are installed.</p>
+<p>Download the github repository and build it with fpm(1) and create a test fpm(1) project:</p>
+<pre><code>   #!/bin/bash
+   # first you need to install a few example programs
+   cd /tmp
+   git clone https://github.com/urbanjost/M_framework.git
+   cd M_framework
+   # install the &quot;unit_test&quot;, &quot;bookkeeper&quot;, and &quot;test_suite&quot;
+   # example programs; assuming the default install puts
+   # them in your path:
+   fpm install
+   # &quot;fpm help install&quot; describes how to customize where the
+   # programs are installed.
+   #
+   # go to your fpm package test/ directory.
+   # here, we will make one up
+   fpm new /tmp/tryit  # create test project
+   cd /tmp/tryit/test
+   # so lets say you plan on adding procedures &quot;a&quot;,&quot;b&quot;,and &quot;c&quot; to your src/tryit.f90
+   # project code. Set up individual skeleton tests for each procedure.
+   unit_test a b c                         # a file for each test
+   test_suite a b c &gt; test_suite_tryit.f90 # or a single file
+   cd ..  # go to the top of the project
+   # add M_framework to the developer dependencies
+   cat &gt;&gt; fpm.toml &lt;&lt;\EOF
+   [dev-dependencies]
+   M_framework    = { git = &quot;https://github.com/urbanjost/M_framework.git&quot; }
+</code></pre>
+<h3 id="eof">EOF</h3>
+<p># # test the package fpm test # if will say the procedures are untested. Put real calls # in to unit_test(3f) and see how the default report # changes # # so now to run the default tests is as simple as fpm test # run just one test fpm test unit_test_a # run tests using globbing; eg. all tests beginning with "unit\_" fpm test 'unit_*' # display help on the interactive command options fpm test -- <strong>--help</strong></p>
+<p># you can pass parameters and/or change the unit_test_mode(3f) # calls to change some of the test behavior</p>
+<p>So once you want to use this on your own projects, you would normally just add M\_framework(3f) as a developer dependency in your fpm.toml project file and start making tests that call M\_framework(3f).</p>
+<blockquote>
+<p>The optional programs demonstrated ("unit\_test", "test\_suite") are just simple stand-alone programs that make skeleton programs to run tests that you can customize (and rename too to avoid confusion).</p>
+<pre><code>   # some useful things to try. Check out the man-pages for all the unit_test_*(3f)
+   # procedures.
+   # Then look at
+   unit_test --help
+   fpm test -- help
+   # run the demo bookkeeper script
+   fpm test -- command=bookkeeper
+   # and look at the bookkeeper*.* files in the top of the project
+</code></pre>
+</blockquote>
+<h2 id="documentation">DOCUMENTATION</h2>
+<h3 id="user">USER</h3>
+<ul>
+<li><p>An [index](<a href="https://urbanjost.github.io/M\_framework/man3.html">https://urbanjost.github.io/M\_framework/man3.html</a>) to HTML versions of the manpages</p></li>
+<li><p>single pages that uses javascript to combine all the HTML descriptions of the man-pages is at</p>
+<ul>
+<li><p>[BOOK_M_framework__verify](<a href="https://urbanjost.github.io/M\_framework/BOOK\_M\_framework\_\_verify.html">https://urbanjost.github.io/M\_framework/BOOK\_M\_framework\_\_verify.html</a>)</p></li>
+<li><p>[BOOK_M_framework__approx](<a href="https://urbanjost.github.io/M\_framework/BOOK\_M\_framework\_\_approx.html">https://urbanjost.github.io/M\_framework/BOOK\_M\_framework\_\_approx.html</a>)</p></li>
+<li><p>[BOOK_M_framework__journal](<a href="https://urbanjost.github.io/M\_framework/BOOK\_M\_framework\_\_journal.html">https://urbanjost.github.io/M\_framework/BOOK\_M\_framework\_\_journal.html</a>)</p></li>
+<li><p>[BOOK_M_framework__msg](<a href="https://urbanjost.github.io/M\_framework/BOOK\_M\_framework\_\_msg.html">https://urbanjost.github.io/M\_framework/BOOK\_M\_framework\_\_msg.html</a>)</p></li>
+</ul></li>
+<li><p>man-pages in</p>
+<ul>
+<li><p>[manpages.zip](<a href="https://urbanjost.github.io/M\_framework/manpages.zip">https://urbanjost.github.io/M\_framework/manpages.zip</a>)</p></li>
+<li><p>[manpages.tgz](<a href="https://urbanjost.github.io/M\_framework/manpages.tgz">https://urbanjost.github.io/M\_framework/manpages.tgz</a>)</p></li>
+</ul></li>
+</ul>
+<h3 id="developer">DEVELOPER</h3>
+<ul>
+<li><p>[ford-generated developers' document](<a href="https://urbanjost.github.io/M\_framework/fpm-ford/index.html">https://urbanjost.github.io/M\_framework/fpm-ford/index.html</a>)</p></li>
+<li><p>[github action status](docs/STATUS.md)</p></li>
+</ul>
+<h2 id="additional-directory-descriptions">ADDITIONAL DIRECTORY DESCRIPTIONS</h2>
+<ul>
+<li><p>src/ is where the source for the M_framework(3f) module code resides</p></li>
+<li><p>docs/ contains HTML documentation and the manpage archives</p></li>
+<li><p>test/ contains simple test programs</p></li>
+<li><p>example/ has demos</p></li>
+</ul>
+<h2 id="references-1">REFERENCES</h2>
+<ul>
+<li><p>See the .github directory in [easy](<a href="https://github.com/urbanjost/easy">https://github.com/urbanjost/easy</a>)</p></li>
+<li><p>for examples of CD/CI scripts that assume your package can be tested with an "fpm test" command.</p></li>
+<li><p>examples that use M_framework in github fpm packages:</p>
+<ul>
+<li><p>[M_strings](<a href="https://github.com/urbanjost/M\_strings">https://github.com/urbanjost/M\_strings</a>)</p></li>
+<li><p>[M_process](<a href="https://github.com/urbanjost/M\_process">https://github.com/urbanjost/M\_process</a>)</p></li>
+</ul></li>
+</ul>
+<p>These packages used a different reincarnation of the testing harness and are in the process of being changed to use M_framework(3f) more appropriately, but still contain some useful examples.</p>
+<ul>
+<li><p>[Fortran Package Manager](<a href="https://github.com/fortran-lang/fpm">https://github.com/fortran-lang/fpm</a>)</p></li>
+<li><p>[fpm(1) registry](<a href="https://github.com/fortran-lang/fpm-registry">https://github.com/fortran-lang/fpm-registry</a>)</p></li>
+<li><p>[Fortran Wiki: unit testing list](<a href="https://fortranwiki.org/fortran/show/Unit+testing+frameworks">https://fortranwiki.org/fortran/show/Unit+testing+frameworks</a>)</p></li>
+<li><p>[ford(1)](<a href="https://politicalphysicist.github.io/ford-fortran-documentation.html">https://politicalphysicist.github.io/ford-fortran-documentation.html</a>) for generating documentation for your projects</p></li>
+</ul>
+<h3 id="note">NOTE</h3>
+<p>M_framework(3f) is subject to interface changes so the generally recommended practice of using a specific commit when using it an an external fpm(1) dependency is highly encouraged.</p>
+<p>Any feedback (features, performance, ease of use, ```) is appreciated, particularly in the ongoing development phase.</p>
+<h2 id="quote">QUOTE</h2>
+<p>Do not let your victories go to your head, nor let your failures go to your heart.</p>
+<h2 id="author-8">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-9">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-12" class="slide section level1">
+<h1>NAME</h1>
+<p>M_framework__attr(3f) - [M_framework__attr::INTRO] control text attributes on terminals (LICENSE:MIT)</p>
+<h2 id="synopsis-12">SYNOPSIS</h2>
+<p>use M_framework__attr, only : attr, attr_mode, attr_update</p>
+<h2 id="description-12">DESCRIPTION</h2>
+<p>M_framework__attr(3f) is a Fortran module that uses common ANSI escape sequences to control terminal text attributes.</p>
+<pre><code>        use M_framework__attr
+        write(*,*)attr(&#39;&lt;red&gt;Red Text!&lt;/red&gt; &lt;green&gt;Green Text!&lt;/green&gt;&#39;)
+        end
+</code></pre>
+<p>It is designed to use three simple procedures to</p>
+<pre><code>    + Specify attributes using simple HTML-like syntax
+    + allow the sequences to be suppressed when desired
+    + permit the  user program to completely customize the keywords.
+      The user can add, delete and replace the sequences associated with
+      a keyword without changing the code.
+</code></pre>
+<p>One advantage of the approach of using formatting directives which are replaced with in-band escape sequences is that it is easy to turn off when running batch.</p>
+<p>Another important capability is that programs can be run in "raw" mode and create a simple text file with the formatting directives in it that can then be read back in by a simple filter program that strips it back to plain text( see app/plain.f90), or displays it to a screen in color(see app/light.f90) or perhaps converts it to another format.</p>
+<p>So this approach makes it trivial to read specially-formatted data from a file like a message catalog (perhaps with various versions in different languages) and colorize it or display it as plain text</p>
+<p>By making each line self-contained (by default) lines can be filtered by external utilities and still display correctly.</p>
+<h2 id="access">ACCESS</h2>
+<p>Via git(1):</p>
+<pre><code>       git clone https://github.com/urbanjost/M_framework__attr.git
+       cd M_framework__attr/src
+       # change Makefile if not using one of the listed compilers
+       make clean; make gfortran    # for gfortran
+       make clean; make ifort       # for ifort
+       make clean; make nvfortran   # for nvfortran
+</code></pre>
+<p>This will compile the M_framework__attr module and example programs.</p>
+<p>Alternatively, via fpm (see <a href="https://github.com/fortran-lang/fpm">https://github.com/fortran-lang/fpm</a>):</p>
+<pre><code>        git clone https://github.com/urbanjost/M_framework__attr.git
+</code></pre>
+<p>or just list it as a dependency in your fpm.toml project file.</p>
+<pre><code>        [dependencies]
+        M_framework__attr = { git = &quot;https://github.com/urbanjost/M_framework__attr.git&quot; }
+</code></pre>
+<h2 id="limitations-1">LIMITATIONS</h2>
+<ul>
+<li><p>colors are not nestable.</p></li>
+<li><p>keywords are case-sensitive,</p></li>
+<li><p>ANSI escape sequences are not universally supported by all terminal emulators; and normally should be suppressed when not going to a tty device. Therefore, you should use M_system::system_istty(3f) or the common Fortran extension ISATTY() to set the default to "plain" instead of "color" when the output file is not a conforming terminal. On basic MSWindows console windows, it is best to use Windows 10+ and/or the Linux mode; you may have to enable ANSI escape sequence mode on MSWindows. It does work as-is with CygWin and MinGW and Putty windows and mintty(1) as tested.</p></li>
+</ul>
+<h2 id="examples-11">EXAMPLES</h2>
+<p>Sample program</p>
+<pre><code>    program demo_M_framework__attr
+    use M_framework__attr, only : attr, attr_mode, attr_update
+    implicit none
+    character(len=256) :: line
+    character(len=*),parameter :: f=&#39;( &amp;
+     &amp;&quot;   &lt;bo&gt;&lt;w&gt;&lt;G&gt; GREAT: &lt;/G&gt;&lt;/w&gt;&amp;
+     &amp;The new value &lt;Y&gt;&lt;b&gt;&quot;,f8.4,1x,&quot;&lt;/b&gt;&lt;/Y&gt; is in range&quot;&amp;
+     &amp;)&#39;
+    real :: value
+
+       write(*,&#39;(a)&#39;)&amp;
+       &amp;attr(&#39;   &lt;r&gt;&lt;W&gt;&lt;bo&gt; ERROR: &lt;/W&gt;red text on a white background&lt;/y&gt;&#39;)
+
+       value=3.4567
+       write(line,fmt=f) value
+       write(*,&#39;(a)&#39;)attr(trim(line))
+
+       ! write same string as plain text
+       write(*,*)
+       call attr_mode(manner=&#39;plain&#39;)
+       write(*,&#39;(a)&#39;)attr(trim(line))
+
+       call attr_mode(manner=&#39;color&#39;)
+       ! use pre-defined or user defined strings
+       write(*,*)
+       write(*,&#39;(a)&#39;)attr(&#39;&lt;ERROR&gt; Woe is nigh.&#39;)
+       write(*,&#39;(a)&#39;)attr(&#39;&lt;WARNING&gt; The night is young.&#39;)
+       write(*,&#39;(a)&#39;)attr(&#39;&lt;INFO&gt; It is Monday&#39;)
+
+       ! create a custom mnemonic
+       call attr_update(&#39;MYERROR&#39;,attr(&amp;
+       &#39; &lt;R&gt;&lt;e&gt; E&lt;w&gt;-&lt;e&gt;R&lt;w&gt;-&lt;e&gt;R&lt;w&gt;-&lt;e&gt;O&lt;w&gt;-&lt;e&gt;R: &lt;/e&gt;&lt;/R&gt;&lt;/bo&gt;&#39;&amp;
+       ))
+       write(*,*)
+       write(*,&#39;(a)&#39;)attr(&#39;&lt;MYERROR&gt; my custom message style&#39;)
+
+    end program demo_M_framework__attr
+</code></pre>
+<h2 id="author-9">AUTHOR</h2>
+<p>John S. Urban, 2021</p>
+<h2 id="license-10">LICENSE</h2>
+<h3 id="mit-3">MIT</h3>
+<h2 id="see-also-2">SEE ALSO</h2>
+<p>attr(3f), attr_mode(3f), attr_update(3f)</p>
+<p>Related information:</p>
+<pre><code>    terminfo(3c), termlib(3c), tput(1), reset(1), clear(1),
+    console_codes(4), ECMA-48,
+    https://en.wikipedia.org/wiki/ANSI_escape_code
+</code></pre>
+</div>
+<div id="name-13" class="slide section level1">
+<h1>NAME</h1>
+<p>M_framework__journal(3fm) - [M_framework__journal::INTRO] write program messages to stdout and/or a log file (LICENSE:PD)</p>
+<h2 id="synopsis-13">SYNOPSIS</h2>
+<p>use, M_framework__journal , only : journal</p>
+<h2 id="description-13">DESCRIPTION</h2>
+<p>For large interactive programs in particular it is useful if all messages go thru a JOURNAL(3f) call. This makes it easy to write messages to a log file as well as standard output; to toggle time prefixes on and off; to turn on and off debug-mode messages; control output paging and create replayable input journals.</p>
+<p>The primary use of JOURNAL(3f) is to create journal files for interactive programs that</p>
+<pre><code>       + provide various levels of verbosity on demand, often for
+         debugging purposes.
+       + can be replayed even when interactive input was provided
+       + and/or be used to verify program executions
+</code></pre>
+<p>Typically, you would echo what the user typed to the trail file as-is, and write output you write to stdout as comments to the trail file so that the trail file can easily be read back in (by ignoring comments).</p>
+<p>Even though there is essentially one procedure (journal(3f) calls that are more than just a single message have an action specified as the first parameter. This action might specify to open a log file, to change the "level" required by messages for them to appear, whether output it written as a comment or not, and on what files the output should appear. So the interface can be used in a very simple manner but has more options than is evident at first glance, as detailed in the man-page for journal(3f).</p>
+<p>to stdout is written with WHERE='SC' in the JOURNAL(3f) call.</p>
+<pre><code>    &gt;      :
+    &gt;      :
+    &gt; call journal(&#39;O&#39;,&#39;my_trail_file&#39;)  ! open trail file
+    &gt; ! write output to stdout as-is and as comment to trail file
+    &gt; call journal(output)
+    &gt; ! echo message to trail/log file only
+    &gt; call journal(&#39;T&#39;,userline)
+    &gt; ! write to stdout as-is and trail as a comment.
+    &gt; ! up to twenty scalar values of any intrinsic type are allowed
+    &gt; call journal(&#39;SC&#39;,&#39;i1=&#39;,i1,&#39;i2=&#39;,i2,&#39;i3=&#39;,i3)
+    &gt; ! for more complex messages you can build them with non-advancing
+    &gt; ! I/O journal calls, or build the message with internal writes
+    &gt; ! into a string and print that.
+
+      I=10
+      R=20.3
+      ! write to stdout and trail file without advancing I/O
+      call journal(&#39;+SC&#39;,&#39;I=&#39;,i)
+      ! write to stdout and trail file without advancing I/O
+      call journal(&#39;SC&#39;,&#39;AND R=&#39;,r)
+</code></pre>
+<p>writes to the trail file(s) are ignored unless a trail file was opened, but output continues to stdout by default.</p>
+<p>That is, destinations 'T' and 'C' are ignored unless a trail file has been requested, allowing journal to be used with programs that do not generate trails or journals.</p>
+<p>Note that with no parameters, the trail file is flushed.</p>
+<h2 id="examples-12">EXAMPLES</h2>
+<p>The man-page for journal(3f) describes all the options for the</p>
+<ul>
+<li><strong>action field WHERE.</strong><br />
+In addition to being used to generate a journal, the routine can be used for producing optional debug messages and timing information.</li>
+</ul>
+<p>Sample program for debug messages:</p>
+<pre><code>     program demo_journal
+     !! showing creating debug messages
+     use M_framework__journal, only : journal
+     implicit none
+     !! produces no output because trail is not on
+     call journal(&#39;D&#39;,&#39;*demo* DEBUG MESSAGE 001 IGNORED&#39;)
+     !! turn on debug messages
+     call journal(&#39;&gt;&#39;,&#39;debug on&#39;)
+     !! produces output on stdout because debug mode
+     !! is on but no named trail file
+     call journal(&#39;D&#39;,&#39;*demo* DEBUG MESSAGE 002 ON STDOUT&#39;)
+     !! open trail file
+     call journal(&#39;O&#39;,&#39;mytrail.txt&#39;)
+     !! debug messages now go to the trail file only
+     call journal(&#39;D&#39;,&#39;*demo* DEBUG MESSAGE 003 TO TRAIL&#39;)
+     !! or always to stdout and trail file only if on
+     call journal(&#39;DS&#39;,&#39;*demo* DEBUG MESSAGE 003 TO TRAIL&#39;)
+     !! close trail file so messages go only to stdout again
+     call journal(&#39;O&#39;,&#39;&#39;)
+     !! debug on stdout now
+     call journal(&#39;D&#39;,&#39;*demo* DEBUG MESSAGE 004 TO STDOUT&#39;)
+     !! turn off debug messages
+     call journal(&#39;&lt;&#39;,&#39;debug off&#39;)
+     !! back to no output from the next message
+     call journal(&#39;D&#39;,&#39;*demo* DEBUG MESSAGE 005 IGNORED&#39;)
+     end program demo_journal
+</code></pre>
+<p>Sample program for trail messages with optional timing information:</p>
+<pre><code>     program testit
+     use M_framework__journal,only : journal
+     implicit none
+     call journal(&#39;a single string A -should be on S&#39;)
+
+     ! add time prefix to output
+     call journal(&#39;%&#39;,&#39;%Y-%M-%DT%h:%m:%s.%x%u:%b&#39;)
+     !
+     call journal(&#39;a single string B -should be on S with prefix&#39;)
+     ! change to CPU time and number of calls prefix
+     call journal(&#39;%&#39;,&#39;CPU_TIME: %c:CALLS: %C: %b&#39;)
+     !
+     call journal(&#39;a single string B-1 -should be on S with prefix&#39;)
+     call journal(&#39;a single string B-2 -should be on S with prefix&#39;)
+     call journal(&#39;a single string B-3 -should be on S with prefix&#39;)
+     !  Other useful time formats:
+     !     %E -- Unix Epoch time
+     !     %e -- integer value of Unix Epoch time
+     !     %C -- number of times this format is used
+     !     %c -- CPU_time(3f) output
+     !     %S -- seconds since last use of this format
+     !     %k -- CPU time in seconds from system_clock
+     call journal(&#39;%&#39;,&#39;&#39;) ! turn off time prefix
+     !
+     call journal(&#39;a single string C -should be on S&#39;)
+     !
+     call journal(&#39;O&#39;,&#39;aaa.out&#39;) ! turn on trail file
+     call journal(&#39;a single string D -should be on SC&#39;)
+     call journal(&#39;a single string E -should be on SC&#39;)
+     call journal(&#39;a single string F -should be on SC&#39;)
+     call journal(&#39;O&#39;,&#39;&#39;) ! turn off trail file
+     !
+     call journal(&#39;a single string G -should be on S&#39;)
+     call journal(&#39;a single string H -should be on S&#39;)
+     call journal(&#39;a single string I -should be on S&#39;)
+
+     ! build one line of output with intrinsic scalar values added
+     call journal(&#39;+sc&#39;,&#39;APPEND:&#39;)
+     call journal(&#39;+sc&#39;,&#39; integer&#39;,         1234)
+     call journal(&#39;+sc&#39;,&#39; and real&#39;,        1234.5678)
+     call journal(&#39;+sc&#39;,&#39; and double&#39;,1234567890.123456d0)
+     call journal(&#39;+sc&#39;,&#39; and logical&#39;,    .true.)
+     call journal(&#39;sc&#39;,&#39;&#39;)
+     !
+     end program testit
+</code></pre>
+<h2 id="author-10">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-11">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-14" class="slide section level1">
+<h1>NAME</h1>
+<p>M_framework__verify(3f) - [M_framework__verify::INTRO] unit test framework (LICENSE:PD)</p>
+<h2 id="synopsis-14">SYNOPSIS</h2>
+<p>Module procedures</p>
+<pre><code>   use M_framework, only : unit_test, unit_test_start,    &amp;
+                           unit_test_end, unit_test_stop, &amp;
+                           unit_test_msg, unit_test_mode, &amp;
+                           unit_test_system,              &amp;
+                           unit_test_expected
+</code></pre>
+<p>Module values</p>
+<pre><code>   use M_framework, only : unit_test_level, unit_test_flags
+</code></pre>
+<h2 id="quote-1">QUOTE</h2>
+<p>Do not let your victories go to your head, nor let your failures go to your heart.</p>
+<h2 id="description-14">DESCRIPTION</h2>
+<p>The M_framework(3f) module is a collection of Fortran routines for supporting code development by providing logging, error processing, debugging, comparison and unit testing procedures.</p>
+<p>The M_framework__verify(3f) module specifically brings together a few procedures for creating unit testing. It ```</p>
+<ul class="incremental">
+<li><p>allows for a user-defined command to be called to collect results or produce mail alerts, or other custom bookkeeping operations.</p></li>
+<li><p>supports easily composing a message from up to twenty scalar intrinsic values and different strings</p></li>
+<li><p>allows stopping on failure or continuing</p></li>
+<li><p>provides for a non-zero exit code if any tests fail</p></li>
+<li><p>is designed for with integration with the fpm (Fortran Package Manager) "test" subcommand.</p></li>
+</ul>
+<p>If default modes need changed it can be done via the unit_test_mode(3f) procedure or as command line options.</p>
+<p>messages by default are writing to stderr, but may be written to any list of LUNs of preassigned or open files.</p>
+<h3 id="set-modes">SET MODES</h3>
+<p>Some of the most common options are</p>
+<pre><code>      call unit_test_mode(command,keep_going,level,luns=[K,L,M,N,```])
+
+       keep_going  logical variable that can be used to turn on or off
+                   program termination on errors.
+       luns        array of Fortran LUNs to write messages to
+       level       An integer that can be used to specify
+                   different debug levels
+       command     name of optional command to execute for a start,
+                   check, or finish.
+</code></pre>
+<h3 id="procedures">PROCEDURES</h3>
+<p>The unit test procedures are</p>
+<pre><code>      unit_test_start()     start tests of a procedure
+      unit_test()           report if expression is false or true
+                             and if .false. stop program when keep_going=.false.
+      unit_test_end()       ends test of a procedure
+      unit_test_msg()       write message
+      unit_test_stop()      stop program with exit value of 0 if no failures
+                             else with an exit value of 1
+      unit_test_system()    execute system command, recursively if requested.
+</code></pre>
+<p>The unit test short-cut procedures are</p>
+<pre><code>      unit_test_expected()  report if two values are equal
+</code></pre>
+<p>For custom unit testing reports, a command can be given that will be passed information on the command line in NAMELIST format.</p>
+<blockquote>
+<p>This command is generally a script that makes entries for each unit, perhaps in an SQLite data file for example.</p>
+<p>It might also send an email if a test fails in batch environments.</p>
+<p>It could also convert the information to CSV for use in spreadsheets, or generate an HTML report, for example.</p>
+<p>A sample command written in the bash(1) shell and using the sqlite3(1) command should be included in this distribution as an example.</p>
+<p>The flexibility introduced by calling an external script or program is that the command can be changed as desired without changing the test programs.</p>
+</blockquote>
+<h3 id="related-functions">RELATED FUNCTIONS</h3>
+<p>The routines in M_framework__verify(3f) are often combined with other small modules such as Comparisons of real values can be done with a tolerance with M_Compare_Float_Numbers(3f) and M_framework__approx(3f). M_hashkeys(3f) routines and various math and statistical routines can be helpful to quickly create unit tests.</p>
+<p>The intrinsics ANY(3f) and ALL(3f) are particularly useful in calls to unit_test(3f).</p>
+<h2 id="examples-13">EXAMPLES</h2>
+<p>Sample program</p>
+<pre><code>    !! program demo_M_framework__verify
+    module M_framework__verify_demo
+    private
+    public one ! some regular routine
+    public two ! some regular routine
+    contains
+
+    subroutine one(array)
+    integer,intent(out),allocatable :: array(:)
+       array=[21,51,14,45]
+    end subroutine one
+
+    subroutine two(array)
+    integer,intent(inout),allocatable :: array(:)
+       array=2*array
+    end subroutine two
+
+    end module M_framework__verify_demo
+
+    program demo_M_framework__verify
+    use M_framework, only: unit_test_start, unit_test,   &amp;
+        &amp; unit_test_end, unit_test_msg, unit_test_stop, &amp;
+        &amp; unit_test_system, unit_test_mode
+    use M_framework__verify_demo,   only: one, two
+    ! set-up
+    call unit_test_mode(command=&#39;&#39;,flags=[0],keep_going=.true.)
+    ! call a test procedure for each routine to test
+       call test_one()
+       call test_two()
+    ! tear-down
+    call unit_test_stop()
+    contains
+
+    subroutine test_one()
+    integer,allocatable :: results(:)
+    integer,parameter   :: expected(*)=[21,51,14,45]
+    call unit_test_start(&#39;one&#39;)
+    call one(results)
+    call unit_test(&#39;one&#39;,all(expected&gt;0), &amp;
+       &amp; &#39;testing if everyone greater than zero&#39;)
+    call unit_test(&#39;one&#39;,all(expected==results), &amp;
+       &amp; &#39;testing if all values are expected&#39;)
+    call unit_test_end(&#39;one&#39;,&#39;checks on &quot;one&quot; ended&#39;)
+    end subroutine test_one
+
+    subroutine test_two
+    integer,allocatable :: results(:)
+    integer,parameter   :: expected(*)=[2,20,200]
+    results=[1,10,100]
+    call two(results)
+    call unit_test_start(&#39;two&#39;,&#39;check procedure &quot;two&quot; &#39;)
+    call unit_test(&#39;two&#39;, all(expected == results) .and. &amp;
+       &amp; all(expected &gt; 0) .and. maxval(expected) &lt;201,msg=&#39;long expression&#39;)
+    call unit_test_end(&#39;two&#39;,&#39;checks on &quot;two&quot; ended&#39;)
+    end subroutine test_two
+
+    end program demo_M_framework__verify
+</code></pre>
+<p>Expected output:</p>
+<pre><code>   check_start: one   START   :
+   check:       one   SUCCESS : testing if everyone greater than zero
+   check:       one   SUCCESS : testing if all values are expected
+   check_end:   one   PASSED  : GOOD:  2 BAD:  0 DURATION:00000001
+   check_start: two   START   :
+   check:       two   SUCCESS : long expression
+   check_end:   two   PASSED  : GOOD:   1 BAD:  0 DURATION:00000000
+   check_stop:  TALLY PASSED  : GOOD:    3 BAD:  0 DURATION:00000001
+</code></pre>
+<h2 id="author-11">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-12">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-15" class="slide section level1">
+<h1>NAME</h1>
+<p>pdec(3f) - [M_framework__msg] write out string with ASCII decimal equivalent vertically under it (LICENSE:PD)</p>
+<h2 id="synopsis-15">SYNOPSIS</h2>
+<p>Usage:</p>
+<pre><code>    subroutine pdec(string)
+    character(len=*),intent(in) :: string
+</code></pre>
+<h2 id="description-15">DESCRIPTION</h2>
+<p>Given a string to print, PDEC() writes out the ASCII Decimal equivalent of the string directly underneath it. This can help you to locate unprintable characters or non-standard white-space such as a backspace character or tab character in input strings that your program could not interpret. On output, non-printable characters are replaced with a space, and trailing spaces are ignored.</p>
+<p>You read the numbers vertically.</p>
+<ol>
+<li><p>ignore trailing spaces</p></li>
+<li><p>print the character if it has an ADE of 32 on up</p></li>
+<li><p>print a space if it has an ADE of less than 32</p></li>
+<li><p>underneath each character print the ADE value vertically</p></li>
+</ol>
+<h2 id="examples-14">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>      program demo_pdec
+      use M_framework__msg, only : pdec
+      call pdec(&#39; ABCDEFG abcdefg    &#39;)
+      end program demo_pdec
+</code></pre>
+<p>would produce (notice trailing space is trimmed):</p>
+<pre><code>     &gt; ABCDEFG abcdefg
+     &gt;0000000000001111
+     &gt;3666667739990000
+     &gt;2567890127890123
+</code></pre>
+<h2 id="author-12">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-13">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-16" class="slide section level1">
+<h1>NAME</h1>
+<p>set(3f) - [M_msg] set scalars from an array (LICENSE:PD)</p>
+<h2 id="synopsis-16">SYNOPSIS</h2>
+<p>Syntax:</p>
+<pre><code>     function set(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9, &amp;
+     &amp; ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,gk)
+     class(*),intent(in)           :: g0
+     class(*),intent(out),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga
+     class(*),intent(out),optional  :: gb,gc,gd,ge,gf,gg,gh,gi,gj,gk
+</code></pre>
+<h2 id="description-16">DESCRIPTION</h2>
+<p>set(3f) sets up to twenty scalars to elements from an array.</p>
+<h2 id="options-10">OPTIONS</h2>
+<ul>
+<li><p><strong>g0(:)</strong><br />
+array to read values from. Can be of type INTEGER or REAL</p></li>
+<li><p><strong>g[1-9a-k]</strong><br />
+optional values to set to an array element. Can be of type INTEGER or REAL</p></li>
+</ul>
+<h2 id="examples-15">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_set
+   use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+   use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+   use M_framework__msg, only : set
+   implicit none
+   real(kind=real32)    :: a; namelist /all/a
+   real(kind=real64)    :: b; namelist /all/b
+   real(kind=real128)   :: c; namelist /all/c
+   integer(kind=int8)   :: i; namelist /all/i
+   integer(kind=int16)  :: j; namelist /all/j
+   integer(kind=int32)  :: k; namelist /all/k
+   integer(kind=int64)  :: l; namelist /all/l
+      call set([1,2,3,4,5,6,7],a,b,c,i,j,k,l)
+      write(*,nml=all)
+      call set(10,a)
+      call set(100,l)
+      write(*,nml=all)
+   end program demo_set
+</code></pre>
+<p>Results:</p>
+<pre><code>    &amp;ALL
+    A       =   1.000000    ,
+    B       =   2.00000000000000     ,
+    C       =   3.00000000000000000000000000000000      ,
+    I       =    4,
+    J       =      5,
+    K       =           6,
+    L       =                     7
+    /
+    &amp;ALL
+    A       =   10.00000    ,
+    B       =   2.00000000000000     ,
+    C       =   3.00000000000000000000000000000000      ,
+    I       =    4,
+    J       =      5,
+    K       =           6,
+    L       =                   100
+    /
+</code></pre>
+<h2 id="author-13">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-14">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-17" class="slide section level1">
+<h1>NAME</h1>
+<p>significant(3f) - [M_framework__approx] round val to specified number of significant digits</p>
+<h2 id="synopsis-17">SYNOPSIS</h2>
+<p>pure elemental function significant(val,digits,round)</p>
+<pre><code>     real,intent(in)                      :: val
+     integer,intent(in)                   :: digits
+     character(len=*),intent(in),optional :: round
+     real                                 :: significant
+</code></pre>
+<h2 id="description-17">DESCRIPTION</h2>
+<p>Round real value to specified number of significant digits</p>
+<h2 id="options-11">OPTIONS</h2>
+<ul>
+<li><p><strong>val</strong><br />
+value to round</p></li>
+<li><p><strong>digits</strong><br />
+number of significant digits to produce</p></li>
+<li><p><strong>round</strong><br />
+Use the round edit descriptor</p></li>
+</ul>
+<!-- end list -->
+
+<pre><code>          RU  UP : the value resulting from conversion shall be the
+                   smallest representable value that is greater than or
+                   equal to the original value
+          RD  DOWN : the value resulting from conversion shall be the
+                   largest representable value that is less than or
+                   equal to the original value
+          RZ  ZERO : the value resulting from conversion shall be the value
+                   closest to the original value and no greater in
+                   magnitude than the original value.
+          RN  NEAREST : modeis NEAREST,thevalueresulting from conversion
+                       shall be the closer of the two nearest
+                       representable values if one is closer than the
+                       other. If the two nearest representable values
+                       are equidistant from the original value, it is
+                       processor dependent which one of them is chosen.
+          RC  COMPATIBLE : the value resulting from conversion shall be
+                         the closer of the two nearest representable
+                         values or the value away from zero if halfway
+                         between them.
+          RP  PROCESSOR_DEFINED : rounding during conversion shall be
+                                  a processor-dependent default mode,
+                                  which may correspond to one of the
+                                  other modes.
+</code></pre>
+<h2 id="examples-16">EXAMPLES</h2>
+<p>Sample program</p>
+<pre><code>   program demo_significant
+   use M_framework__approx, only : significant
+   implicit none
+   integer :: i
+   real :: r, v
+   character(len=*),parameter :: g=&#39;(*(g0.7,1x))&#39;
+
+      write(*,g)significant([8765.43210,0.1234567890],5)
+
+      write(*,*)&#39;default:&#39;,1.23456789012345
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9])
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#39;RU&#39;),&#39;RU&#39;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#39;RD&#39;),&#39;RD&#39;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#39;RZ&#39;),&#39;RZ&#39;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#39;RN&#39;),&#39;RN&#39;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#39;RC&#39;),&#39;RC&#39;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#39;RP&#39;),&#39;RP&#39;
+   end program demo_significant
+</code></pre>
+<p>Results:</p>
+<pre><code>      &gt; 8765.400 .1234600
+      &gt;  default:   1.234568
+      &gt; 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ```
+      &gt; 1.234568 1.234568 1.234568
+      &gt; 2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 ```
+      &gt; 1.234568 1.234568 1.234568 RU
+      &gt; 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ```
+      &gt; 1.234567 1.234568 1.234568 RD
+      &gt; 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ```
+      &gt; 1.234567 1.234568 1.234568 RZ
+      &gt; 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ```
+      &gt; 1.234568 1.234568 1.234568 RN
+      &gt; 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ```
+      &gt; 1.234568 1.234568 1.234568 RC
+      &gt; 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ```
+      &gt; 1.234568 1.234568 1.234568 RP
+
+</code></pre>
+</div>
+<div id="name-18" class="slide section level1">
+<h1>NAME</h1>
+<p>stderr(3f) - [M_framework__msg] write message to stderr (LICENSE:PD)</p>
+<h2 id="synopsis-18">SYNOPSIS</h2>
+<p>subroutine stderr(msg,[generic(s)])</p>
+<pre><code>    class(*),intent(in),optional :: msg
+    class(*),intent(in),optional :: &amp;
+                    &amp; generic0,generic1,generic2,generic3,generic4
+    class(*),intent(in),optional :: &amp;
+                    &amp; generic5,generic6,generic7,generic8,generic9
+    class(*),intent(in),optional :: &amp;
+                    &amp; generica,genericb,genericc,genericd,generice
+    class(*),intent(in),optional :: &amp;
+                    &amp; genericf,genericg,generich,generici,genericj
+</code></pre>
+<h2 id="description-18">DESCRIPTION</h2>
+<p>STDERR(3f) writes a message to standard error using a standard</p>
+<ul>
+<li><strong>f2003 method.</strong><br />
+Up to twenty generic options are available.</li>
+</ul>
+<h2 id="options-12">OPTIONS</h2>
+<ul>
+<li><p><strong>msg</strong><br />
+- description to print</p></li>
+<li><p><strong>generic[0-j]</strong><br />
+- optional value to print the value of after the message. May be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.</p></li>
+</ul>
+<h2 id="examples-17">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_stderr
+   use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+   use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+   use,intrinsic :: iso_fortran_env, only : real=&gt; real32, integer=&gt; int32
+   use M_framework__msg, only: stderr
+   implicit none
+
+   call stderr(&#39;A simple message&#39;)
+   call stderr(&#39;error: RVALUE=&#39;,3.0/4.0)
+   call stderr(&#39;error: IVALUE=&#39;,123456789)
+   call stderr(&#39;error: LVALUE=&#39;,.true.)
+
+   SEVERAL: block
+   integer :: least=10, most=999, ival=-10
+   call stderr(&#39;error: value&#39;,ival, &amp;
+           &amp; &#39;should be between&#39;,least,&#39;and&#39;,most)
+   endblock SEVERAL
+
+   call stderr(&#39;real32  :&#39;,huge(0.0_real32),0.0_real32, &amp;
+           &amp; 12345.6789_real32,tiny(0.0_real32))
+   call stderr(&#39;real64  :&#39;,huge(0.0_real64),0.0_real64, &amp;
+           &amp; 12345.6789_real64,tiny(0.0_real64))
+   !#ifdef __NVCOMPILER
+   !#else
+   call stderr(&#39;real128 :&#39;,huge(0.0_real128),0.0_real128, &amp;
+           &amp; 12345.6789_real128,tiny(0.0_real128))
+   !#endif
+   call stderr(&#39;complex :&#39;,cmplx(huge(0.0_real),tiny(0.0_real)))
+
+   call stderr(&#39;error: program will now stop&#39;)
+   stop 1
+
+   end program demo_stderr
+</code></pre>
+<p>Results: A simple message error: RVALUE= 0.750000000 error: IVALUE= 123456789 error: LVALUE= T error: value <strong>-10</strong> should be between 10 and 999</p>
+<ul class="incremental">
+<li><p><strong>real32</strong><br />
+: 3.40282347E+38 ``` 0.00000000 ``` 12345.6787 ``` 1.17549435E-38</p></li>
+<li><p><strong>real64</strong><br />
+: 1.7976931348623157E+308 ``` 0.0000000000000000 ``` 12345.678900000001 ``` 2.2250738585072014E-308 real128 : 1.18973149535723176508575932662800702E+4932 ```</p>
+<ul class="incremental">
+<li><strong>0.00000000000000000000000000000000000</strong><br />
+``` 12345.6789000000000000000000000000002 ``` 3.36210314311209350626267781732175260E-4932 complex : (3.40282347E+38,1.17549435E-38) error: program will now stop STOP 1</li>
+</ul></li>
+</ul>
+<h2 id="author-14">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-15">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-19" class="slide section level1">
+<h1>NAME</h1>
+<p>str(3f) - [M_framework__msg] converts up to twenty standard scalar type values to a string (LICENSE:PD)</p>
+<h2 id="synopsis-19">SYNOPSIS</h2>
+<p>Syntax:</p>
+<pre><code>     pure function str(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&amp;
+                     &amp; ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep,if)
+     class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
+     class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+     logical,intent(in),optional          :: if
+     character(len=*),intent(in),optional :: sep
+     character,len=(:),allocatable        :: str
+</code></pre>
+<h2 id="description-19">DESCRIPTION</h2>
+<p>str(3f) builds a space-separated string from up to twenty scalar values.</p>
+<h2 id="options-13">OPTIONS</h2>
+<ul>
+<li><p><strong>g[0-9a-j]</strong><br />
+Optional value to print the value of after the message. May be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.</p>
+<p>Optionally, all the generic values can be single-dimensioned arrays. Currently, mixing scalar arguments and array arguments is not supported.</p></li>
+<li><p><strong>sep</strong><br />
+separator string used between values. Defaults to a space. Must be specified with a keyword.</p></li>
+<li><p><strong>if</strong><br />
+If false return a null string. Must be specified with a keyword.</p></li>
+</ul>
+<h2 id="returns-2">RETURNS</h2>
+<ul>
+<li><strong>str</strong><br />
+description to print</li>
+</ul>
+<h2 id="examples-18">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_str
+   use M_framework__msg, only : str
+   implicit none
+   character(len=:),allocatable :: pr
+   character(len=:),allocatable :: frmt
+   integer                      :: biggest
+
+   pr=str(&#39;HUGE(3f) integers&#39;,huge(0),&amp;
+   &amp;&#39;and real&#39;,huge(0.0),&#39;and double&#39;,huge(0.0d0))
+   write(*,&#39;(a)&#39;)pr
+   pr=str(&#39;real            :&#39;,huge(0.0),0.0,12345.6789,tiny(0.0) )
+   write(*,&#39;(a)&#39;)pr
+   pr=str(&#39;doubleprecision :&#39;,huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
+   write(*,&#39;(a)&#39;)pr
+   pr=str(&#39;complex         :&#39;,cmplx(huge(0.0),tiny(0.0)) )
+   write(*,&#39;(a)&#39;)pr
+
+   ! create a format on the fly
+   biggest=huge(0)
+   ! +0 for gfortran-11 bug
+   frmt=str(&#39;(*(i&#39;,int(log10(real(biggest)))+0,&#39;:,1x))&#39;,sep=&#39;&#39;)
+   write(*,*)&#39;format=&#39;,frmt
+
+   ! although it will often work, using str(3f)
+   ! in an I/O statement is not recommended
+   ! because if an error occurs str(3f) will try
+   ! to write while part of an I/O statement
+   ! which not all compilers can handle and is currently non-standard
+   write(*,*)str(&#39;program will now stop&#39;)
+
+   end program demo_str
+</code></pre>
+<p>Output</p>
+<pre><code>   HUGE(3f) integers 2147483647 and real 3.40282347E+38 ```
+   and double 1.7976931348623157E+308
+   real            : 3.40282347E+38 0.00000000 12345.6787 1.17549435E-38
+   doubleprecision : 1.7976931348623157E+308 0.0000000000000000 ```
+   12345.678900000001 2.2250738585072014E-308
+   complex         : (3.40282347E+38,1.17549435E-38)
+    format=(*(i9:,1x))
+    program will now stop
+</code></pre>
+<h2 id="author-15">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-16">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-20" class="slide section level1">
+<h1>NAME</h1>
+<p>unit_test(3f) - [M_framework__verify] report if logical expression is true or false, optionally call command and/or stop program. (LICENSE:PD)</p>
+<h2 id="synopsis-20">SYNOPSIS</h2>
+<p>subroutine unit_test(name,expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&amp; &amp; ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,only_on_fail)</p>
+<pre><code>    character(len=*),intent(in) :: name
+    logical,intent(in) :: expression
+    class(*),intent(in),optional :: msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,&amp;
+    &amp; ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+    logical,intent(in),optional :: only_on_fail
+</code></pre>
+<h2 id="description-20">DESCRIPTION</h2>
+<p>unit_test(3f) tests the expression and displays a message composed of the generic intrinsic values msg, and g1 thorough gj. Additionally, if the expression is false</p>
+<ul>
+<li>if unit_test_mode(command) is not blank calls the specified shell command</li>
+</ul>
+<!-- end list -->
+
+<pre><code>      $COMMAND name=&quot;NAME&quot; type=&quot;check&quot; passed=&quot;passed|failed&quot; ```
+      msg=&quot;all messages&quot;
+</code></pre>
+<ul>
+<li>if keep_going = .false. stop the program on a failed test</li>
+</ul>
+<h2 id="options-14">OPTIONS</h2>
+<ul>
+<li><p><strong>NAME</strong><br />
+the unit test name</p></li>
+<li><p><strong>EXPRESSION</strong><br />
+the logical expression to evaluate</p></li>
+<li><p><strong>msg,g1```gj</strong><br />
+optional message to display when performing test, composed of any scalar intrinsics of type INTEGER, REAL, DOUBLEPRECISION, COMPLEX, LOGICAL, or CHARACTER. A space is placed between each value.</p></li>
+<li><p><strong>wordy</strong><br />
+If .false. The message MSG is only displayed if the expression is .false. . Must be used as a keyword. Default is .true. .</p></li>
+</ul>
+<h2 id="examples-19">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>      program demo_unit_test
+      use M_framework, only: &amp;
+         &amp; unit_test_mode,     &amp;
+         &amp; unit_test_start,    &amp;
+         &amp; unit_test,          &amp;
+         &amp; unit_test_end,      &amp;
+         &amp; unit_test_stop
+      use M_framework, only: almost
+
+      implicit none
+      integer :: i
+      integer :: x
+      integer,allocatable :: arr(:)
+      real,allocatable :: arr1(:)
+      real,allocatable :: arr2(:)
+
+         call unit_test_mode(keep_going=.true.,debug=.false.,command=&#39;&#39;)
+
+         x=10
+         arr1=[1.0,10.0,100.0]
+         arr2=[1.0001,10.001,100.01]
+         call unit_test_start(&#39;myroutine&#39;)
+
+         call unit_test(&#39;myroutine&#39;, x &gt; 3 ,&#39; if big enough&#39;)
+         call unit_test(&#39;myroutine&#39;, x &lt; 100 ,&#39; if small enough&#39;)
+
+         do i=1,size(arr1)
+            call unit_test(&#39;myroutine&#39;, &amp;
+            &amp; almost(arr1(i),arr2(i),3.9,verbose=.true.) )
+         enddo
+
+         arr=[10,20,30]
+         call unit_test(&#39;myroutine&#39;, .not.any(arr &lt; 0) , &amp;
+         &amp; &#39;fail if any negative values in array ARR&#39;)
+         call unit_test(&#39;myroutine&#39;, all(arr &lt; 100) , &amp;
+         &amp; &#39;fail unless all values are less than 100 in array ARR&#39;)
+
+         call unit_test_end(&#39;myroutine&#39;, &amp;
+         &amp; msg=&#39;checks on &quot;myroutine&quot; all passed&#39;)
+
+         call unit_test_stop()
+
+      end program demo_unit_test
+</code></pre>
+<p>Results:</p>
+<pre><code> Sample output (varies with what optional command or modes is used):
+
+     &gt;check_start: myroutine            START   :
+     &gt;check:       myroutine            SUCCESS :  if big enough
+     &gt;check:       myroutine            SUCCESS :  if small enough
+     &gt;*almost* for values 1.00000000 1.00010002 agreement of 3.99997139 ```
+     &gt;digits out of requested 3.90000010
+     &gt;check:       myroutine            SUCCESS :
+     &gt;*almost* for values 10.0000000 10.0010004 agreement of 3.99986792 ```
+     &gt;digits out of requested 3.90000010
+     &gt;check:       myroutine            SUCCESS :
+     &gt;*almost* for values 100.000000 100.010002 agreement of 3.99995065 ```
+     &gt;digits out of requested 3.90000010
+     &gt;check:       myroutine            SUCCESS :
+     &gt;check:       myroutine            SUCCESS : fail if any negative ```
+     &gt;values in array ARR
+     &gt;check:       myroutine            SUCCESS : fail unless all values ```
+     &gt;are less than 100 in array ARR
+     &gt;check_end:   myroutine            PASSED  : GOOD:7         BAD: ```
+     &gt;0 DURATION:00000000294709: checks on &quot;myroutine&quot; all passed
+     &gt;check_stop:  TALLY                PASSED  : GOOD:7         BAD: ```
+     &gt;0 DURATION:00000000267059
+</code></pre>
+<h2 id="author-16">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-17">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-21" class="slide section level1">
+<h1>NAME</h1>
+<p>unit_test_end(3f) - [M_framework__verify] end test of procedure started by unit_test_start(3f) (LICENSE:PD)</p>
+<h2 id="synopsis-21">SYNOPSIS</h2>
+<p>subroutine unit_test_end(name,msg,opts)</p>
+<pre><code>    character(len=*),intent(in) :: name
+    character(len=*),intent(in),optional :: msg
+    character(len=*),intent(in),optional :: opts
+</code></pre>
+<h2 id="description-21">DESCRIPTION</h2>
+<p>A message is shown including the duration of the tests If there have been no failures the optional shell command</p>
+<pre><code>       $COMMAND name=&quot;name&quot; type=&quot;end&quot; passed=&quot;passed|failed|untested&quot; ```
+       clicks=NNNN msg=&quot;message&quot; opts
+</code></pre>
+<p>is executed</p>
+<h2 id="examples-20">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>    program demo_unit_test_end
+    use M_framework, only: unit_test_start
+    use M_framework, only: unit_test
+    use M_framework, only: unit_test_end
+    implicit none
+    integer :: x
+    x=10
+    call unit_test_start(&#39;myroutine&#39;)
+
+    call unit_test(&#39;myroutine&#39;, x &gt; 3 ,&#39;if big enough&#39;)
+    call unit_test(&#39;myroutine&#39;, x &lt; 100 ,&#39;if small enough&#39;)
+
+    ! program execution stopped
+    call unit_test_end (&#39;myroutine&#39;,msg=&#39;checks on &quot;myroutine&quot;&#39; )
+
+    end program demo_unit_test_end
+</code></pre>
+<h2 id="author-17">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-18">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-22" class="slide section level1">
+<h1>NAME</h1>
+<p>unit_test_expected(3f) - [M_framework__verify] report if two scalar values of like type and kind are equal. (LICENSE:PD)</p>
+<h2 id="synopsis-22">SYNOPSIS</h2>
+<p>impure elemental subroutine unit_test_example(name,result,expected)</p>
+<pre><code>    character(len=*),intent(in)  :: name
+    class(*),intent(in)          :: result
+    class(*),intent(in),optional :: expected
+</code></pre>
+<h2 id="description-22">DESCRIPTION</h2>
+<p>A shortcut for a common call to unit_test(3f) tests the two values of like type and kind. It is equivalent to</p>
+<pre><code>       call unit_test(name,result,expected,&#39;result=&#39;,result,&#39;expected=&#39;,.true.)
+</code></pre>
+<h2 id="options-15">OPTIONS</h2>
+<ul>
+<li><p><strong>RESULT</strong><br />
+A generated value or expression of integer, real, character, or complex type.</p></li>
+<li><p><strong>EXPECTED</strong><br />
+The expected value for RESULT, of the same type and kind as RESULT. If not present, it is equivalent to .TRUE.</p></li>
+</ul>
+<h2 id="examples-21">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>      program demo_unit_test_expected
+      use, intrinsic :: iso_fortran_env, only: &amp;
+      &amp; stdin =&gt; input_unit, stdout =&gt; output_unit, stderr =&gt; error_unit
+      use M_framework, only:                &amp;
+      &amp;  unit_test_mode,                    &amp;
+      &amp;  start     =&gt;  unit_test_start,     &amp;
+      &amp;  expected  =&gt;  unit_test_expected,  &amp;
+      &amp;  stop      =&gt;  unit_test_stop,      &amp;
+      &amp; unit_test_level, unit_test_flags
+      implicit none
+      logical, parameter :: T=.true., F=.false.
+      ! optional call to change default modes
+         call unit_test_mode(  &amp;
+             keep_going=T,     &amp;
+             flags=[0],        &amp;
+             luns=[stderr],    &amp;
+             command=&#39;&#39;,       &amp;
+             brief=F,          &amp;
+             match=&#39;&#39;,         &amp;
+             interactive=F,    &amp;
+             CMDLINE=T,        &amp;
+             debug=F)
+
+         unit_test_level=0
+         ! unit tests for ABS(3f) intrinsic
+         call start(&#39;abs&#39;)
+         ! integer
+         call expected(&#39;abs&#39;,abs(-10),10)
+         call expected(&#39;abs&#39;,abs( 10),10)
+         ! real and elemental
+         call expected(&#39;abs&#39;,abs( [-10.0, 10.0]),10.0)
+         ! complex
+         call expected(&#39;abs&#39;,abs(( 3.0,-4.0)),5.0)
+         call expected(&#39;abs&#39;,abs((-3.0, 4.0)),5.0)
+         call expected(&#39;abs&#39;,abs((-3.0,-4.0)),5.0)
+         call expected(&#39;abs&#39;,abs(( 3.0, 4.0)),5.0)
+         call stop(&#39;abs&#39;)
+      end program demo_unit_test_expected
+</code></pre>
+<h2 id="author-18">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-19">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-23" class="slide section level1">
+<h1>NAME</h1>
+<p>unit_test_mode(3f) - [M_framework__verify] set testing modes (LICENSE:PD)</p>
+<h2 id="synopsis-23">SYNOPSIS</h2>
+<p>subroutine unit_test_mode( keep_going, flags, luns, command, &amp; brief, interactive, CMDLINE, debug, match)</p>
+<p>logical,intent(in) :: keep_going, brief, interactive,debug integer,intent(in),allocatable :: luns(:), flags(:) character(len=*),intent(in) :: command</p>
+<h2 id="description-23">DESCRIPTION</h2>
+<p>unit_test_mode(3f) changes testing mode defaults</p>
+<h2 id="options-16">OPTIONS</h2>
+<ul>
+<li><p><strong>keep_going</strong><br />
+keep running if a test fails. Default to TRUE</p></li>
+<li><p><strong>flags</strong><br />
+a list of integer values that can be accessed from M_framework as unit_test_flags(:) for use in selecting various tests conditionally</p></li>
+<li><p><strong>luns</strong><br />
+list of Fortran units to unit test messages to. Defaults to the the value of ERROR_UNIT from the intrinsic module ISO_FORTRAN_ENV (ie. defaults to "stderr"). It is Assumed the units have been opened by the program.</p></li>
+<li><p><strong>match</strong><br />
+the string that is tested against the name and msg specified on unit_test_start() to set the "matched" argument.</p></li>
+<li><p><strong>command</strong><br />
+filter command, typically to generate reports. It is passed data on the command line. See the example filter "bookkeeper" for examples.</p></li>
+<li><p><strong>brief</strong><br />
+If present only "FAIL" messages are produced.</p></li>
+<li><p><strong>brief</strong><br />
+Only display FAIL messages and related information</p></li>
+<li><p><strong>verbose</strong><br />
+verbose mode displays compiler version and options and all standard messages.</p></li>
+<li><p><strong>silent</strong><br />
+no output from unit_test_*(3f) procedures</p></li>
+<li><p><strong>interactive</strong><br />
+prompt as each test case starts as to continue.</p></li>
+<li><p><strong>cmdline</strong><br />
+If set to .false. do not parse command line for options.</p></li>
+<li><p><strong>debug</strong><br />
+Debug mode for the M_framework package</p></li>
+</ul>
+<h2 id="examples-22">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_unit_test_mode
+   use M_framework
+   implicit none
+
+   call unit_test_mode(keep_going=.false.,luns=[6], &amp;
+           &amp; brief=.true.)
+
+   end program demo_unit_test_mode
+</code></pre>
+<h2 id="author-19">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-20">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-24" class="slide section level1">
+<h1>NAME</h1>
+<p>unit_test_msg(3f) - [M_framework__verify] converts up to twenty standard scalar values to a message for unit testing (LICENSE:PD)</p>
+<h2 id="synopsis-24">SYNOPSIS</h2>
+<p>function unit_test_msg(name, msg, &amp; &amp; g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,if)</p>
+<pre><code>    character(len=*),intent(in)  :: name
+    class(*),intent(in),optional :: msg, &amp;
+    &amp; g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+</code></pre>
+<h2 id="description-24">DESCRIPTION</h2>
+<p>unit_test_msg(3f) builds a string from up to twenty scalar values and prints it to the error log.</p>
+<h2 id="options-17">OPTIONS</h2>
+<ul>
+<li><p><strong>name</strong><br />
+name of unit being tested</p></li>
+<li><p><strong>msg,g[1-j]</strong><br />
+optional values to print the value of. May be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.</p></li>
+<li><p><strong>if</strong><br />
+expression must be true or message is not output. Must be specified by keyword as "if=expression".</p></li>
+</ul>
+<h2 id="examples-23">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_unit_test_msg
+   use M_framework, only : unit_test_start,unit_test_msg, &amp;
+           &amp; unit_test_end
+   implicit none
+
+   call unit_test_start(&#39;myroutine&#39;)
+   call unit_test_msg(&#39;myroutine&#39;,&#39;HUGE(3f) integers&#39;, &amp;
+           &amp; huge(0),&#39;and real&#39;,huge(0.0),&#39;and double&#39;,huge(0.0d0))
+   call unit_test_msg(&#39;myroutine&#39;,&#39;real            :&#39;, &amp;
+           &amp; huge(0.0),0.0,12345.6789,tiny(0.0) )
+   call unit_test_msg(&#39;myroutine&#39;,&#39;doubleprecision :&#39;, &amp;
+           &amp; huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
+   call unit_test_msg(&#39;myroutine&#39;,&#39;complex         :&#39;, &amp;
+           &amp; cmplx(huge(0.0),tiny(0.0)) )
+   call unit_test_end(&#39;myroutine&#39;)
+
+   end program demo_unit_test_msg
+</code></pre>
+<h2 id="author-20">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-21">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-25" class="slide section level1">
+<h1>NAME</h1>
+<p>unit_test_start(3f) - [M_framework__verify] reset counters and start a new test block (LICENSE:PD)</p>
+<h2 id="synopsis-25">SYNOPSIS</h2>
+<p>subroutine unit_test_start(name,msg,opts,matched)</p>
+<pre><code>    character(len=*),intent(in)          :: name
+    character(len=*),intent(in),optional :: msg
+    character(len=*),intent(in),optional :: opts
+    logical,intent(out),optional         :: matched
+</code></pre>
+<h2 id="description-25">DESCRIPTION</h2>
+<p>unit_test_start(3f) is an initialization procedure for starting a new procedure test.</p>
+<h2 id="options-18">OPTIONS</h2>
+<ul>
+<li><p><strong>NAME</strong><br />
+name of the procedure to test</p></li>
+<li><p><strong>MSG</strong><br />
+message to print</p></li>
+<li><p><strong>OPTS</strong><br />
+pass additional options to the optional shell command that can be assigned on the command line or by unit_test_mode(3f).</p></li>
+<li><p><strong>MATCHED</strong><br />
+if the match string has been set with unit_test_mode(3f) or on the command line this will return true if the name and msg concatenated with a space match the entire match string, where "*" matches any string and "?" matches any single character. This allows you to skip a test set if you wish by exiting.</p></li>
+</ul>
+<h2 id="examples-24">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>    program demo_unit_test_start
+    use M_framework, only: unit_test_start, unit_test, &amp;
+     &amp; unit_test_end, unit_test_mode, unit_test_stop
+    implicit none
+    integer :: ival
+    logical :: matched
+    call unit_test_mode()
+    call test_mysub1()
+    call test_mysub2()
+    call unit_test_stop()
+    contains
+    subroutine test_mysub1() ! first test
+    call unit_test_start(&#39;mysub1&#39;)
+    ! the example goodbad(1) command called here takes many options
+    ! used to build an SQLite3 entry
+    ival=10
+    call unit_test(&#39;mysub1&#39;, ival &gt; 3 ,   msg=&#39; if big enough&#39;)
+    call unit_test(&#39;mysub1&#39;, ival &lt; 100 , msg=&#39; if small enough&#39;)
+    call unit_test_end(&#39;mysub1&#39;,msg=&#39;completed checks of &quot;mysub1&quot;&#39;)
+    end subroutine test_mysub1
+
+    subroutine test_mysub2() ! second test
+    call unit_test_start(&#39;mysub1&#39;,&#39;&#39;,matched=matched)
+    ival=200
+       if(.not.matched)return ! makes it skippable
+       call unit_test(&#39;mysub1&#39;, ival &gt; 3 ,   msg=&#39; if big enough&#39;)
+       call unit_test(&#39;mysub1&#39;, ival &lt; 100 , msg=&#39; if small enough&#39;)
+       call unit_test_end(&#39;mysub1&#39;,msg=&#39;completed checks of &quot;mysub2&quot;&#39;)
+    end subroutine test_mysub2
+
+    end program demo_unit_test_start
+</code></pre>
+<h2 id="author-21">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-22">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-26" class="slide section level1">
+<h1>NAME</h1>
+<p>unit_test_stop(3f) - [M_framework__verify] report tally of all checks and stop program (LICENSE:PD)</p>
+<h2 id="synopsis-26">SYNOPSIS</h2>
+<p>subroutine unit_test_stop(msg,opts)</p>
+<pre><code>    character(len=*),intent(in),optional :: msg
+    character(len=*),intent(in),optional :: opts
+</code></pre>
+<h2 id="description-26">DESCRIPTION</h2>
+<p>give a tally of all calls to unit_test(3f) and stop program.</p>
+<p>Tally up the test result totals and stop the program. If a command is set via unit_test_mode(3f) or the command line call it appending OPTS to the end of the command.</p>
+<h2 id="options-19">OPTIONS</h2>
+<ul>
+<li><strong>MSG</strong><br />
+additional message to display OPTS add string to filter command line if any is specified.</li>
+</ul>
+<h2 id="examples-25">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>    program demo_unit_test_stop
+    use M_framework, only: unit_test_start, unit_test_end, &amp;
+    &amp; unit_test, unit_test_stop, unit_test_mode
+    use,intrinsic :: iso_fortran_env, stdout=&gt;OUTPUT_UNIT
+    implicit none
+    integer :: x
+    x=10
+    call unit_test_mode(luns=[stdout])
+    ! do a test
+    call unit_test_start(&#39;proc1&#39;)
+    call unit_test(&#39;proc1&#39;, x &gt; 3 , &#39;if big enough&#39;)
+    call unit_test(&#39;proc1&#39;, x &lt; 100 , &#39;if small enough&#39;)
+    call unit_test_end  (&#39;proc1&#39;,msg=&#39;checks all done&#39; )
+    ! do another test
+    call unit_test_start(&#39;proc2&#39;)
+    call unit_test(&#39;proc2&#39;, x &gt; 3 , &#39;if big enough&#39;)
+    call unit_test(&#39;proc2&#39;, x &lt; 100 , &#39;if small enough&#39;)
+    call unit_test_end  (&#39;proc2&#39;,msg=&#39;checks all done&#39; )
+
+    ! tally up test results and stop program
+    call unit_test_stop()
+
+    end program demo_unit_test_stop
+</code></pre>
+<h2 id="author-22">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-23">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-27" class="slide section level1">
+<h1>NAME</h1>
+<p>unit_test_system(3f) - [M_framework__verify] return status from system command (LICENSE:PD)</p>
+<h2 id="synopsis-27">SYNOPSIS</h2>
+<p>function unit_test_system(cmd,verbose)</p>
+<pre><code>    character(len=*),intent(in)  :: cmd
+    logical,intent(in),optional  :: verbose
+</code></pre>
+<h2 id="description-27">DESCRIPTION</h2>
+<p>unit_test_system(3f) executes a system command and returns the exit status of the command.</p>
+<h2 id="options-20">OPTIONS</h2>
+<ul>
+<li><p><strong>command</strong><br />
+system command to execute. If it starts with "* " the asterisk is replaced by the name of the current command. If it starts with "** " the asterisks are replaced by the current command including arguments.</p></li>
+<li><p><strong>verbose</strong><br />
+if .true. the executed command is echoed to output. The default is .false.</p></li>
+</ul>
+<h2 id="examples-26">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_unit_test_system
+   use M_framework, only: &amp;
+      unit_test_start,  &amp;
+      unit_test,        &amp;
+      unit_test_system, &amp;
+      unit_test_end
+   implicit none
+   if (command_argument_count()  ==  0) then
+      call unit_test_start(&#39;myroutine&#39;)
+      call unit_test(&#39;false&#39;, unit_test_system(&#39;false&#39;) == 0, &#39;check false&#39;)
+      call unit_test(&#39;true&#39;, unit_test_system(&#39;true&#39;) == 0, &#39;check true&#39;)
+      call unit_test(&#39;notthere&#39;, unit_test_system(&#39;notthere&#39;) == 0, &amp;
+      &amp; &#39;check notthere&#39;)
+      call unit_test(&#39;*&#39;,&amp;
+      &amp; unit_test_system(&#39;* and options&#39;, verbose=.true.) == 0, &#39;check &quot;*&quot;&#39;)
+      call unit_test_end(&#39;myroutine&#39;)
+   else
+      write (*, *) &#39;called with an option&#39;
+   endif
+   end program demo_unit_test_system
+</code></pre>
+<h2 id="author-23">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-24">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+<div id="name-28" class="slide section level1">
+<h1>NAME</h1>
+<p>wrt(3f) - [M_framework__msg] write multiple scalar values to any number of files (LICENSE:PD)</p>
+<h2 id="synopsis-28">SYNOPSIS</h2>
+<p>subroutine wrt(luns,generic(s),iostat)</p>
+<pre><code>    integer,intent(in)           :: luns(:)
+    class(*),intent(in),optional :: &amp;
+                    &amp; generic0,generic1,generic2,generic3,generic4
+    class(*),intent(in),optional :: &amp;
+                    &amp; generic5,generic6,generic7,generic8,generic9
+    class(*),intent(in),optional :: &amp;
+                    &amp; generica,genericb,genericc,genericd,generice
+    class(*),intent(in),optional :: &amp;
+                    &amp; genericf,genericg,generich,generici,genericj
+    integer,intent(out),optional :: iostat
+    character(len=*),intent(in)  :: types(*)
+</code></pre>
+<h2 id="description-28">DESCRIPTION</h2>
+<ul>
+<li><strong>WRT(3f) writes a list of scalar values</strong><br />
+to the list of unit numbers in LUNS(:).</li>
+</ul>
+<h2 id="options-21">OPTIONS</h2>
+<ul>
+<li><p><strong>LUNS</strong><br />
+Unit numbers to write to. If of size zero no output is generated</p></li>
+<li><p><strong>generic[1-20]</strong><br />
+optional value to print the value of after the message. May be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.</p></li>
+<li><p><strong>TYPES</strong><br />
+one for each lun. '' for ASCII, 'CSV' for comma-separated.</p></li>
+</ul>
+<h2 id="returns-3">RETURNS</h2>
+<ul>
+<li><strong>IOSTAT</strong><br />
+The value of the last non-zero IOSTAT value. Returns zero if no errors occurred.</li>
+</ul>
+<h2 id="examples-27">EXAMPLES</h2>
+<p>Sample program:</p>
+<pre><code>   program demo_wrt
+   use, intrinsic :: iso_fortran_env, only : &amp;
+    &amp; stdin=&gt;input_unit, &amp;
+    &amp; stdout=&gt;output_unit, &amp;
+    &amp; stderr=&gt;error_unit
+   use M_framework__msg, only: wrt, fmt
+   implicit none
+   integer,allocatable :: luns(:)
+   integer :: iostat=0
+   integer,parameter :: ints(3)=[1,2,3]
+
+   ! a null list allows for turning off verbose or debug mode output
+   luns=[integer ::]
+   call wrt(luns,&#39;NULL LIST:&#39;,huge(0),&#39;PI=&#39;,asin(1.0d0)*2.0d0,iostat=iostat)
+   write(*,*)&#39;IOSTAT=&#39;,iostat
+
+   ! multiple files can be used to create a log file, for example
+   luns=[stderr,stdout]
+   call wrt(luns,&#39;TWO FILES:&#39;,huge(0),&#39;PI=&#39;,asin(1.0d0)*2.0d0,iostat=iostat)
+   write(*,*)&#39;IOSTAT=&#39;,iostat
+
+   ! using fmt
+   call wrt([stdout,stdout,stdout],&#39;USING FMT :&#39;, &amp;
+    &amp; huge(0),&#39;PI=&#39;,asin(1.0d0)*2.0d0,fmt(ints(2),&#39;i0.4&#39;),iostat=iostat)
+
+   end program demo_wrt
+</code></pre>
+<p>TWO FILES: 2147483647 PI= 3.1415926535897931 TWO FILES: 2147483647 PI= 3.1415926535897931</p>
+<ul>
+<li><p><strong>IOSTAT=</strong><br />
+USING FMT : 2147483647 PI= 3.1415926535897931 0002 USING FMT : 2147483647 PI= 3.1415926535897931 0002 USING FMT : 2147483647 PI= 3.1415926535897931 0002</p>
+<ul>
+<li><strong>IOSTAT=</strong></li>
+</ul></li>
+</ul>
+<h2 id="author-24">AUTHOR</h2>
+<p>John S. Urban</p>
+<h2 id="license-25">LICENSE</h2>
+<p>Public Domain</p>
+</div>
+</body>
+</html>

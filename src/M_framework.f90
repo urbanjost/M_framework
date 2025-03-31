@@ -4,6 +4,7 @@ use M_framework__msg
 use M_framework__verify
 use M_framework__approx
 use M_framework__utility
+use M_framework__timing
 !use M_framework__attr
 implicit none(type,external)
 !private
@@ -24,11 +25,11 @@ implicit none(type,external)
 !!
 !! The support modules are useful for creating terminal messages, comparing
 !! expected values to results, writing logfiles and playback journals
-!! independant of unit testing as well.
+!! independent of unit testing as well.
 !!
 !! Typically unit testing can be integrated seamlessly into the fpm(1) subcommand
 !! "test" making unit testing from github/gitlab CD/CI utilities as simple as
-!! "fpm teet" in many cases.
+!! "fpm test" in many cases.
 !!
 !!
 !!  BASIC TIMING IS INCLUDED

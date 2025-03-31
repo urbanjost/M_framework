@@ -32,7 +32,7 @@
 !!    the first parameter. This action might specify to open a log file, to
 !!    change the "level" required by messages for them to appear, whether
 !!    output it written as a comment or not, and on what files the output
-!!    shoud appear. So the interface can be used in a very simple manner
+!!    should appear. So the interface can be used in a very simple manner
 !!    but has more options than is evident at first glance, as detailed in
 !!    the man-page for journal(3f).
 !!
@@ -272,7 +272,7 @@ private
 !!   TIMEFORMAT  when WHERE="%" the message is treated as a time format
 !!               specification as described under now(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!

@@ -23,5 +23,4 @@
      call wrt([stdout,stdout,stdout],'USING FMT :', &
       & huge(0),'PI=',asin(1.0d0)*2.0d0,fmt(ints(2),'i0.4'),iostat=iostat)
 
-
      end program demo_wrt

@@ -50,25 +50,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>compare_float (3m_framework__approx)</NOBR><HR></H1>
 </CENTER>
-<A name=1>
-
-     <H3>NAME</H3>
-
-</A>
-<BLOCKQUOTE>
-</BLOCKQUOTE>
-<A name=contents></A><H3>CONTENTS</H3></A>
-<BLOCKQUOTE>
-<A HREF=#1>Name</A><BR>
-<A HREF=#2>Synopsis</A><BR>
-<A HREF=#3>Description</A><BR>
-<A HREF=#4>Details</A><BR>
-<A HREF=#5>Options</A><BR>
-<A HREF=#6>Result</A><BR>
-<A HREF=#7>Operators</A><BR>
-<A HREF=#8>Examples</A><BR>
-</BLOCKQUOTE>
-<A name=9>
+<A name=0>
 
      <H3>NAME</H3>
 
@@ -79,7 +61,17 @@ values with adjustable tolerance.
 (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
-<A name=2>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Details</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Result</A><BR>
+<A HREF=#6>Operators</A><BR>
+<A HREF=#7>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=8>
 
      <H3>SYNOPSIS</H3>
 
@@ -101,8 +93,14 @@ Additional convenience operators:
        X.greaterthan.Y
 <P>
 </PRE>
+Developer procedure (Do not use in production):
+<P>
+<PRE>
+      change_default_ulp(ulp)
+<P>
+</PRE>
 </BLOCKQUOTE>
-<A name=3>
+<A name=2>
 
      <H3>DESCRIPTION</H3>
 
@@ -117,56 +115,84 @@ The test performed is
        abs( x - y ) &lt; ( ulp * spacing( max(abs(x),abs(y)) ) )
 <P>
 </PRE>
-If the result is .TRUE., the numbers are considered equal.
-Both single and double precision scalar and array numbers can
-be compared, as the function is elemental.
+where ULP is a user-selected scaling factor that defaults to 1. The
+default is intentionally low so that default behavior is close to
+that of the default operators. Setting it to zero(0.0) essentially
+causes no values to compare equal.
+<P>
+If the result is .TRUE., the numbers are considered equal. Both single
+and double precision scalar and array values can be compared, as the
+function is elemental.
+<P>
+By definition of an elemental function the returned data entity is the
+same shape as the input array size or scalar if all values are scalar.
+<P>
+It can be useful to empirically test your code for numeric
+sensitivities by changing the value of the ULP scaling factor and
+noting any result changes.
 <P>
 As a convenience relational operators .EqualTo., .GreaterThan.,
-and .LessThan. are provided. These are based on the
-compare_float(3f) function using the commonly used default
-scaling of ULP=1.
+and .LessThan. are provided. Note the comparisons return .TRUE&gt;
+if the difference between the two values is .lt., .ge., and .le. .
+The algorithm for each operator is shown in the following OPERATORS
+section.
+<P>
+The default ULP value is 1.0. A procedure is available to change the
+default but it should only be used for examining code behavior during
+development, as it changes the default for calls from all procedures
+(even those in other modules or procedures).
+<P>
+<PRE>
+      call default_ulp(ulp=VALUE)
+<P>
+</PRE>
 </BLOCKQUOTE>
-<A name=4>
+<A name=3>
 
      <H3>DETAILS</H3>
 
 </A>
 <BLOCKQUOTE>
 <P>
-It is generally acknowledged that real numbers should not be
-compared directly but within some tolerance. However, the magnitude
-of an appropriate tolerance value will vary depending on the
-magnitudes of the numbers being compared and the precision of the
-computing environment.
+It is generally acknowledged that real numbers should not be compared
+directly but within some tolerance. However, the magnitude of an
+appropriate tolerance value will vary depending on the magnitudes
+of the numbers being compared and the precision of the computing
+environment.
 <P>
 The Fortran standard does not specify functions or operators
-specifically for comparing float values, but leaves some latitude in
-how the compilers address floating point comparisions. It does
+specifically for comparing float values, but leaves some latitude
+in how the compilers address floating point comparisons. It does
 specify functions that return platform-specific values useful in
 applying different methods to the problem such as
 <P>
 <PRE>
-    + digits(3f)        - Significant digits in the numeric model
     + epsilon(3f)       - Epsilon function
+    + nearest(3f)       - Nearest representable number
+    + spacing(3f)       - Smallest distance between two numbers of a given type
+    + rrspacing(3f)     - Reciprocal of the relative spacing of a numeric type
+<P>
+</PRE>
+and in some cases
+<P>
+<PRE>
+    + scale(3f)         - Scale a real value by a whole power of the radix
+    + digits(3f)        - Significant digits in the numeric model
     + exponent(3f)      - Exponent of floating-point number
     + fraction(3f)      - Fractional part of the model representation
     + huge(3f)          - Largest number of a type and kind
     + maxexponent(3f)   - Maximum exponent of a real kind
     + minexponent(3f)   - Minimum exponent of a real kind
-    + nearest(3f)       - Nearest representable number
     + precision(3f)     - Decimal precision of a real kind
     + radix(3f)         - Base of a numeric model
     + range(3f)         - Decimal exponent range of a numeric kind
-    + rrspacing(3f)     - Reciprocal of the relative spacing of a numeric type
-    + scale(3f)         - Scale a real value by a whole power of the radix
     + set_exponent(3f)  - real value with specified exponent
-    + spacing(3f)       - Smallest distance between two numbers of a given type
     + tiny(3f)          - Smallest positive number of a real kind
 <P>
 </PRE>
 Books have been written on the behavior of floating point math.
 <P>
-As is used here, a commonly used simple general floating point
+As is used here, a commonly used simple floating point
 comparison algorithm is
 <P>
 <PRE>
@@ -179,7 +205,7 @@ where the intrinsic function SPACING(3f) determines the distance
 between the argument X and the nearest adjacent representable number
 of the same type and ULP is an optional user-supplied scaling factor.
 </BLOCKQUOTE>
-<A name=5>
+<A name=4>
 
      <H3>OPTIONS</H3>
 
@@ -198,7 +224,7 @@ users to control the scaling of the value returned by SPACING(3f)
 in order to relax or tighten what is considered "equal". That
 is, the ULP value can be used to scale the comparison based
 on knowledge of the "numerical quality" of the values being used
-in the comparision.
+in the comparison.
 <P>
 The value should be positive. The absolute value of the value is
 taken if it is negative.
@@ -212,7 +238,7 @@ this corresponds to always rounding to the nearest representable
 floating point number.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=6>
+<A name=5>
 
      <H3>RESULT</H3>
 
@@ -222,7 +248,7 @@ floating point number.
 The return value is a logical value indicating whether the inputs
 are equal to within the requested precision.
 </BLOCKQUOTE>
-<A name=7>
+<A name=6>
 
      <H3>OPERATORS</H3>
 
@@ -255,6 +281,7 @@ The test performed is
 <P>
 <PRE>
                   ( x - y ) &gt;= SPACING( MAX(ABS(x),ABS(y)) )
+<P>
 </PRE>
 </TD></TR>
 <TR valign=top><TD colspan=2>
@@ -274,31 +301,70 @@ The test performed is
 If the result is .TRUE., x is considered less than y.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=8>
+<A name=7>
 
      <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
+Sample programs:
 <P>
-use m_compare_float_numbers
-real :: x, y
-if ( compare_float( x, y, ulp=5.0 ) ) ) then
-! what to do when x effectively equals y
-endif
+<PRE>
+   program demo_compare_float
+   use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+   use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+   use,intrinsic :: iso_fortran_env, only : error_unit,output_unit
+   use M_framework__approx,          only : compare_float
+   use M_framework__approx,          only : &
+   & operator(.equalto.), operator(.greaterthan.), operator(.lessthan.)
+   implicit none
+   integer,parameter       :: wp=int32
+   integer                 :: i
+   character(len=80),save  :: line=&#146;10*0.1&#146;
+   real(kind=wp)           :: a(10), x, y, ulp
+      write(*,*)&#146;is 10*0.1 == 1.0?&#146;
+      ! sum up 0.1 ten times hopefully in a manner compiler does not
+      ! optimize it and in the process make it equal
+      a=0.1_wp
+      read(line,*)a
+      x=sum(a)
+      y=1.0_wp
+      write(*, *)merge(&#146;    EQUAL &#146;,&#146;NOT EQUAL!&#146;,x .eq. y)
+      write(*,&#146;(*(g0,1x,z0,1x))&#146;)x,x,y,y ! show decimal and hexadecimal value
+      write(*, *)&#146;regular&#146;,x .eq. y, x .gt. y, x .lt. y ! standard operators
+      ! For the default ULP=1.0, the relational operators can be used
+      write(*, *)&#146;compare&#146;,x .equalto. y, x .greaterthan. y, x .lessthan. y
+      do i=0,10
+         ulp=real(i,kind=wp)/2.0
+         write(*,*) i, compare_float( x, y, ulp=ulp ) ,&#146;ULP=&#146;,ulp
+      enddo
+   end program demo_compare_float
 <P>
-For no ULP scaling (ULP=1.0), the relational operators can be used
-instead
+</PRE>
+Results:
 <P>
-use m_compare_float_numbers
-real :: x, y
-if ( x .equalto. y ) then
-! -- x effectively equals y, so perform some operation
-&#46;&#46;&#46;.
-endif
+<PRE>
+    &gt;  is 10*0.1 == 1.0?
+    &gt;  NOT EQUAL!
+    &gt; 1.00000012 3F800001 1.00000000 3F800000
+    &gt;  regular F T F
+    &gt;  compare F T F
+    &gt;            0 F ULP=   0.00000000
+    &gt;            1 F ULP=  0.500000000
+    &gt;            2 F ULP=   1.00000000
+    &gt;            3 T ULP=   1.50000000
+    &gt;            4 T ULP=   2.00000000
+    &gt;            5 T ULP=   2.50000000
+    &gt;            6 T ULP=   3.00000000
+    &gt;            7 T ULP=   3.50000000
+    &gt;            8 T ULP=   4.00000000
+    &gt;            9 T ULP=   4.50000000
+    &gt;           10 T ULP=   5.00000000
+<P>
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>compare_float (3m_framework__approx)</TD> <TD align=right width=33%><I>August 31, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bbd767c1-a07d-4536-8fcc-75dcc5763723 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>compare_float (3m_framework__approx)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4340ed90-76db-4443-9c95-e9860a446e35 using man macros.</FONT>
 <br><br><center><img src="images/compare_float.gif"></center>
 </div>
 </div>

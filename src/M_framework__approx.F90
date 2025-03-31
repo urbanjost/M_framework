@@ -17,6 +17,7 @@ public  :: round_to_power  ! round val to specified number of digits after the d
 public  :: round           ! round val to specified number of significant digits
 public  :: significant     ! round val to specified number of significant digits
 public  :: compare_float
+public  :: change_default_ulp
 public  :: operator (.equalto.)
 public  :: operator (.greaterthan.)
 public  :: operator (.lessthan.)
@@ -36,7 +37,6 @@ end interface significant
 
 private :: anyscalar_to_realbig_
 private :: anyscalar_to_double_
-
 
 interface compare_float
    module procedure compare_float_real32
@@ -69,6 +69,9 @@ interface operator (.lessthan.)
    module procedure is_less_than_real128
 #endif
 end interface operator (.lessthan.)
+
+real(kind=real64),save,private :: default_ulp=1.0_real64
+
 contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -100,7 +103,7 @@ contains
 !!##RETURNS
 !!    almost   TRUE if the input values compare up to the specified number
 !!             of values
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample:
 !!
@@ -275,7 +278,7 @@ end function almost
 !!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
 !!    here the accuracy reported is -0.30103000.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Example program:
@@ -462,7 +465,7 @@ END SUBROUTINE sp_accdig
 !!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
 !!    here the accuracy reported is -0.30103000.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Example program:
@@ -614,7 +617,7 @@ end subroutine accdig
 !!   measured_value   Second value
 !!   allowed_margin   Allowed relative margin
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -768,7 +771,7 @@ end function round
 !!                                   which may correspond to one of the
 !!                                   other modes.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program
 !!
@@ -920,12 +923,10 @@ doubleprecision,parameter :: big=huge(0.0d0)
      !!stop '*M_framework__approx::anyscalar_to_double_: unknown type'
    end select
 end function anyscalar_to_double_
-
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!!##NAME
 !!##NAME
 !!    compare_float(3f) - [M_framework__approx] compare floating point
 !!    values with adjustable tolerance.
@@ -945,6 +946,10 @@ end function anyscalar_to_double_
 !!        X.lessthan.Y
 !!        X.greaterthan.Y
 !!
+!!     Developer procedure (Do not use in production):
+!!
+!!       change_default_ulp(ulp)
+!!
 !!##DESCRIPTION
 !!    compare_float(3f) is a function for comparing floating point numbers
 !!    within an automatically adjusted tolerance.
@@ -953,49 +958,72 @@ end function anyscalar_to_double_
 !!
 !!        abs( x - y ) < ( ulp * spacing( max(abs(x),abs(y)) ) )
 !!
-!!    If the result is .TRUE., the numbers are considered equal.
-!!    Both single and double precision scalar and array numbers can
-!!    be compared, as the function is elemental.
+!!    where ULP is a user-selected scaling factor that defaults to 1. The
+!!    default is intentionally low so that default behavior is close to
+!!    that of the default operators. Setting it to zero(0.0) essentially
+!!    causes no values to compare equal.
+!!
+!!    If the result is .TRUE., the numbers are considered equal. Both single
+!!    and double precision scalar and array values can be compared, as the
+!!    function is elemental.
+!!
+!!    By definition of an elemental function the returned data entity is the
+!!    same shape as the input array size or scalar if all values are scalar.
+!!
+!!    It can be useful to empirically test your code for numeric
+!!    sensitivities by changing the value of the ULP scaling factor and
+!!    noting any result changes.
 !!
 !!    As a convenience relational operators .EqualTo., .GreaterThan.,
-!!    and .LessThan. are provided. These are based on the
-!!    compare_float(3f) function using the commonly used default
-!!    scaling of ULP=1.
+!!    and .LessThan. are provided. Note the comparisons return .TRUE>
+!!    if the difference between the two values is .lt., .ge., and .le. .
+!!    The algorithm for each operator is shown in the following OPERATORS
+!!    section.
+!!
+!!    The default ULP value is 1.0. A procedure is available to change the
+!!    default but it should only be used for examining code behavior during
+!!    development, as it changes the default for calls from all procedures
+!!    (even those in other modules or procedures).
+!!
+!!       call default_ulp(ulp=VALUE)
 !!
 !!##DETAILS
 !!
-!!    It is generally acknowledged that real numbers should not be
-!!    compared directly but within some tolerance. However, the magnitude
-!!    of an appropriate tolerance value will vary depending on the
-!!    magnitudes of the numbers being compared and the precision of the
-!!    computing environment.
+!!    It is generally acknowledged that real numbers should not be compared
+!!    directly but within some tolerance. However, the magnitude of an
+!!    appropriate tolerance value will vary depending on the magnitudes
+!!    of the numbers being compared and the precision of the computing
+!!    environment.
 !!
 !!    The Fortran standard does not specify functions or operators
-!!    specifically for comparing float values, but leaves some latitude in
-!!    how the compilers address floating point comparisions. It does
+!!    specifically for comparing float values, but leaves some latitude
+!!    in how the compilers address floating point comparisons. It does
 !!    specify functions that return platform-specific values useful in
 !!    applying different methods to the problem such as
 !!
-!!     + digits(3f)        - Significant digits in the numeric model
 !!     + epsilon(3f)       - Epsilon function
+!!     + nearest(3f)       - Nearest representable number
+!!     + spacing(3f)       - Smallest distance between two numbers of a given type
+!!     + rrspacing(3f)     - Reciprocal of the relative spacing of a numeric type
+!!
+!!    and in some cases
+!!
+!!     + scale(3f)         - Scale a real value by a whole power of the radix
+!!     + digits(3f)        - Significant digits in the numeric model
 !!     + exponent(3f)      - Exponent of floating-point number
 !!     + fraction(3f)      - Fractional part of the model representation
 !!     + huge(3f)          - Largest number of a type and kind
 !!     + maxexponent(3f)   - Maximum exponent of a real kind
 !!     + minexponent(3f)   - Minimum exponent of a real kind
-!!     + nearest(3f)       - Nearest representable number
 !!     + precision(3f)     - Decimal precision of a real kind
 !!     + radix(3f)         - Base of a numeric model
 !!     + range(3f)         - Decimal exponent range of a numeric kind
-!!     + rrspacing(3f)     - Reciprocal of the relative spacing of a numeric type
-!!     + scale(3f)         - Scale a real value by a whole power of the radix
 !!     + set_exponent(3f)  - real value with specified exponent
-!!     + spacing(3f)       - Smallest distance between two numbers of a given type
 !!     + tiny(3f)          - Smallest positive number of a real kind
 !!
 !!    Books have been written on the behavior of floating point math.
 !!
-!!    As is used here, a commonly used simple general floating point
+!!    As is used here, a commonly used simple floating point
 !!    comparison algorithm is
 !!
 !!        if(abs(x < y) < (ulp * spacing(max(abs(x),abs(y))))) then
@@ -1015,7 +1043,7 @@ end function anyscalar_to_double_
 !!          in order to relax or tighten what is considered "equal". That
 !!          is, the ULP value can be used to scale the comparison based
 !!          on knowledge of the "numerical quality" of the values being used
-!!          in the comparision.
+!!          in the comparison.
 !!
 !!          The value should be positive. The absolute value of the value is
 !!          taken if it is negative.
@@ -1027,6 +1055,7 @@ end function anyscalar_to_double_
 !!          A 0.5 ULP maximum error is the best you could hope for, since
 !!          this corresponds to always rounding to the nearest representable
 !!          floating point number.
+!!
 !!##RESULT
 !!
 !!    The return value is a logical value indicating whether the inputs
@@ -1049,6 +1078,7 @@ end function anyscalar_to_double_
 !!                  The test performed is
 !!
 !!                   ( x - y ) >= SPACING( MAX(ABS(x),ABS(y)) )
+!!
 !! X.lessthan.Y  Test if one operand is less than another.
 !!               The result is a logical value indicating whether
 !!               the operand x is less than y by more than the
@@ -1063,22 +1093,61 @@ end function anyscalar_to_double_
 !!
 !!##EXAMPLES
 !!
+!!  Sample programs:
 !!
-!!   use m_compare_float_numbers
-!!   real :: x, y
-!!   if ( compare_float( x, y, ulp=5.0 ) ) ) then
-!!     ! what to do when x effectively equals y
-!!   endif
+!!    program demo_compare_float
+!!    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+!!    use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+!!    use,intrinsic :: iso_fortran_env, only : error_unit,output_unit
+!!    use M_framework__approx,          only : compare_float
+!!    use M_framework__approx,          only : &
+!!    & operator(.equalto.), operator(.greaterthan.), operator(.lessthan.)
+!!    implicit none
+!!    integer,parameter       :: wp=int32
+!!    integer                 :: i
+!!    character(len=80),save  :: line='10*0.1'
+!!    real(kind=wp)           :: a(10), x, y, ulp
+!!       write(*,*)'is 10*0.1 == 1.0?'
+!!       ! sum up 0.1 ten times hopefully in a manner compiler does not
+!!       ! optimize it and in the process make it equal
+!!       a=0.1_wp
+!!       read(line,*)a
+!!       x=sum(a)
+!!       y=1.0_wp
+!!       write(*, *)merge('    EQUAL ','NOT EQUAL!',x .eq. y)
+!!       write(*,'(*(g0,1x,z0,1x))')x,x,y,y ! show decimal and hexadecimal value
+!!       write(*, *)'regular',x .eq. y, x .gt. y, x .lt. y ! standard operators
+!!       ! For the default ULP=1.0, the relational operators can be used
+!!       write(*, *)'compare',x .equalto. y, x .greaterthan. y, x .lessthan. y
+!!       do i=0,10
+!!          ulp=real(i,kind=wp)/2.0
+!!          write(*,*) i, compare_float( x, y, ulp=ulp ) ,'ULP=',ulp
+!!       enddo
+!!    end program demo_compare_float
 !!
-!!   For no ULP scaling (ULP=1.0), the relational operators can be used
-!!   instead
+!!  Results:
 !!
-!!   use m_compare_float_numbers
-!!   real :: x, y
-!!   if ( x .equalto. y ) then
-!!     ! -- x effectively equals y, so perform some operation
-!!     ....
-!!   endif
+!!     >  is 10*0.1 == 1.0?
+!!     >  NOT EQUAL!
+!!     > 1.00000012 3F800001 1.00000000 3F800000
+!!     >  regular F T F
+!!     >  compare F T F
+!!     >            0 F ULP=   0.00000000
+!!     >            1 F ULP=  0.500000000
+!!     >            2 F ULP=   1.00000000
+!!     >            3 T ULP=   1.50000000
+!!     >            4 T ULP=   2.00000000
+!!     >            5 T ULP=   2.50000000
+!!     >            6 T ULP=   3.00000000
+!!     >            7 T ULP=   3.50000000
+!!     >            8 T ULP=   4.00000000
+!!     >            9 T ULP=   4.50000000
+!!     >           10 T ULP=   5.00000000
+subroutine change_default_ulp(ulp)
+! developer routine for changing default ulp
+class(*),intent(in) :: ulp
+   default_ulp = abs(anyscalar_to_double_(ulp))
+end subroutine change_default_ulp
 elemental function compare_float_real32( x, y, ulp ) result( compare )
 integer,parameter            ::  wp=real32
 real(kind=wp),intent(in)     ::  x
@@ -1089,7 +1158,7 @@ real(kind=wp)                ::  rel
    if ( present( ulp ) ) then
      rel = abs(anyscalar_to_double_(ulp))
    else
-     rel = 1.0_wp
+     rel = default_ulp
    endif
    compare = abs( x - y ) < ( rel * spacing( max(abs(x),abs(y)) ) )
 end function compare_float_real32
@@ -1130,7 +1199,7 @@ real(kind=wp)                ::  rel
    if ( present( ulp ) ) then
      rel = abs(anyscalar_to_double_(ulp))
    else
-     rel = 1.0_wp
+     rel = default_ulp
    endif
    compare = abs( x - y ) < ( rel * spacing( max(abs(x),abs(y)) ) )
 end function compare_float_real64
@@ -1172,7 +1241,7 @@ real(kind=wp)                ::  rel
    if ( present( ulp ) ) then
      rel = abs(anyscalar_to_double_(ulp))
    else
-     rel = 1.0_wp
+     rel = default_ulp
    endif
    compare = abs( x - y ) < ( rel * spacing( max(abs(x),abs(y)) ) )
 end function compare_float_real128

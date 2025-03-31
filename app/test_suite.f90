@@ -11,6 +11,8 @@ program maketest
    integer :: i
 ! a program to call the test_suite_* Fortran procedures
    write (out, g) "program runtest"
+   write (out, g) "use, intrinsic :: iso_fortran_env, only : real_kinds,real32,real64,real128"
+   write (out, g) "use, intrinsic :: iso_fortran_env, only : integer_kinds,int8,int16,int32,int64"
    write (out, g) "use, intrinsic :: iso_fortran_env, only: &"
    write (out, g) "& stdin => input_unit,   &"
    write (out, g) "& stdout => output_unit, &"
@@ -26,7 +28,7 @@ program maketest
    write (out, g) "   call unit_test_mode(       &"
    write (out, g) "       keep_going=T,           &"
    write (out, g) "       flags=[0],              &"
-   write (out, g) "       luns=[stderr],          &"
+   write (out, g) "       luns=[stdout],          &"
    write (out, g) "       command='',             &"
    write (out, g) "       brief=F,                &"
    write (out, g) "       match='',               &"

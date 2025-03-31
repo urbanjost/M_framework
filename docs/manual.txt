@@ -29,8 +29,6 @@ unit_test_system (3m_framework__verify) - [M_framework__verify] return status fr
 wrt (3m_framework__msg) - [M_framework__msg] write multiple scalar values to any number of files (LICENSE:PD)
 M_framework(3m_framework)			     M_framework(3m_framework)
 
-
-
 NAME
   M_framework(3f) - [M_framework::INTRO] unit test framework (LICENSE:PD)
 
@@ -41,11 +39,11 @@ SYNOPSIS
 
   The support modules are useful for creating terminal messages, comparing
   expected values to results, writing logfiles and playback journals
-  independant of unit testing as well.
+  independent of unit testing as well.
 
   Typically unit testing can be integrated seamlessly into the fpm(1)
   subcommand "test" making unit testing from github/gitlab CD/CI utilities as
-  simple as "fpm teet" in many cases.
+  simple as "fpm test" in many cases.
 
    BASIC TIMING IS INCLUDED
   As well as the expected **pass/fail/skipped unit testing** report.  basic
@@ -491,7 +489,6 @@ UNIQUE FEATURES
      where_write_message_all			   0	      0 	 3
      write_message_only 			   4	      2 	 4
 
-
 UNIQUE FEATURES
   fpm(1), gdb(1), and M\_framework(3f) work together
 
@@ -588,7 +585,6 @@ SUPPORTS FPM
        fpm test -- command=bookkeeper
        # and look at the bookkeeper*.* files in the top of the project
 
-
 DOCUMENTATION
    USER
   •  An [index](https://urbanjost.github.io/M_framework/man3.html) to HTML
@@ -670,12 +666,8 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024      M_framework(3m_framework)
+			       February 23, 2025     M_framework(3m_framework)
 almost(3m_framework__approx)			  almost(3m_framework__approx)
-
-
 
 NAME
   almost(3f) - [M_framework__approx] return true or false if two numbers agree
@@ -688,7 +680,6 @@ SYNOPSIS
       class(*),intent(in)	  :: rdigits
       logical,intent(in),optional :: verbose
       logical			  :: almost
-
 
 DESCRIPTION
   Returns true or false depending on whether the two numbers given agree to
@@ -710,7 +701,7 @@ RETURNS
   almost
     TRUE if the input values compare up to the specified number of values
 
-EXAMPLE
+EXAMPLES
   sample:
 
      program demo_almost
@@ -755,24 +746,18 @@ EXAMPLE
       > digits out of requested 8.00000000
       > 	   8 F
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024   almost(3m_framework__approx)
+			       February 23, 2025  almost(3m_framework__approx)
 in_margin(3m_framework__approx) 	       in_margin(3m_framework__approx)
-
-
 
 NAME
   in_margin(3f) - [M_framework__approx] check if two reals are approximately
   equal using a relative margin
-
 
 SYNOPSIS
   elemental pure function in_margin( expected_value, measured_value,
@@ -782,7 +767,6 @@ SYNOPSIS
        real, intent(in)    :: measured_value
        real, intent(in)    :: allowed_margin
        class(*),intent(in) :: invalue
-
 
 DESCRIPTION
   Compare two values to see if they are relatively equal using the specified
@@ -803,7 +787,7 @@ OPTIONS
   allowed_margin
     Allowed relative margin
 
-EXAMPLE
+EXAMPLES
   Sample program:
 
      program demo_in_margin
@@ -839,18 +823,12 @@ EXAMPLE
 	 > T
 	 > T
 
-
-
-
-				August 31, 2024in_margin(3m_framework__approx)
+			       February 23, 202in_margin(3m_framework__approx)
 significant(3m_framework__approx)	     significant(3m_framework__approx)
-
-
 
 NAME
   significant(3f) - [M_framework__approx] round val to specified number of
   significant digits
-
 
 SYNOPSIS
   pure elemental function significant(val,digits,round)
@@ -859,7 +837,6 @@ SYNOPSIS
        integer,intent(in)		    :: digits
        character(len=*),intent(in),optional :: round
        real				    :: significant
-
 
 DESCRIPTION
   Round real value to specified number of significant digits
@@ -898,8 +875,7 @@ OPTIONS
 				    which may correspond to one of the
 				    other modes.
 
-
-EXAMPLE
+EXAMPLES
   Sample program
 
      program demo_significant
@@ -940,19 +916,12 @@ EXAMPLE
 	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
 	> 1.234568 1.234568 1.234568 RP
 
-
-
-
-				August 31, 20significant(3m_framework__approx)
+			       February 23, 2significant(3m_framework__approx)
 compare_float(3m_framework__approx)	   compare_float(3m_framework__approx)
 
-
-
-NAME
 NAME
   compare_float(3f) - [M_framework__approx] compare floating point values with
   adjustable tolerance.  (LICENSE:PD)
-
 
 SYNOPSIS
   result = compare_float( x, y,ulp = SCALING_VALUE)
@@ -967,6 +936,9 @@ SYNOPSIS
 	 X.lessthan.Y
 	 X.greaterthan.Y
 
+  Developer procedure (Do not use in production):
+
+	change_default_ulp(ulp)
 
 DESCRIPTION
   compare_float(3f) is a function for comparing floating point numbers within
@@ -976,13 +948,32 @@ DESCRIPTION
 
 	 abs( x - y ) < ( ulp * spacing( max(abs(x),abs(y)) ) )
 
-  If the result is .TRUE., the numbers are considered equal.  Both single and
-  double precision scalar and array numbers can be compared, as the function
-  is elemental.
+  where ULP is a user-selected scaling factor that defaults to 1. The default
+  is intentionally low so that default behavior is close to that of the
+  default operators. Setting it to zero(0.0) essentially causes no values to
+  compare equal.
+
+  If the result is .TRUE., the numbers are considered equal. Both single and
+  double precision scalar and array values can be compared, as the function is
+  elemental.
+
+  By definition of an elemental function the returned data entity is the same
+  shape as the input array size or scalar if all values are scalar.
+
+  It can be useful to empirically test your code for numeric sensitivities by
+  changing the value of the ULP scaling factor and noting any result changes.
 
   As a convenience relational operators .EqualTo., .GreaterThan., and
-  .LessThan. are provided. These are based on the compare_float(3f) function
-  using the commonly used default scaling of ULP=1.
+  .LessThan. are provided. Note the comparisons return .TRUE> if the
+  difference between the two values is .lt., .ge., and .le. .  The algorithm
+  for each operator is shown in the following OPERATORS section.
+
+  The default ULP value is 1.0. A procedure is available to change the default
+  but it should only be used for examining code behavior during development,
+  as it changes the default for calls from all procedures (even those in other
+  modules or procedures).
+
+	call default_ulp(ulp=VALUE)
 
 DETAILS
   It is generally acknowledged that real numbers should not be compared
@@ -992,31 +983,34 @@ DETAILS
 
   The Fortran standard does not specify functions or operators specifically
   for comparing float values, but leaves some latitude in how the compilers
-  address floating point comparisions. It does specify functions that return
+  address floating point comparisons. It does specify functions that return
   platform-specific values useful in applying different methods to the problem
   such as
 
-      + digits(3f)	  - Significant digits in the numeric model
       + epsilon(3f)	  - Epsilon function
+      + nearest(3f)	  - Nearest representable number
+      + spacing(3f)	  - Smallest distance between two numbers of a given type
+      + rrspacing(3f)	  - Reciprocal of the relative spacing of a numeric type
+
+  and in some cases
+
+      + scale(3f)	  - Scale a real value by a whole power of the radix
+      + digits(3f)	  - Significant digits in the numeric model
       + exponent(3f)	  - Exponent of floating-point number
       + fraction(3f)	  - Fractional part of the model representation
       + huge(3f)	  - Largest number of a type and kind
       + maxexponent(3f)   - Maximum exponent of a real kind
       + minexponent(3f)   - Minimum exponent of a real kind
-      + nearest(3f)	  - Nearest representable number
       + precision(3f)	  - Decimal precision of a real kind
       + radix(3f)	  - Base of a numeric model
       + range(3f)	  - Decimal exponent range of a numeric kind
-      + rrspacing(3f)	  - Reciprocal of the relative spacing of a numeric type
-      + scale(3f)	  - Scale a real value by a whole power of the radix
       + set_exponent(3f)  - real value with specified exponent
-      + spacing(3f)	  - Smallest distance between two numbers of a given type
       + tiny(3f)	  - Smallest positive number of a real kind
 
   Books have been written on the behavior of floating point math.
 
-  As is used here, a commonly used simple general floating point comparison
-  algorithm is
+  As is used here, a commonly used simple floating point comparison algorithm
+  is
 
 	 if(abs(x < y) < (ulp * spacing(max(abs(x),abs(y))))) then
 	   :
@@ -1035,7 +1029,7 @@ OPTIONS
     control the scaling of the value returned by SPACING(3f) in order to relax
     or tighten what is considered "equal". That is, the ULP value can be used
     to scale the comparison based on knowledge of the "numerical quality" of
-    the values being used in the comparision.
+    the values being used in the comparison.
 
     The value should be positive. The absolute value of the value is taken if
     it is negative.
@@ -1061,7 +1055,6 @@ OPERATORS
 
 		 abs( x - y ) < spacing( max(abs(x),abs(y)) )
 
-
   X.greaterthan.Y
     If the result is .TRUE., x is considered greater than y.  The result is a
     logical value indicating whether the operand x is greater than y by more
@@ -1083,25 +1076,63 @@ OPERATORS
     If the result is .TRUE., x is considered less than y.
 
 EXAMPLES
-  use m_compare_float_numbers real :: x, y if ( compare_float( x, y, ulp=5.0 )
-  ) ) then ! what to do when x effectively equals y endif
+  Sample programs:
 
-  For no ULP scaling (ULP=1.0), the relational operators can be used instead
+     program demo_compare_float
+     use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+     use,intrinsic :: iso_fortran_env, only : real32, real64, real128
+     use,intrinsic :: iso_fortran_env, only : error_unit,output_unit
+     use M_framework__approx,	       only : compare_float
+     use M_framework__approx,	       only : &
+     & operator(.equalto.), operator(.greaterthan.), operator(.lessthan.)
+     implicit none
+     integer,parameter	     :: wp=int32
+     integer		     :: i
+     character(len=80),save  :: line='10*0.1'
+     real(kind=wp)	     :: a(10), x, y, ulp
+	write(*,*)'is 10*0.1 == 1.0?'
+	! sum up 0.1 ten times hopefully in a manner compiler does not
+	! optimize it and in the process make it equal
+	a=0.1_wp
+	read(line,*)a
+	x=sum(a)
+	y=1.0_wp
+	write(*, *)merge('    EQUAL ','NOT EQUAL!',x .eq. y)
+	write(*,'(*(g0,1x,z0,1x))')x,x,y,y ! show decimal and hexadecimal value
+	write(*, *)'regular',x .eq. y, x .gt. y, x .lt. y ! standard operators
+	! For the default ULP=1.0, the relational operators can be used
+	write(*, *)'compare',x .equalto. y, x .greaterthan. y, x .lessthan. y
+	do i=0,10
+	   ulp=real(i,kind=wp)/2.0
+	   write(*,*) i, compare_float( x, y, ulp=ulp ) ,'ULP=',ulp
+	enddo
+     end program demo_compare_float
 
-  use m_compare_float_numbers real :: x, y if ( x .equalto. y ) then ! -- x
-  effectively equals y, so perform some operation endif
+  Results:
 
+      >  is 10*0.1 == 1.0?
+      >  NOT EQUAL!
+      > 1.00000012 3F800001 1.00000000 3F800000
+      >  regular F T F
+      >  compare F T F
+      > 	   0 F ULP=   0.00000000
+      > 	   1 F ULP=  0.500000000
+      > 	   2 F ULP=   1.00000000
+      > 	   3 T ULP=   1.50000000
+      > 	   4 T ULP=   2.00000000
+      > 	   5 T ULP=   2.50000000
+      > 	   6 T ULP=   3.00000000
+      > 	   7 T ULP=   3.50000000
+      > 	   8 T ULP=   4.00000000
+      > 	   9 T ULP=   4.50000000
+      > 	  10 T ULP=   5.00000000
 
-
-				August 31, compare_float(3m_framework__approx)
+			       February 23,compare_float(3m_framework__approx)
 accdig(3m_framework__approx)			  accdig(3m_framework__approx)
-
-
 
 NAME
   accdig(3f) - [M_framework__approx] compare two numbers only up to a
   specified number of digits (LICENSE:PD)
-
 
 SYNOPSIS
   elemental impure subroutine accdig(x,y,digio,acurcy,ind)
@@ -1111,7 +1142,6 @@ SYNOPSIS
 	 class(*),intent(in)  :: DIGI0
 	 real,intent(out)     :: acurcy
 	 integer,intent(out)  :: ind
-
 
 DESCRIPTION
   This procedure is used to check how closely two numbers agree.
@@ -1168,7 +1198,7 @@ DESCRIPTION
   agree in sign in X=-1.2345678 and Y=1.2345678; here the accuracy reported is
   -0.30103000.
 
-EXAMPLE
+EXAMPLES
   Example program:
 
      program demo_accdig ! fortran 90 example
@@ -1207,7 +1237,6 @@ EXAMPLE
 	enddo
      end program demo_accdig
 
-
 NOTES
 REFERENCES
   based on ...
@@ -1224,7 +1253,6 @@ REFERENCES
 	     CURRENT VERSION - February, 1990.
 	     JSU     VERSION - February, 1991.
 
-
 DEPENDENCIES
   •  M_framework__journal(), log10(), abs(1)
 
@@ -1234,17 +1262,12 @@ AUTHORS
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024   accdig(3m_framework__approx)
+			       February 23, 2025  accdig(3m_framework__approx)
 attr(3m_framework__attr)			      attr(3m_framework__attr)
-
-
 
 NAME
   attr(3f) - [M_framework__attr] substitute escape sequences for HTML-like
   syntax in strings (LICENSE:MIT)
-
 
 SYNOPSIS
   function attr(string,reset) result (expanded)
@@ -1258,7 +1281,6 @@ SYNOPSIS
 	 logical,intent(in),optional  :: reset
 	 character(len=:),allocatable :: expanded(:)
 	 integer,intent(in),optional  :: chars
-
 
 DESCRIPTION
   Use HTML-like syntax to add attributes to terminal output such as color on
@@ -1359,7 +1381,7 @@ LIMITATIONS
      processed by attr(3f) instead of in any plain text output so that the raw
      mode will create correct input for the attr(3f) function if read back in.
 
-EXAMPLE
+EXAMPLES
   Sample program
 
       program demo_attr
@@ -1421,7 +1443,6 @@ EXAMPLE
       end subroutine printstuff
       end program demo_attr
 
-
 AUTHOR
   John S. Urban, 2021
 
@@ -1430,25 +1451,17 @@ LICENSE
 SEE ALSO
   attr_mode(3f), attr_update(3f)
 
-
-
-				August 31, 2024       attr(3m_framework__attr)
+			       February 23, 2025      attr(3m_framework__attr)
 attr_mode(3m_framework__attr)			 attr_mode(3m_framework__attr)
-
-
-
-	      !>
 
 NAME
   attr_mode(3f) - [M_framework__attr] select processing mode for output from
   attr(3f) (LICENSE:MIT)
 
-
 SYNOPSIS
   subroutine attr_mode(manner)
 
 	 character(len=*),intent(in) :: manner
-
 
 DESCRIPTION
   Turn off the generation of strings associated with the HTML keywords in the
@@ -1471,7 +1484,7 @@ OPTIONS
       restore original keyword meanings deleted or replaced by calls to
       attr_update(3f).
 
-EXAMPLE
+EXAMPLES
   Sample program
 
       program demo_attr_mode
@@ -1501,21 +1514,17 @@ EXAMPLE
 
       end program demo_attr_mode
 
-
 AUTHOR
   John S. Urban, 2021
 
 LICENSE
    MIT
-				August 31, 2024  attr_mode(3m_framework__attr)
+			       February 23, 2025 attr_mode(3m_framework__attr)
 M_framework__attr(3m_framework__attr)	 M_framework__attr(3m_framework__attr)
-
-
 
 NAME
   M_framework__attr(3f) - [M_framework__attr::INTRO] control text attributes
   on terminals (LICENSE:MIT)
-
 
 SYNOPSIS
   use M_framework__attr, only : attr, attr_mode, attr_update
@@ -1574,7 +1583,6 @@ ACCESS
 	  [dependencies]
 	  M_framework__attr = { git = "https://github.com/urbanjost/M_framework__attr.git" }
 
-
 LIMITATIONS
   •  colors are not nestable.
 
@@ -1590,7 +1598,7 @@ LIMITATIONS
      does work as-is with CygWin and MinGW and Putty windows and mintty(1) as
      tested.
 
-EXAMPLE
+EXAMPLES
   Sample program
 
       program demo_M_framework__attr
@@ -1631,7 +1639,6 @@ EXAMPLE
 
       end program demo_M_framework__attr
 
-
 AUTHOR
   John S. Urban, 2021
 
@@ -1646,19 +1653,12 @@ SEE ALSO
       console_codes(4), ECMA-48,
       https://en.wikipedia.org/wiki/ANSI_escape_code
 
-
-
-				August 31M_framework__attr(3m_framework__attr)
+			       February 2M_framework__attr(3m_framework__attr)
 attr_update(3m_framework__attr) 	       attr_update(3m_framework__attr)
-
-
-
-	      !>
 
 NAME
   attr_update(3f) - [M_framework__attr] update internal dictionary given
   keyword and value (LICENSE:MIT)
-
 
 SYNOPSIS
   subroutine attr_update(key,val)
@@ -1666,7 +1666,6 @@ SYNOPSIS
       character(len=*),intent(in)	    :: key
       character(len=*),intent(in),optional  :: val
       character(len=*),intent(in),optional  :: mono_val
-
 
 DESCRIPTION
   Update internal dictionary in M_framework__attr(3fm) module.
@@ -1700,8 +1699,7 @@ KEYWORDS
        ul,underline
        it,italics (often produces inverse colors on many devices
 
-
-EXAMPLE
+EXAMPLES
   Sample program
 
        program demo_update
@@ -1730,16 +1728,13 @@ EXAMPLE
 	  'CUSTOMIZED: <r>Apple</r>, <b>Sky</b>, <g>Grass</g>')
        end program demo_update
 
-
 AUTHOR
   John S. Urban, 2021
 
 LICENSE
    MIT
-				August 31, 2024attr_update(3m_framework__attr)
+			       February 23, 202attr_update(3m_framework__attr)
 journal(3m_framework__journal)			journal(3m_framework__journal)
-
-
 
 NAME
   journal(3f) - [M_framework__journal] provides public message routine, no
@@ -1750,7 +1745,6 @@ SYNOPSIS
 
       character(len=*),intent(in) :: where
       class(*),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-
 
    WRITE MESSAGES
   basic messages
@@ -1770,13 +1764,11 @@ SYNOPSIS
 
 	call journal('%',time_stamp_prefix_specification)
 
-
    MODES
   Turn on/off writing DEBUG messages to trail file
 
 	call journal('>','debug on') # turn on debug mode
 	call journal('<','debug off') # turn off debug mode
-
 
    ASSIGN STDOUT TO AN ALTERNATE FILE
   change stdout to iunit and open filename; or close unit and go back to
@@ -1787,7 +1779,6 @@ SYNOPSIS
   change stdout to iunit to use a file already open
 
 	call journal(iunit)
-
 
 DESCRIPTION
   If a user procedure is used for outputting messages instead of calling
@@ -1858,7 +1849,7 @@ OPTIONS
     when WHERE="%" the message is treated as a time format specification as
     described under now(3f).
 
-EXAMPLE
+EXAMPLES
   Sample program:
 
      program demo_journal
@@ -1965,19 +1956,14 @@ EXAMPLE
 
      end program testit
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024 journal(3m_framework__journal)
+			       February 23, 2025journal(3m_framework__journal)
 M_framework__journal(3m_framework__M_framework__journal(3m_framework__journal)
-
-
 
 NAME
   M_framework__journal(3fm) - [M_framework__journal::INTRO] write program
@@ -2009,7 +1995,7 @@ DESCRIPTION
   more than just a single message have an action specified as the first
   parameter. This action might specify to open a log file, to change the
   "level" required by messages for them to appear, whether output it written
-  as a comment or not, and on what files the output shoud appear. So the
+  as a comment or not, and on what files the output should appear. So the
   interface can be used in a very simple manner but has more options than is
   evident at first glance, as detailed in the man-page for journal(3f).
 
@@ -2081,7 +2067,6 @@ EXAMPLES
        call journal('D','*demo* DEBUG MESSAGE 005 IGNORED')
        end program demo_journal
 
-
   Sample program for trail messages with optional timing information:
 
        program testit
@@ -2130,24 +2115,18 @@ EXAMPLES
        !
        end program testit
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				AugM_framework__journal(3m_framework__journal)
+			       FebrM_framework__journal(3m_framework__journal)
 str(3m_framework__msg)					str(3m_framework__msg)
-
-
 
 NAME
   str(3f) - [M_framework__msg] converts up to twenty standard scalar type
   values to a string (LICENSE:PD)
-
 
 SYNOPSIS
   Syntax:
@@ -2159,7 +2138,6 @@ SYNOPSIS
        logical,intent(in),optional	    :: if
        character(len=*),intent(in),optional :: sep
        character,len=(:),allocatable	    :: str
-
 
 DESCRIPTION
   str(3f) builds a space-separated string from up to twenty scalar values.
@@ -2229,19 +2207,14 @@ EXAMPLES
       format=(*(i9:,1x))
       program will now stop
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024 	str(3m_framework__msg)
+			       February 23, 2025	str(3m_framework__msg)
 wrt(3m_framework__msg)					wrt(3m_framework__msg)
-
-
 
 NAME
   wrt(3f) - [M_framework__msg] write multiple scalar values to any number of
@@ -2310,7 +2283,6 @@ EXAMPLES
      call wrt([stdout,stdout,stdout],'USING FMT :', &
       & huge(0),'PI=',asin(1.0d0)*2.0d0,fmt(ints(2),'i0.4'),iostat=iostat)
 
-
      end program demo_wrt
 
   TWO FILES: 2147483647 PI= 3.1415926535897931 TWO FILES: 2147483647 PI=
@@ -2329,24 +2301,18 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024 	wrt(3m_framework__msg)
+			       February 23, 2025	wrt(3m_framework__msg)
 pdec(3m_framework__msg) 			       pdec(3m_framework__msg)
-
-
 
 NAME
   pdec(3f) - [M_framework__msg] write out string with ASCII decimal equivalent
   vertically under it (LICENSE:PD)
-
 
 SYNOPSIS
   Usage:
 
       subroutine pdec(string)
       character(len=*),intent(in) :: string
-
 
 DESCRIPTION
   Given a string to print, PDEC() writes out the ASCII Decimal equivalent of
@@ -2381,23 +2347,17 @@ EXAMPLES
        >3666667739990000
        >2567890127890123
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024        pdec(3m_framework__msg)
+			       February 23, 2025       pdec(3m_framework__msg)
 set(3m_framework__msg)					set(3m_framework__msg)
-
-
 
 NAME
   set(3f) - [M_msg] set scalars from an array (LICENSE:PD)
-
 
 SYNOPSIS
   Syntax:
@@ -2407,7 +2367,6 @@ SYNOPSIS
        class(*),intent(in)	     :: g0
        class(*),intent(out),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga
        class(*),intent(out),optional  :: gb,gc,gd,ge,gf,gg,gh,gi,gj,gk
-
 
 DESCRIPTION
   set(3f) sets up to twenty scalars to elements from an array.
@@ -2462,20 +2421,14 @@ EXAMPLES
       L       = 		  100
       /
 
-
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024 	set(3m_framework__msg)
+			       February 23, 2025	set(3m_framework__msg)
 stderr(3m_framework__msg)			     stderr(3m_framework__msg)
-
-
 
 NAME
   stderr(3f) - [M_framework__msg] write message to stderr (LICENSE:PD)
@@ -2566,12 +2519,8 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024      stderr(3m_framework__msg)
+			       February 23, 2025     stderr(3m_framework__msg)
 fmt(3m_framework__msg)					fmt(3m_framework__msg)
-
-
 
 NAME
   fmt(3f) - [M_framework__msg] convert any intrinsic to a string using
@@ -2628,19 +2577,14 @@ EXAMPLES
       result is [3.3333]
       result is The final answer is [T]
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024 	fmt(3m_framework__msg)
+			       February 23, 2025	fmt(3m_framework__msg)
 assert(3m_framework__msg)			     assert(3m_framework__msg)
-
-
 
 NAME
   assert(3f) - [M_framework__msg] print filename, linenumber, and message to
@@ -2695,19 +2639,14 @@ EXAMPLES
 	     & 'The value is too large', a, ' > ', toobig)
      end program demo_assert
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024      assert(3m_framework__msg)
+			       February 23, 2025     assert(3m_framework__msg)
 fstop(3m_framework__utility)			  fstop(3m_framework__utility)
-
-
 
 NAME
   fstop(3f) - [M_framework__utility] call stop with both a number and a
@@ -2769,17 +2708,12 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024   fstop(3m_framework__utility)
+			       February 23, 2025  fstop(3m_framework__utility)
 unit_test(3m_framework__verify) 	       unit_test(3m_framework__verify)
-
-
 
 NAME
   unit_test(3f) - [M_framework__verify] report if logical expression is true
   or false, optionally call command and/or stop program.  (LICENSE:PD)
-
 
 SYNOPSIS
   subroutine unit_test(name,expression,msg,g1,g2,g3,g4,g5,g6,g7,g8,g9,& &
@@ -2791,7 +2725,6 @@ SYNOPSIS
       & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
       logical,intent(in),optional :: only_on_fail
 
-
 DESCRIPTION
   unit_test(3f) tests the expression and displays a message composed of the
   generic intrinsic values msg, and g1 thorough gj. Additionally, if the
@@ -2801,7 +2734,6 @@ DESCRIPTION
 
 	$COMMAND name="NAME" type="check" passed="passed|failed" ...
 	msg="all messages"
-
 
   •  if keep_going = .false. stop the program on a failed test
 
@@ -2893,24 +2825,18 @@ EXAMPLES
        >check_stop:  TALLY		  PASSED  : GOOD:7	   BAD: ...
        >0 DURATION:00000000267059
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31, 2024unit_test(3m_framework__verify)
+			       February 23, 202unit_test(3m_framework__verify)
 unit_test_end(3m_framework__verify)	   unit_test_end(3m_framework__verify)
-
-
 
 NAME
   unit_test_end(3f) - [M_framework__verify] end test of procedure started by
   unit_test_start(3f) (LICENSE:PD)
-
 
 SYNOPSIS
   subroutine unit_test_end(name,msg,opts)
@@ -2918,7 +2844,6 @@ SYNOPSIS
       character(len=*),intent(in) :: name
       character(len=*),intent(in),optional :: msg
       character(len=*),intent(in),optional :: opts
-
 
 DESCRIPTION
   A message is shown including the duration of the tests If there have been no
@@ -2955,17 +2880,12 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-				August 31, unit_test_end(3m_framework__verify)
+			       February 23,unit_test_end(3m_framework__verify)
 unit_test_expected(3m_framework__verifunit_test_expected(3m_framework__verify)
-
-
 
 NAME
   unit_test_expected(3f) - [M_framework__verify] report if two scalar values
   of like type and kind are equal.  (LICENSE:PD)
-
 
 SYNOPSIS
   impure elemental subroutine unit_test_example(name,result,expected)
@@ -2974,13 +2894,11 @@ SYNOPSIS
       class(*),intent(in)	   :: result
       class(*),intent(in),optional :: expected
 
-
 DESCRIPTION
   A shortcut for a common call to unit_test(3f) tests the two values of like
   type and kind. It is equivalent to
 
 	 call unit_test(name,result,expected,'result=',result,'expected=',.true.)
-
 
 OPTIONS
   RESULT
@@ -3033,19 +2951,14 @@ EXAMPLES
 	   call stop('abs')
 	end program demo_unit_test_expected
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				Augustunit_test_expected(3m_framework__verify)
+			       Februarunit_test_expected(3m_framework__verify)
 unit_test_mode(3m_framework__verify)	  unit_test_mode(3m_framework__verify)
-
-
 
 NAME
   unit_test_mode(3f) - [M_framework__verify] set testing modes (LICENSE:PD)
@@ -3116,19 +3029,14 @@ EXAMPLES
 
      end program demo_unit_test_mode
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31,unit_test_mode(3m_framework__verify)
+			       February 23unit_test_mode(3m_framework__verify)
 unit_test_msg(3m_framework__verify)	   unit_test_msg(3m_framework__verify)
-
-
 
 NAME
   unit_test_msg(3f) - [M_framework__verify] converts up to twenty standard
@@ -3179,24 +3087,18 @@ EXAMPLES
 
      end program demo_unit_test_msg
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31, unit_test_msg(3m_framework__verify)
+			       February 23,unit_test_msg(3m_framework__verify)
 unit_test_start(3m_framework__verify)	 unit_test_start(3m_framework__verify)
-
-
 
 NAME
   unit_test_start(3f) - [M_framework__verify] reset counters and start a new
   test block (LICENSE:PD)
-
 
 SYNOPSIS
   subroutine unit_test_start(name,msg,opts,matched)
@@ -3205,7 +3107,6 @@ SYNOPSIS
       character(len=*),intent(in),optional :: msg
       character(len=*),intent(in),optional :: opts
       logical,intent(out),optional	   :: matched
-
 
 DESCRIPTION
   unit_test_start(3f) is an initialization procedure for starting a new
@@ -3264,31 +3165,24 @@ EXAMPLES
 
       end program demo_unit_test_start
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31unit_test_start(3m_framework__verify)
+			       February 2unit_test_start(3m_framework__verify)
 unit_test_stop(3m_framework__verify)	  unit_test_stop(3m_framework__verify)
-
-
 
 NAME
   unit_test_stop(3f) - [M_framework__verify] report tally of all checks and
   stop program (LICENSE:PD)
-
 
 SYNOPSIS
   subroutine unit_test_stop(msg,opts)
 
       character(len=*),intent(in),optional :: msg
       character(len=*),intent(in),optional :: opts
-
 
 DESCRIPTION
   give a tally of all calls to unit_test(3f) and stop program.
@@ -3329,19 +3223,14 @@ EXAMPLES
 
       end program demo_unit_test_stop
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 31,unit_test_stop(3m_framework__verify)
+			       February 23unit_test_stop(3m_framework__verify)
 unit_test_system(3m_framework__verify)	unit_test_system(3m_framework__verify)
-
-
 
 NAME
   unit_test_system(3f) - [M_framework__verify] return status from system
@@ -3390,19 +3279,14 @@ EXAMPLES
      endif
      end program demo_unit_test_system
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				August 3unit_test_system(3m_framework__verify)
+			       February unit_test_system(3m_framework__verify)
 M_framework__verify(3m_framework__verM_framework__verify(3m_framework__verify)
-
-
 
 NAME
   M_framework__verify(3f) - [M_framework__verify::INTRO] unit test framework
@@ -3419,7 +3303,6 @@ SYNOPSIS
   Module values
 
      use M_framework, only : unit_test_level, unit_test_flags
-
 
 QUOTE
   Do not let your victories go to your head, nor let your failures go to your
@@ -3449,8 +3332,8 @@ DESCRIPTION
   If default modes need changed it can be done via the unit_test_mode(3f)
   procedure or as command line options.
 
-  messages by default are writting to stderr, but may be written to any list
-  of LUNs of preassigned or open files.
+  messages by default are writing to stderr, but may be written to any list of
+  LUNs of preassigned or open files.
 
    SET MODES
   Some of the most common options are
@@ -3464,7 +3347,6 @@ DESCRIPTION
 		     different debug levels
 	 command     name of optional command to execute for a start,
 		     check, or finish.
-
 
    PROCEDURES
   The unit test procedures are
@@ -3582,13 +3464,10 @@ EXAMPLES
      check_end:   two	PASSED	: GOOD:   1 BAD:  0 DURATION:00000000
      check_stop:  TALLY PASSED	: GOOD:    3 BAD:  0 DURATION:00000001
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-				AugusM_framework__verify(3m_framework__verify)
+			       FebruaM_framework__verify(3m_framework__verify)

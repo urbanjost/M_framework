@@ -364,8 +364,8 @@ to just use standard Fortran programs that make it very easy to generate
 test program skeletons instead.
 -->
 <!--
-Of course any user-supplied method such as a file listing what tests to
+Of course any user-supplied method such as a file listing which tests to
 execute or skip or build the tests conditionally with a preprocessor or
 using procedure pointers in clever ways to point to a no-op procedure
 are just a few examples of alternate methods.
--->
+>

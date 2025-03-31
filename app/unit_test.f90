@@ -20,7 +20,7 @@ character(len=256)            :: iomsg
       write (stderr, g) 'SYNOPSIS                                                                        '
       write (stderr, g) '     unit_test ARG1 ARG2 ARG3 ARG4 ...                                          '
       write (stderr, g) 'DESCRIPTION                                                                     '
-      write (stderr, g) '   generate skeleton programs in current directory named "unit_test_ARG.f90 for"'
+      write (stderr, g) '   generate skeleton programs in current directory named "unit_test_ARG.f90"    '
       write (stderr, g) '   for use with "fpm test". Will not overwrite existing files.                  '
       write (stderr, g) 'EXAMPLE                                                                         '
       write (stderr, g) 'Create a new fpm project to try it out                                          '
@@ -54,8 +54,10 @@ character(len=256)            :: iomsg
       endif
       write (out, g) "program unit_test_",trim(words(i))
       write (out, g) "use, intrinsic :: iso_fortran_env, only: &"
-      write (out, g) "& stdin => input_unit,   &"
-      write (out, g) "& stdout => output_unit, &"
+      write (out, g) "& real32, real64, real128,   &"
+      write (out, g) "& int8, int16, int32, int64, &"
+      write (out, g) "& stdin => input_unit,       &"
+      write (out, g) "& stdout => output_unit,     &"
       write (out, g) "& stderr => error_unit"
       write (out, g) "use M_framework, only : unit_test_start, unit_test"
       write (out, g) "use M_framework, only : unit_test_end,   unit_test_stop"
@@ -68,7 +70,7 @@ character(len=256)            :: iomsg
       write (out, g) "   call unit_test_mode(       &"
       write (out, g) "       keep_going=T,           &"
       write (out, g) "       flags=[0],              &"
-      write (out, g) "       luns=[stderr],          &"
+      write (out, g) "       luns=[stdout],          &"
       write (out, g) "       command='',             &"
       write (out, g) "       brief=F,                &"
       write (out, g) "       silent=F,               &"

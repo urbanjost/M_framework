@@ -29,7 +29,7 @@ end interface set
 
 type :: force_kwargs_hack ! force keywords, using @awvwgk method
 end type force_kwargs_hack
-! so then any argument that comes afer "force_kwargs" is a compile time error
+! so then any argument that comes after "force_kwargs" is a compile time error
 ! if not done with a keyword unless someone "breaks" it by passing something
 ! of this type:
 !    type(force_kwargs_hack), optional, intent(in) :: force_kwargs
@@ -302,7 +302,7 @@ integer :: i
       !type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
 #endif
       type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
-      type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",1x))') (trim(generic(i)),i=1,size(generic))
+      type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",:,1x))') (trim(generic(i)),i=1,size(generic))
       type is (complex);                write(line(istart:),'("[",*("(",1pg0,",",1pg0,")",1x))') generic
       class default
          !error_stop 'unknown type in *print_generic*'

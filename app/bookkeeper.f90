@@ -261,7 +261,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '                                                                                ',&
 'SEE ALSO                                                                        ',&
-'    M_framemaker(3f), unit_test(3f), unit_test_mode(3f)                         ',&
+'    M_framework(3f), unit_test(3f), unit_test_mode(3f)                          ',&
 'AUTHOR                                                                          ',&
 '   John S. Urban                                                                ',&
 'LICENSE                                                                         ',&
@@ -334,7 +334,7 @@ if ( .not.exists('bookkeeper_clicks.csv') )then
 endif
 if ( .not.exists('bookkeeper.nml') )then
    write(nmlfile,g0)' Fortran NAMELIST group file containing test results'
-   write(nmlfile,g0)' that may be read with a simple file and used to'
+   write(nmlfile,g0)' that may be read with a simple program and used to'
    write(nmlfile,g0)' generate reports in other formats.'
    write(nmlfile,g0)' '
 endif
