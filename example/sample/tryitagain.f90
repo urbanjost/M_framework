@@ -1,10 +1,9 @@
 program M_test_suite_M_steam67
 use M_framework, only : unit_test_start,unit_test,unit_test_done, &
-                 unit_test_mode, unit_test_level, unit_test_stop
+                 unit_test_mode, unit_test_stop !  unit_test_level
 !use M_steam67
 implicit none
 double precision,allocatable :: expected(:), answers(:), input(:)
-double precision,parameter :: PI=atan(1.0d0)*4
    call test_sqrt()
    call test_cos()
    call test_sin()

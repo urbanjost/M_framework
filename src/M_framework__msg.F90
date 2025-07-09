@@ -1,28 +1,3 @@
-!-----------------------------------------------------------------------------------------------------------------------------------
-#define  __INTEL_COMP        1
-#define  __GFORTRAN_COMP     2
-#define  __NVIDIA_COMP       3
-#define  __NAG_COMP          4
-#define  __flang__           5
-#define  __UNKNOWN_COMP   9999
-
-#define FLOAT128
-
-#ifdef __INTEL_COMPILER
-#   define __COMPILER__ __INTEL_COMP
-#elif __GFORTRAN__ == 1
-#   define __COMPILER__ __GFORTRAN_COMP
-#elif __flang__
-#   undef FLOAT128
-#   define __COMPILER__ __LLVM_FLANG_COMP
-#elif __NVCOMPILER
-#   undef FLOAT128
-#   define __COMPILER__ __NVIDIA_COMP
-#else
-#   define __COMPILER__ __UNKNOWN_COMP
-#   warning  NOTE: UNKNOWN COMPILER
-#endif
-!-----------------------------------------------------------------------------------------------------------------------------------
 module M_framework__msg
 use,intrinsic :: iso_fortran_env, only : ERROR_UNIT,OUTPUT_UNIT    ! access computing environment
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
@@ -228,7 +203,8 @@ character(len=*),intent(in) :: sep
       type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
       type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
       type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
       type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
 #endif
       type is (logical);                write(line(istart:),'(l1)') generic
@@ -320,7 +296,8 @@ integer :: i
       type is (integer(kind=int64));    write(line(istart:),'("[",*(i0,1x))') generic
       type is (real(kind=real32));      write(line(istart:),'("[",*(1pg0,1x))') generic
       type is (real(kind=real64));      write(line(istart:),'("[",*(1pg0,1x))') generic
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
       type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
       !type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
 #endif
@@ -402,11 +379,11 @@ class(*),intent(in)                   :: generic
 character(len=*),intent(in),optional  :: format
 character(len=:),allocatable          :: line
 character(len=:),allocatable          :: fmt_local
-character(len=:),allocatable          :: re,im
+character(len=:),allocatable          :: str_re,str_im
 integer                               :: iostat
 character(len=255)                    :: iomsg
-character(len=1),parameter            :: null=char(0)
-integer                               :: ilen
+character(len=1),parameter            :: nil=char(0)
+integer                               :: iilen
 logical                               :: trimit
    if(present(format))then
       fmt_local=format
@@ -426,7 +403,8 @@ logical                               :: trimit
          type is (integer(kind=int64));    fmt_local='(i0,a)'
          type is (real(kind=real32));      fmt_local='(1pg0,a)'
          type is (real(kind=real64));      fmt_local='(1pg0,a)'
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     fmt_local='(1pg0,a)'
 #endif
          type is (logical);                fmt_local='(l1,a)'
@@ -443,36 +421,37 @@ logical                               :: trimit
    allocate(character(len=256) :: line) ! cannot currently write into allocatable variable
    iostat=0
    select type(generic)
-      type is (integer(kind=int8));     write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
-      type is (integer(kind=int16));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
-      type is (integer(kind=int32));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
-      type is (integer(kind=int64));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
-      type is (real(kind=real32));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
-      type is (real(kind=real64));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
-#ifdef FLOAT128
-      type is (real(kind=real128));     write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (integer(kind=int8));     write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
+      type is (integer(kind=int16));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
+      type is (integer(kind=int32));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
+      type is (integer(kind=int64));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
+      type is (real(kind=real32));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
+      type is (real(kind=real64));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
+#ifdef __NVCOMPILER
+#else
+      type is (real(kind=real128));     write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
 #endif
-      type is (logical);                write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
-      type is (character(len=*));       write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (logical);                write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
+      type is (character(len=*));       write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
       type is (complex);
               if(trimit)then
-                 re=fmt(generic%re)
-                 im=fmt(generic%im)
-                 call trimzeros_(re)
-                 call trimzeros_(im)
+                 str_re=fmt(real(generic))  ! nvfortran cannot yet do fmt(generic%re)
+                 str_im=fmt(aimag(generic)) ! nvfortran cannot yet do fmt(generic%im)
+                 call trimzeros_(str_re)
+                 call trimzeros_(str_im)
                  fmt_local='("(",g0,",",g0,")",a)'
-                 write(line,fmt_local,iostat=iostat,iomsg=iomsg) trim(re),trim(im),null
+                 write(line,fmt_local,iostat=iostat,iomsg=iomsg) trim(str_re),trim(str_im),nil
                  trimit=.false.
               else
-                 write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+                 write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
               endif
    end select
    if(iostat /= 0)then
       line='<ERROR>'//trim(iomsg)
    else
-      ilen=index(line,null,back=.true.)
-      if(ilen == 0)ilen=len(line)
-      line=line(:ilen-1)
+      iilen=index(line,nil,back=.true.)
+      if(iilen == 0)iilen=len(line)
+      line=line(:iilen-1)
    endif
 
    if(index(line,'.') /= 0 .and. trimit) call trimzeros_(line)
@@ -541,13 +520,13 @@ subroutine trimzeros_(string)
 ! if zero needs added at end assumes input string has room
 character(len=*)               :: string
 character(len=len(string) + 2) :: str
-character(len=len(string))     :: exp        ! the exponent string if present
+character(len=len(string))     :: expnt      ! the exponent string if present
 integer                        :: ipos       ! where exponent letter appears if present
 integer                        :: i, ii
    str = string                              ! working copy of string
    ipos = scan(str, 'eEdD')                  ! find end of real number if string uses exponent notation
    if (ipos > 0) then                        ! letter was found
-      exp = str(ipos:)                       ! keep exponent string so it can be added back as a suffix
+      expnt = str(ipos:)                     ! keep exponent string so it can be added back as a suffix
       str = str(1:ipos - 1)                  ! just the real part, exponent removed will not have trailing zeros removed
    endif
    if (index(str, '.') == 0) then            ! if no decimal character in original string add one to end of string
@@ -571,7 +550,7 @@ integer                        :: i, ii
       end select
    end do
    if (ipos > 0) then                        ! if originally had an exponent place it back on
-      string = trim(str)//trim(exp)
+      string = trim(str)//trim(expnt)
    else
       string = str
    endif
@@ -598,7 +577,7 @@ end subroutine trimzeros_
 !!                     & genericf,genericg,generich,generici,genericj
 !!##DESCRIPTION
 !!    STDERR(3f) writes a message to standard error using a standard
-!!    f2003 method.  Up to twenty generic options are available.
+!!    f2003 method. Up to twenty generic options are available.
 !!##OPTIONS
 !!    msg           - description to print
 !!    generic[0-j]  - optional value to print the value of after the
@@ -630,7 +609,8 @@ end subroutine trimzeros_
 !!            & 12345.6789_real32,tiny(0.0_real32))
 !!    call stderr('real64  :',huge(0.0_real64),0.0_real64, &
 !!            & 12345.6789_real64,tiny(0.0_real64))
-!!    !#ifdef FLOAT128
+!!    !#ifdef __NVCOMPILER
+!!    !#else
 !!    call stderr('real128 :',huge(0.0_real128),0.0_real128, &
 !!            & 12345.6789_real128,tiny(0.0_real128))
 !!    !#endif
@@ -880,7 +860,8 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -892,7 +873,8 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -904,7 +886,8 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -916,7 +899,8 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -928,7 +912,8 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -940,11 +925,13 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
    type is(real(kind=real128))
       select type(gen)
          type is (integer(kind=int8));     gen=generic0
@@ -953,7 +940,8 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -1012,7 +1000,8 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1024,7 +1013,8 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1036,7 +1026,8 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1048,7 +1039,8 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1060,7 +1052,8 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1072,11 +1065,13 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
    type is(real(kind=real128))
       select type(gen)
          type is (integer(kind=int8));     gen=generic0(i)
@@ -1085,7 +1080,8 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef FLOAT128
+#ifdef __NVCOMPILER
+#else
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1152,17 +1148,17 @@ subroutine pdec(string)
 ! ident_8="@(#) M_framework__msg pdec(3f) write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
 
 character(len=*),intent(in) :: string   ! the string to print
-integer                     :: ilen     ! number of characters in string to print
+integer                     :: iilen    ! number of characters in string to print
 integer                     :: i        ! counter used to step thru string
 
-   ilen=len_trim(string(:len(string)))  ! get trimmed length of input string
+   iilen=len_trim(string(:len(string)))  ! get trimmed length of input string
 
-   write(*,101)(char(max(32,ichar(string(i:i)))),i=1,ilen) ! replace lower unprintable characters with spaces
+   write(*,101)(char(max(32,ichar(string(i:i)))),i=1,iilen) ! replace lower unprintable characters with spaces
 
    ! print ADE value of character underneath it
-   write(*,202)     (ichar(string(i:i))/100,    i=1,ilen)
-   write(*,202)(mod( ichar(string(i:i)),100)/10,i=1,ilen)
-   write(*,202)(mod((ichar(string(i:i))),10),   i=1,ilen)
+   write(*,202)     (ichar(string(i:i))/100,    i=1,iilen)
+   write(*,202)(mod( ichar(string(i:i)),100)/10,i=1,iilen)
+   write(*,202)(mod((ichar(string(i:i))),10),   i=1,iilen)
 ! strings are assumed under 32767+1 characters in length because format integer constants > 32767+1 are not supported on HP-UX
 ! when newer compilers are available use unlimited
 !101   format(32767a1:)  ! format for printing string characters

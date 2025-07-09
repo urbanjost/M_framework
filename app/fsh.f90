@@ -3,26 +3,25 @@ program testtype
 use, intrinsic :: iso_fortran_env, only: ERROR_UNIT
 use M_framework, only: str, wrt
 implicit none
-character(len=*), parameter :: g = '(*(g0,1x))'
-integer :: icase
-integer :: ios
-integer :: iostat
-character(len=:),allocatable  :: string
-character(len=256) :: line
-character(len=256) :: iomsg
-character(len=256) :: answer
-integer            :: lun
+character(len=*), parameter  :: g = '(*(g0,1x))'
+integer                      :: ios
+integer                      :: iostat
+character(len=:),allocatable :: string
+character(len=256)           :: line
+character(len=256)           :: iomsg
+character(len=256)           :: answer
+integer                      :: lun
 character(len=:),allocatable :: strlevel
-integer            :: level=0;         namelist /args/ level
-character(len=80)  :: compiler='' ;    namelist /args/ compiler
-character(len=80)  :: profile='' ;     namelist /args/ profile
-character(len=80)  :: link_flag='' ;   namelist /args/ link_flag
-character(len=80)  :: flag='' ;        namelist /args/ flag
-character(len=80)  :: cxx_flag='';     namelist /args/ cxx_flag
-character(len=80)  :: cxx_compiler=''; namelist /args/ cxx_compiler
-character(len=80)  :: c_flag='';       namelist /args/ c_flag
-character(len=80)  :: c_compiler='';   namelist /args/ c_compiler
-character(len=80)  :: archiver='';     namelist /args/ archiver
+integer                      :: level=0;         namelist /args/ level
+character(len=80)            :: compiler='' ;    namelist /args/ compiler
+character(len=80)            :: profile='' ;     namelist /args/ profile
+character(len=80)            :: link_flag='' ;   namelist /args/ link_flag
+character(len=80)            :: flag='' ;        namelist /args/ flag
+character(len=80)            :: cxx_flag='';     namelist /args/ cxx_flag
+character(len=80)            :: cxx_compiler=''; namelist /args/ cxx_compiler
+character(len=80)            :: c_flag='';       namelist /args/ c_flag
+character(len=80)            :: c_compiler='';   namelist /args/ c_compiler
+character(len=80)            :: archiver='';     namelist /args/ archiver
 character(len=:),allocatable :: options
 
    options=' --compiler gfortran --profile debug'

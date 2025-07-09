@@ -49,7 +49,7 @@ use,intrinsic :: iso_fortran_env, only : &
 !
 use M_framework, only : unit_test_start,unit_test,unit_test_end, &
                  unit_test_mode, unit_test_level, unit_test_stop
-use M_framework, only : CHECK_PREFIX ! change column one of messages
+use M_framework, only : TEST_PREFIX ! change column one of messages
 !
 !use M_mymodule ! load any modules you will be testing
 implicit none
@@ -62,19 +62,19 @@ double precision,parameter :: PI=atan(1.0d0)*4
    !  the default is to set them all to the basename of
    !  the executable running tests, but they can be 
    !  altered. For example:
-   CHECK_PREFIX=prefix(                  &
-    check_MSG    =  'check_msg:   ', &
-    check        =  'check:       ', &
-    check_START  =  'check_start: ', &
-    check_STOP   =  'check_stop:  ', &
-    check_END    =  'check_end:   '  &
+   TEST_PREFIX=prefix(                  &
+    TEST_MSG    =  'test_msg:   ', &
+    TEST        =  'test:       ', &
+    TEST_START  =  'test_start: ', &
+    TEST_STOP   =  'test_stop:  ', &
+    TEST_END    =  'test_end:   '  &
    )
    !---------------------------------------------------
    !OPTIONAL: 
    ! the options available at run-time on the command
    ! line can have their defaults selected. See the 
    ! man-page for the procedure for details.
-   call unit_check_mode(
+   call unit_test_mode(
      ( keep_going=.true. ,
      flags=[character(len=0) ::], 
      luns=[stdout], 

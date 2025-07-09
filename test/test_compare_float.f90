@@ -25,10 +25,7 @@ real(kind=real64), parameter :: double_number(nums) = &
        1.0_real64 ]
 real(kind=real32),parameter  ::  sten    =     10.0_real32
 real(kind=real64),parameter  ::  dten    =     10.0_real64
-integer                      ::  pn_pos
 integer                      ::  i
-character(len=80)            ::  pn_fmt
-character(len=256)           ::  answer
 real(kind=real32)            ::  x,  y1,  y2,  y3,  y4
 real(kind=real64)            ::  xd, yd1, yd2, yd3, yd4
 

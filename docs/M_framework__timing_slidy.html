@@ -1093,12 +1093,12 @@ when WHERE="%" the message is treated as a time format specification as describe
 <p>Put autodetecting tools (at least the ones employed) are not generally portable; and with public packages there is a strong incentive to minimize the amount of infrastructure and external dependencies. It is generally imperative to make package use as simple and generic as possible.</p>
 <p>So the suggested scheme is to create a small test program for each procedure or closely related procedures in the fpm test/ directory.</p>
 <pre><code> + make a subroutine for each component to be tested
- + in each test procedure start it with a call to UNIT\_CHECK\_START(3f)
- + end each test procedure it with a call to UNIT\_CHECK\_END(3f)
- + make multiple calls to UNIT\_CHECK(3f) in-between to generate
+ + in each test procedure start it with a call to UNIT\_TEST\_START(3f)
+ + end each test procedure it with a call to UNIT\_TEST\_END(3f)
+ + make multiple calls to UNIT\_TEST(3f) in-between to generate
    test results
  + call each of those test routines from the main program
- + end the main program with a call to UNIT\_CHECK\_STOP(3f)
+ + end the main program with a call to UNIT\_TEST\_STOP(3f)
 </code></pre>
 <p>Optionally, before starting set preferred non-default modes.</p>
 <p>Use the 'fpm test' command to run specific tests; all tests (the default); a list of tests or test names using simple globbing.</p>
@@ -1106,7 +1106,7 @@ when WHERE="%" the message is treated as a time format specification as describe
 <p>As an example, we can create a skeleton program to test a few routines. Using</p>
 <pre><code>     fpm test_suite sqrt cos sin &gt; test/test_suite.f90
 </code></pre>
-<p>to create the skeleton program and then adding a few actual calls to unit\_test\_check(3f) results in</p>
+<p>to create the skeleton program and then adding a few actual calls to unit\_test\_test(3f) results in</p>
 <pre><code>  Sample program:
 
    program M_test_suite_M_intrinsics
@@ -1129,18 +1129,18 @@ when WHERE="%" the message is treated as a time format specification as describe
       !  the executable running tests, but they can be
       !  altered. For example:
       CHECK_PREFIX=prefix(                  &amp;
-       check_MSG    =  &#39;check_msg:   &#39;, &amp;
-       check        =  &#39;check:       &#39;, &amp;
-       check_START  =  &#39;check_start: &#39;, &amp;
-       check_STOP   =  &#39;check_stop:  &#39;, &amp;
-       check_END    =  &#39;check_end:   &#39;  &amp;
+       test_MSG    =  &#39;test_msg:   &#39;, &amp;
+       test        =  &#39;test:      &#39;,  &amp;
+       test_START  =  &#39;test_start: &#39;, &amp;
+       test_STOP   =  &#39;test_stop:  &#39;, &amp;
+       test_END    =  &#39;test_end:   &#39;  &amp;
       )
       !---------------------------------------------------
       !OPTIONAL:
       ! the options available at run-time on the command
       ! line can have their defaults selected. See the
       ! man-page for the procedure for details.
-      call unit_check_mode(
+      call unit_test_mode(
         ( keep_going=.true. ,
         flags=[character(len=0) ::],
         luns=[stdout],
@@ -1185,12 +1185,12 @@ when WHERE="%" the message is treated as a time format specification as describe
    end program M_test_suite_M_intrinsics
 </code></pre>
 <p>The output now looks like this (note if no calls to unit\_test routines are made between unit_test_start(3f) and unit_test_end(3f) the procedure gets an "UNTESTED" entry to remind you to make some tests ..).</p>
-<pre><code>   &gt; check:       sqrt   SUCCESS : check table of values
-   &gt; check:       sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
-   &gt; check_end:   sqrt   PASSED  : GOOD:        2 BAD:        0 DURATION:00000000012000:
-   &gt; check_end:   cos    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
-   &gt; check_end:   sin    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
-   &gt; check_stop:  TALLY  PASSED  : GOOD:        2 BAD:        0 DURATION:00000000000000
+<pre><code>   &gt; test:       sqrt   SUCCESS : check table of values
+   &gt; test:       sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
+   &gt; test_end:   sqrt   PASSED  : GOOD:        2 BAD:        0 DURATION:00000000012000:
+   &gt; test_end:   cos    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+   &gt; test_end:   sin    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+   &gt; test_stop:  TALLY  PASSED  : GOOD:        2 BAD:        0 DURATION:00000000000000
    &gt; STOP 0
 </code></pre>
 <p>this is a model that works particularly well for basic numeric procedures.</p>
@@ -1208,7 +1208,7 @@ when WHERE="%" the message is treated as a time format specification as describe
 <p>The "unit\_test(3f)" procedure in its simplest form takes a string that is usually the procedure name and a logical expression, along with up to twenty completely optional intrinsic scalar values which will be used to create an optional message.</p>
 <p>The example programs also contain a placeholder call to unit\_test\_mode(3f).</p>
 <h3 id="procedural-and-command-line-mode-options">PROCEDURAL AND COMMAND LINE MODE OPTIONS</h3>
-<p>The dummy skeleton routines all start with a call to unix\_check\_mode(3f). Its documentation describes a few default modes you can change with the routine. Essentially the same options are available on the command line of the test program(s) as well.</p>
+<p>The dummy skeleton routines all start with a call to unix\_test\_mode(3f). Its documentation describes a few default modes you can change with the routine. Essentially the same options are available on the command line of the test program(s) as well.</p>
 <pre><code>    # options may be specified in NAMELIST input format with no
     # extraneous spaces on the command line
     fpm test -- flags=100,200,300 keep_going=T
@@ -1257,18 +1257,18 @@ when WHERE="%" the message is treated as a time format specification as describe
 </code></pre>
 <p>if you have sqlite3(1) installed.</p>
 <pre><code>   .mode csv
-   .import bookkeeper.csv unit_check
-   .schema unit_check
+   .import bookkeeper.csv unit_test
+   .schema unit_test
    ---
    --- show all data to show it worked
-   SELECT * FROM unit_check;
+   SELECT * FROM unit_test;
    ---
    --- example lists unique names
-   SELECT name FROM unit_check GROUP BY name ORDER BY name ;
+   SELECT name FROM unit_test GROUP BY name ORDER BY name ;
    ---
    --- tally up passed, failed, skipped in a text table
    .header on
-   .mode column unit_check
+   .mode column unit_test
    .width 64 9 9 9
    SELECT name,
    --- depending on SQL version a simpler IIF/IF, IFNULL, or TOTAL might be better but this works well
@@ -1277,7 +1277,7 @@ when WHERE="%" the message is treated as a time format specification as describe
    CASE  sum( passed == &#39;passed&#39;  ) WHEN NULL THEN 0 ELSE sum ( passed == &#39;passed&#39;)  END  AS &#39;ok&#39;,
    CASE  sum( passed == &#39;failed&#39;  ) WHEN NULL THEN 0 ELSE sum ( passed == &#39;failed&#39;)  END  AS &#39;not ok&#39;,
    CASE  sum( passed == &#39;skipped&#39; ) WHEN NULL THEN 0 ELSE sum ( passed == &#39;skipped&#39;) END  AS &#39;skip&#39;
-   FROM unit_check
+   FROM unit_test
    --- WHERE condition
    GROUP BY name
    ORDER BY name ;
@@ -1286,8 +1286,8 @@ when WHERE="%" the message is treated as a time format specification as describe
    --- including the first row, in the CSV file as the actual data to import.
    --- Therefore, you should delete the first row of the CSV file with the
    --- header labels if adding to an existing table instead of creating
-   DROP TABLE IF EXISTS unit_check;
-   --- CREATE TABLE unit_check(
+   DROP TABLE IF EXISTS unit_test;
+   --- CREATE TABLE unit_test(
    ---   name   TEXT NOT NULL,
    ---   date   DATE NOT NULL,
    ---   passed TEXT NOT NULL,
@@ -1568,11 +1568,7 @@ when WHERE="%" the message is treated as a time format specification as describe
 <p>That is, destinations 'T' and 'C' are ignored unless a trail file has been requested, allowing journal to be used with programs that do not generate trails or journals.</p>
 <p>Note that with no parameters, the trail file is flushed.</p>
 <h2 id="examples-12">EXAMPLES</h2>
-<p>The man-page for journal(3f) describes all the options for the</p>
-<ul>
-<li><strong>action field WHERE.</strong><br />
-In addition to being used to generate a journal, the routine can be used for producing optional debug messages and timing information.</li>
-</ul>
+<p>The man-page for journal(3f) describes all the options for the action field WHERE. In addition to being used to generate a journal, the routine can be used for producing optional debug messages and timing information.</p>
 <p>Sample program for debug messages:</p>
 <pre><code>     program demo_journal
      !! showing creating debug messages
@@ -1946,8 +1942,6 @@ Use the round edit descriptor</p></li>
 <pre><code>   program demo_significant
    use M_framework__approx, only : significant
    implicit none
-   integer :: i
-   real :: r, v
    character(len=*),parameter :: g=&#39;(*(g0.7,1x))&#39;
 
       write(*,g)significant([8765.43210,0.1234567890],5)
@@ -1998,11 +1992,7 @@ Use the round edit descriptor</p></li>
                     &amp; genericf,genericg,generich,generici,genericj
 </code></pre>
 <h2 id="description-18">DESCRIPTION</h2>
-<p>STDERR(3f) writes a message to standard error using a standard</p>
-<ul>
-<li><strong>f2003 method.</strong><br />
-Up to twenty generic options are available.</li>
-</ul>
+<p>STDERR(3f) writes a message to standard error using a standard f2003 method. Up to twenty generic options are available.</p>
 <h2 id="options-12">OPTIONS</h2>
 <ul>
 <li><p><strong>msg</strong><br />
@@ -2320,7 +2310,7 @@ The expected value for RESULT, of the same type and kind as RESULT. If not prese
       &amp;  start     =&gt;  unit_test_start,     &amp;
       &amp;  expected  =&gt;  unit_test_expected,  &amp;
       &amp;  stop      =&gt;  unit_test_stop,      &amp;
-      &amp; unit_test_level, unit_test_flags
+      &amp; unit_test_level ! , unit_test_flags
       implicit none
       logical, parameter :: T=.true., F=.false.
       ! optional call to change default modes

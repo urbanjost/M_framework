@@ -89,7 +89,7 @@ end interface exists
       write(htmlfile,g0)'</tr>'
 
    case("check")
-      write(csvfile,g0),quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
+      write(csvfile,g0) quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
 
       write(htmlfile,g0)'<tr class="',passed,'" class="even"><!-- check -->'
       write(htmlfile,g0)' <td >', name    ,' </td>'
@@ -109,7 +109,7 @@ end interface exists
    case("end")
       !intable=.false.
       if(passed.eq.'untested')then
-         write(csvfile,g0),quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
+         write(csvfile,g0) quote,name,quote,comma,quote,here_and_now(),quote,comma,quote,passed,quote,comma,quote,msg,quote
 
          write(htmlfile,g0)'<tr class="',passed,'" class="odd"><!-- end -->'
          write(htmlfile,g0)' <td >', name    ,' </td>'
@@ -126,7 +126,7 @@ end interface exists
       write(htmlfile,g0)'</table>'
 
 
-      write(clicksfile,g0),quote,name,quote,comma,           &
+      write(clicksfile,g0) quote,name,quote,comma,           &
                            quote,here_and_now(),quote,comma, &
                            quote,clicks,quote,comma,         &
                            quote,msg,quote
@@ -141,7 +141,7 @@ contains
 subroutine cmdline_()                                ! read arguments from command line as NAMELIST group input
 character(len=4096), save :: input(3) = [character(len=4096) :: '&long', '', ' /'], arg
 character(len=256) :: message1, message2
-integer :: i, j, k, ios, equal_pos, iend
+integer :: i, j, ios, equal_pos, iend
    help = .false.
    version = .false.
    do i = 1, command_argument_count()

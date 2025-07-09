@@ -154,12 +154,12 @@ DESCRIPTION
   or closely related procedures in the fpm test/ directory.
 
    + make a subroutine for each component to be tested
-   + in each test procedure start it with a call to UNIT\_CHECK\_START(3f)
-   + end each test procedure it with a call to UNIT\_CHECK\_END(3f)
-   + make multiple calls to UNIT\_CHECK(3f) in-between to generate
+   + in each test procedure start it with a call to UNIT\_TEST\_START(3f)
+   + end each test procedure it with a call to UNIT\_TEST\_END(3f)
+   + make multiple calls to UNIT\_TEST(3f) in-between to generate
      test results
    + call each of those test routines from the main program
-   + end the main program with a call to UNIT\_CHECK\_STOP(3f)
+   + end the main program with a call to UNIT\_TEST\_STOP(3f)
 
   Optionally, before starting set preferred non-default modes.
 
@@ -175,7 +175,7 @@ DESCRIPTION
        fpm test_suite sqrt cos sin > test/test_suite.f90
 
   to create the skeleton program and then adding a few actual calls to
-  unit\_test\_check(3f) results in
+  unit\_test\_test(3f) results in
 
     Sample program:
 
@@ -199,18 +199,18 @@ DESCRIPTION
 	!  the executable running tests, but they can be
 	!  altered. For example:
 	CHECK_PREFIX=prefix(		      &
-	 check_MSG    =  'check_msg:   ', &
-	 check	      =  'check:       ', &
-	 check_START  =  'check_start: ', &
-	 check_STOP   =  'check_stop:  ', &
-	 check_END    =  'check_end:   '  &
+	 test_MSG    =	'test_msg:   ', &
+	 test	     =	'test:	    ',	&
+	 test_START  =	'test_start: ', &
+	 test_STOP   =	'test_stop:  ', &
+	 test_END    =	'test_end:   '	&
 	)
 	!---------------------------------------------------
 	!OPTIONAL:
 	! the options available at run-time on the command
 	! line can have their defaults selected. See the
 	! man-page for the procedure for details.
-	call unit_check_mode(
+	call unit_test_mode(
 	  ( keep_going=.true. ,
 	  flags=[character(len=0) ::],
 	  luns=[stdout],
@@ -258,12 +258,12 @@ DESCRIPTION
   made between unit_test_start(3f) and unit_test_end(3f) the procedure gets an
   "UNTESTED" entry to remind you to make some tests ..).
 
-     > check:	    sqrt   SUCCESS : check table of values
-     > check:	    sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
-     > check_end:   sqrt   PASSED  : GOOD:	  2 BAD:	0 DURATION:00000000012000:
-     > check_end:   cos    UNTESTED: GOOD:	  0 BAD:	0 DURATION:00000000000000:
-     > check_end:   sin    UNTESTED: GOOD:	  0 BAD:	0 DURATION:00000000000000:
-     > check_stop:  TALLY  PASSED  : GOOD:	  2 BAD:	0 DURATION:00000000000000
+     > test:	   sqrt   SUCCESS : check table of values
+     > test:	   sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
+     > test_end:   sqrt   PASSED  : GOOD:	 2 BAD:        0 DURATION:00000000012000:
+     > test_end:   cos	  UNTESTED: GOOD:	 0 BAD:        0 DURATION:00000000000000:
+     > test_end:   sin	  UNTESTED: GOOD:	 0 BAD:        0 DURATION:00000000000000:
+     > test_stop:  TALLY  PASSED  : GOOD:	 2 BAD:        0 DURATION:00000000000000
      > STOP 0
 
   this is a model that works particularly well for basic numeric procedures.
@@ -311,7 +311,7 @@ DESCRIPTION
   unit\_test\_mode(3f).
 
    PROCEDURAL AND COMMAND LINE MODE OPTIONS
-  The dummy skeleton routines all start with a call to unix\_check\_mode(3f).
+  The dummy skeleton routines all start with a call to unix\_test\_mode(3f).
   Its documentation describes a few default modes you can change with the
   routine. Essentially the same options are available on the command line of
   the test program(s) as well.
@@ -428,18 +428,18 @@ UNIQUE FEATURES
   if you have sqlite3(1) installed.
 
      .mode csv
-     .import bookkeeper.csv unit_check
-     .schema unit_check
+     .import bookkeeper.csv unit_test
+     .schema unit_test
      ---
      --- show all data to show it worked
-     SELECT * FROM unit_check;
+     SELECT * FROM unit_test;
      ---
      --- example lists unique names
-     SELECT name FROM unit_check GROUP BY name ORDER BY name ;
+     SELECT name FROM unit_test GROUP BY name ORDER BY name ;
      ---
      --- tally up passed, failed, skipped in a text table
      .header on
-     .mode column unit_check
+     .mode column unit_test
      .width 64 9 9 9
      SELECT name,
      --- depending on SQL version a simpler IIF/IF, IFNULL, or TOTAL might be better but this works well
@@ -448,7 +448,7 @@ UNIQUE FEATURES
      CASE  sum( passed == 'passed'  ) WHEN NULL THEN 0 ELSE sum ( passed == 'passed')  END  AS 'ok',
      CASE  sum( passed == 'failed'  ) WHEN NULL THEN 0 ELSE sum ( passed == 'failed')  END  AS 'not ok',
      CASE  sum( passed == 'skipped' ) WHEN NULL THEN 0 ELSE sum ( passed == 'skipped') END  AS 'skip'
-     FROM unit_check
+     FROM unit_test
      --- WHERE condition
      GROUP BY name
      ORDER BY name ;
@@ -457,8 +457,8 @@ UNIQUE FEATURES
      --- including the first row, in the CSV file as the actual data to import.
      --- Therefore, you should delete the first row of the CSV file with the
      --- header labels if adding to an existing table instead of creating
-     DROP TABLE IF EXISTS unit_check;
-     --- CREATE TABLE unit_check(
+     DROP TABLE IF EXISTS unit_test;
+     --- CREATE TABLE unit_test(
      ---   name   TEXT NOT NULL,
      ---   date   DATE NOT NULL,
      ---   passed TEXT NOT NULL,
@@ -666,7 +666,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025     M_framework(3m_framework)
+				 July 08, 2025	     M_framework(3m_framework)
 almost(3m_framework__approx)			  almost(3m_framework__approx)
 
 NAME
@@ -752,7 +752,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025  almost(3m_framework__approx)
+				 July 08, 2025	  almost(3m_framework__approx)
 in_margin(3m_framework__approx) 	       in_margin(3m_framework__approx)
 
 NAME
@@ -823,7 +823,7 @@ EXAMPLES
 	 > T
 	 > T
 
-			       February 23, 202in_margin(3m_framework__approx)
+				 July 08, 2025 in_margin(3m_framework__approx)
 significant(3m_framework__approx)	     significant(3m_framework__approx)
 
 NAME
@@ -881,8 +881,6 @@ EXAMPLES
      program demo_significant
      use M_framework__approx, only : significant
      implicit none
-     integer :: i
-     real :: r, v
      character(len=*),parameter :: g='(*(g0.7,1x))'
 
 	write(*,g)significant([8765.43210,0.1234567890],5)
@@ -916,7 +914,7 @@ EXAMPLES
 	> 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
 	> 1.234568 1.234568 1.234568 RP
 
-			       February 23, 2significant(3m_framework__approx)
+				 July 08, 202significant(3m_framework__approx)
 compare_float(3m_framework__approx)	   compare_float(3m_framework__approx)
 
 NAME
@@ -1127,7 +1125,7 @@ EXAMPLES
       > 	   9 T ULP=   4.50000000
       > 	  10 T ULP=   5.00000000
 
-			       February 23,compare_float(3m_framework__approx)
+				 July 08, 2compare_float(3m_framework__approx)
 accdig(3m_framework__approx)			  accdig(3m_framework__approx)
 
 NAME
@@ -1262,7 +1260,7 @@ AUTHORS
 LICENSE
   Public Domain
 
-			       February 23, 2025  accdig(3m_framework__approx)
+				 July 08, 2025	  accdig(3m_framework__approx)
 attr(3m_framework__attr)			      attr(3m_framework__attr)
 
 NAME
@@ -1451,7 +1449,7 @@ LICENSE
 SEE ALSO
   attr_mode(3f), attr_update(3f)
 
-			       February 23, 2025      attr(3m_framework__attr)
+				 July 08, 2025	      attr(3m_framework__attr)
 attr_mode(3m_framework__attr)			 attr_mode(3m_framework__attr)
 
 NAME
@@ -1519,7 +1517,7 @@ AUTHOR
 
 LICENSE
    MIT
-			       February 23, 2025 attr_mode(3m_framework__attr)
+				 July 08, 2025	 attr_mode(3m_framework__attr)
 M_framework__attr(3m_framework__attr)	 M_framework__attr(3m_framework__attr)
 
 NAME
@@ -1653,7 +1651,7 @@ SEE ALSO
       console_codes(4), ECMA-48,
       https://en.wikipedia.org/wiki/ANSI_escape_code
 
-			       February 2M_framework__attr(3m_framework__attr)
+				 July 08,M_framework__attr(3m_framework__attr)
 attr_update(3m_framework__attr) 	       attr_update(3m_framework__attr)
 
 NAME
@@ -1733,7 +1731,7 @@ AUTHOR
 
 LICENSE
    MIT
-			       February 23, 202attr_update(3m_framework__attr)
+				 July 08, 2025 attr_update(3m_framework__attr)
 journal(3m_framework__journal)			journal(3m_framework__journal)
 
 NAME
@@ -1962,7 +1960,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025journal(3m_framework__journal)
+				 July 08, 2025	journal(3m_framework__journal)
 M_framework__journal(3m_framework__M_framework__journal(3m_framework__journal)
 
 NAME
@@ -2032,11 +2030,9 @@ DESCRIPTION
   Note that with no parameters, the trail file is flushed.
 
 EXAMPLES
-  The man-page for journal(3f) describes all the options for the
-
-  action field WHERE.
-    In addition to being used to generate a journal, the routine can be used
-    for producing optional debug messages and timing information.
+  The man-page for journal(3f) describes all the options for the action field
+  WHERE. In addition to being used to generate a journal, the routine can be
+  used for producing optional debug messages and timing information.
 
   Sample program for debug messages:
 
@@ -2121,7 +2117,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       FebrM_framework__journal(3m_framework__journal)
+				 JuM_framework__journal(3m_framework__journal)
 str(3m_framework__msg)					str(3m_framework__msg)
 
 NAME
@@ -2213,7 +2209,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025	str(3m_framework__msg)
+				 July 08, 2025		str(3m_framework__msg)
 wrt(3m_framework__msg)					wrt(3m_framework__msg)
 
 NAME
@@ -2301,7 +2297,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025	wrt(3m_framework__msg)
+				 July 08, 2025		wrt(3m_framework__msg)
 pdec(3m_framework__msg) 			       pdec(3m_framework__msg)
 
 NAME
@@ -2353,7 +2349,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025       pdec(3m_framework__msg)
+				 July 08, 2025	       pdec(3m_framework__msg)
 set(3m_framework__msg)					set(3m_framework__msg)
 
 NAME
@@ -2427,7 +2423,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025	set(3m_framework__msg)
+				 July 08, 2025		set(3m_framework__msg)
 stderr(3m_framework__msg)			     stderr(3m_framework__msg)
 
 NAME
@@ -2447,10 +2443,8 @@ SYNOPSIS
 		      & genericf,genericg,generich,generici,genericj
 
 DESCRIPTION
-  STDERR(3f) writes a message to standard error using a standard
-
-  f2003 method.
-    Up to twenty generic options are available.
+  STDERR(3f) writes a message to standard error using a standard f2003 method.
+  Up to twenty generic options are available.
 
 OPTIONS
   msg
@@ -2519,7 +2513,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025     stderr(3m_framework__msg)
+				 July 08, 2025	     stderr(3m_framework__msg)
 fmt(3m_framework__msg)					fmt(3m_framework__msg)
 
 NAME
@@ -2583,7 +2577,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025	fmt(3m_framework__msg)
+				 July 08, 2025		fmt(3m_framework__msg)
 assert(3m_framework__msg)			     assert(3m_framework__msg)
 
 NAME
@@ -2645,7 +2639,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025     assert(3m_framework__msg)
+				 July 08, 2025	     assert(3m_framework__msg)
 fstop(3m_framework__utility)			  fstop(3m_framework__utility)
 
 NAME
@@ -2708,7 +2702,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 2025  fstop(3m_framework__utility)
+				 July 08, 2025	  fstop(3m_framework__utility)
 unit_test(3m_framework__verify) 	       unit_test(3m_framework__verify)
 
 NAME
@@ -2831,7 +2825,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23, 202unit_test(3m_framework__verify)
+				 July 08, 2025 unit_test(3m_framework__verify)
 unit_test_end(3m_framework__verify)	   unit_test_end(3m_framework__verify)
 
 NAME
@@ -2880,7 +2874,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23,unit_test_end(3m_framework__verify)
+				 July 08, 2unit_test_end(3m_framework__verify)
 unit_test_expected(3m_framework__verifunit_test_expected(3m_framework__verify)
 
 NAME
@@ -2920,7 +2914,7 @@ EXAMPLES
 	&  start     =>  unit_test_start,     &
 	&  expected  =>  unit_test_expected,  &
 	&  stop      =>  unit_test_stop,      &
-	& unit_test_level, unit_test_flags
+	& unit_test_level ! , unit_test_flags
 	implicit none
 	logical, parameter :: T=.true., F=.false.
 	! optional call to change default modes
@@ -2957,7 +2951,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       Februarunit_test_expected(3m_framework__verify)
+				 July unit_test_expected(3m_framework__verify)
 unit_test_mode(3m_framework__verify)	  unit_test_mode(3m_framework__verify)
 
 NAME
@@ -3035,7 +3029,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23unit_test_mode(3m_framework__verify)
+				 July 08, unit_test_mode(3m_framework__verify)
 unit_test_msg(3m_framework__verify)	   unit_test_msg(3m_framework__verify)
 
 NAME
@@ -3093,7 +3087,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23,unit_test_msg(3m_framework__verify)
+				 July 08, 2unit_test_msg(3m_framework__verify)
 unit_test_start(3m_framework__verify)	 unit_test_start(3m_framework__verify)
 
 NAME
@@ -3171,7 +3165,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 2unit_test_start(3m_framework__verify)
+				 July 08,unit_test_start(3m_framework__verify)
 unit_test_stop(3m_framework__verify)	  unit_test_stop(3m_framework__verify)
 
 NAME
@@ -3229,7 +3223,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February 23unit_test_stop(3m_framework__verify)
+				 July 08, unit_test_stop(3m_framework__verify)
 unit_test_system(3m_framework__verify)	unit_test_system(3m_framework__verify)
 
 NAME
@@ -3285,7 +3279,7 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       February unit_test_system(3m_framework__verify)
+				 July 08unit_test_system(3m_framework__verify)
 M_framework__verify(3m_framework__verM_framework__verify(3m_framework__verify)
 
 NAME
@@ -3470,4 +3464,4 @@ AUTHOR
 LICENSE
   Public Domain
 
-			       FebruaM_framework__verify(3m_framework__verify)
+				 JulyM_framework__verify(3m_framework__verify)
