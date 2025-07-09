@@ -1,3 +1,30 @@
+!-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __UNKNOWN_COMP   9999
+
+#define FLOAT128
+
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   warning  NOTE: REAL128 not supported
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   warning  NOTE: REAL128 not supported
+#   define __COMPILER__ __NVIDIA_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
+!-----------------------------------------------------------------------------------------------------------------------------------
 module M_framework__msg
 use,intrinsic :: iso_fortran_env, only : ERROR_UNIT,OUTPUT_UNIT    ! access computing environment
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
@@ -203,8 +230,7 @@ character(len=*),intent(in) :: sep
       type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
       type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
       type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
       type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
 #endif
       type is (logical);                write(line(istart:),'(l1)') generic
@@ -296,11 +322,10 @@ integer :: i
       type is (integer(kind=int64));    write(line(istart:),'("[",*(i0,1x))') generic
       type is (real(kind=real32));      write(line(istart:),'("[",*(1pg0,1x))') generic
       type is (real(kind=real64));      write(line(istart:),'("[",*(1pg0,1x))') generic
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
       type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
-      !type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
 #endif
+      !type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
       type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
       type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",:,1x))') (trim(generic(i)),i=1,size(generic))
       type is (complex);                write(line(istart:),'("[",*("(",1pg0,",",1pg0,")",1x))') generic
@@ -403,8 +428,7 @@ logical                               :: trimit
          type is (integer(kind=int64));    fmt_local='(i0,a)'
          type is (real(kind=real32));      fmt_local='(1pg0,a)'
          type is (real(kind=real64));      fmt_local='(1pg0,a)'
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     fmt_local='(1pg0,a)'
 #endif
          type is (logical);                fmt_local='(l1,a)'
@@ -427,8 +451,7 @@ logical                               :: trimit
       type is (integer(kind=int64));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
       type is (real(kind=real32));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
       type is (real(kind=real64));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
       type is (real(kind=real128));     write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
 #endif
       type is (logical);                write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
@@ -860,8 +883,7 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -873,8 +895,7 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -886,8 +907,7 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -899,8 +919,7 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -912,8 +931,7 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -925,13 +943,11 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
    type is(real(kind=real128))
       select type(gen)
          type is (integer(kind=int8));     gen=generic0
@@ -940,8 +956,7 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=generic0
          type is (real(kind=real32));      gen=generic0
          type is (real(kind=real64));      gen=generic0
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0
 #endif
       end select
@@ -1000,8 +1015,7 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1013,8 +1027,7 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1026,8 +1039,7 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1039,8 +1051,7 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1052,8 +1063,7 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
@@ -1065,13 +1075,11 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
    type is(real(kind=real128))
       select type(gen)
          type is (integer(kind=int8));     gen=generic0(i)
@@ -1080,8 +1088,7 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=generic0(i)
          type is (real(kind=real32));      gen=generic0(i)
          type is (real(kind=real64));      gen=generic0(i)
-#ifdef __NVCOMPILER
-#else
+#ifdef FLOAT128
          type is (real(kind=real128));     gen=generic0(i)
 #endif
       end select
