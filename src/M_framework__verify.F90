@@ -1864,7 +1864,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
          tbookmark = tametext(ti:)
       elseif(tametext(ti:ti)  /=  wildtext(wi:wi) .and. wildtext(wi:wi)  /=  '?') then
          ! Got a non-match. If we've set our bookmarks, back up to one or both of them and retry.
-         if(wbookmark /= NULL) then
+         if(wbookmark /= NIL) then
             if(wildtext(wi:) /=  wbookmark) then
                wildtext = wbookmark
                wlen=len_trim(wbookmark)
@@ -1879,7 +1879,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
                   wi=wi+1
                endif
             endif
-            if (tametext(ti:ti) /= NULL) then
+            if (tametext(ti:ti) /= NIL) then
                ti=ti+1
                cycle                             ! "mississippi" matches "*sip*"
             endif
@@ -1892,14 +1892,14 @@ character(len=:),allocatable :: tbookmark, wbookmark
       if (ti > len(tametext)) then
          glob_=.false.
          return
-      elseif (tametext(ti:ti) == NULL) then          ! How do you match a tame text string?
-         if(wildtext(wi:wi) /= NULL)then
+      elseif (tametext(ti:ti) == NIL) then          ! How do you match a tame text string?
+         if(wildtext(wi:wi) /= NIL)then
             do while (wildtext(wi:wi) == '*')    ! The tame way: unique up on it!
                wi=wi+1                           ! "x" matches "x*"
-               if(wildtext(wi:wi) == NULL)exit
+               if(wildtext(wi:wi) == NIL)exit
             enddo
          endif
-         if (wildtext(wi:wi) == NULL)then
+         if (wildtext(wi:wi) == NIL)then
             glob_=.true.
             return                               ! "x" matches "x"
          endif
