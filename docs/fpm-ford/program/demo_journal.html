@@ -93,19 +93,19 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 0.8% of total for programs.">14 statements</a>
+                 title=" 0.6% of total for programs.">10 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/demo_M_framework__journal.f90"> Source File</a>
+              <a href="../src/demo_journal.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='../sourcefile/demo_m_framework__journal.f90.html'>demo_M_framework__journal.f90</a></li>
+                <li class="breadcrumb-item"><a href='../sourcefile/demo_journal.f90.html'>demo_journal.f90</a></li>
             <li class="breadcrumb-item active" aria-current="page">demo_journal</li>
           </ol>
         </nav>
@@ -172,18 +172,7 @@
       </div>
     </div>
 
-    <p>showing creating debug messages
-produces no output because trail is not on
-turn on debug messages
-produces output on stdout because debug mode
-is on but no named trail file
-open trail file
-debug messages now go to the trail file only
-or always to stdout and trail file only if on
-close trail file so messages go only to stdout again
-debug on stdout now
-turn off debug messages
-back to no output from the next message</p>
+    <p>BASIC USAGE</p>
 <br>
 
     
@@ -197,32 +186,24 @@ back to no output from the next message</p>
 
     <section>
     <h2 id="src">Source Code</h2>
-    <div class="hl codehilite"><pre><span></span><span class="w">       </span><span class="k">program </span><span class="n">demo_journal</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! showing creating debug messages</span>
-<span class="w">       </span><span class="k">use </span><span class="n">M_framework__journal</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">journal</span><span class="w"></span>
-<span class="w">       </span><span class="k">implicit none</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! produces no output because trail is not on</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="s1">&#39;*demo* DEBUG MESSAGE 001 IGNORED&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! turn on debug messages</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span><span class="s1">&#39;debug on&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! produces output on stdout because debug mode</span>
-<span class="w">       </span><span class="c">!! is on but no named trail file</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="s1">&#39;*demo* DEBUG MESSAGE 002 ON STDOUT&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! open trail file</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span><span class="s1">&#39;mytrail.txt&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! debug messages now go to the trail file only</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="s1">&#39;*demo* DEBUG MESSAGE 003 TO TRAIL&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! or always to stdout and trail file only if on</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;DS&#39;</span><span class="p">,</span><span class="s1">&#39;*demo* DEBUG MESSAGE 003 TO TRAIL&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! close trail file so messages go only to stdout again</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! debug on stdout now</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="s1">&#39;*demo* DEBUG MESSAGE 004 TO STDOUT&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! turn off debug messages</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;&lt;&#39;</span><span class="p">,</span><span class="s1">&#39;debug off&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="c">!! back to no output from the next message</span>
-<span class="w">       </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="s1">&#39;*demo* DEBUG MESSAGE 005 IGNORED&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="k">end program </span><span class="n">demo_journal</span><span class="w"></span>
+    <div class="hl codehilite"><pre><span></span><span class="w">     </span><span class="k">program </span><span class="n">demo_journal</span><span class="w"></span>
+<span class="w">     </span><span class="k">use </span><span class="n">M_framework__journal</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">journal</span><span class="w"></span>
+<span class="w">     </span><span class="c">!! BASIC USAGE</span>
+<span class="w">     </span><span class="k">call </span><span class="n">journal</span><span class="p">(&amp;</span><span class="w"></span>
+<span class="w">     </span><span class="p">&amp;</span><span class="w"> </span><span class="s1">&#39;write to standard output as-is, and trail file as a comment if open&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="c">! since trail file is not yet open, only stdout will display output</span>
+<span class="w">     </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;ignored, as trail file is not open&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="c">! now open trail file &quot;trail&quot;</span>
+<span class="w">     </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;trail&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;sc&#39;</span><span class="p">,</span><span class="s1">&#39;same thing except now trail file is open&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="c">! only write to trail file if open</span>
+<span class="w">     </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">     </span><span class="p">&amp;</span><span class="w"> </span><span class="s1">&#39;not ignored, as trail file is open. Written with # suffix&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">     </span><span class="p">&amp;</span><span class="w"> </span><span class="s1">&#39;not ignored, as trail file is open. Written as-is&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="c">! turn off trail file</span>
+<span class="w">     </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="k">end program </span><span class="n">demo_journal</span><span class="w"></span>
 </pre></div>
 
     </section>
@@ -245,7 +226,7 @@ back to no output from the next message</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-07-11 00:19 +0000             </p>
+ on 2025-07-11 12:50 +0000             </p>
           </div>
         </div>
         <br>

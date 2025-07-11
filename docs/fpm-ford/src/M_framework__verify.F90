@@ -1823,17 +1823,17 @@ character(len=*)           :: tame       ! A string without wildcards
 character(len=*)           :: wild       ! A (potentially) corresponding string with wildcards
 character(len=len(tame)+1) :: tametext
 character(len=len(wild)+1) :: wildtext
-character(len=1),parameter :: NULL=char(0)
+character(len=1),parameter :: NIL=char(0)
 integer                    :: wlen
 integer                    :: ti, wi
 integer                    :: i
 character(len=:),allocatable :: tbookmark, wbookmark
 ! These two values are set when we observe a wildcard character. They
 ! represent the locations, in the two strings, from which we start once we have observed it.
-   tametext=tame//NULL
-   wildtext=wild//NULL
-   tbookmark = NULL
-   wbookmark = NULL
+   tametext=tame//NIL
+   wildtext=wild//NIL
+   tbookmark = NIL
+   wbookmark = NIL
    wlen=len(wild)
    wi=1
    ti=1
@@ -1846,7 +1846,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
                exit
             endif
          enddo
-         if(wildtext(wi:wi) == NULL) then        ! "x" matches "*"
+         if(wildtext(wi:wi) == NIL) then        ! "x" matches "*"
             glob_=.true.
             return
          endif
@@ -1854,7 +1854,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
             ! Fast-forward to next possible match.
             do while (tametext(ti:ti)  /=  wildtext(wi:wi))
                ti=ti+1
-               if (tametext(ti:ti) == NULL)then
+               if (tametext(ti:ti) == NIL)then
                   glob_=.false.
                   return                         ! "x" doesn't match "*y*"
                endif

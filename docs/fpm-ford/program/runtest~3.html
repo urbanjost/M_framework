@@ -93,19 +93,19 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 0.6% of total for programs.">11 statements</a>
+                 title=" 2.0% of total for programs.">35 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/test_suite_M_framework.f90"> Source File</a>
+              <a href="../src/test_suite_M_framework__verify.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='../sourcefile/test_suite_m_framework.f90.html'>test_suite_M_framework.f90</a></li>
+                <li class="breadcrumb-item"><a href='../sourcefile/test_suite_m_framework__verify.f90.html'>test_suite_M_framework__verify.f90</a></li>
             <li class="breadcrumb-item active" aria-current="page">runtest</li>
           </ol>
         </nav>
@@ -145,7 +145,12 @@
       </a>
       <div id="subs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../program/runtest~3.html#proc-test_framework">test_framework</a>
+            <a class="list-group-item" href="../program/runtest~3.html#proc-test_unit_test">test_unit_test</a>
+            <a class="list-group-item" href="../program/runtest~3.html#proc-test_unit_test_bad">test_unit_test_bad</a>
+            <a class="list-group-item" href="../program/runtest~3.html#proc-test_unit_test_end">test_unit_test_end</a>
+            <a class="list-group-item" href="../program/runtest~3.html#proc-test_unit_test_good">test_unit_test_good</a>
+            <a class="list-group-item" href="../program/runtest~3.html#proc-test_unit_test_start">test_unit_test_start</a>
+            <a class="list-group-item" href="../program/runtest~3.html#proc-test_unit_test_stop">test_unit_test_stop</a>
         </div>
       </div>
     </div>
@@ -176,7 +181,7 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='../module/m_framework.html'>M_framework</a></li>
+                  <li class="list-inline-item"><a href='../module/m_framework__verify.html'>M_framework__verify</a></li>
               </ul>
             </li>
         </ul>
@@ -196,7 +201,72 @@
     <section>
     <h2>Subroutines</h2>
       <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-test_framework"></span> <h3> subroutine <a href='../proc/test_framework.html'>test_framework</a>()  
+    <div class="card-header codesum"><span class="anchor" id="proc-test_unit_test"></span> <h3> subroutine <a href='../proc/test_unit_test.html'>test_unit_test</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_unit_test_bad"></span> <h3> subroutine <a href='../proc/test_unit_test_bad.html'>test_unit_test_bad</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_unit_test_end"></span> <h3> subroutine <a href='../proc/test_unit_test_end.html'>test_unit_test_end</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_unit_test_good"></span> <h3> subroutine <a href='../proc/test_unit_test_good.html'>test_unit_test_good</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_unit_test_start"></span> <h3> subroutine <a href='../proc/test_unit_test_start.html'>test_unit_test_start</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_unit_test_stop"></span> <h3> subroutine <a href='../proc/test_unit_test_stop.html'>test_unit_test_stop</a>()  
 </h3></div>
     <div class="card-body">
           
@@ -214,18 +284,57 @@
     <section>
     <h2 id="src">Source Code</h2>
     <div class="hl codehilite"><pre><span></span><span class="k">program </span><span class="n">runtest</span><span class="w"></span>
-<span class="k">use </span><span class="n">M_framework</span><span class="w"></span>
-<span class="w">   </span><span class="n">unit_test_level</span><span class="o">=</span><span class="mi">0</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">test_framework</span><span class="p">()</span><span class="w"></span>
+<span class="k">use </span><span class="n">M_framework__verify</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_test</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_bad</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_end</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_good</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_start</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_stop</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_unit_test_start</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_unit_test</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_unit_test_end</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_unit_test_bad</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_unit_test_good</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_unit_test_stop</span><span class="p">()</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">unit_test_stop</span><span class="p">()</span><span class="w"></span>
 <span class="w">   </span><span class="k">contains</span><span class="w"></span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_framework</span><span class="p">()</span><span class="w"></span>
+<span class="k">subroutine </span><span class="n">test_unit_test_start</span><span class="p">()</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;unit_test_start&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
 <span class="c">!      call unit_test(&#39;unit_test_start&#39;, .true.,&#39;expression is true&#39;)</span>
 <span class="c">!      call unit_test(&#39;unit_test_start&#39;, .false.,&#39;expression is false&#39;)</span>
 <span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;unit_test_start&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_framework</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_unit_test_start</span><span class="w"></span>
+<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="k">subroutine </span><span class="n">test_unit_test</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;unit_test&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="c">!      call unit_test(&#39;unit_test&#39;, .true.,&#39;expression is true&#39;)</span>
+<span class="c">!      call unit_test(&#39;unit_test&#39;, .false.,&#39;expression is false&#39;)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;unit_test&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_unit_test</span><span class="w"></span>
+<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="k">subroutine </span><span class="n">test_unit_test_end</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;unit_test_end&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="c">!      call unit_test(&#39;unit_test_end&#39;, .true.,&#39;expression is true&#39;)</span>
+<span class="c">!      call unit_test(&#39;unit_test_end&#39;, .false.,&#39;expression is false&#39;)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;unit_test_end&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_unit_test_end</span><span class="w"></span>
+<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="k">subroutine </span><span class="n">test_unit_test_bad</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;unit_test_bad&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="c">!      call unit_test(&#39;unit_test_bad&#39;, .true.,&#39;expression is true&#39;)</span>
+<span class="c">!      call unit_test(&#39;unit_test_bad&#39;, .false.,&#39;expression is false&#39;)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;unit_test_bad&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_unit_test_bad</span><span class="w"></span>
+<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="k">subroutine </span><span class="n">test_unit_test_good</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;unit_test_good&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="c">!      call unit_test(&#39;unit_test_good&#39;, .true.,&#39;expression is true&#39;)</span>
+<span class="c">!      call unit_test(&#39;unit_test_good&#39;, .false.,&#39;expression is false&#39;)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;unit_test_good&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_unit_test_good</span><span class="w"></span>
+<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="k">subroutine </span><span class="n">test_unit_test_stop</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;unit_test_stop&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="c">!      call unit_test_stop(&#39;unit_test_stop&#39;, .true.,&#39;expression is true&#39;)</span>
+<span class="c">!      call unit_test_stop(&#39;unit_test_stop&#39;, .false.,&#39;expression is false&#39;)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;unit_test_stop&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_unit_test_stop</span><span class="w"></span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">end program </span><span class="n">runtest</span><span class="w"></span>
 </pre></div>
@@ -250,7 +359,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-07-11 00:19 +0000             </p>
+ on 2025-07-11 12:50 +0000             </p>
           </div>
         </div>
         <br>

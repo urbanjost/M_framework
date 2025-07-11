@@ -93,19 +93,19 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 5.2% of total for programs.">93 statements</a>
+                 title=" 4.5% of total for programs.">79 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/test_suite_M_framework__approx.f90"> Source File</a>
+              <a href="../src/test_suite_M_framework__msg.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='../sourcefile/test_suite_m_framework__approx.f90.html'>test_suite_M_framework__approx.f90</a></li>
+                <li class="breadcrumb-item"><a href='../sourcefile/test_suite_m_framework__msg.f90.html'>test_suite_M_framework__msg.f90</a></li>
             <li class="breadcrumb-item active" aria-current="page">runtest</li>
           </ol>
         </nav>
@@ -134,7 +134,9 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../program/runtest~4.html#variable-g~5">g</a>
+            <a class="list-group-item" href="../program/runtest~4.html#variable-f~2">F</a>
+            <a class="list-group-item" href="../program/runtest~4.html#variable-t~2">T</a>
+            <a class="list-group-item" href="../program/runtest~4.html#variable-matched~2">matched</a>
         </div>
       </div>
     </div>
@@ -156,11 +158,14 @@
       </a>
       <div id="subs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../program/runtest~4.html#proc-test_accdig">test_accdig</a>
-            <a class="list-group-item" href="../program/runtest~4.html#proc-test_almost">test_almost</a>
-            <a class="list-group-item" href="../program/runtest~4.html#proc-test_in_margin">test_in_margin</a>
-            <a class="list-group-item" href="../program/runtest~4.html#proc-test_round">test_round</a>
-            <a class="list-group-item" href="../program/runtest~4.html#proc-test_significant">test_significant</a>
+            <a class="list-group-item" href="../program/runtest~4.html#proc-add">add</a>
+            <a class="list-group-item" href="../program/runtest~4.html#proc-test_suite_assert">test_suite_assert</a>
+            <a class="list-group-item" href="../program/runtest~4.html#proc-test_suite_fmt">test_suite_fmt</a>
+            <a class="list-group-item" href="../program/runtest~4.html#proc-test_suite_pdec">test_suite_pdec</a>
+            <a class="list-group-item" href="../program/runtest~4.html#proc-test_suite_set">test_suite_set</a>
+            <a class="list-group-item" href="../program/runtest~4.html#proc-test_suite_stderr">test_suite_stderr</a>
+            <a class="list-group-item" href="../program/runtest~4.html#proc-test_suite_str">test_suite_str</a>
+            <a class="list-group-item" href="../program/runtest~4.html#proc-test_suite_wrt">test_suite_wrt</a>
         </div>
       </div>
     </div>
@@ -191,11 +196,8 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
+                  <li class="list-inline-item"><a href='../module/m_framework.html'>M_framework</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
-                  <li class="list-inline-item"><a href='../module/m_framework__approx.html'>M_framework__approx</a></li>
-                  <li class="list-inline-item"><a href='../module/m_framework__journal.html'>M_framework__journal</a></li>
-                  <li class="list-inline-item"><a href='../module/m_framework__msg.html'>M_framework__msg</a></li>
-                  <li class="list-inline-item"><a href='../module/m_framework__verify.html'>M_framework__verify</a></li>
               </ul>
             </li>
         </ul>
@@ -219,16 +221,48 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-g~5"></span>
-              character(len=*),
+              <span class="anchor" id="variable-f~2"></span>
+              logical,
             </td>
             <td>
 parameter               
             </td>
             <td>::</td>
-            <td><strong>g</strong></td>
+            <td><strong>F</strong></td>
 <td> =</td>
-                <td>&#39;(*(g0,1x))&#39;</td>
+                <td>.false.</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-t~2"></span>
+              logical,
+            </td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>T</strong></td>
+<td> =</td>
+                <td>.true.</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-matched~2"></span>
+              logical
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>matched</strong></td>
+                <td></td>
+                <td></td>
             <td>
                 
             </td>
@@ -248,7 +282,157 @@ parameter
     <section>
     <h2>Subroutines</h2>
       <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-test_accdig"></span> <h3> subroutine <a href='../proc/test_accdig.html'>test_accdig</a>()  
+    <div class="card-header codesum"><span class="anchor" id="proc-add"></span> <h3> subroutine <a href='../proc/add.html'>add</a>(message, question, answer, answer2)  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-message~3"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>message</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-question"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>question</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-answer"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>answer</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-answer2"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>answer2</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_suite_assert"></span> <h3> subroutine <a href='../proc/test_suite_assert.html'>test_suite_assert</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  <p>call unit_test(&ldquo;assert&rdquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p>
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_suite_fmt"></span> <h3> subroutine <a href='../proc/test_suite_fmt.html'>test_suite_fmt</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  <p>call unit_test(&ldquo;fmt   &ldquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p>
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_suite_pdec"></span> <h3> subroutine <a href='../proc/test_suite_pdec.html'>test_suite_pdec</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  <p>call unit_test(&ldquo;pdec  &ldquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p>
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_suite_set"></span> <h3> subroutine <a href='../proc/test_suite_set.html'>test_suite_set</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  <p>call unit_test(&ldquo;set   &ldquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p>
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_suite_stderr"></span> <h3> subroutine <a href='../proc/test_suite_stderr.html'>test_suite_stderr</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  <p>call unit_test(&ldquo;stderr&rdquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p>
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-test_suite_str"></span> <h3> subroutine <a href='../proc/test_suite_str.html'>test_suite_str</a>()  
 </h3></div>
     <div class="card-body">
           
@@ -261,50 +445,11 @@ parameter
   </div>
 
       <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-test_almost"></span> <h3> subroutine <a href='../proc/test_almost.html'>test_almost</a>()  
+    <div class="card-header codesum"><span class="anchor" id="proc-test_suite_wrt"></span> <h3> subroutine <a href='../proc/test_suite_wrt.html'>test_suite_wrt</a>()  
 </h3></div>
     <div class="card-body">
           
-  
-
-  <h4>Arguments</h4>
-    <em>None</em>
-
-    </div>
-  </div>
-
-      <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-test_in_margin"></span> <h3> subroutine <a href='../proc/test_in_margin.html'>test_in_margin</a>()  
-</h3></div>
-    <div class="card-body">
-          
-  <p>call unit_test(&lsquo;in_margin&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
-
-  <h4>Arguments</h4>
-    <em>None</em>
-
-    </div>
-  </div>
-
-      <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-test_round"></span> <h3> subroutine <a href='../proc/test_round.html'>test_round</a>()  
-</h3></div>
-    <div class="card-body">
-          
-  <p>call unit_test(&lsquo;round&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p>
-
-  <h4>Arguments</h4>
-    <em>None</em>
-
-    </div>
-  </div>
-
-      <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-test_significant"></span> <h3> subroutine <a href='../proc/test_significant.html'>test_significant</a>()  
-</h3></div>
-    <div class="card-body">
-          
-  
+  <p>call unit_test(&ldquo;wrt   &ldquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p>
 
   <h4>Arguments</h4>
     <em>None</em>
@@ -318,121 +463,121 @@ parameter
     <section>
     <h2 id="src">Source Code</h2>
     <div class="hl codehilite"><pre><span></span><span class="k">program </span><span class="n">runtest</span><span class="w"></span>
-<span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w">  </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">int8</span><span class="p">,</span><span class="w"> </span><span class="n">int16</span><span class="p">,</span><span class="w"> </span><span class="n">int32</span><span class="p">,</span><span class="w"> </span><span class="n">int64</span><span class="w"></span>
-<span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w">  </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">real32</span><span class="p">,</span><span class="w"> </span><span class="n">real64</span><span class="p">,</span><span class="w"> </span><span class="n">real128</span><span class="w"></span>
-<span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w">  </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ERROR_UNIT</span><span class="p">,</span><span class="n">OUTPUT_UNIT</span><span class="w"></span>
-<span class="k">use </span><span class="n">M_framework__msg</span><span class="w"></span>
-<span class="k">use </span><span class="n">M_framework__verify</span><span class="w"></span>
-<span class="k">use </span><span class="n">M_framework__journal</span><span class="w"></span>
-<span class="k">use </span><span class="n">M_framework__approx</span><span class="w"></span>
+<span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="p">&amp;</span><span class="w"> </span><span class="n">stdin</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">input_unit</span><span class="p">,</span><span class="w">   </span><span class="p">&amp;</span><span class="w"></span>
+<span class="p">&amp;</span><span class="w"> </span><span class="n">stdout</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">output_unit</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="p">&amp;</span><span class="w"> </span><span class="n">stderr</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">error_unit</span><span class="w"></span>
+<span class="k">use </span><span class="n">M_framework</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_test_start</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_msg</span><span class="w"></span>
+<span class="k">use </span><span class="n">M_framework</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_test_end</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_stop</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_mode</span><span class="w"></span>
+<span class="k">use </span><span class="n">M_framework</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_test_level</span><span class="w"> </span><span class="c">! unit_test_flags</span>
+<span class="k">use </span><span class="n">M_framework</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">str</span><span class="w"></span>
+<span class="c">!use M_xxxx</span>
 <span class="k">implicit none</span>
-<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">g</span><span class="o">=</span><span class="s1">&#39;(*(g0,1x))&#39;</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_mode</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">luns</span><span class="o">=</span><span class="p">[</span><span class="n">OUTPUT_UNIT</span><span class="p">])</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">test_accdig</span><span class="p">()</span><span class="w">         </span><span class="c">! compare two real numbers only up to a specified number of digits</span>
-<span class="w">   </span><span class="k">call </span><span class="n">test_almost</span><span class="p">()</span><span class="w">         </span><span class="c">! function compares two numbers only up to a specified number of digits</span>
-<span class="w">   </span><span class="k">call </span><span class="n">test_in_margin</span><span class="p">()</span><span class="w">      </span><span class="c">! check if two reals are approximately equal using a relative margin</span>
-<span class="w">   </span><span class="k">call </span><span class="n">test_round</span><span class="p">()</span><span class="w">          </span><span class="c">! round val to specified number of significant digits</span>
-<span class="w">   </span><span class="k">call </span><span class="n">test_significant</span><span class="p">()</span><span class="w">    </span><span class="c">! round val to specified number of significant digits</span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_stop</span><span class="p">()</span><span class="w"></span>
-<span class="w">   </span><span class="k">contains</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_in_margin</span><span class="p">()</span><span class="w"></span>
+<span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">T</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="n">F</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+<span class="kt">logical</span><span class="w">            </span><span class="kd">::</span><span class="w"> </span><span class="n">matched</span><span class="w"></span>
+<span class="c">! optional call to change default modes</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_mode</span><span class="p">(</span><span class="w">       </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="n">keep_going</span><span class="o">=</span><span class="n">T</span><span class="p">,</span><span class="w">           </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="n">flags</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w">              </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="n">luns</span><span class="o">=</span><span class="p">[</span><span class="n">stderr</span><span class="p">],</span><span class="w">          </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w">             </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="n">brief</span><span class="o">=</span><span class="n">F</span><span class="p">,</span><span class="w">                </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="n">match</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w">               </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="n">interactive</span><span class="o">=</span><span class="n">F</span><span class="p">,</span><span class="w">          </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="n">CMDLINE</span><span class="o">=</span><span class="n">T</span><span class="p">,</span><span class="w">              </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="n">debug</span><span class="o">=</span><span class="n">F</span><span class="p">)</span><span class="w"></span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="c">!!call unit_test(&#39;in_margin&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="n">in_margin</span><span class="p">(</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.000000001</span><span class="p">),</span><span class="s1">&#39;compare&#39;</span><span class="p">,</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.000000001</span><span class="p">)</span><span class="w"></span>
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="n">in_margin</span><span class="p">(</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.00000001</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="s1">&#39;compare&#39;</span><span class="p">,</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.00000001</span><span class="p">)</span><span class="w"></span>
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="n">in_margin</span><span class="p">(</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.0000001</span><span class="p">)</span><span class="w">  </span><span class="p">,</span><span class="s1">&#39;compare&#39;</span><span class="p">,</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.0000001</span><span class="p">)</span><span class="w"></span>
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="n">in_margin</span><span class="p">(</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.000001</span><span class="p">)</span><span class="w">   </span><span class="p">,</span><span class="s1">&#39;compare&#39;</span><span class="p">,</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.000001</span><span class="p">)</span><span class="w"></span>
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">in_margin</span><span class="p">(</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.00001</span><span class="p">)</span><span class="w">         </span><span class="p">,</span><span class="s1">&#39;compare&#39;</span><span class="p">,</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.00001</span><span class="p">)</span><span class="w"></span>
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">in_margin</span><span class="p">(</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.0001</span><span class="p">)</span><span class="w">          </span><span class="p">,</span><span class="s1">&#39;compare&#39;</span><span class="p">,</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.0001</span><span class="p">)</span><span class="w"></span>
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">in_margin</span><span class="p">(</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.001</span><span class="p">)</span><span class="w">           </span><span class="p">,</span><span class="s1">&#39;compare&#39;</span><span class="p">,</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.001</span><span class="p">)</span><span class="w"></span>
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">in_margin</span><span class="p">(</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span><span class="w">            </span><span class="p">,</span><span class="s1">&#39;compare&#39;</span><span class="p">,</span><span class="mf">4.00000</span><span class="p">,</span><span class="mf">3.99999</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">unit_test_level</span><span class="o">=</span><span class="mi">0</span><span class="w"></span>
 
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,.</span><span class="nb">not</span><span class="p">.</span><span class="k">all</span><span class="p">(</span><span class="n">in_margin</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span><span class="mi">4</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">40</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">400</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">4000</span><span class="mf">0.0</span><span class="p">],&amp;</span><span class="w"></span>
-<span class="w">                                                  </span><span class="p">&amp;</span><span class="w"> </span><span class="p">[</span><span class="mf">3.9</span><span class="p">,</span><span class="mi">3</span><span class="mf">9.9</span><span class="p">,</span><span class="mi">39</span><span class="mf">9.9</span><span class="p">,</span><span class="mi">399</span><span class="mf">9.9</span><span class="p">,</span><span class="mi">3999</span><span class="mf">9.9</span><span class="p">],</span><span class="mf">0.000001</span><span class="p">)),</span><span class="s1">&#39;should all be false&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="w">     </span><span class="k">all</span><span class="p">(</span><span class="n">in_margin</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span><span class="mi">4</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">40</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">400</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">4000</span><span class="mf">0.0</span><span class="p">],&amp;</span><span class="w"></span>
-<span class="w">                                                  </span><span class="p">&amp;</span><span class="w"> </span><span class="p">[</span><span class="mf">3.9</span><span class="p">,</span><span class="mi">3</span><span class="mf">9.9</span><span class="p">,</span><span class="mi">39</span><span class="mf">9.9</span><span class="p">,</span><span class="mi">399</span><span class="mf">9.9</span><span class="p">,</span><span class="mi">3999</span><span class="mf">9.9</span><span class="p">],</span><span class="mf">0.1</span><span class="p">)),</span><span class="s1">&#39;should all be true&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_suite_str</span><span class="w">   </span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_suite_stderr</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_suite_wrt</span><span class="w">   </span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_suite_fmt</span><span class="w">   </span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_suite_set</span><span class="w">   </span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_suite_pdec</span><span class="w">  </span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_suite_assert</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_stop</span><span class="p">(</span><span class="s1">&#39;M_framework_msg&#39;</span><span class="p">)</span><span class="w"></span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;in_margin&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_in_margin</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_significant</span><span class="p">()</span><span class="w"></span>
-<span class="n">doubleprecision</span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">answers</span><span class="p">(:)</span><span class="w"></span>
-<span class="n">doubleprecision</span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">expected</span><span class="p">(:)</span><span class="w"></span>
+<span class="k">contains</span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;significant&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">subroutine </span><span class="n">test_suite_str</span><span class="w">   </span><span class="p">()</span><span class="w"></span>
+<span class="kt">logical</span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tests</span><span class="p">(:)</span><span class="w"></span>
 
-<span class="w">   </span><span class="n">answers</span><span class="o">=</span><span class="n">significant</span><span class="p">(</span><span class="mf">1.23456789012345d0</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span><span class="s1">&#39;RU&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="n">expected</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.3d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.24d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.235d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2346d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23457d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.234568d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345679d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345679d0</span><span class="p">]</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;significant&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">(</span><span class="w"> </span><span class="n">answers</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">expected</span><span class="p">),</span><span class="s1">&#39;RU, round up&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">,</span><span class="s1">&#39;test building message strings&#39;</span><span class="p">,</span><span class="n">matched</span><span class="o">=</span><span class="n">matched</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">matched</span><span class="p">)</span><span class="k">return</span>
 
-<span class="w">   </span><span class="n">answers</span><span class="o">=</span><span class="n">significant</span><span class="p">(</span><span class="mf">1.23456789012345d0</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span><span class="s1">&#39;RD&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="n">expected</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.234d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23456d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.234567d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23456789d0</span><span class="p">]</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;significant&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">(</span><span class="w"> </span><span class="n">answers</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">expected</span><span class="p">),</span><span class="s1">&#39;RD, round down &#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">  </span><span class="n">tests</span><span class="o">=</span><span class="p">[</span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
 
-<span class="w">   </span><span class="n">answers</span><span class="o">=</span><span class="n">significant</span><span class="p">(</span><span class="mf">1.23456789012345d0</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span><span class="s1">&#39;RZ&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="n">expected</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.234d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23456d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.234567d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23456789d0</span><span class="p">]</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;significant&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">(</span><span class="w"> </span><span class="n">answers</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">expected</span><span class="p">),</span><span class="s1">&#39;RZ, round towards zero&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;INTEGER&#39;</span><span class="p">,</span><span class="n">str</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="s1">&#39;10&#39;</span><span class="p">,</span><span class="s1">&#39;10&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;LOGICAL&#39;</span><span class="p">,</span><span class="n">str</span><span class="p">(.</span><span class="n">false</span><span class="p">.),</span><span class="s1">&#39;F&#39;</span><span class="p">,</span><span class="s1">&#39;F&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;LOGICAL&#39;</span><span class="p">,</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.),</span><span class="s1">&#39;T&#39;</span><span class="p">,</span><span class="s1">&#39;T&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;REAL&#39;</span><span class="p">,</span><span class="n">str</span><span class="p">(</span><span class="mi">10</span><span class="mf">0.0</span><span class="p">),</span><span class="s1">&#39;100.000000&#39;</span><span class="p">,</span><span class="s1">&#39;100.0000&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;COMPLEX&#39;</span><span class="p">,</span><span class="n">str</span><span class="p">((</span><span class="mi">1</span><span class="mf">1.0</span><span class="p">,</span><span class="mi">2</span><span class="mf">2.0</span><span class="p">)),</span><span class="s1">&#39;(11.0000000,22.0000000)&#39;</span><span class="p">,</span><span class="s1">&#39;(11.00000,22.00000)&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;COMPOUND&#39;</span><span class="p">,</span><span class="n">str</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="s2">&quot;string&quot;</span><span class="p">,(</span><span class="mi">1</span><span class="mf">1.0</span><span class="p">,</span><span class="mi">2</span><span class="mf">2.0</span><span class="p">),.</span><span class="n">false</span><span class="p">.),</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="p">&amp;</span><span class="w"> </span><span class="s1">&#39;10 100.000000 string (11.0000000,22.0000000) F&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">       </span><span class="p">&amp;</span><span class="w"> </span><span class="s1">&#39;10 100.0000 string (11.00000,22.00000) F&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">unit_test_msg</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">,</span><span class="s1">&#39;tally is &#39;</span><span class="p">,</span><span class="n">str</span><span class="p">(</span><span class="n">tests</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="c">! //&#39;&#39; for gfortran-11 bug</span>
+<span class="w">  </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s2">&quot;str   &quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
 
-<span class="w">   </span><span class="n">answers</span><span class="o">=</span><span class="n">significant</span><span class="p">(</span><span class="mf">1.23456789012345d0</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span><span class="s1">&#39;RN&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="n">expected</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.235d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2346d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23457d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.234568d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345679d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23456789d0</span><span class="p">]</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;significant&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">(</span><span class="w"> </span><span class="n">answers</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">expected</span><span class="p">),</span><span class="s1">&#39;RN, round towards nearest representable number&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_suite_str</span><span class="w">   </span>
 
-<span class="w">   </span><span class="n">answers</span><span class="o">=</span><span class="n">significant</span><span class="p">(</span><span class="mf">1.23456789012345d0</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span><span class="s1">&#39;RC&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="n">expected</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.235d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2346d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23457d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.234568d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345679d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23456789d0</span><span class="p">]</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;significant&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">(</span><span class="w"> </span><span class="n">answers</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">expected</span><span class="p">),</span><span class="s1">&#39;RC, compatible rounding rounds to closest representable number&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">subroutine </span><span class="n">add</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="n">question</span><span class="p">,</span><span class="n">answer</span><span class="p">,</span><span class="n">answer2</span><span class="p">)</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">message</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">question</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">answer</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">answer2</span><span class="w"></span>
+<span class="kt">logical</span><span class="w">                       </span><span class="kd">::</span><span class="w"> </span><span class="n">passed</span><span class="w"></span>
+<span class="w">  </span><span class="n">passed</span><span class="o">=</span><span class="n">question</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="n">answer</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">passed</span><span class="p">)</span><span class="k">then</span>
+<span class="k">     call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">,</span><span class="n">passed</span><span class="p">,</span><span class="s1">&#39;testing&#39;</span><span class="p">,</span><span class="n">message</span><span class="p">,</span><span class="s1">&#39;expected&#39;</span><span class="p">,</span><span class="n">answer</span><span class="p">,</span><span class="s1">&#39;got&#39;</span><span class="p">,</span><span class="n">question</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">else</span>
+<span class="k">     </span><span class="n">passed</span><span class="o">=</span><span class="n">question</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="n">answer2</span><span class="w"></span>
+<span class="w">     </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">,</span><span class="n">passed</span><span class="p">,</span><span class="s1">&#39;testing&#39;</span><span class="p">,</span><span class="n">message</span><span class="p">,</span><span class="s1">&#39;expected&#39;</span><span class="p">,</span><span class="n">answer2</span><span class="p">,</span><span class="s1">&#39;got&#39;</span><span class="p">,</span><span class="n">question</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">endif</span>
+<span class="k">end subroutine </span><span class="n">add</span><span class="w"></span>
 
-<span class="w">   </span><span class="n">answers</span><span class="o">=</span><span class="n">significant</span><span class="p">(</span><span class="mf">1.23456789012345d0</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span><span class="s1">&#39;RP&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="n">expected</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.235d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2346d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23457d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.234568d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345679d0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23456789d0</span><span class="p">]</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;significant&#39;</span><span class="p">,</span><span class="k">all</span><span class="p">(</span><span class="w"> </span><span class="n">answers</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">expected</span><span class="p">),</span><span class="s1">&#39;RP, processor-dependent rounding &#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">subroutine </span><span class="n">test_suite_stderr</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s2">&quot;stderr&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">matched</span><span class="o">=</span><span class="n">matched</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">matched</span><span class="p">)</span><span class="k">return</span><span class="w"></span>
+<span class="w">   </span><span class="c">!!call unit_test(&quot;stderr&quot;, 0 .eq. 0, &quot;checking&quot;,100)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s2">&quot;stderr&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_suite_stderr</span><span class="w"></span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;significant&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_significant</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_round</span><span class="p">()</span><span class="w"></span>
+<span class="k">subroutine </span><span class="n">test_suite_wrt</span><span class="w">   </span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s2">&quot;wrt&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">matched</span><span class="o">=</span><span class="n">matched</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">matched</span><span class="p">)</span><span class="k">return</span><span class="w"></span>
+<span class="w">   </span><span class="c">!!call unit_test(&quot;wrt   &quot;, 0 .eq. 0, &quot;checking&quot;,100)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s2">&quot;wrt&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_suite_wrt</span><span class="w">   </span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;round&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="c">!!call unit_test(&#39;round&#39;, 0.eq.0, &#39;checking&#39;, 100)</span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;round&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_round</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_accdig</span><span class="p">()</span><span class="w"></span>
-<span class="kt">integer</span><span class="p">,</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sz</span><span class="o">=</span><span class="mi">16</span><span class="w"></span>
-<span class="n">doubleprecision</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">aarr</span><span class="p">(</span><span class="n">sz</span><span class="p">),</span><span class="w"> </span><span class="n">barr</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span><span class="w"></span>
-<span class="kt">integer</span><span class="w">           </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">ind</span><span class="p">,</span><span class="w"> </span><span class="n">indarr</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span><span class="w"></span>
-<span class="kt">real</span><span class="w">              </span><span class="kd">::</span><span class="w"> </span><span class="n">acurcy</span><span class="p">,</span><span class="w"> </span><span class="n">acurcyarr</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span><span class="w"></span>
+<span class="k">subroutine </span><span class="n">test_suite_fmt</span><span class="w">   </span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">matched</span><span class="o">=</span><span class="n">matched</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">matched</span><span class="p">)</span><span class="k">return</span><span class="w"></span>
+<span class="w">   </span><span class="c">!!call unit_test(&quot;fmt   &quot;, 0 .eq. 0, &quot;checking&quot;,100)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s2">&quot;fmt&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_suite_fmt</span><span class="w">   </span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;accdig&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">sz</span><span class="w"></span>
-<span class="w">      </span><span class="n">a</span><span class="o">=</span><span class="mf">1.0d0</span><span class="w"></span>
-<span class="w">      </span><span class="n">b</span><span class="o">=</span><span class="n">a</span><span class="o">+</span><span class="mf">1.0d0</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="mf">0.0d0</span><span class="o">**</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">call </span><span class="n">accdig</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="mf">8.0</span><span class="p">,</span><span class="n">acurcy</span><span class="p">,</span><span class="n">ind</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">unit_test_level</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">i</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">acurcy</span><span class="p">,</span><span class="n">ind</span><span class="w"></span>
-<span class="w">      </span><span class="n">aarr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=</span><span class="n">a</span><span class="w"></span>
-<span class="w">      </span><span class="n">barr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=</span><span class="n">b</span><span class="w"></span>
-<span class="w">   </span><span class="k">enddo</span>
-<span class="k">   call </span><span class="n">accdig</span><span class="p">(</span><span class="n">aarr</span><span class="p">,</span><span class="n">barr</span><span class="p">,</span><span class="mf">8.0</span><span class="p">,</span><span class="n">acurcyarr</span><span class="p">,</span><span class="n">indarr</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">unit_test_level</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)(</span><span class="n">aarr</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">barr</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">acurcyarr</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">indarr</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">sz</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;accdig&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">all</span><span class="p">(</span><span class="n">indarr</span><span class="p">.</span><span class="n">eq</span><span class="p">.[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="w"> </span><span class="s1">&#39;expected 7 bad, got &#39;</span><span class="p">,</span><span class="nb">count</span><span class="p">(</span><span class="n">indarr</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;accdig&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_accdig</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_almost</span><span class="p">()</span><span class="w"></span>
-<span class="kt">real</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"></span>
-<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
-<span class="kt">logical</span><span class="p">,</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">expected</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="o">=</span><span class="p">[.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.]</span><span class="w"></span>
+<span class="k">subroutine </span><span class="n">test_suite_set</span><span class="w">   </span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s2">&quot;set&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">matched</span><span class="o">=</span><span class="n">matched</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">matched</span><span class="p">)</span><span class="k">return</span><span class="w"></span>
+<span class="w">   </span><span class="c">!!call unit_test(&quot;set   &quot;, 0 .eq. 0, &quot;checking&quot;,100)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s2">&quot;set&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_suite_set</span><span class="w">   </span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;almost&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="n">x</span><span class="o">=</span><span class="mf">1.2345678</span><span class="w"></span>
-<span class="w">   </span><span class="n">y</span><span class="o">=</span><span class="mf">1.2300000</span><span class="w"></span>
-<span class="w">   </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="w"></span>
-<span class="w">       </span><span class="n">r</span><span class="o">=</span><span class="kt">real</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;almost&#39;</span><span class="p">,</span><span class="n">almost</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.).</span><span class="n">eqv</span><span class="p">.</span><span class="n">expected</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="s1">&#39;for&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="s1">&#39;expected&#39;</span><span class="p">,</span><span class="n">expected</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"></span>
-<span class="w">   </span><span class="k">enddo</span>
-<span class="k">   call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;almost&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_almost</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="k">subroutine </span><span class="n">test_suite_pdec</span><span class="w">  </span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s2">&quot;pdec&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">matched</span><span class="o">=</span><span class="n">matched</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">matched</span><span class="p">)</span><span class="k">return</span><span class="w"></span>
+<span class="w">   </span><span class="c">!!call unit_test(&quot;pdec  &quot;, 0 .eq. 0, &quot;checking&quot;,100)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s2">&quot;pdec&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_suite_pdec</span><span class="w">  </span>
+
+<span class="k">subroutine </span><span class="n">test_suite_assert</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s2">&quot;assert&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">matched</span><span class="o">=</span><span class="n">matched</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">matched</span><span class="p">)</span><span class="k">return</span><span class="w"></span>
+<span class="w">   </span><span class="c">!!call unit_test(&quot;assert&quot;, 0 .eq. 0, &quot;checking&quot;,100)</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s2">&quot;assert&quot;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_suite_assert</span><span class="w"></span>
+
 <span class="k">end program </span><span class="n">runtest</span><span class="w"></span>
 </pre></div>
 
@@ -456,7 +601,7 @@ parameter
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-07-11 00:19 +0000             </p>
+ on 2025-07-11 12:50 +0000             </p>
           </div>
         </div>
         <br>
