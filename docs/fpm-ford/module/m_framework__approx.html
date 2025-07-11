@@ -1,0 +1,2053 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="collection of modules for unit testing and logging and messaging">
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>M_framework__approx &ndash; M_framework</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">M_framework </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>M_framework__approx
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="13.4% of total for modules and submodules.">420 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/M_framework__approx.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/m_framework__approx.f90.html'>M_framework__approx.F90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">M_framework__approx</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#inters-0"
+         aria-expanded="false" aria-controls="inters-0">
+         <h4 class="card-header bg-primary text-white">Interfaces</h4>
+      </a>
+      <div id="inters-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/m_framework__approx.html#interface-compare_float">compare_float</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#interface-dp_accdig">dp_accdig</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#interface-operator%20%28.equalto.%29">operator (.equalto.)</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#interface-operator%20%28.greaterthan.%29">operator (.greaterthan.)</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#interface-operator%20%28.lessthan.%29">operator (.lessthan.)</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#interface-significant">significant</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#funcs-0"
+         aria-expanded="false" aria-controls="funcs-0">
+         <h4 class="card-header bg-primary text-white">Functions</h4>
+      </a>
+      <div id="funcs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/m_framework__approx.html#proc-almost">almost</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#proc-in_margin">in_margin</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#proc-round">round</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#proc-round_to_power">round_to_power</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#subs-0"
+         aria-expanded="false" aria-controls="subs-0">
+         <h4 class="card-header bg-primary text-white">Subroutines</h4>
+      </a>
+      <div id="subs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/m_framework__approx.html#proc-accdig">accdig</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#proc-change_default_ulp">change_default_ulp</a>
+            <a class="list-group-item" href="../module/m_framework__approx.html#proc-sp_accdig">sp_accdig</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      
+      <br>
+
+
+
+
+        <section>
+          <h2>Interfaces</h2>
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-compare_float"></span>
+      <h3>public        interface <a href='../interface/compare_float.html'>compare_float</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private elemental function compare_float_real32(x, y, ulp) result(compare)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~8"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ulp~2"></span>
+              class(*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ulp</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private elemental function compare_float_real64(x, y, ulp) result(compare)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~12"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~9"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ulp~3"></span>
+              class(*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ulp</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private elemental function compare_float_real128(x, y, ulp) result(compare)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~16"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~13"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ulp~4"></span>
+              class(*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ulp</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-dp_accdig"></span>
+      <h3>public        interface <a href='../interface/dp_accdig.html'>dp_accdig</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    public impure elemental subroutine <a href='../proc/accdig.html'>accdig</a>(x, y, digi0, acurcy, ind)  
+
+    </h3>
+    
+  <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code><span class="w">  </span><span class="n">accdig</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_framework__approx</span><span class="o">]</span><span class="w"> </span><span class="n">compare</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="n">numbers</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="k">to</span><span class="w"></span>
+<span class="w">  </span><span class="n">a</span><span class="w"> </span><span class="n">specified</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">digits</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<div class="codehilite"><pre><span></span><code>   elemental impure subroutine accdig(x,y,digio,acurcy,ind)
+
+    class(*),intent(in)  :: X
+    class(*),intent(in)  :: Y
+    class(*),intent(in)  :: DIGI0
+    real,intent(out)     :: acurcy
+    integer,intent(out)  :: ind
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">This</span> <span class="nv">procedure</span> <span class="nv">is</span> <span class="nv">used</span> <span class="nv">to</span> <span class="nv">check</span> <span class="nv">how</span> <span class="nv">closely</span> <span class="nv">two</span> <span class="nv">numbers</span> <span class="nv">agree</span>.
+
+   <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="nv">X</span>,<span class="nv">Y</span>,<span class="nv">DIGI0</span>,<span class="nv">ACURCY</span>,<span class="nv">IND</span><span class="ss">)</span>
+
+<span class="nv">The</span> <span class="nv">values</span> <span class="nv">X</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="nv">are</span> <span class="nv">the</span> <span class="nv">numbers</span> <span class="nv">to</span> <span class="nv">compare</span>, <span class="nv">and</span> <span class="nv">DIGI0</span> <span class="nv">is</span> <span class="nv">the</span>
+<span class="nv">threshold</span> <span class="nv">number</span> <span class="nv">of</span> <span class="nv">digits</span> <span class="nv">to</span> <span class="nv">consider</span> <span class="nv">significant</span> <span class="nv">in</span> <span class="nv">returning</span> <span class="nv">IND</span>.
+
+<span class="k">If</span> <span class="nv">X</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="nv">are</span> <span class="nv">considered</span> <span class="nv">equal</span> <span class="nv">within</span> <span class="nv">DIGI0</span> <span class="nv">relative</span> <span class="nv">tolerance</span>,
+
+    <span class="nv">IND</span>    <span class="o">=</span> <span class="mi">0</span>, <span class="k">if</span> <span class="nv">tolerance</span> <span class="nv">is</span>     <span class="nv">satisfied</span>.
+           <span class="o">=</span> <span class="mi">1</span>, <span class="k">if</span> <span class="nv">tolerance</span> <span class="nv">is</span> <span class="nv">not</span> <span class="nv">satisfied</span>.
+
+<span class="nv">The</span> <span class="nb">result</span> <span class="nv">ACURCY</span> <span class="nv">gives</span> <span class="nv">a</span> <span class="nv">measure</span> <span class="nv">of</span> <span class="nv">the</span> <span class="nv">number</span> <span class="nv">of</span> <span class="nv">leading</span> <span class="nv">digits</span> <span class="nv">in</span> <span class="nv">X</span>
+<span class="nv">which</span> <span class="nv">are</span> <span class="nv">the</span> <span class="nv">same</span> <span class="nv">as</span> <span class="nv">the</span> <span class="nv">number</span> <span class="nv">of</span> <span class="nv">leading</span> <span class="nv">digits</span> <span class="nv">in</span> <span class="nv">Y</span>.
+
+     <span class="nv">ACURCY</span><span class="o">=-</span><span class="nv">log10</span><span class="ss">((</span><span class="nv">X</span><span class="o">-</span><span class="nv">Y</span><span class="ss">)</span><span class="o">/</span><span class="nv">Y</span><span class="ss">)</span>   <span class="k">if</span> <span class="nv">X</span> <span class="o">!=</span> <span class="nv">Y</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="o">!=</span> <span class="mi">0</span>
+     <span class="nv">ACURCY</span><span class="o">=-</span><span class="nv">log10</span><span class="ss">(</span><span class="nv">X</span><span class="o">-</span><span class="nv">Y</span><span class="ss">)</span>       <span class="k">if</span> <span class="nv">X</span> <span class="o">!=</span> <span class="nv">Y</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="o">=</span> <span class="mi">0</span>
+     <span class="nv">ACURCY</span><span class="o">=</span><span class="mi">8</span>                 <span class="k">if</span> <span class="nv">X</span><span class="o">=</span><span class="nv">Y</span>
+
+     <span class="nv">ACURCY</span> <span class="nv">is</span> <span class="nv">never</span> <span class="nv">less</span> <span class="nv">than</span> <span class="o">-</span><span class="mi">8</span> <span class="nv">or</span> <span class="nv">greater</span> <span class="nv">than</span> <span class="mi">8</span> <span class="k">for</span> <span class="mi">32</span><span class="o">-</span><span class="nv">bit</span> <span class="nv">REAL</span> <span class="nv">values</span>
+
+<span class="nv">TOLERANCE</span> ...
+     <span class="nv">X</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="nv">are</span> <span class="nv">considered</span> <span class="nv">equal</span> <span class="nv">within</span> <span class="nv">DIGI0</span> <span class="nv">relative</span> <span class="nv">tolerance</span>,
+     <span class="k">if</span> <span class="nv">ACURCY</span> <span class="nv">is</span> <span class="nv">greater</span> <span class="nv">than</span> <span class="nv">DIGI0</span>.
+
+<span class="k">For</span> <span class="nv">example</span>, <span class="nv">Take</span> <span class="nv">some</span> <span class="nv">numbers</span> <span class="nv">and</span> <span class="nv">compare</span> <span class="nv">them</span>  <span class="nv">to</span> <span class="mi">1</span>.<span class="mi">2345678</span> ...
+
+   <span class="o">&gt;</span>  <span class="o">================================================</span>
+   <span class="o">&gt;</span>  <span class="nv">A</span> <span class="nv">number</span>     <span class="o">|</span>    <span class="nv">ACURCY</span>       <span class="o">|</span>   <span class="nv">ACURCY</span>
+   <span class="o">&gt;</span>               <span class="o">|</span>    <span class="mi">1</span>.<span class="mi">2345678</span><span class="o">=</span><span class="nv">Y</span>  <span class="o">|</span>   <span class="mi">1</span>.<span class="mi">2345678</span><span class="o">=</span><span class="nv">X</span>
+   <span class="o">&gt;</span>  <span class="o">================================================</span>
+   <span class="o">&gt;</span>   <span class="mi">1</span>.<span class="mi">234680</span>    <span class="o">|</span>    <span class="mi">3</span>.<span class="mi">7900571</span>    <span class="o">|</span>   <span class="mi">3</span>.<span class="mi">7901275</span>
+   <span class="o">&gt;</span>   <span class="mi">1</span>.<span class="mi">2345378</span>   <span class="o">|</span>    <span class="mi">4</span>.<span class="mi">6144510</span>    <span class="o">|</span>   <span class="mi">4</span>.<span class="mi">6144404</span>
+   <span class="o">&gt;</span>   <span class="mi">2</span>.<span class="mi">2234568</span>   <span class="o">|</span>    <span class="mi">0</span>.<span class="mi">096367393</span>  <span class="o">|</span>   <span class="mi">0</span>.<span class="mi">35188114</span>
+   <span class="o">&gt;</span>   <span class="mi">1</span>.<span class="mi">2345678</span>   <span class="o">|</span>    <span class="mi">8</span>.<span class="mi">0000000</span>    <span class="o">|</span>   <span class="mi">8</span>.<span class="mi">0000000</span>
+   <span class="o">&gt;</span>   <span class="mi">1</span>.<span class="mi">2345679</span>   <span class="o">|</span>    <span class="mi">7</span>.<span class="mi">0732967</span>    <span class="o">|</span>   <span class="mi">7</span>.<span class="mi">0731968</span>
+   <span class="o">&gt;</span>  <span class="o">-</span><span class="mi">1</span>.<span class="mi">2345678</span>   <span class="o">|</span>   <span class="o">-</span><span class="mi">0</span>.<span class="mi">30103000</span>   <span class="o">|</span>  <span class="o">-</span><span class="mi">0</span>.<span class="mi">30103000</span>
+   <span class="o">&gt;</span>  <span class="mi">76</span>.<span class="mi">234567</span>    <span class="o">|</span>   <span class="o">-</span><span class="mi">1</span>.<span class="mi">7835463</span>    <span class="o">|</span>   <span class="mi">0</span>.<span class="mi">0070906729</span>
+   <span class="o">&gt;</span>   <span class="mi">2</span>.<span class="mi">4691356</span>   <span class="o">|</span>    <span class="mi">0</span>.<span class="mi">0</span>          <span class="o">|</span>   <span class="mi">0</span>.<span class="mi">3010300</span>
+   <span class="o">&gt;</span>   <span class="mi">0</span>.<span class="mi">0</span>         <span class="o">|</span>    <span class="mi">0</span>.<span class="mi">0</span>          <span class="o">|</span>  <span class="o">-</span><span class="mi">0</span>.<span class="mi">91514942</span>.
+
+<span class="nv">Due</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">typical</span> <span class="nv">limits</span> <span class="nv">of</span> <span class="nv">the</span> <span class="nv">log</span> <span class="nv">function</span>, <span class="nv">the</span> <span class="nv">number</span> <span class="nv">of</span>
+<span class="nv">significant</span> <span class="nv">digits</span> <span class="nv">in</span> <span class="nv">the</span> <span class="nb">result</span> <span class="nv">is</span> <span class="nv">best</span> <span class="nv">considered</span> <span class="nv">to</span> <span class="nv">be</span> <span class="nv">three</span>.
+
+<span class="nv">Notice</span> <span class="nv">that</span> <span class="mi">1</span>.<span class="mi">2345678</span><span class="o">=</span><span class="nv">Y</span> <span class="nv">produces</span> <span class="nv">different</span> <span class="nv">values</span> <span class="nv">than</span> <span class="mi">1</span>.<span class="mi">2345678</span><span class="o">=</span><span class="nv">X</span>
+
+<span class="nv">A</span> <span class="nv">negative</span> <span class="nb">result</span> <span class="nv">indicates</span> <span class="nv">the</span> <span class="nv">two</span> <span class="nv">values</span> <span class="nv">being</span> <span class="nv">compared</span> <span class="nv">either</span> <span class="k">do</span>
+<span class="nv">not</span> <span class="nv">agree</span> <span class="nv">in</span> <span class="nv">the</span> <span class="nv">first</span> <span class="nv">digit</span> <span class="nv">or</span> <span class="nv">they</span> <span class="nv">differ</span> <span class="nv">with</span> <span class="nv">respect</span> <span class="nv">to</span> <span class="nv">sign</span>. <span class="nv">An</span>
+<span class="nv">example</span> <span class="nv">of</span> <span class="nv">two</span> <span class="nv">numbers</span> <span class="nv">which</span> <span class="k">do</span> <span class="nv">not</span> <span class="nv">agree</span> <span class="nv">in</span> <span class="nv">their</span> <span class="nv">leading</span> <span class="nv">digit</span> <span class="ss">(</span><span class="nv">and</span>
+<span class="nv">actually</span> <span class="nv">differ</span> <span class="nv">in</span> <span class="nv">order</span> <span class="nv">of</span> <span class="nv">magnitude</span><span class="ss">)</span> <span class="nv">is</span> <span class="nv">given</span> <span class="nv">above</span> <span class="nv">by</span> <span class="nv">X</span><span class="o">=</span><span class="mi">76</span>.<span class="mi">234567</span>
+<span class="nv">and</span> <span class="nv">Y</span><span class="o">=</span><span class="mi">1</span>.<span class="mi">2345678</span><span class="c1">; the accuracy reported is -1.7835463. An example of</span>
+<span class="nv">two</span> <span class="nv">numbers</span> <span class="nv">which</span> <span class="k">do</span> <span class="nv">not</span> <span class="nv">agree</span> <span class="nv">in</span> <span class="nv">sign</span> <span class="nv">in</span> <span class="nv">X</span><span class="o">=-</span><span class="mi">1</span>.<span class="mi">2345678</span> <span class="nv">and</span> <span class="nv">Y</span><span class="o">=</span><span class="mi">1</span>.<span class="mi">2345678</span><span class="c1">;</span>
+<span class="nv">here</span> <span class="nv">the</span> <span class="nv">accuracy</span> <span class="nv">reported</span> <span class="nv">is</span> <span class="o">-</span><span class="mi">0</span>.<span class="mi">30103000</span>.
+</code></pre></div>
+
+<h2 id="examples">EXAMPLES</h2>
+<p>Example program:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">program</span> <span class="nv">demo_accdig</span> <span class="o">!</span> <span class="nv">fortran</span> <span class="mi">90</span> <span class="nv">example</span>
+<span class="nv">use</span> <span class="nv">M_framework__approx</span>, <span class="nv">only</span> : <span class="nv">accdig</span>
+<span class="nv">implicit</span> <span class="nv">none</span>
+<span class="nv">integer</span>         :: <span class="nv">digi</span>
+<span class="nv">doubleprecision</span> :: <span class="nv">a</span>, <span class="nv">b</span>
+<span class="nv">integer</span>         :: <span class="nv">i10</span>, <span class="nv">i20</span>, <span class="nv">i30</span>
+<span class="nv">integer</span>         :: <span class="nv">ind</span>, <span class="nv">ind1</span>, <span class="nv">ind2</span>
+<span class="nv">real</span>            :: <span class="nv">acurcy</span>, <span class="nv">acurcy1</span>, <span class="nv">acurcy2</span>
+<span class="nv">doubleprecision</span> :: <span class="nv">vals</span><span class="ss">(</span><span class="mi">9</span><span class="ss">)</span>
+<span class="nv">data</span> <span class="nv">vals</span><span class="o">/</span> <span class="o">&amp;</span>
+  <span class="o">&amp;</span><span class="mi">1</span>.<span class="mi">234680</span><span class="nv">d0</span>,   <span class="mi">1</span>.<span class="mi">2345378</span><span class="nv">d0</span>,  <span class="mi">2</span>.<span class="mi">2234568</span><span class="nv">d0</span>, <span class="mi">1</span>.<span class="mi">2345678</span><span class="nv">d0</span>, <span class="o">&amp;</span>
+  <span class="o">&amp;</span><span class="mi">1</span>.<span class="mi">2345679</span><span class="nv">d0</span>, <span class="o">-</span><span class="mi">1</span>.<span class="mi">2345678</span><span class="nv">d0</span>, <span class="mi">76</span>.<span class="mi">234567</span><span class="nv">d0</span>,  <span class="mi">2</span>.<span class="mi">4691356</span><span class="nv">d0</span>, <span class="o">&amp;</span>
+  <span class="o">&amp;</span><span class="mi">0</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">/</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">=========================</span><span class="s1">&#39;</span>
+   <span class="k">do</span> <span class="nv">i10</span><span class="o">=</span><span class="mi">0</span>,<span class="mi">16</span>
+      <span class="nv">a</span><span class="o">=</span><span class="mi">1</span>.<span class="mi">0</span><span class="nv">d0</span>
+      <span class="nv">b</span><span class="o">=</span><span class="nv">a</span><span class="o">+</span><span class="mi">1</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">/</span><span class="ss">(</span><span class="mi">10</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">**</span><span class="nv">i10</span><span class="ss">)</span>
+      <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="nv">a</span>,<span class="nv">b</span>,<span class="mi">8</span>.<span class="mi">0</span>,<span class="nv">acurcy</span>,<span class="nv">ind</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="nv">i10</span>,<span class="nv">a</span>,<span class="nv">b</span>,<span class="nv">acurcy</span>,<span class="nv">ind</span>
+   <span class="nv">enddo</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">=========================</span><span class="s1">&#39;</span>
+   <span class="nv">digi</span><span class="o">=</span><span class="mi">16</span>
+   <span class="k">do</span> <span class="nv">i20</span><span class="o">=</span><span class="mi">0</span>,<span class="nv">digi</span>
+      <span class="nv">a</span><span class="o">=</span><span class="mi">1</span>.<span class="mi">0</span><span class="nv">d0</span>
+      <span class="nv">b</span><span class="o">=</span><span class="nv">a</span><span class="o">+</span><span class="mi">1</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">/</span><span class="ss">(</span><span class="mi">10</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">**</span><span class="nv">i20</span><span class="ss">)</span>
+      <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="nv">a</span>,<span class="nv">b</span>,<span class="nv">dble</span><span class="ss">(</span><span class="nv">digi</span><span class="ss">)</span>,<span class="nv">acurcy</span>,<span class="nv">ind</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="nv">i20</span>,<span class="nv">a</span>,<span class="nv">b</span>,<span class="nv">acurcy</span>,<span class="nv">ind</span>
+   <span class="nv">enddo</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">=========================</span><span class="s1">&#39;</span>
+   <span class="k">do</span> <span class="nv">i30</span><span class="o">=</span><span class="mi">1</span>,<span class="mi">9</span>
+      <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="mi">1</span>.<span class="mi">2345678</span><span class="nv">d0</span>,<span class="nv">vals</span><span class="ss">(</span><span class="nv">i30</span><span class="ss">)</span>,<span class="mi">8</span>.<span class="mi">0</span>,<span class="nv">acurcy1</span>,<span class="nv">ind1</span><span class="ss">)</span>
+      <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="nv">vals</span><span class="ss">(</span><span class="nv">i30</span><span class="ss">)</span>,<span class="mi">1</span>.<span class="mi">2345678</span><span class="nv">d0</span>,<span class="mi">8</span>.<span class="mi">0</span>,<span class="nv">acurcy2</span>,<span class="nv">ind2</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="nv">i30</span>,<span class="nv">vals</span><span class="ss">(</span><span class="nv">i30</span><span class="ss">)</span>,<span class="nv">acurcy1</span>,<span class="nv">acurcy2</span>,<span class="nv">ind1</span>,<span class="nv">ind2</span>
+   <span class="nv">enddo</span>
+<span class="k">end</span> <span class="nv">program</span> <span class="nv">demo_accdig</span>
+</code></pre></div>
+
+<h2 id="notes">NOTES</h2>
+<h2 id="references">REFERENCES</h2>
+<p>based on &hellip;</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">NBS</span> <span class="nv">OMNITAB</span> <span class="mi">1980</span> <span class="nv">VERSION</span> <span class="mi">6</span>.<span class="mi">01</span>  <span class="mi">1</span><span class="o">/</span> <span class="mi">1</span><span class="o">/</span><span class="mi">81</span>. <span class="nv">dp_accdig</span> <span class="nv">V</span> <span class="mi">7</span>.<span class="mi">00</span>  <span class="mi">2</span><span class="o">/</span><span class="mi">14</span><span class="o">/</span><span class="mi">90</span>. <span class="o">**</span>
+   <span class="nv">David</span> <span class="nv">Hogben</span>,
+   <span class="nv">Statistical</span> <span class="nv">Engineering</span> <span class="nv">Division</span>,
+   <span class="nv">Center</span> <span class="k">for</span> <span class="nv">Computing</span> <span class="nv">and</span> <span class="nv">Applied</span> <span class="nv">Mathematics</span>,
+   <span class="nv">A337</span> <span class="nv">Administration</span> <span class="nv">Building</span>,
+   <span class="nv">National</span> <span class="nv">Institute</span> <span class="nv">of</span> <span class="nv">Standards</span> <span class="nv">and</span> <span class="nv">Technology</span>,
+   <span class="nv">Gaithersburg</span>, <span class="nv">MD</span> <span class="mi">20899</span>
+                  <span class="nv">TELEPHONE</span> <span class="mi">301</span><span class="o">-</span><span class="mi">975</span><span class="o">-</span><span class="mi">2845</span>
+       <span class="nv">ORIGINAL</span> <span class="nv">VERSION</span> <span class="o">-</span>  <span class="nv">October</span>, <span class="mi">1969</span>.
+        <span class="nv">CURRENT</span> <span class="nv">VERSION</span> <span class="o">-</span> <span class="nv">February</span>, <span class="mi">1990</span>.
+        <span class="nv">JSU</span>     <span class="nv">VERSION</span> <span class="o">-</span> <span class="nv">February</span>, <span class="mi">1991</span>.
+</code></pre></div>
+
+<h2 id="dependencies">DEPENDENCIES</h2>
+<div class="codehilite"><pre><span></span><code>     o M_framework__journal(), log10(), abs(1)
+</code></pre></div>
+
+<h2 id="authors">AUTHORS</h2>
+<div class="codehilite"><pre><span></span><code>  David Hogben, John S. Urban
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>  Public Domain
+</code></pre></div>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~7"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~4"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-digi0~2"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>digi0</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-acurcy~3"></span>
+              real,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>acurcy</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ind~3"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ind</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-operator%20%28.equalto.%29"></span>
+      <h3>public        interface <a href='../interface/operator (.equalto.).html'>operator (.equalto.)</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private elemental function is_equal_to_real32(x, y) result(equal_to)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~11"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~8"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private elemental function is_equal_to_real64(x, y) result(equal_to)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~15"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~12"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private elemental function is_equal_to_real128(x, y) result(equal_to)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~19"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~16"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-operator%20%28.greaterthan.%29"></span>
+      <h3>public        interface <a href='../interface/operator (.greaterthan.).html'>operator (.greaterthan.)</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private elemental function is_greater_than_real32(x, y) result(greater_than)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~10"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~7"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private elemental function is_greater_than_real64(x, y) result(greater_than)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~14"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~11"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private elemental function is_greater_than_real128(x, y) result(greater_than)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~18"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~15"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-operator%20%28.lessthan.%29"></span>
+      <h3>public        interface <a href='../interface/operator (.lessthan.).html'>operator (.lessthan.)</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private elemental function is_less_than_real32(x, y) result(less_than)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~9"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~6"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private elemental function is_less_than_real64(x, y) result(less_than)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~13"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~10"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private elemental function is_less_than_real128(x, y) result(less_than)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~17"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~14"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-significant"></span>
+      <h3>public        interface <a href='../interface/significant.html'>significant</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure elemental function significant_real32(val, digits, round) result(significant)  
+
+    </h3>
+  <h2 id="name">NAME</h2>
+<p>significant(3f) - [M_framework__approx] round val to specified number
+   of significant digits</p>
+<h2 id="synopsis">SYNOPSIS</h2>
+<div class="codehilite"><pre><span></span><code> pure elemental function significant(val,digits,round)
+
+  real,intent(in)                      :: val
+  integer,intent(in)                   :: digits
+  character(len=*),intent(in),optional :: round
+  real                                 :: significant
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<p>Round real value to specified number of significant digits</p>
+<h2 id="options">OPTIONS</h2>
+<p>val     value to round
+ digits  number of significant digits to produce
+ round   Use the round edit descriptor</p>
+<div class="codehilite"><pre><span></span><code>       <span class="nv">RU</span>  <span class="nv">UP</span> : <span class="nv">the</span> <span class="nv">value</span> <span class="nv">resulting</span> <span class="nv">from</span> <span class="nv">conversion</span> <span class="nv">shall</span> <span class="nv">be</span> <span class="nv">the</span>
+                <span class="nv">smallest</span> <span class="nv">representable</span> <span class="nv">value</span> <span class="nv">that</span> <span class="nv">is</span> <span class="nv">greater</span> <span class="nv">than</span> <span class="nv">or</span>
+                <span class="nv">equal</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">original</span> <span class="nv">value</span>
+       <span class="nv">RD</span>  <span class="nv">DOWN</span> : <span class="nv">the</span> <span class="nv">value</span> <span class="nv">resulting</span> <span class="nv">from</span> <span class="nv">conversion</span> <span class="nv">shall</span> <span class="nv">be</span> <span class="nv">the</span>
+                <span class="nv">largest</span> <span class="nv">representable</span> <span class="nv">value</span> <span class="nv">that</span> <span class="nv">is</span> <span class="nv">less</span> <span class="nv">than</span> <span class="nv">or</span>
+                <span class="nv">equal</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">original</span> <span class="nv">value</span>
+       <span class="nv">RZ</span>  <span class="nv">ZERO</span> : <span class="nv">the</span> <span class="nv">value</span> <span class="nv">resulting</span> <span class="nv">from</span> <span class="nv">conversion</span> <span class="nv">shall</span> <span class="nv">be</span> <span class="nv">the</span> <span class="nv">value</span>
+                <span class="nv">closest</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">original</span> <span class="nv">value</span> <span class="nv">and</span> <span class="nv">no</span> <span class="nv">greater</span> <span class="nv">in</span>
+                <span class="nv">magnitude</span> <span class="nv">than</span> <span class="nv">the</span> <span class="nv">original</span> <span class="nv">value</span>.
+       <span class="nv">RN</span>  <span class="nv">NEAREST</span> : <span class="nv">modeis</span> <span class="nv">NEAREST</span>,<span class="nv">thevalueresulting</span> <span class="nv">from</span> <span class="nv">conversion</span>
+                    <span class="nv">shall</span> <span class="nv">be</span> <span class="nv">the</span> <span class="nv">closer</span> <span class="nv">of</span> <span class="nv">the</span> <span class="nv">two</span> <span class="nv">nearest</span>
+                    <span class="nv">representable</span> <span class="nv">values</span> <span class="k">if</span> <span class="nv">one</span> <span class="nv">is</span> <span class="nv">closer</span> <span class="nv">than</span> <span class="nv">the</span>
+                    <span class="nv">other</span>. <span class="k">If</span> <span class="nv">the</span> <span class="nv">two</span> <span class="nv">nearest</span> <span class="nv">representable</span> <span class="nv">values</span>
+                    <span class="nv">are</span> <span class="nv">equidistant</span> <span class="nv">from</span> <span class="nv">the</span> <span class="nv">original</span> <span class="nv">value</span>, <span class="nv">it</span> <span class="nv">is</span>
+                    <span class="nv">processor</span> <span class="nv">dependent</span> <span class="nv">which</span> <span class="nv">one</span> <span class="nv">of</span> <span class="nv">them</span> <span class="nv">is</span> <span class="nv">chosen</span>.
+       <span class="nv">RC</span>  <span class="nv">COMPATIBLE</span> : <span class="nv">the</span> <span class="nv">value</span> <span class="nv">resulting</span> <span class="nv">from</span> <span class="nv">conversion</span> <span class="nv">shall</span> <span class="nv">be</span>
+                      <span class="nv">the</span> <span class="nv">closer</span> <span class="nv">of</span> <span class="nv">the</span> <span class="nv">two</span> <span class="nv">nearest</span> <span class="nv">representable</span>
+                      <span class="nv">values</span> <span class="nv">or</span> <span class="nv">the</span> <span class="nv">value</span> <span class="nv">away</span> <span class="nv">from</span> <span class="nv">zero</span> <span class="k">if</span> <span class="nv">halfway</span>
+                      <span class="nv">between</span> <span class="nv">them</span>.
+       <span class="nv">RP</span>  <span class="nv">PROCESSOR_DEFINED</span> : <span class="nv">rounding</span> <span class="nv">during</span> <span class="nv">conversion</span> <span class="nv">shall</span> <span class="nv">be</span>
+                               <span class="nv">a</span> <span class="nv">processor</span><span class="o">-</span><span class="nv">dependent</span> <span class="nv">default</span> <span class="nv">mode</span>,
+                               <span class="nv">which</span> <span class="nv">may</span> <span class="nv">correspond</span> <span class="nv">to</span> <span class="nv">one</span> <span class="nv">of</span> <span class="nv">the</span>
+                               <span class="nv">other</span> <span class="nv">modes</span>.
+</code></pre></div>
+
+<h2 id="examples">EXAMPLES</h2>
+<p>Sample program</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">program</span> <span class="nv">demo_significant</span>
+<span class="nv">use</span> <span class="nv">M_framework__approx</span>, <span class="nv">only</span> : <span class="nv">significant</span>
+<span class="nv">implicit</span> <span class="nv">none</span>
+<span class="nv">character</span><span class="ss">(</span><span class="nv">len</span><span class="o">=*</span><span class="ss">)</span>,<span class="nv">parameter</span> :: <span class="nv">g</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">(*(g0.7,1x))</span><span class="s1">&#39;</span>
+
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="nv">g</span><span class="ss">)</span><span class="nv">significant</span><span class="ss">(</span>[<span class="mi">8765</span>.<span class="mi">43210</span>,<span class="mi">0</span>.<span class="mi">1234567890</span>],<span class="mi">5</span><span class="ss">)</span>
+
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">default:</span><span class="s1">&#39;</span>,<span class="mi">1</span>.<span class="mi">23456789012345</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="nv">g</span><span class="ss">)</span><span class="nv">significant</span><span class="ss">(</span><span class="mi">1</span>.<span class="mi">23456789012345</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>,<span class="mi">5</span>,<span class="mi">6</span>,<span class="mi">7</span>,<span class="mi">8</span>,<span class="mi">9</span>]<span class="ss">)</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="nv">g</span><span class="ss">)</span><span class="nv">significant</span><span class="ss">(</span><span class="mi">1</span>.<span class="mi">23456789012345</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>,<span class="mi">5</span>,<span class="mi">6</span>,<span class="mi">7</span>,<span class="mi">8</span>,<span class="mi">9</span>],<span class="s1">&#39;</span><span class="s">RU</span><span class="s1">&#39;</span><span class="ss">)</span>,<span class="s1">&#39;</span><span class="s">RU</span><span class="s1">&#39;</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="nv">g</span><span class="ss">)</span><span class="nv">significant</span><span class="ss">(</span><span class="mi">1</span>.<span class="mi">23456789012345</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>,<span class="mi">5</span>,<span class="mi">6</span>,<span class="mi">7</span>,<span class="mi">8</span>,<span class="mi">9</span>],<span class="s1">&#39;</span><span class="s">RD</span><span class="s1">&#39;</span><span class="ss">)</span>,<span class="s1">&#39;</span><span class="s">RD</span><span class="s1">&#39;</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="nv">g</span><span class="ss">)</span><span class="nv">significant</span><span class="ss">(</span><span class="mi">1</span>.<span class="mi">23456789012345</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>,<span class="mi">5</span>,<span class="mi">6</span>,<span class="mi">7</span>,<span class="mi">8</span>,<span class="mi">9</span>],<span class="s1">&#39;</span><span class="s">RZ</span><span class="s1">&#39;</span><span class="ss">)</span>,<span class="s1">&#39;</span><span class="s">RZ</span><span class="s1">&#39;</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="nv">g</span><span class="ss">)</span><span class="nv">significant</span><span class="ss">(</span><span class="mi">1</span>.<span class="mi">23456789012345</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>,<span class="mi">5</span>,<span class="mi">6</span>,<span class="mi">7</span>,<span class="mi">8</span>,<span class="mi">9</span>],<span class="s1">&#39;</span><span class="s">RN</span><span class="s1">&#39;</span><span class="ss">)</span>,<span class="s1">&#39;</span><span class="s">RN</span><span class="s1">&#39;</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="nv">g</span><span class="ss">)</span><span class="nv">significant</span><span class="ss">(</span><span class="mi">1</span>.<span class="mi">23456789012345</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>,<span class="mi">5</span>,<span class="mi">6</span>,<span class="mi">7</span>,<span class="mi">8</span>,<span class="mi">9</span>],<span class="s1">&#39;</span><span class="s">RC</span><span class="s1">&#39;</span><span class="ss">)</span>,<span class="s1">&#39;</span><span class="s">RC</span><span class="s1">&#39;</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="nv">g</span><span class="ss">)</span><span class="nv">significant</span><span class="ss">(</span><span class="mi">1</span>.<span class="mi">23456789012345</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>,<span class="mi">5</span>,<span class="mi">6</span>,<span class="mi">7</span>,<span class="mi">8</span>,<span class="mi">9</span>],<span class="s1">&#39;</span><span class="s">RP</span><span class="s1">&#39;</span><span class="ss">)</span>,<span class="s1">&#39;</span><span class="s">RP</span><span class="s1">&#39;</span>
+<span class="k">end</span> <span class="nv">program</span> <span class="nv">demo_significant</span>
+</code></pre></div>
+
+<p>Results:</p>
+<div class="codehilite"><pre><span></span><code>   &gt; 8765.400 .1234600
+   &gt;  default:   1.234568
+   &gt; 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+   &gt; 1.234568 1.234568 1.234568
+   &gt; 2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 ...
+   &gt; 1.234568 1.234568 1.234568 RU
+   &gt; 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
+   &gt; 1.234567 1.234568 1.234568 RD
+   &gt; 1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 ...
+   &gt; 1.234567 1.234568 1.234568 RZ
+   &gt; 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+   &gt; 1.234568 1.234568 1.234568 RN
+   &gt; 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+   &gt; 1.234568 1.234568 1.234568 RC
+   &gt; 1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 ...
+   &gt; 1.234568 1.234568 1.234568 RP
+</code></pre></div>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val~4"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-digits~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>digits</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-round~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>round</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=wp)</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure elemental function significant_real64(val, digits, round) result(significant)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-digits~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>digits</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-round~3"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>round</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=wp)</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
+
+
+
+        <section>
+          <h2>Functions</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-almost"></span> <h3>public impure elemental function <a href='../proc/almost.html'>almost</a>(x, y, digits, verbose)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>sample:</p><a href="../proc/almost.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~5"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~2"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-digits"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>digits</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-verbose~3"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>verbose</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-in_margin"></span> <h3>public impure elemental function <a href='../proc/in_margin.html'>in_margin</a>(expected_value, measured_value, allowed_margin)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>in_margin(3f) - [M_framework__approx] check if two reals are
+   approximately equal using a relative margin</p><a href="../proc/in_margin.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-expected_value"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>expected_value</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-measured_value"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>measured_value</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-allowed_margin"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>allowed_margin</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-round"></span> <h3>public  function <a href='../proc/round.html'>round</a>(val, idigits0)  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val~3"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-idigits0"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>idigits0</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=dp)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-round_to_power"></span> <h3>public pure elemental function <a href='../proc/round_to_power.html'>round_to_power</a>(val, n)  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val~2"></span>
+              real,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+        <section>
+          <h2>Subroutines</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-accdig"></span> <h3>public impure elemental subroutine <a href='../proc/accdig.html'>accdig</a>(x, y, digi0, acurcy, ind)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Example program:</p><a href="../proc/accdig.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~7"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~4"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-digi0~2"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>digi0</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-acurcy~3"></span>
+              real,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>acurcy</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ind~3"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ind</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-change_default_ulp"></span> <h3>public  subroutine <a href='../proc/change_default_ulp.html'>change_default_ulp</a>(ulp)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Additional operators based on compare_float(3f) are included:</p><a href="../proc/change_default_ulp.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ulp"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ulp</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-sp_accdig"></span> <h3>public  subroutine <a href='../proc/sp_accdig.html'>sp_accdig</a>(x, y, digi0, acurcy, ind)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Example program:</p><a href="../proc/sp_accdig.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~6"></span>
+              real,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~3"></span>
+              real,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-digi0"></span>
+              real,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>digi0</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-acurcy~2"></span>
+              real,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>acurcy</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ind~2"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ind</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_framework
+ was developed by John S. Urban<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-07-11 00:19 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

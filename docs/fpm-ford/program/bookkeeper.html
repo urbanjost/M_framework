@@ -1,0 +1,1742 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="collection of modules for unit testing and logging and messaging">
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>bookkeeper &ndash; M_framework</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">M_framework </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>bookkeeper      <small>Program</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="12.5% of total for programs.">222 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/bookkeeper.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/bookkeeper.f90.html'>bookkeeper.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">bookkeeper</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#vars-0"
+         aria-expanded="false" aria-controls="vars-0">
+         <h4 class="card-header bg-primary text-white">Variables</h4>
+      </a>
+      <div id="vars-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-clicks~2">clicks</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-clicksfile">clicksfile</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-color">color</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-comma">comma</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-csvfile">csvfile</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-date">date</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-g~6">g</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-g0~4">g0</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-help">help</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-html_footer">html_footer</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-html_header">html_header</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-htmlfile">htmlfile</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-i~28">i</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-intable">intable</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-msg~10">msg</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-name~17">name</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-nmlfile">nmlfile</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-passed~2">passed</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-quote">quote</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-type">type</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-verbose~4">verbose</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#variable-version~2">version</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#inters-0"
+         aria-expanded="false" aria-controls="inters-0">
+         <h4 class="card-header bg-primary text-white">Interfaces</h4>
+      </a>
+      <div id="inters-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../program/bookkeeper.html#interface-exists">exists</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#funcs-0"
+         aria-expanded="false" aria-controls="funcs-0">
+         <h4 class="card-header bg-primary text-white">Functions</h4>
+      </a>
+      <div id="funcs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../program/bookkeeper.html#proc-fileexists">fileexists</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#proc-here_and_now">here_and_now</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#proc-unitexists">unitexists</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#subs-0"
+         aria-expanded="false" aria-controls="subs-0">
+         <h4 class="card-header bg-primary text-white">Subroutines</h4>
+      </a>
+      <div id="subs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../program/bookkeeper.html#proc-cmdline_~2">cmdline_</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#proc-get_html_header">get_html_header</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#proc-header">header</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#proc-printhelp">printhelp</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#proc-printversion">printversion</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#namelists-0"
+         aria-expanded="false" aria-controls="namelists-0">
+         <h4 class="card-header bg-primary text-white">Namelists</h4>
+      </a>
+      <div id="namelists-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../program/bookkeeper.html#namelist-args~23">args</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#namelist-args~24">args</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#namelist-args~25">args</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#namelist-args~26">args</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#namelist-args~27">args</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#namelist-args~28">args</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#namelist-long">long</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#namelist-long~2">long</a>
+            <a class="list-group-item" href="../program/bookkeeper.html#namelist-long~3">long</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../program/bookkeeper.html#src">bookkeeper</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+        <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='../module/m_framework.html'>M_framework</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+    
+
+
+    <section>
+    <h2>Variables</h2>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-clicks~2"></span>
+              integer(kind=int64)
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>clicks</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-clicksfile"></span>
+              integer
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>clicksfile</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-color"></span>
+              character(len=:),
+            </td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>color</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-comma"></span>
+              character(len=1),
+            </td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>comma</strong></td>
+<td> =</td>
+                <td>&#39;,&#39;</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-csvfile"></span>
+              integer
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>csvfile</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-date"></span>
+              character(len=25)
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>date</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-g~6"></span>
+              character(len=*),
+            </td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>g</strong></td>
+<td> =</td>
+                <td>&#39;(*(g0,1x))&#39;</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-g0~4"></span>
+              character(len=*),
+            </td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>g0</strong></td>
+<td> =</td>
+                <td>&#39;(*(g0))&#39;</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-help"></span>
+              logical
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>help</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-html_footer"></span>
+              character(len=:),
+            </td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>html_footer</strong>(:)</td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-html_header"></span>
+              character(len=:),
+            </td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>html_header</strong>(:)</td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-htmlfile"></span>
+              integer
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>htmlfile</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i~28"></span>
+              integer
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-intable"></span>
+              logical
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>intable</strong></td>
+<td> =</td>
+                <td>.true.</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-msg~10"></span>
+              character(len=:),
+            </td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>msg</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-name~17"></span>
+              character(len=:),
+            </td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>name</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nmlfile"></span>
+              integer
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nmlfile</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-passed~2"></span>
+              character(len=:),
+            </td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>passed</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-quote"></span>
+              character(len=1),
+            </td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>quote</strong></td>
+<td> =</td>
+                <td>&#39;&#34;&#39;</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-type"></span>
+              character(len=:),
+            </td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>type</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-verbose~4"></span>
+              logical
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>verbose</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-version~2"></span>
+              logical
+            </td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>version</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </section>
+    <br>
+    
+    
+    <section>
+   <h2>Interfaces</h2>
+       <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-exists"></span>
+      <h3>        interface <a href='../interface/exists.html'>exists</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+     function <a href='../proc/fileexists.html'>fileexists</a>(filename) result(r)  
+
+    </h3>
+    
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-filename~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>filename</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+     function <a href='../proc/unitexists.html'>unitexists</a>(lun) result(r)  
+
+    </h3>
+    
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-lun~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>lun</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+    </section>
+   <br>
+    
+
+    
+ 
+    <section>
+    <h2>Functions</h2>
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-fileexists"></span> <h3> function <a href='../proc/fileexists.html'>fileexists</a>(filename) result(r)  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-filename~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>filename</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-here_and_now"></span> <h3> function <a href='../proc/here_and_now.html'>here_and_now</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+    <h4>
+    Return Value
+    <small>character(len=25)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-unitexists"></span> <h3> function <a href='../proc/unitexists.html'>unitexists</a>(lun) result(r)  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-lun~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>lun</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+    </section>
+    <br>
+
+
+    <section>
+    <h2>Subroutines</h2>
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-cmdline_~2"></span> <h3> subroutine <a href='../proc/cmdline_~2.html'>cmdline_</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-get_html_header"></span> <h3> subroutine <a href='../proc/get_html_header.html'>get_html_header</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-header"></span> <h3> subroutine <a href='../proc/header.html'>header</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-printhelp"></span> <h3> subroutine <a href='../proc/printhelp.html'>printhelp</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-printversion"></span> <h3> subroutine <a href='../proc/printversion.html'>printversion</a>()  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+    </section>    
+    
+      <section>
+        <h2>Namelists</h2>
+            <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="namelist-args~23"></span>
+      <h3>Namelist <a href='../namelist/args~23.html'>args</a></h3>
+    </div>
+    <div class="card-body">
+        
+  <br class="visible-xs visible-sm hidden-md">
+  <section>
+    <h2>Variables</h2>
+    <table class="table table-striped" id="namelist-args~23">
+      <thead><tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+      </tr></thead>
+      <tbody>
+              <tr id="variable-type">
+      <td><a href="#variable-type">type</a></td>
+      <td>character(len=:)</td>
+      <td>None</td>
+      <td></td>
+    </tr>
+
+              <tr id="">
+      <td><a href="#"></a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="namelist-args~24"></span>
+      <h3>Namelist <a href='../namelist/args~24.html'>args</a></h3>
+    </div>
+    <div class="card-body">
+        
+  <br class="visible-xs visible-sm hidden-md">
+  <section>
+    <h2>Variables</h2>
+    <table class="table table-striped" id="namelist-args~24">
+      <thead><tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+      </tr></thead>
+      <tbody>
+              <tr id="variable-name~17">
+      <td><a href="#variable-name~17">name</a></td>
+      <td>character(len=:)</td>
+      <td>None</td>
+      <td></td>
+    </tr>
+
+              <tr id="">
+      <td><a href="#"></a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="namelist-args~25"></span>
+      <h3>Namelist <a href='../namelist/args~25.html'>args</a></h3>
+    </div>
+    <div class="card-body">
+        
+  <br class="visible-xs visible-sm hidden-md">
+  <section>
+    <h2>Variables</h2>
+    <table class="table table-striped" id="namelist-args~25">
+      <thead><tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+      </tr></thead>
+      <tbody>
+              <tr id="variable-passed~2">
+      <td><a href="#variable-passed~2">passed</a></td>
+      <td>character(len=:)</td>
+      <td>None</td>
+      <td></td>
+    </tr>
+
+              <tr id="">
+      <td><a href="#"></a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="namelist-args~26"></span>
+      <h3>Namelist <a href='../namelist/args~26.html'>args</a></h3>
+    </div>
+    <div class="card-body">
+        
+  <br class="visible-xs visible-sm hidden-md">
+  <section>
+    <h2>Variables</h2>
+    <table class="table table-striped" id="namelist-args~26">
+      <thead><tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+      </tr></thead>
+      <tbody>
+              <tr id="variable-msg~10">
+      <td><a href="#variable-msg~10">msg</a></td>
+      <td>character(len=:)</td>
+      <td>None</td>
+      <td></td>
+    </tr>
+
+              <tr id="">
+      <td><a href="#"></a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="namelist-args~27"></span>
+      <h3>Namelist <a href='../namelist/args~27.html'>args</a></h3>
+    </div>
+    <div class="card-body">
+        
+  <br class="visible-xs visible-sm hidden-md">
+  <section>
+    <h2>Variables</h2>
+    <table class="table table-striped" id="namelist-args~27">
+      <thead><tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+      </tr></thead>
+      <tbody>
+              <tr id="variable-date~2">
+      <td><a href="#variable-date~2">date</a></td>
+      <td>character(len=1)</td>
+      <td>None</td>
+      <td></td>
+    </tr>
+
+              <tr id="">
+      <td><a href="#"></a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="namelist-args~28"></span>
+      <h3>Namelist <a href='../namelist/args~28.html'>args</a></h3>
+    </div>
+    <div class="card-body">
+        
+  <br class="visible-xs visible-sm hidden-md">
+  <section>
+    <h2>Variables</h2>
+    <table class="table table-striped" id="namelist-args~28">
+      <thead><tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+      </tr></thead>
+      <tbody>
+              <tr id="variable-clicks~2">
+      <td><a href="#variable-clicks~2">clicks</a></td>
+      <td>integer(kind=int64)</td>
+      <td>None</td>
+      <td></td>
+    </tr>
+
+              <tr id="">
+      <td><a href="#"></a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="namelist-long"></span>
+      <h3>Namelist <a href='../namelist/long.html'>long</a></h3>
+    </div>
+    <div class="card-body">
+        
+  <br class="visible-xs visible-sm hidden-md">
+  <section>
+    <h2>Variables</h2>
+    <table class="table table-striped" id="namelist-long">
+      <thead><tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+      </tr></thead>
+      <tbody>
+              <tr id="variable-help">
+      <td><a href="#variable-help">help</a></td>
+      <td>logical</td>
+      <td>None</td>
+      <td></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="namelist-long~2"></span>
+      <h3>Namelist <a href='../namelist/long~2.html'>long</a></h3>
+    </div>
+    <div class="card-body">
+        
+  <br class="visible-xs visible-sm hidden-md">
+  <section>
+    <h2>Variables</h2>
+    <table class="table table-striped" id="namelist-long~2">
+      <thead><tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+      </tr></thead>
+      <tbody>
+              <tr id="variable-version~2">
+      <td><a href="#variable-version~2">version</a></td>
+      <td>logical</td>
+      <td>None</td>
+      <td></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="namelist-long~3"></span>
+      <h3>Namelist <a href='../namelist/long~3.html'>long</a></h3>
+    </div>
+    <div class="card-body">
+        
+  <br class="visible-xs visible-sm hidden-md">
+  <section>
+    <h2>Variables</h2>
+    <table class="table table-striped" id="namelist-long~3">
+      <thead><tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+      </tr></thead>
+      <tbody>
+              <tr id="variable-verbose~4">
+      <td><a href="#variable-verbose~4">verbose</a></td>
+      <td>logical</td>
+      <td>None</td>
+      <td></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+    </div>
+  </div>
+
+      </section>
+
+    <section>
+    <h2 id="src">Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="k">program </span><span class="n">bookkeeper</span><span class="w"></span>
+<span class="c">! example program that can parse arguments given to optional unit_test command</span>
+<span class="c">!  o writing a CSV file to be read into spread sheets, SQLite3, ....</span>
+<span class="c">!  o writing a HTML document</span>
+<span class="c">!  o writing a NAMELIST group file for post-processing into formats like a TAP (Test Anything Protocol) document</span>
+<span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">stderr</span><span class="o">=&gt;</span><span class="n">ERROR_UNIT</span><span class="p">,</span><span class="w"> </span><span class="n">stdin</span><span class="o">=&gt;</span><span class="n">INPUT_UNIT</span><span class="p">,</span><span class="w"> </span><span class="n">stdout</span><span class="o">=&gt;</span><span class="n">OUTPUT_UNIT</span><span class="w"></span>
+<span class="k">use</span><span class="p">,</span><span class="w"> </span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">int8</span><span class="p">,</span><span class="w"> </span><span class="n">int16</span><span class="p">,</span><span class="w"> </span><span class="n">int32</span><span class="p">,</span><span class="w"> </span><span class="n">int64</span><span class="p">,</span><span class="w"> </span><span class="n">real32</span><span class="p">,</span><span class="w"> </span><span class="n">real64</span><span class="p">,</span><span class="w"> </span><span class="n">real128</span><span class="w"></span>
+<span class="k">use </span><span class="n">M_framework</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">wrt</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="w"></span>
+<span class="c">! put something here into namelist and it becomes an argument</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">type</span><span class="w">    </span><span class="p">;</span><span class="w"> </span><span class="k">namelist</span><span class="w"> </span><span class="o">/</span><span class="n">args</span><span class="o">/</span><span class="w"> </span><span class="k">type</span><span class="p">,</span><span class="w">    </span><span class="o">/</span><span class="nb">long</span><span class="o">/</span><span class="w"> </span><span class="k">type</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">name</span><span class="w">    </span><span class="p">;</span><span class="w"> </span><span class="k">namelist</span><span class="w"> </span><span class="o">/</span><span class="n">args</span><span class="o">/</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w">    </span><span class="o">/</span><span class="nb">long</span><span class="o">/</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">passed</span><span class="w">  </span><span class="p">;</span><span class="w"> </span><span class="k">namelist</span><span class="w"> </span><span class="o">/</span><span class="n">args</span><span class="o">/</span><span class="w"> </span><span class="n">passed</span><span class="p">,</span><span class="w">  </span><span class="o">/</span><span class="nb">long</span><span class="o">/</span><span class="w"> </span><span class="n">passed</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">msg</span><span class="w">     </span><span class="p">;</span><span class="w"> </span><span class="k">namelist</span><span class="w"> </span><span class="o">/</span><span class="n">args</span><span class="o">/</span><span class="w"> </span><span class="n">msg</span><span class="p">,</span><span class="w">     </span><span class="o">/</span><span class="nb">long</span><span class="o">/</span><span class="w"> </span><span class="n">msg</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span><span class="w">            </span><span class="kd">::</span><span class="w"> </span><span class="n">date</span><span class="w">    </span><span class="p">;</span><span class="w"> </span><span class="k">namelist</span><span class="w"> </span><span class="o">/</span><span class="n">args</span><span class="o">/</span><span class="w"> </span><span class="n">date</span><span class="p">,</span><span class="w">    </span><span class="o">/</span><span class="nb">long</span><span class="o">/</span><span class="w"> </span><span class="n">date</span><span class="w"></span>
+<span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">int64</span><span class="p">)</span><span class="w">          </span><span class="kd">::</span><span class="w"> </span><span class="n">clicks</span><span class="w">  </span><span class="p">;</span><span class="w"> </span><span class="k">namelist</span><span class="w"> </span><span class="o">/</span><span class="n">args</span><span class="o">/</span><span class="w"> </span><span class="n">clicks</span><span class="p">,</span><span class="w">  </span><span class="o">/</span><span class="nb">long</span><span class="o">/</span><span class="w"> </span><span class="n">clicks</span><span class="w"></span>
+<span class="kt">logical</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">help</span><span class="w">    </span><span class="p">;</span><span class="w"> </span><span class="k">namelist</span><span class="w">                 </span><span class="o">/</span><span class="nb">long</span><span class="o">/</span><span class="w"> </span><span class="n">help</span><span class="w"></span>
+<span class="kt">logical</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">namelist</span><span class="w">                 </span><span class="o">/</span><span class="nb">long</span><span class="o">/</span><span class="w"> </span><span class="n">version</span><span class="w"></span>
+<span class="kt">logical</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">verbose</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">namelist</span><span class="w">                 </span><span class="o">/</span><span class="nb">long</span><span class="o">/</span><span class="w"> </span><span class="n">verbose</span><span class="w"></span>
+<span class="c">!integer                      :: level = -1         ; namelist /args/ level</span>
+<span class="c">!integer,allocatable          :: flags(:)           ; namelist /args/ flags</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">html_header</span><span class="p">(:),</span><span class="w"> </span><span class="n">html_footer</span><span class="p">(:)</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">parameter</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">g</span><span class="o">=</span><span class="s1">&#39;(*(g0,1x))&#39;</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">parameter</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">g0</span><span class="o">=</span><span class="s1">&#39;(*(g0))&#39;</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="k">parameter</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">comma</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">quote</span><span class="o">=</span><span class="s1">&#39;&quot;&#39;</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">color</span><span class="w"></span>
+<span class="kt">logical</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">intable</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w"> </span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">htmlfile</span><span class="p">,</span><span class="w"> </span><span class="n">csvfile</span><span class="p">,</span><span class="w"> </span><span class="n">clicksfile</span><span class="p">,</span><span class="w"> </span><span class="n">nmlfile</span><span class="w"></span>
+<span class="k">interface </span><span class="n">exists</span><span class="w">        </span><span class="c">! for backward compatibility, accdig(3f) preferred</span>
+<span class="w">   </span><span class="k">procedure </span><span class="n">fileexists</span><span class="w"></span>
+<span class="w">   </span><span class="k">procedure </span><span class="n">unitexists</span><span class="w"></span>
+<span class="k">end interface </span><span class="n">exists</span><span class="w"></span>
+<span class="c">!SETUP </span>
+<span class="w">   </span><span class="c">! This is an example program. A simple kludge is to pick scratch output or file output</span>
+<span class="w">   </span><span class="c">! to work with just one output. Not something to do in production code.</span>
+
+<span class="w">   </span><span class="k">open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">htmlfile</span><span class="p">,</span><span class="k">file</span><span class="o">=</span><span class="s1">&#39;bookkeeper.html&#39;</span><span class="p">,</span><span class="n">position</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="c">!open(newunit=htmlfile,position=&#39;append&#39;,status=&#39;scratch&#39;)</span>
+
+<span class="w">   </span><span class="k">open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">csvfile</span><span class="p">,</span><span class="k">file</span><span class="o">=</span><span class="s1">&#39;bookkeeper.csv&#39;</span><span class="p">,</span><span class="n">position</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">,</span><span class="n">DELIM</span><span class="o">=</span><span class="s1">&#39;quote&#39;</span><span class="p">,</span><span class="n">form</span><span class="o">=</span><span class="s1">&#39;formatted&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="c">!open(newunit=csvfile,position=&#39;append&#39;,DELIM=&#39;quote&#39;,form=&#39;formatted&#39;,status=&#39;scratch&#39;)</span>
+
+<span class="w">   </span><span class="k">open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">clicksfile</span><span class="p">,</span><span class="k">file</span><span class="o">=</span><span class="s1">&#39;bookkeeper_clicks.csv&#39;</span><span class="p">,</span><span class="n">position</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="c">!open(newunit=clicksfile,position=&#39;append&#39;,status=&#39;scratch&#39;)</span>
+
+<span class="w">   </span><span class="k">open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">nmlfile</span><span class="p">,</span><span class="k">file</span><span class="o">=</span><span class="s1">&#39;bookkeeper.nml&#39;</span><span class="p">,</span><span class="n">position</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="c">!open(newunit=nmlfile,position=&#39;append&#39;,status=&#39;scratch&#39;)</span>
+
+
+<span class="w">   </span><span class="k">call </span><span class="n">header</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="n">verbose</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+<span class="w">   </span><span class="k">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="mi">4096</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="mi">4096</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="mi">4096</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="mi">4096</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="c">!intable=.false.</span>
+<span class="w">   </span><span class="n">date</span><span class="o">=</span><span class="n">here_and_now</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="n">clicks</span><span class="o">=-</span><span class="mi">1</span><span class="w"></span>
+<span class="c">!   flags = [(-1, i=1, 1000)]</span>
+<span class="c">!PARSE</span>
+<span class="w">   </span><span class="k">call </span><span class="n">cmdline_</span><span class="p">()</span><span class="w"></span>
+<span class="c">!TEARDOWN</span>
+<span class="w">   </span><span class="k">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="k">type</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="n">passed</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="w"></span>
+<span class="c">!   flags = pack(flags, flags  /=  -1)</span>
+<span class="c">!USE</span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="n">nmlfile</span><span class="p">,</span><span class="n">nml</span><span class="o">=</span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="c">! cannot do advance=&#39;no&#39;</span>
+<span class="w">   </span><span class="k">select case</span><span class="p">(</span><span class="n">passed</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="s2">&quot;untested&quot;</span><span class="p">);</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="s2">&quot;passed&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;#9F9&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="s2">&quot;failed&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="k">case </span><span class="n">default</span><span class="w">   </span><span class="p">;</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="k">end select</span>
+
+<span class="k">   select case</span><span class="p">(</span><span class="k">type</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="c">!intable=.true.</span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;table id=&quot;&#39;</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;caption class=&quot;caption&quot; style=&quot;text-align:left&quot;&gt;&#39;</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">str</span><span class="p">(</span><span class="s1">&#39; -&#39;</span><span class="p">,</span><span class="k">if</span><span class="o">=</span><span class="n">msg</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="s1">&#39;&#39;</span><span class="p">),</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">msg</span><span class="p">,</span><span class="s1">&#39;&lt;/caption&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;tbody&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;tr class=&quot;header&quot; class=&quot;odd&quot;&gt;&lt;!-- start --&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;th style=&quot;width:25%;text-align:center;&quot;&gt; name   &lt;/th&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;th style=&quot;width:10%;text-align:center;&quot;&gt; passed &lt;/th&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;th style=&quot;width:40%;text-align:center;&quot;&gt; msg    &lt;/th&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;th style=&quot;width:25%;text-align:center;&quot;&gt; date   &lt;/th&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="s2">&quot;check&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="w"> </span><span class="n">quote</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">comma</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">here_and_now</span><span class="p">(),</span><span class="n">quote</span><span class="p">,</span><span class="n">comma</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">passed</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">comma</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">msg</span><span class="p">,</span><span class="n">quote</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;tr class=&quot;&#39;</span><span class="p">,</span><span class="n">passed</span><span class="p">,</span><span class="s1">&#39;&quot; class=&quot;even&quot;&gt;&lt;!-- check --&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;td &gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w">    </span><span class="p">,</span><span class="s1">&#39; &lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;td style=&quot;text-align:center;&quot; bgcolor=&quot;&#39;</span><span class="p">,</span><span class="n">color</span><span class="p">,</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">passed</span><span class="w">  </span><span class="p">,</span><span class="s1">&#39; &lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;td &gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="w">     </span><span class="p">,</span><span class="s1">&#39; &lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;td style=&quot;text-align:center;&quot;&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">date</span><span class="w">    </span><span class="p">,</span><span class="s1">&#39; &lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">intable</span><span class="p">)</span><span class="k">then</span>
+<span class="k">         write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;tr class=&quot;message&quot;&gt;&lt;!-- message --&gt;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;td colspan=&quot;4&quot; bgcolor=&quot;#AAF&quot; style=&quot;text-align:center;&quot;&gt;&#39;</span><span class="p">,</span><span class="n">msg</span><span class="p">,</span><span class="s1">&#39;&lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">else</span><span class="w"></span>
+<span class="w">         </span><span class="c">!write(htmlfile,g0)msg</span>
+<span class="w">      </span><span class="k">endif</span>
+
+<span class="k">   case</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="c">!intable=.false.</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">passed</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;untested&#39;</span><span class="p">)</span><span class="k">then</span>
+<span class="k">         write</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="w"> </span><span class="n">quote</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">comma</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">here_and_now</span><span class="p">(),</span><span class="n">quote</span><span class="p">,</span><span class="n">comma</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">passed</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">comma</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">msg</span><span class="p">,</span><span class="n">quote</span><span class="w"></span>
+
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;tr class=&quot;&#39;</span><span class="p">,</span><span class="n">passed</span><span class="p">,</span><span class="s1">&#39;&quot; class=&quot;odd&quot;&gt;&lt;!-- end --&gt;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;td &gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w">    </span><span class="p">,</span><span class="s1">&#39; &lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;td bgcolor=&quot;&#39;</span><span class="p">,</span><span class="n">color</span><span class="p">,</span><span class="s1">&#39;&quot; style=&quot;text-align:center;&quot;&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">passed</span><span class="w">  </span><span class="p">,</span><span class="s1">&#39; &lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;td &gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="w">     </span><span class="p">,</span><span class="s1">&#39; &lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &lt;td style=&quot;text-align:center;&quot;&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">date</span><span class="w">    </span><span class="p">,</span><span class="s1">&#39; &lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">      if</span><span class="p">(</span><span class="n">clicks</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k">         write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;tr class=&quot;clicks&quot; class=&quot;&#39;</span><span class="p">,</span><span class="n">passed</span><span class="p">,</span><span class="s1">&#39;&quot;&gt;&lt;!-- clicks --&gt;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;td colspan=&quot;4&quot; bgcolor=&quot;#AAF&quot; style=&quot;text-align:center;&quot;&gt; clicks:&#39;</span><span class="p">,</span><span class="n">clicks</span><span class="p">,</span><span class="s1">&#39; for &#39;</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="s1">&#39;&lt;/td&gt;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">      write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;/table&gt;&#39;</span><span class="w"></span>
+
+
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">clicksfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="w"> </span><span class="n">quote</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">comma</span><span class="p">,</span><span class="w">           </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">                           </span><span class="n">quote</span><span class="p">,</span><span class="n">here_and_now</span><span class="p">(),</span><span class="n">quote</span><span class="p">,</span><span class="n">comma</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">                           </span><span class="n">quote</span><span class="p">,</span><span class="n">clicks</span><span class="p">,</span><span class="n">quote</span><span class="p">,</span><span class="n">comma</span><span class="p">,</span><span class="w">         </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">                           </span><span class="n">quote</span><span class="p">,</span><span class="n">msg</span><span class="p">,</span><span class="n">quote</span><span class="w"></span>
+
+
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="s2">&quot;stop&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="c">!intable=.false.</span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&lt;!-- STOP --&gt;&#39;</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">end select</span>
+<span class="k">contains</span>
+<span class="k">subroutine </span><span class="n">cmdline_</span><span class="p">()</span><span class="w">                                </span><span class="c">! read arguments from command line as NAMELIST group input</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">4096</span><span class="p">),</span><span class="w"> </span><span class="k">save</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">input</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="s1">&#39;&amp;long&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39; /&#39;</span><span class="p">],</span><span class="w"> </span><span class="n">arg</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">message1</span><span class="p">,</span><span class="w"> </span><span class="n">message2</span><span class="w"></span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">ios</span><span class="p">,</span><span class="w"> </span><span class="n">equal_pos</span><span class="p">,</span><span class="w"> </span><span class="n">iend</span><span class="w"></span>
+<span class="w">   </span><span class="n">help</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+<span class="w">   </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+<span class="w">   </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">command_argument_count</span><span class="p">()</span><span class="w"></span>
+<span class="w">      </span><span class="k">call </span><span class="nb">get_command_argument</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">len_trim</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span><span class="w">                   </span><span class="c">! blank out leading - or / so &quot;--name=value&quot; or &quot;/name=value&quot; works</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="s1">&#39;/- &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">         </span><span class="n">arg</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39; &#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;=&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;=T&#39;</span><span class="w"> </span><span class="c">! if no equal sign add =T</span>
+<span class="w">      </span><span class="n">iend</span><span class="o">=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">arg</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">arg</span><span class="p">(</span><span class="n">iend</span><span class="p">:</span><span class="n">iend</span><span class="p">).</span><span class="n">ne</span><span class="p">.</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; ,&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">read</span><span class="w"> </span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">nml</span><span class="o">=</span><span class="nb">long</span><span class="p">,</span><span class="w"> </span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="w"> </span><span class="n">iomsg</span><span class="o">=</span><span class="n">message1</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w">                             </span><span class="c">! assume first failure might be because of missing quotes</span>
+<span class="w">         </span><span class="n">equal_pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">index</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;=&#39;</span><span class="p">)</span><span class="w">            </span><span class="c">! find position of &#39;=&#39;</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">equal_pos</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">            </span><span class="c">! requote and try again</span>
+<span class="w">            </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="p">(:</span><span class="n">equal_pos</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span><span class="o">//</span><span class="n">arg</span><span class="p">(</span><span class="n">equal_pos</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span><span class="w"></span>
+<span class="w">            </span><span class="n">iend</span><span class="o">=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">arg</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">arg</span><span class="p">(</span><span class="n">iend</span><span class="p">:</span><span class="n">iend</span><span class="p">).</span><span class="n">ne</span><span class="p">.</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; ,&#39;</span><span class="w"></span>
+<span class="w">            </span><span class="k">read</span><span class="w"> </span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">nml</span><span class="o">=</span><span class="nb">long</span><span class="p">,</span><span class="w"> </span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="w"> </span><span class="n">iomsg</span><span class="o">=</span><span class="n">message2</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">               write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;BOOKKEEPER:ERROR UNQUOTED:&#39;</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">message1</span><span class="p">),</span><span class="s1">&#39;: when reading &#39;</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"></span>
+<span class="w">               </span><span class="k">if</span><span class="p">(</span><span class="n">message1</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="n">message2</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;BOOKKEEPER:ERROR QUOTED  :&#39;</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">message2</span><span class="p">),</span><span class="s1">&#39;: when reading &#39;</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"></span>
+<span class="w">               </span><span class="k">type</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="k">type</span><span class="p">)</span><span class="w"></span>
+<span class="w">               </span><span class="n">name</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"></span>
+<span class="w">               </span><span class="n">passed</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">passed</span><span class="p">)</span><span class="w"></span>
+<span class="w">               </span><span class="n">msg</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="w"></span>
+<span class="w">               </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">nml</span><span class="o">=</span><span class="nb">long</span><span class="p">,</span><span class="w"> </span><span class="n">delim</span><span class="o">=</span><span class="s1">&#39;quote&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">               </span><span class="k">stop </span><span class="mi">2</span><span class="w"></span>
+<span class="w">            </span><span class="k">endif</span>
+<span class="k">         else</span>
+<span class="k">            write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="s1">&#39;ERROR:&#39;</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">message1</span><span class="p">),</span><span class="s1">&#39;: when reading &#39;</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="k">type</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="k">type</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">name</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">passed</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">passed</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">msg</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="n">nml</span><span class="o">=</span><span class="nb">long</span><span class="p">,</span><span class="w"> </span><span class="n">delim</span><span class="o">=</span><span class="s1">&#39;quote&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">stop </span><span class="mi">4</span><span class="w"></span>
+<span class="w">         </span><span class="k">endif</span>
+<span class="k">      endif</span>
+<span class="k">   enddo</span>
+<span class="k">   if</span><span class="p">(</span><span class="n">help</span><span class="p">)</span><span class="k">call </span><span class="n">printhelp</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">version</span><span class="p">)</span><span class="k">call </span><span class="n">printversion</span><span class="p">()</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">cmdline_</span><span class="w"></span>
+<span class="k">subroutine </span><span class="n">printhelp</span><span class="p">()</span><span class="w"></span>
+<span class="k">implicit none</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">parameter</span><span class="w">     </span><span class="kd">::</span><span class="w"> </span><span class="n">ident</span><span class="o">=</span><span class="s2">&quot;@(#)printhelp(3f): prints help information&quot;</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">help_text</span><span class="p">(:)</span><span class="w"></span>
+<span class="kt">integer</span><span class="w">                        </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="n">help_text</span><span class="o">=</span><span class="p">[</span><span class="w"> </span><span class="kt">CHARACTER</span><span class="p">(</span><span class="nb">LEN</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="c">!12345678901234567890123456789012345678901234567890123456789012345678901234567890&#39;,&amp;</span>
+<span class="s1">&#39;NAME                                                                            &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    bookkeeper-(1f) - example filter program callable from the M_framework(3f)  &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    unit testing harness.                                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    (LICENSE:PD)                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;SYNOPSIS                                                                        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; commands:                                                                      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     bookkeeper [help| version]                                                 &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     bookkeeper type=&quot;start&quot; name=&quot;NAME&quot; msg=&quot;MESSAGE TEXT&quot; [opts]              &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     bookkeeper type=&quot;check&quot; name=&quot;NAME&quot; msg=&quot;MESSAGE TEXT&quot; ...                 &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                passed=&quot;passed|failed&quot;                                          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     bookkeeper type=&quot;end&quot; name=&quot;NAME&quot; msg=&quot;MESSAGE TEXT&quot; clicks=N ...          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                [passed=&quot;failed|passed|untested&quot;]                               &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     bookkeeper type=&quot;stop&quot; name=&quot;NAME&quot; msg=&quot;MESSAGE TEXT&quot;                      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                [passed=&quot;failed|passed|untested&quot;] clicks=M                      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     bookkeeper type=&quot;message&quot; name=&quot;NAME&quot; msg=&quot;MESSAGE TEXT&quot;                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;DESCRIPTION                                                                     &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; This is an example program that shows how to create an external program that   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; can be called by the testing harness in the M_framework__verify(3f) module     &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; for custom processing. Data is based in the form of NAMELIST group data        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; for the NAMELIST group                                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     character(len=:),allocatable :: type                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     character(len=:),allocatable :: name                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     character(len=:),allocatable :: passed                                     &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     character(len=:),allocatable :: msg                                        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     character(len=25)            :: date                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     integer(kind=int64)          :: clicks                                     &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     logical                      :: help                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;     logical                      :: version                                    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; The data conforms to the Fortran NAMELIST group input syntax with the          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; delimiter set to a double-quote except extraneous spaces are not allowed,      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; and names may optionally be preceded by &quot; --&quot; or &quot; /&quot; and if no equal          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; appears after a keyword &quot;=T&quot; is assumed to appear more like typical            &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; Unix long options or MSWindows commands. So these would all be                 &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39; equivalent:                                                                    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      bookkeeper type=&quot;end&quot; msg=&quot;message text&quot;                                  &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      bookkeeper /type=&quot;end&quot; /msg=&quot;message text&quot;                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      bookkeeper --type=&quot;end&quot; --msg=&quot;message text&quot;                              &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;OPTIONS                                                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    type     &quot;start&quot;,&quot;check&quot;,&quot;end&quot;,&quot;stop&quot;,&quot;message&quot;                             &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    name     a label, typically the name of the procedure that was tested.      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    passed   &quot;passed&quot;,&quot;failed&quot;,&quot;untested&quot;                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    msg      a description of the test, or a descriptive message                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    date     YYYY-MM-DDTHH:MM:SS-HH:MM                                          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    clicks   for type=&quot;end&quot; assumed to be the time in clicks since the          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;             previous type=&quot;start&quot;                                              &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    silent|brief|verbose   silent produces no output from unit_check_* routines &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                           brief only shows failed tests, verbose shows all     &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                           messages including compiler and options.             &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    help     display this help and exit                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    version  output version information and exit                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;EXAMPLES                                                                        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    Sample commands                                                             &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;       fpm test -- command=bookkeeper                                           &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;       fpm test --target=&#39;&#39;time*&#39;&#39; -- command=bookkeeper luns=6                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;SEE ALSO                                                                        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;    M_framework(3f), unit_test(3f), unit_test_mode(3f)                          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;AUTHOR                                                                          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   John S. Urban                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;LICENSE                                                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   Public Domain                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&#39;</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="k">WRITE</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)(</span><span class="nb">trim</span><span class="p">(</span><span class="n">help_text</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">help_text</span><span class="p">))</span><span class="w"></span>
+<span class="w">   </span><span class="k">stop</span><span class="w"> </span><span class="c">! if --help was specified, stop</span>
+<span class="k">end subroutine </span><span class="n">printhelp</span><span class="w"></span>
+<span class="k">subroutine </span><span class="n">printversion</span><span class="p">()</span><span class="w"></span>
+<span class="k">implicit none</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">parameter</span><span class="w">     </span><span class="kd">::</span><span class="w"> </span><span class="n">ident</span><span class="o">=</span><span class="s2">&quot;@(#)printhelp(3f): prints help information&quot;</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">help_text</span><span class="p">(:)</span><span class="w"></span>
+<span class="kt">integer</span><span class="w">                        </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="n">help_text</span><span class="o">=</span><span class="p">[</span><span class="w"> </span><span class="kt">CHARACTER</span><span class="p">(</span><span class="nb">LEN</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="c">!12345678901234567890123456789012345678901234567890123456789012345678901234567890&#39;,&amp;</span>
+<span class="s1">&#39;                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;PRODUCT:        Fortran Unit Testing Harness                                    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;PROGRAM:        bookkeeper(1)                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;DESCRIPTION:    filter data from M_framework(3f) Unit Testing Framework         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;VERSION:        1.0, 20230507                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;AUTHOR:         John S. Urban                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;REPORTING BUGS: http://www.urbanjost.altervista.org/                            &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;HOME PAGE:      https://github.com/urbanjost/M_framework                        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;LICENSE:        Public Domain. This is free software: you are free to change    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                and redistribute it. There is NO WARRANTY,                      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                to the extent permitted by law.                                 &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&#39;</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="k">WRITE</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)(</span><span class="nb">trim</span><span class="p">(</span><span class="n">help_text</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">help_text</span><span class="p">))</span><span class="w"></span>
+<span class="w">   </span><span class="k">stop</span><span class="w"> </span><span class="c">! if --help was specified, stop</span>
+<span class="k">end subroutine </span><span class="n">printversion</span><span class="w"></span>
+
+<span class="k">function </span><span class="n">here_and_now</span><span class="p">()</span><span class="w"> </span><span class="c">! 2023-05-01 23:05:12 UTC-0400</span>
+<span class="kt">character</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">date</span><span class="o">*</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span><span class="w"> </span><span class="nb">time</span><span class="o">*</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">zone</span><span class="o">*</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">here_and_now</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="nb">date_and_time</span><span class="p">(</span><span class="n">DATE</span><span class="o">=</span><span class="n">date</span><span class="p">,</span><span class="nb">TIME</span><span class="o">=</span><span class="nb">time</span><span class="p">,</span><span class="n">ZONE</span><span class="o">=</span><span class="n">zone</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="c">!write(here_and_now,&#39;(*(g0))&#39;)date(1:4),&#39;-&#39;,date(5:6),&#39;-&#39;,date(7:8),&#39; &#39;,time(1:2),&#39;:&#39;,time(3:4),&#39;:&#39;,time(5:6),&#39; UTC&#39;,zone</span>
+<span class="w">   </span><span class="c">! rfc-3339&quot;   ==&gt; %Y-%M-%DT%h:%m:%s%z  2023-05-02T18:40:25-04:00; except ZONE is in</span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="n">here_and_now</span><span class="p">,</span><span class="s1">&#39;(*(g0))&#39;</span><span class="p">)&amp;</span><span class="w"></span>
+<span class="w">   </span><span class="p">&amp;</span><span class="w"> </span><span class="n">date</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">),</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="n">date</span><span class="p">(</span><span class="mi">5</span><span class="p">:</span><span class="mi">6</span><span class="p">),</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="n">date</span><span class="p">(</span><span class="mi">7</span><span class="p">:</span><span class="mi">8</span><span class="p">),</span><span class="s1">&#39;T&#39;</span><span class="p">,</span><span class="nb">time</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="nb">time</span><span class="p">(</span><span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">),</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="nb">time</span><span class="p">(</span><span class="mi">5</span><span class="p">:</span><span class="mi">6</span><span class="p">),</span><span class="n">zone</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">),</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="n">zone</span><span class="p">(</span><span class="mi">4</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<span class="k">end function </span><span class="n">here_and_now</span><span class="w"></span>
+
+<span class="kt">logical </span><span class="k">function </span><span class="n">fileexists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">filename</span><span class="w"></span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">size</span><span class="w"></span>
+<span class="w">    </span><span class="k">inquire</span><span class="p">(</span><span class="k">file</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="n">exist</span><span class="o">=</span><span class="n">r</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="k">then</span>
+<span class="k">       if</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">le</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="n">r</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+<span class="w">    </span><span class="k">endif</span>
+<span class="k">end function </span><span class="n">fileexists</span><span class="w"></span>
+
+<span class="kt">logical </span><span class="k">function </span><span class="n">unitexists</span><span class="p">(</span><span class="n">lun</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="w"></span>
+<span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lun</span><span class="w"></span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">size</span><span class="w"></span>
+<span class="w">    </span><span class="k">inquire</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">lun</span><span class="p">,</span><span class="w"> </span><span class="n">exist</span><span class="o">=</span><span class="n">r</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="k">then</span>
+<span class="k">       if</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">le</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="n">r</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+<span class="w">    </span><span class="k">endif</span>
+<span class="k">end function </span><span class="n">unitexists</span><span class="w"></span>
+
+<span class="k">subroutine </span><span class="n">header</span><span class="p">()</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;bookkeeper.csv&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="k">then</span>
+<span class="k">   write</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&quot;name&quot;,&quot;date&quot;,&quot;passed&quot;,&quot;msg&quot;&#39;</span><span class="w"></span>
+<span class="k">endif</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;bookkeeper.html&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="k">then</span>
+<span class="k">   call </span><span class="n">get_html_header</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="n">htmlfile</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)(</span><span class="nb">trim</span><span class="p">(</span><span class="n">html_header</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">html_header</span><span class="p">))</span><span class="w"></span>
+<span class="k">endif</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;bookkeeper_clicks.csv&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="k">then</span>
+<span class="k">   write</span><span class="p">(</span><span class="n">clicksfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39;&quot;name&quot;,&quot;date&quot;,&quot;clicks&quot;,&quot;msg&quot;&#39;</span><span class="w"></span>
+<span class="k">endif</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;bookkeeper.nml&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="k">then</span>
+<span class="k">   write</span><span class="p">(</span><span class="n">nmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; Fortran NAMELIST group file containing test results&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="n">nmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; that may be read with a simple program and used to&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="n">nmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; generate reports in other formats.&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="n">nmlfile</span><span class="p">,</span><span class="n">g0</span><span class="p">)</span><span class="s1">&#39; &#39;</span><span class="w"></span>
+<span class="k">endif</span>
+<span class="k">end subroutine </span><span class="n">header</span><span class="w"></span>
+
+<span class="k">subroutine </span><span class="n">get_html_header</span><span class="p">()</span><span class="w"></span>
+<span class="n">html_header</span><span class="o">=</span><span class="p">[</span><span class="w"> </span><span class="kt">CHARACTER</span><span class="p">(</span><span class="nb">LEN</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;html&gt;&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;head&gt;&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;title&gt;unit_test_results&lt;/title&gt;&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;style&gt;        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;body {xfont-style: italic}&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;body {                    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;a:visited { color:#666; }                                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }                                              &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;h1 { font-size:200%; }                                                                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;h2 { font-size:173%; }                                                                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;h3 { font-size:144%; }                                                                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;h4 { font-size:120%; }                                                                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;h5,h6 { font-size:100% }                                                                                                 &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;/*                                                                                                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;td { border:thin solid #888; word-break: break-all; width: 1em}                                                          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;*/                                                                                                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;td { border:thin solid #888; overflow-wrap: break-word; }                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;li { margin-bottom:0.5em; }                                                                                              &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;blockquote { display:block; font-size:90%; font-style:italic; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;a,li span { color:#000; }                                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;#Container { margin:0 10px; text-align:center; }                                                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:58em; }                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;span.webName { font-size:.5em; }                                                                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;textarea#content { font-size: 1em; line-height: 1.125em; }                                                               &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;h1#pageName { line-height:1.4em; margin:0.2em 0 0.2em 0; padding:0; }                                                    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;h2{ line-height:1.2em; margin:0.2em 0 0.2em 0; padding:0; color:blue;}                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;.property { color:#666; font-size:80%; }                                                                                 &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;a.existingWikiWord[title]{ //border: 1px dashed #BBB; }                                                                  &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }                           &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;/* table takes its dimensions from the &lt;table&gt; element width and                                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;the width of the first row of cells (or the &lt;col&gt; elements, if you have them).*/                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;table { table-layout: fixed ; width: 100% ; border:double #000; border-collapse:collapse; }                              &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;td { width: 25% ; }                                                                                                      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;table#unit_test { table-layout: fixed ; width: 100% ; border-collapse: collapse ; border: 1px black solid ; }            &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;table#unit_test td { width: 25% ; border: 1px black solid ; padding: 10px ; }                                            &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;table#unit_test caption { font-style: italic ; font-weight: 600; color: gray;}                                           &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;/*                                                                                                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;col:nth-child(even) {background: #FFF}                                                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;col:nth-child(odd) {background: #CCC}                                                                                    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;*/                                                                                                                       &#39;</span><span class="p">,&amp;</span><span class="w"> </span>
+<span class="s1">&#39;tr:nth-child(even) {background: #CCC}                                                                                    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;tr:nth-child(odd) {background: #FFF}                                                                                     &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;/style&gt;                                                                                                                 &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;script language=&quot;JavaScript1.1&quot; type=&quot;text/javascript&quot;&gt;                                                                 &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;//&lt;![CDATA[                                                                                                              &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   //---------------------------------------------------------------------------                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   // turn on/off visibility of class                                                                                    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   function toggleHiddenClass(objectClassName) {                                                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      const collection = document.getElementsByClassName(objectClassName);                                               &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;                                                                                                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      for (let i = 0; i &lt; collection.length; i++) {                                                                      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;         if(collection[i].style.display == &quot;none&quot; ) {                                                                    &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;            collection[i].style.display = &quot;&quot;;                                                                            &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;         }else{                                                                                                          &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;            collection[i].style.display = &quot;none&quot;;                                                                        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;         }                                                                                                               &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      }                                                                                                                  &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   }                                                                                                                     &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   //---------------------------------------------------------------------------                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   //alert(&quot;A1&quot;);                                                                                                        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   //---------------------------------------------------------------------------                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   // turn on/off visibility of id                                                                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   function toggleHiddenId(objectIdName) {                                                                               &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      var TARGET = document.getElementById(objectIdName);                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      if(TARGET.style.display == &quot;none&quot; ) {                                                                              &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;         TARGET.style.display = &quot;&quot;;                                                                                      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      }else{                                                                                                             &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;         TARGET.style.display = &quot;none&quot;;                                                                                  &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      }                                                                                                                  &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   //alert(TARGET.style.display);                                                                                        &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   }                                                                                                                     &#39;</span><span class="p">,&amp;</span><span class="w"> </span>
+<span class="s1">&#39;   //---------------------------------------------------------------------------                                         &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;/script&gt;                                                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;p&gt;                                                                                                                      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;   &lt;form&gt;                                                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      &lt;input  type=&quot;button&quot;  value=&quot;passed&quot;   onclick=&quot;toggleHiddenClass(&#39;&#39;passed&#39;&#39;);&quot; /&gt;                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      &lt;input  type=&quot;button&quot;  value=&quot;failed&quot;   onclick=&quot;toggleHiddenClass(&#39;&#39;failed&#39;&#39;);&quot; /&gt;                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      &lt;input  type=&quot;button&quot;  value=&quot;untested&quot; onclick=&quot;toggleHiddenClass(&#39;&#39;untested&#39;&#39;);&quot; /&gt;                              &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      &lt;input  type=&quot;button&quot;  value=&quot;clicks&quot;   onclick=&quot;toggleHiddenClass(&#39;&#39;clicks&#39;&#39;);&quot; /&gt;                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      &lt;input  type=&quot;button&quot;  value=&quot;message&quot;  onclick=&quot;toggleHiddenClass(&#39;&#39;message&#39;&#39;);&quot; /&gt;                               &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      &lt;input  type=&quot;button&quot;  value=&quot;caption&quot;  onclick=&quot;toggleHiddenClass(&#39;&#39;caption&#39;&#39;);&quot; /&gt;                               &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;      &lt;input  type=&quot;button&quot;  value=&quot;header&quot;   onclick=&quot;toggleHiddenClass(&#39;&#39;header&#39;&#39;);&quot; /&gt;                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;  &lt;/form&gt;                                                                                                                &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;/p&gt;                                                                                                                     &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;/head&gt;                                                                                                                  &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;body&gt;                                                                                                                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;div id=&quot;Container&quot;&gt;                                                                                                     &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;div id=&quot;Content&quot;&gt;                                                                                                       &#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&#39;</span><span class="p">]</span><span class="w"></span>
+
+<span class="n">html_footer</span><span class="o">=</span><span class="p">[</span><span class="w"> </span><span class="kt">CHARACTER</span><span class="p">(</span><span class="nb">LEN</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;/body&gt;&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&lt;/html&gt;&#39;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="s1">&#39;&#39;</span><span class="p">]</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">get_html_header</span><span class="w"></span>
+
+<span class="k">end program </span><span class="n">bookkeeper</span><span class="w"></span>
+</pre></div>
+
+    </section>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_framework
+ was developed by John S. Urban<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-07-11 00:19 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

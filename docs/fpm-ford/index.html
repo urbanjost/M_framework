@@ -1,0 +1,564 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="collection of modules for unit testing and logging and messaging">
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="./favicon.png">
+
+    <title> M_framework </title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="./css/fontawesome.min.css" rel="stylesheet">
+    <link href="./css/brands.min.css" rel="stylesheet">
+    <link href="./css/regular.min.css" rel="stylesheet">
+    <link href="./css/solid.min.css" rel="stylesheet">
+    <link href="./css/v4-font-face.min.css" rel="stylesheet">
+    <link href="./css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="./css/local.css" rel="stylesheet">
+    <link href="./css/pygments.css" rel="stylesheet">
+    <script src="./js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="./index.html">M_framework </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="./lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="./search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <!-- Main component for a primary marketing message or call to action -->
+    <div class="p-5 mb-4 bg-light border rounded-3" id="jumbotron">
+      <p>collection of modules for unit testing and logging and messaging</p>
+        <p> Find us on&hellip;</p>
+      <p>
+        <a class="btn btn-lg btn-primary" href="https://github.com/urbanjost/M_framework" role="button">GitHub</a>
+        
+        
+        
+        
+        <a class="btn btn-lg btn-danger" style="float:right" href="https://github.com/urbanjost/M_framework/archive/refs/heads/master.zip" role="button">Download the Source</a>
+      </p>
+    </div>
+
+      <div class="row" id='text'>
+        <div class=col-md-8>
+          <h1>M_framework</h1>
+          <p><a href="https://urbanjost.github.io/M_framework/fpm-ford/index.html"><img alt="" src="docs/images/framework.gif"></a></p>
+<h1 id="m_framework"><a href="https://urbanjost.github.io/M_framework/man3.html">M_framework</a></h1>
+<h2 id="synopsis">Synopsis</h2>
+<p>M_framework(3f) is an aggregate of Fortran modules useful for creating
+and performing unit tests for Fortran.</p>
+<p>The support modules are useful on their own for terminal messages,
+comparing expected values to results, writing logfiles and playback
+journals.</p>
+<p>It supports easy integration with the fpm(1) &ldquo;test&rdquo; subcommand,
+in particular.</p>
+<ul>
+<li>basic timing is included</li>
+<li>messages can be composed almost like list-directed I/O when calling the
+   unit test procedures.</li>
+<li>
+<p>hooks are provided to external local applications
+   M_framework(3f) comes with a hook that allows calling your own programs to
+   integrate with local logging tools, report generators, spreadsheets or other
+   local infrastructure. The example program &ldquo;bookkeeper&rdquo; is included that
+   uses the hook to write example report data files:</p>
+<ul>
+<li><a href="https://urbanjost.github.io/M_framework/bookkeeper.csv">CSV</a>,</li>
+<li><a href="https://urbanjost.github.io/M_framework/bookkeeper.html">HTML</a></li>
+<li><a href="https://urbanjost.github.io/M_framework/bookkeeper.nml">NAMELIST</a></li>
+</ul>
+</li>
+</ul>
+<p>The hook can call any local program with an interface similar to
+   &ldquo;bookkeeper&rdquo;.  Modify the program for local needs such as sending e-mail
+   alerts and so on without having to change the tests.</p>
+<ul>
+<li>designed for integration with fpm(1).
+   In conjunction with fpm(1) it is easy to run the tests with the &ndash;runner
+   option, allowing for integration with other utilities as well such as
+   the GNU debugger gdb(1), valgrind(1), and other tools.</li>
+</ul>
+<h3 id="programs-included-to-generate-skeleton-test-program">programs included to generate skeleton test program</h3>
+<p>Example programs are provided to create unit test skeleton programs to
+ease usage.</p>
+<h3 id="easily-used-with-github-cdci">Easily used with github CD/CI</h3>
+<p>Example CD/CI scripts that can be used with github are in the .github/
+directory that assume your tests can by run by using &ldquo;fpm test&rdquo;.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">program </span><span class="n">M_test_suite_M_intrinsics</span><span class="w"></span>
+<span class="k">use</span><span class="p">,</span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="p">&amp;</span><span class="w"> </span><span class="n">stderr</span><span class="o">=&gt;</span><span class="n">ERROR_UNIT</span><span class="p">,</span><span class="w"> </span><span class="n">stdin</span><span class="o">=&gt;</span><span class="n">INPUT_UNIT</span><span class="p">,</span><span class="w"> </span><span class="n">stdout</span><span class="o">=&gt;</span><span class="n">OUTPUT_UNIT</span><span class="w"></span>
+<span class="c">!</span>
+<span class="k">use </span><span class="n">M_framework</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_test_start</span><span class="p">,</span><span class="n">unit_test</span><span class="p">,</span><span class="n">unit_test_end</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">                 </span><span class="n">unit_test_mode</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_level</span><span class="p">,</span><span class="w"> </span><span class="n">unit_test_stop</span><span class="w"></span>
+<span class="k">use </span><span class="n">M_framework</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">TEST_PREFIX</span><span class="w"> </span><span class="c">! change column one of messages</span>
+<span class="c">!</span>
+<span class="c">!use M_mymodule ! load any modules you will be testing</span>
+<span class="k">implicit none</span>
+<span class="kt">double precision</span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">expected</span><span class="p">(:),</span><span class="w"> </span><span class="n">answers</span><span class="p">(:),</span><span class="w"> </span><span class="n">input</span><span class="p">(:)</span><span class="w"></span>
+<span class="kt">double precision</span><span class="p">,</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">PI</span><span class="o">=</span><span class="nb">atan</span><span class="p">(</span><span class="mf">1.0d0</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="w"></span>
+<span class="c">!! setup</span>
+<span class="w">   </span><span class="c">!---------------------------------------------------</span>
+<span class="w">   </span><span class="c">!OPTIONAL:</span>
+<span class="w">   </span><span class="c">!  values used in prefix column for various messages</span>
+<span class="w">   </span><span class="c">!  the default is to set them all to the basename of</span>
+<span class="w">   </span><span class="c">!  the executable running tests, but they can be </span>
+<span class="w">   </span><span class="c">!  altered. For example:</span>
+<span class="w">   </span><span class="n">TEST_PREFIX</span><span class="o">=</span><span class="n">prefix</span><span class="p">(</span><span class="w">                  </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="n">TEST_MSG</span><span class="w">    </span><span class="o">=</span><span class="w">  </span><span class="s1">&#39;test_msg:   &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="n">TEST</span><span class="w">        </span><span class="o">=</span><span class="w">  </span><span class="s1">&#39;test:       &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="n">TEST_START</span><span class="w">  </span><span class="o">=</span><span class="w">  </span><span class="s1">&#39;test_start: &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="n">TEST_STOP</span><span class="w">   </span><span class="o">=</span><span class="w">  </span><span class="s1">&#39;test_stop:  &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="n">TEST_END</span><span class="w">    </span><span class="o">=</span><span class="w">  </span><span class="s1">&#39;test_end:   &#39;</span><span class="w">  </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">   </span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="c">!---------------------------------------------------</span>
+<span class="w">   </span><span class="c">!OPTIONAL: </span>
+<span class="w">   </span><span class="c">! the options available at run-time on the command</span>
+<span class="w">   </span><span class="c">! line can have their defaults selected. See the </span>
+<span class="w">   </span><span class="c">! man-page for the procedure for details.</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_mode</span><span class="p">(</span><span class="w"></span>
+<span class="w">     </span><span class="p">(</span><span class="w"> </span><span class="n">keep_going</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"> </span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="n">flags</span><span class="o">=</span><span class="p">[</span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="p">],</span><span class="w"> </span>
+<span class="w">     </span><span class="n">luns</span><span class="o">=</span><span class="p">[</span><span class="n">stdout</span><span class="p">],</span><span class="w"> </span>
+<span class="w">     </span><span class="n">command</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">     </span><span class="n">brief</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="n">interactive</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="n">CMDLINE</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="n">debug</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="n">match</span><span class="w"></span>
+<span class="w">     </span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="c">!---------------------------------------------------</span>
+<span class="c">!! test each subroutine</span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_sqrt</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_cos</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_sin</span><span class="p">()</span><span class="w"></span>
+<span class="c">!! teardown</span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_stop</span><span class="p">()</span><span class="w"></span>
+<span class="k">contains</span>
+<span class="k">subroutine </span><span class="n">test_sqrt</span><span class="p">()</span><span class="w"></span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;calculate the square root&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">input</span><span class="w">   </span><span class="o">=</span><span class="p">[</span><span class="mf">1.0d0</span><span class="p">,</span><span class="mf">4.0d0</span><span class="p">,</span><span class="mf">9.0d0</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="n">expected</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0d0</span><span class="p">,</span><span class="mf">2.0d0</span><span class="p">,</span><span class="mf">3.0d0</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="n">answers</span><span class="o">=</span><span class="p">[(</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">input</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">input</span><span class="p">))]</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">all</span><span class="p">(</span><span class="n">expected</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="n">answers</span><span class="p">),&amp;</span><span class="w"></span>
+<span class="w">      </span><span class="p">&amp;</span><span class="w"> </span><span class="s1">&#39;check table of values&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test</span><span class="p">(</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="mf">5.0d0</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mf">5.0d0</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">      </span><span class="p">&amp;</span><span class="w"> </span><span class="s1">&#39;got&#39;</span><span class="p">,</span><span class="nb">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="mf">5.0d0</span><span class="p">),</span><span class="s1">&#39;expected&#39;</span><span class="p">,</span><span class="mf">5.0d0</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_sqrt</span><span class="w"></span>
+
+<span class="k">subroutine </span><span class="n">test_sin</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;sin&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;calculate the sine of a value&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;sin&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_sin</span><span class="w"></span>
+
+<span class="k">subroutine </span><span class="n">test_cos</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_start</span><span class="p">(</span><span class="s1">&#39;cos&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;calculate the cosine of a value&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_test_end</span><span class="p">(</span><span class="s1">&#39;cos&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end subroutine </span><span class="n">test_cos</span><span class="w"></span>
+
+<span class="k">end program </span><span class="n">M_test_suite_M_intrinsics</span><span class="w"></span>
+</code></pre></div>
+
+<p>Example output files from an fpm(1) package that uses
+M_framework illustrate the different types of output that can be 
+generated.
+ + <a href="https://urbanjost.github.io/M_framework/bookkeeper.csv">CSV</a>.
+   Generally. comma-separated files can be read directly into spreadsheet
+   programs, sqlite3, and several common databases.
+ + <a href="https://urbanjost.github.io/M_framework/bookkeeper_clicks.csv">CSV runtimes</a>
+   Another CSV file that is a record of the runtimes between a
+   unit test start and end.
+ + <a href="https://urbanjost.github.io/M_framework/bookkeeper.html">HTML</a>
+   An example of a formatted report that can be displayed in a browser.
+ + <a href="https://urbanjost.github.io/M_framework/bookkeeper.nml">NAMELIST</a>.
+   Essentially this is a metafile that records the unit test calls.
+   It is very easy for a custom Fortran program to read back a NAMELIST
+   file and generate custom outputs instead of modifying bookkeeper(1).</p>
+<p>The bookkeeper(1) program is an example program that is expected to
+be customized. It provides for parsing the parameters passed to a
+M_frame external program.</p>
+<hr>
+<h2 id="supports-fpm">Supports FPM <img alt="fpm" src="docs/images/fpm_logo.gif"></h2>
+<p>The impatient can try this, assuming git(1) and fpm(1) are installed.</p>
+<p>Download the github repository and build it with fpm(1) 
+and create a test fpm(1) project:</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># first you need to install a few example programs</span>
+<span class="nb">cd</span> /tmp
+git clone https://github.com/urbanjost/M_framework.git
+<span class="nb">cd</span> M_framework
+<span class="c1"># install the &quot;unit_test&quot;, &quot;bookkeeper&quot;, and &quot;test_suite&quot;</span>
+<span class="c1"># example programs; assuming the default install puts</span>
+<span class="c1"># them in your path:</span>
+fpm install
+<span class="c1"># &quot;fpm help install&quot; describes how to customize where the</span>
+<span class="c1"># programs are installed.</span>
+<span class="c1">#</span>
+<span class="c1"># go to your fpm package test/ directory.</span>
+<span class="c1"># here, we will make one up</span>
+fpm new /tmp/tryit  <span class="c1"># create test project</span>
+<span class="nb">cd</span> /tmp/tryit/test
+<span class="c1"># so lets say you plan on adding procedures &quot;a&quot;,&quot;b&quot;,and &quot;c&quot; to your src/tryit.f90</span>
+<span class="c1"># project code. Set up individual skeleton tests for each procedure.</span>
+unit_test a b c                         <span class="c1"># a file for each test</span>
+test_suite a b c &gt; test_suite_tryit.f90 <span class="c1"># or a single file</span>
+<span class="nb">cd</span> ..  <span class="c1"># go to the top of the project </span>
+<span class="c1"># add M_framework to the developer dependencies</span>
+cat &gt;&gt; fpm.toml <span class="s">&lt;&lt;\EOF</span>
+<span class="s">[dev-dependencies]</span>
+<span class="s">M_framework    = { git = &quot;https://github.com/urbanjost/M_framework.git&quot; }</span>
+<span class="s">EOF</span>
+<span class="c1">#</span>
+<span class="c1"># test the package </span>
+fpm <span class="nb">test</span>
+<span class="c1"># if will say the procedures are untested. Put real calls</span>
+<span class="c1"># in to unit_test(3f) and see how the default report </span>
+<span class="c1"># changes</span>
+<span class="c1">#</span>
+<span class="c1"># so now to run the default tests is as simple as</span>
+fpm <span class="nb">test</span>
+<span class="c1"># run just one test</span>
+fpm <span class="nb">test</span> unit_test_a
+<span class="c1"># run tests using globbing; eg. all tests beginning with &quot;unit\_&quot;</span>
+fpm <span class="nb">test</span> <span class="s1">&#39;unit_*&#39;</span>
+<span class="c1"># display help on the interactive command options</span>
+fpm <span class="nb">test</span> -- --help
+
+<span class="c1"># you can pass parameters and/or change the unit_test_mode(3f)</span>
+<span class="c1"># calls to change some of the test behavior</span>
+</code></pre></div>
+
+<p>So once you want to use this on your own projects, you would normally
+just add M_framework(3f) as a developer dependency
+in your fpm.toml project file and start making tests that call M_framework(3f).</p>
+<p>The optional programs demonstrated (&ldquo;unit_test&rdquo;, &ldquo;test_suite&rdquo;) are just simple
+stand-alone programs that make skeleton programs to run tests that you can 
+customize (and rename too to avoid confusion).</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># some useful things to try. Check out the man-pages for all the unit_test_*(3f)</span>
+<span class="c1"># procedures.</span>
+<span class="c1"># Then look at</span>
+unit_test --help
+fpm <span class="nb">test</span> -- <span class="nb">help</span>
+<span class="c1"># run the demo bookkeeper script</span>
+fpm <span class="nb">test</span> -- <span class="nv">command</span><span class="o">=</span>bookkeeper
+<span class="c1"># and look at the bookkeeper*.* files in the top of the project</span>
+</code></pre></div>
+
+<h2 id="documentation">Documentation   <img alt="docs" src="docs/images/docs.gif"></h2>
+<h3 id="user">User</h3>
+<ul>
+<li>
+<p>An <a href="https://urbanjost.github.io/M_framework/man3.html">index</a> to HTML versions
+   of the manpages</p>
+</li>
+<li>
+<p>single pages that uses javascript to combine all the HTML descriptions
+   of the man-pages is at</p>
+<ul>
+<li><a href="https://urbanjost.github.io/M_framework/BOOK_M_framework.html">BOOK_M_framework</a></li>
+<li><a href="https://urbanjost.github.io/M_framework/BOOK_M_framework__verify.html">BOOK_M_framework__verify</a></li>
+<li><a href="https://urbanjost.github.io/M_framework/BOOK_M_framework__approx.html">BOOK_M_framework__approx</a></li>
+<li><a href="https://urbanjost.github.io/M_framework/BOOK_M_framework__journal.html">BOOK_M_framework__journal</a></li>
+<li><a href="https://urbanjost.github.io/M_framework/BOOK_M_framework__msg.html">BOOK_M_framework__msg</a></li>
+</ul>
+</li>
+<li>
+<p>man-pages in</p>
+<ul>
+<li><a href="https://urbanjost.github.io/M_framework/manpages.zip">manpages.zip</a></li>
+<li><a href="https://urbanjost.github.io/M_framework/manpages.tgz">manpages.tgz</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="developer">Developer</h3>
+<ul>
+<li><a href="https://urbanjost.github.io/M_framework/fpm-ford/index.html">ford-generated developers&rsquo; document</a></li>
+<li><a href="docs/STATUS.md">github action status</a></li>
+</ul>
+<h2 id="additional-directory-descriptions">Additional Directory Descriptions</h2>
+<ul>
+<li>src/ is where the source for the M_framework(3f) module code resides</li>
+<li>docs/ contains HTML documentation and the manpage archives</li>
+<li>test/ contains simple test programs</li>
+<li>example/ has demos</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>See the .github directory in <a href="https://github.com/urbanjost/easy">easy</a></li>
+<li>for examples of CD/CI scripts that assume your package can be tested with an &ldquo;fpm test&rdquo; command.</li>
+<li>examples that use M_framework in github fpm packages:<ul>
+<li><a href="https://github.com/urbanjost/M_strings">M_strings</a></li>
+<li><a href="https://github.com/urbanjost/M_process">M_process</a></li>
+</ul>
+</li>
+</ul>
+<p>These packages used a different reincarnation of the testing harness and are in the process of
+   being changed to use M_framework(3f) more appropriately, but still contain some useful examples.</p>
+<ul>
+<li><a href="https://github.com/fortran-lang/fpm">Fortran Package Manager</a></li>
+<li><a href="https://github.com/fortran-lang/fpm-registry">fpm(1) registry</a></li>
+<li><a href="https://fortranwiki.org/fortran/show/Unit+testing+frameworks">Fortran Wiki: unit testing list</a></li>
+<li><a href="https://politicalphysicist.github.io/ford-fortran-documentation.html">ford(1)</a> for generating documentation for your projects</li>
+</ul>
+<h2 id="note">Note</h2>
+<p>M_framework(3f) is subject to interface changes so the generally recommended
+practice of using a specific commit when using it an an external
+fpm(1) dependency is highly encouraged.</p>
+<p>Any feedback (features, performance, ease of use, &hellip;) is appreciated,
+particularly in the ongoing development phase.</p>
+<!--
+====================================================================================================
+
+DOES NOT WORK.
+
+If you put that in the "fpm.rsp" file as:
+
+     @debug
+     options test '*' --verbose --runner 'gdb -ex run --args' -- --flags=9997,9998,9999 --luns=6
+
+You can then just enter "fpm @debug"
+
+====================================================================================================
+-->
+
+<!--
+## Building the Module
+A conventional GNU/Linux or Unix install:
+
+
+<div class="codehilite"><pre><span></span><code>     git clone https://github.com/urbanjost/M_framework.git
+     <span class="nb">cd</span> M_framework/src
+     <span class="c1"># change Makefile if not using one of the listed compilers</span>
+
+     <span class="c1"># for gfortran</span>
+     make clean
+     make <span class="nv">F90</span><span class="o">=</span>gfortran gfortran
+
+     <span class="c1"># for ifort</span>
+     make clean
+     make <span class="nv">F90</span><span class="o">=</span>ifort ifort
+
+     <span class="c1"># for nvfortran</span>
+     make clean
+     make <span class="nv">F90</span><span class="o">=</span>nvfortran nvfortran
+</code></pre></div>
+
+
+This will compile the Fortran module and basic test
+programs
+-->
+<!--
+  fpm test --compiler nvfortran --flag '-D__NVFORTRAN -Mbackslash'
+-->
+<!--
+Now add some real calls to unit_test(3f) in the new test files as you
+develop the new project. Make sure to run "unit_test name" when you add
+a new public procedure.
+-->
+<!--
+I used the optional system command to place results into databases
+and SQLite3 files which was great for QA reports, but when using
+**M_framework** in a distributed environment I do not use that at all.
+
+Some of the tools I use like a script that runs nm(1) on the object files
+to create an initial scaffold calling each routine found is too specific
+to my particular platforms currently to distribute; but I find I am much
+more likely to generate tests given a skeleton program that keeps reminding
+me everything is "UNTESTED".
+-->
+<!--
+Command line options use the built-in NAMELIST-group
+See the tests for M_time and M_strings for more elaborate examples.
+## Samples
++ comparing files numerically
++ comparing floating point scalar values and arrays
++ using the many Fortran capabilities in expressions (any(3f), all(3f), pack(3f), merge(3f), ...)
++ dealing with program execution being stopped
+-->
+<!--
+although there might be one procedure tested per file; or the tests
+could even be internal to "mymodule", or the tests might call a system
+command that enters info into a database and so on this is a model that
+works well for basic numeric procedures in particular.
+-->
+<!--
+There can be a lot more to it than this, but even such a simple report
+generated with a simple command in a CLI or batch environment can be a
+powerful tool for ensuring any deviations in behavior are caught quickly
+and that testing becomes a natural part of the development cycle --
+make a code change; run "fpm test"; correct any issues detected.
+
+## Making a skeleton test for each procedure
+
+The first step is to make a skeleton for a test of each procedure.
+Creating unit tests can be cumbersome and the reward for creating them
+is often delayed until they uncover a problem you did not expect.
+So to encourage taking the first step there is an included program
+called unit_test(1).
+
+Initially autodiscovery was used to look through the code for procedures
+called "test_suite_NAME" and a test program was created on the fly;
+where the test procedures were typically included in the same files as
+the procedures they tested. But when many packages are used in the tests
+this quickly leads to the core package having many external dependencies
+used only for testing. So although this approach works well in a stable
+custom environment it complicates the distribution of fpm packages. And
+the autodiscovery tools considered so far have a lot of infrastructure
+requirements and/or are very system dependent. So the decision was made
+to just use standard Fortran programs that make it very easy to generate
+test program skeletons instead.
+-->
+<p>&lt;!&ndash;
+Of course any user-supplied method such as a file listing which tests to
+execute or skip or build the tests conditionally with a preprocessor or
+using procedure pointers in clever ways to point to a no-op procedure
+are just a few examples of alternate methods.</p>
+<blockquote></blockquote>
+<hr>
+        </div>
+          <div class="col-md-4">
+            <div class="card card-body bg-light">
+              <h2 class="card-title">Developer Info</h2>
+              <h4 class="card-text">John S. Urban</h4>
+              <p class="card-text"></p>
+                <div class="text-center"><div class="btn-group" role="group">
+                    
+                    <a class="btn btn-lg btn-primary" href="https://github.com/urbanjost/M_framework"><i class="fa fa-github fa-lg"></i></a>
+                    
+                    
+                    
+                    
+                    
+                    
+                </div></div>
+            </div>
+          </div>
+      </div>
+        <div class="row">
+          <hr>
+          <div class="col-xs-6 col-sm-3">
+            <div>
+              <h3>Source Files</h3>
+              <ul><li><a href='sourcefile/bookkeeper.f90.html'>bookkeeper.f90</a></li><li><a href='sourcefile/demo_accdig.f90.html'>demo_accdig.f90</a></li><li><a href='sourcefile/demo_almost.f90.html'>demo_almost.f90</a></li><li><a href='sourcefile/demo_assert.f90.html'>demo_assert.f90</a></li><li><a href='sourcefile/demo_attr.f90.html'>demo_attr.f90</a></li><li><a href='sourcefile/demo_attr_mode.f90.html'>demo_attr_mode.f90</a></li><li><a href='sourcefile/demo_attr_update.f90.html'>demo_attr_update.f90</a></li><li><a href='sourcefile/demo_compare_float.f90.html'>demo_compare_float.f90</a></li><li><a href='sourcefile/demo_fmt.f90.html'>demo_fmt.f90</a></li><li><a href='sourcefile/demo_fstop.f90.html'>demo_fstop.f90</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-3">
+            <div>
+              <h3>Modules</h3>
+              <ul><li><a href='module/m_framework.html'>M_framework</a></li><li><a href='module/m_framework__approx.html'>M_framework__approx</a></li><li><a href='module/m_framework__attr.html'>M_framework__attr</a></li><li><a href='module/m_framework__journal.html'>M_framework__journal</a></li><li><a href='module/m_framework__msg.html'>M_framework__msg</a></li><li><a href='module/m_framework__timing.html'>M_framework__timing</a></li><li><a href='module/m_framework__utility.html'>M_framework__utility</a></li><li><a href='module/m_framework__verify.html'>M_framework__verify</a></li><li><a href='module/m_framework__verify_demo.html'>M_framework__verify_demo</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/modules.html"><em>All modules&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-3">
+            <div>
+              <h3>Procedures</h3>
+              <ul><li><a href='proc/accdig.html'>accdig</a></li><li><a href='proc/add.html'>add</a></li><li><a href='proc/almost.html'>almost</a></li><li><a href='proc/assert.html'>assert</a></li><li><a href='interface/attr.html'>attr</a></li><li><a href='proc/attr_mode.html'>attr_mode</a></li><li><a href='proc/attr_update.html'>attr_update</a></li><li><a href='proc/change_default_ulp.html'>change_default_ulp</a></li><li><a href='proc/cmdline_~2.html'>cmdline_</a></li><li><a href='interface/compare_float.html'>compare_float</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-3">
+            <div>
+              <h3>Derived Types</h3>
+              <ul><li><a href='type/timer.html'>timer</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/types.html"><em>All derived types&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_framework
+ was developed by John S. Urban<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-07-11 00:19 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

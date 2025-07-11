@@ -1,0 +1,727 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="collection of modules for unit testing and logging and messaging">
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>All Procedures &ndash; M_framework
+</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">M_framework </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12" id='text'>
+			 <h1>Procedures</h1>
+			 <table class="table table-striped">
+			 <thead><tr><th>Procedure</th><th>Location</th><th>Procedure Type</th><th>Description</th></tr></thead>
+			 <tbody>
+			   <tr>
+                 <td><a href='../proc/accdig.html'>accdig</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Example program:</p><a href="../proc/accdig.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/add.html'>add</a></td>
+                 <td><a href='../program/runtest~5.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/almost.html'>almost</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Function</td>
+                 <td><p>sample:</p><a href="../proc/almost.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/assert.html'>assert</a></td>
+                 <td><a href='../module/m_framework__msg.html'>M_framework__msg</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/assert.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/attr.html'>attr</a></td>
+                 <td><a href='../module/m_framework__attr.html'>M_framework__attr</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/attr_mode.html'>attr_mode</a></td>
+                 <td><a href='../module/m_framework__attr.html'>M_framework__attr</a></td>
+                 <td>Subroutine</td>
+                 <td><a href="../proc/attr_mode.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/attr_update.html'>attr_update</a></td>
+                 <td><a href='../module/m_framework__attr.html'>M_framework__attr</a></td>
+                 <td>Subroutine</td>
+                 <td><a href="../proc/attr_update.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/change_default_ulp.html'>change_default_ulp</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Additional operators based on compare_float(3f) are included:</p><a href="../proc/change_default_ulp.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/cmdline_~2.html'>cmdline_</a></td>
+                 <td><a href='../program/bookkeeper.html'>bookkeeper</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/compare_float.html'>compare_float</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/dp_accdig.html'>dp_accdig</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/exists.html'>exists</a></td>
+                 <td><a href='../program/bookkeeper.html'>bookkeeper</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/fileexists.html'>fileexists</a></td>
+                 <td><a href='../program/bookkeeper.html'>bookkeeper</a></td>
+                 <td>Function</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/fmt.html'>fmt</a></td>
+                 <td><a href='../module/m_framework__msg.html'>M_framework__msg</a></td>
+                 <td>Function</td>
+                 <td><p>Sample program:</p><a href="../proc/fmt.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/fstop.html'>fstop</a></td>
+                 <td><a href='../module/m_framework__utility.html'>M_framework__utility</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/fstop.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/get_html_header.html'>get_html_header</a></td>
+                 <td><a href='../program/bookkeeper.html'>bookkeeper</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/get_stack.html'>get_stack</a></td>
+                 <td><a href='../program/maketest.html'>maketest</a></td>
+                 <td>Function</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/get_stack~2.html'>get_stack</a></td>
+                 <td><a href='../program/maketest~2.html'>maketest</a></td>
+                 <td>Function</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/header.html'>header</a></td>
+                 <td><a href='../program/bookkeeper.html'>bookkeeper</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/here_and_now.html'>here_and_now</a></td>
+                 <td><a href='../program/bookkeeper.html'>bookkeeper</a></td>
+                 <td>Function</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/in_margin.html'>in_margin</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Function</td>
+                 <td><p>in_margin(3f) - [M_framework__approx] check if two reals are
+   approximately equal using a relative margin</p><a href="../proc/in_margin.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/journal.html'>journal</a></td>
+                 <td><a href='../module/m_framework__journal.html'>M_framework__journal</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/one.html'>one</a></td>
+                 <td><a href='../module/m_framework__verify_demo.html'>M_framework__verify_demo</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/operator (.equalto.).html'>operator (.equalto.)</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/operator (.greaterthan.).html'>operator (.greaterthan.)</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/operator (.lessthan.).html'>operator (.lessthan.)</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/pdec.html'>pdec</a></td>
+                 <td><a href='../module/m_framework__msg.html'>M_framework__msg</a></td>
+                 <td>Subroutine</td>
+                 <td><a href="../proc/pdec.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/printhelp.html'>printhelp</a></td>
+                 <td><a href='../program/bookkeeper.html'>bookkeeper</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/printstuff.html'>printstuff</a></td>
+                 <td><a href='../program/demo_attr.html'>demo_attr</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/printversion.html'>printversion</a></td>
+                 <td><a href='../program/bookkeeper.html'>bookkeeper</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/round.html'>round</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Function</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/round_to_power.html'>round_to_power</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Function</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/run~2.html'>run</a></td>
+                 <td><a href='../program/testtype.html'>testtype</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/set.html'>set</a></td>
+                 <td><a href='../module/m_framework__msg.html'>M_framework__msg</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/significant.html'>significant</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/sp_accdig.html'>sp_accdig</a></td>
+                 <td><a href='../module/m_framework__approx.html'>M_framework__approx</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Example program:</p><a href="../proc/sp_accdig.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/stderr.html'>stderr</a></td>
+                 <td><a href='../module/m_framework__msg.html'>M_framework__msg</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/stderr.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/str.html'>str</a></td>
+                 <td><a href='../module/m_framework__msg.html'>M_framework__msg</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_accdig.html'>test_accdig</a></td>
+                 <td><a href='../program/runtest~4.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_almost.html'>test_almost</a></td>
+                 <td><a href='../program/runtest~4.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_compare_float_double.html'>test_compare_float_double</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_compare_float_single.html'>test_compare_float_single</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_cos.html'>test_cos</a></td>
+                 <td><a href='../program/m_test_suite_m_steam67.html'>M_test_suite_M_steam67</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_elemental_double.html'>test_elemental_double</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_elemental_single.html'>test_elemental_single</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_equalto_double.html'>test_equalto_double</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_equalto_single.html'>test_equalto_single</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_flush_trail.html'>test_flush_trail</a></td>
+                 <td><a href='../program/runtest~2.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&lsquo;flush_trail&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_framework.html'>test_framework</a></td>
+                 <td><a href='../program/runtest~3.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_greaterthan_double.html'>test_greaterthan_double</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_greaterthan_single.html'>test_greaterthan_single</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_in_margin.html'>test_in_margin</a></td>
+                 <td><a href='../program/runtest~4.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&lsquo;in_margin&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_lessthan_double.html'>test_lessthan_double</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_lessthan_single.html'>test_lessthan_single</a></td>
+                 <td><a href='../program/test_compare_float.html'>test_compare_float</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_mysub1.html'>test_mysub1</a></td>
+                 <td><a href='../program/demo_unit_test_start.html'>demo_unit_test_start</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_mysub2.html'>test_mysub2</a></td>
+                 <td><a href='../program/demo_unit_test_start.html'>demo_unit_test_start</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_one.html'>test_one</a></td>
+                 <td><a href='../program/demo_m_framework__verify.html'>demo_M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_round.html'>test_round</a></td>
+                 <td><a href='../program/runtest~4.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&lsquo;round&rsquo;, 0.eq.0, &lsquo;checking&rsquo;, 100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_set_stdout_lun.html'>test_set_stdout_lun</a></td>
+                 <td><a href='../program/runtest~2.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&lsquo;set_stdout_lun&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_significant.html'>test_significant</a></td>
+                 <td><a href='../program/runtest~4.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_sin.html'>test_sin</a></td>
+                 <td><a href='../program/m_test_suite_m_steam67.html'>M_test_suite_M_steam67</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_sqrt.html'>test_sqrt</a></td>
+                 <td><a href='../program/m_test_suite_m_steam67.html'>M_test_suite_M_steam67</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_suite_assert.html'>test_suite_assert</a></td>
+                 <td><a href='../program/runtest~5.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&ldquo;assert&rdquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_suite_fmt.html'>test_suite_fmt</a></td>
+                 <td><a href='../program/runtest~5.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&ldquo;fmt   &ldquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_suite_pdec.html'>test_suite_pdec</a></td>
+                 <td><a href='../program/runtest~5.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&ldquo;pdec  &ldquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_suite_set.html'>test_suite_set</a></td>
+                 <td><a href='../program/runtest~5.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&ldquo;set   &ldquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_suite_stderr.html'>test_suite_stderr</a></td>
+                 <td><a href='../program/runtest~5.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&ldquo;stderr&rdquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_suite_str.html'>test_suite_str</a></td>
+                 <td><a href='../program/runtest~5.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_suite_wrt.html'>test_suite_wrt</a></td>
+                 <td><a href='../program/runtest~5.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&ldquo;wrt   &ldquo;, 0 .eq. 0, &ldquo;checking&rdquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_two.html'>test_two</a></td>
+                 <td><a href='../program/demo_m_framework__verify.html'>demo_M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_unit_test.html'>test_unit_test</a></td>
+                 <td><a href='../program/runtest.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_unit_test_bad.html'>test_unit_test_bad</a></td>
+                 <td><a href='../program/runtest.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_unit_test_end.html'>test_unit_test_end</a></td>
+                 <td><a href='../program/runtest.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_unit_test_good.html'>test_unit_test_good</a></td>
+                 <td><a href='../program/runtest.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_unit_test_start.html'>test_unit_test_start</a></td>
+                 <td><a href='../program/runtest.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_unit_test_stop.html'>test_unit_test_stop</a></td>
+                 <td><a href='../program/runtest.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_where_write_message_all.html'>test_where_write_message_all</a></td>
+                 <td><a href='../program/runtest~2.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&lsquo;where_write_message_all&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/test_write_message_only.html'>test_write_message_only</a></td>
+                 <td><a href='../program/runtest~2.html'>runtest</a></td>
+                 <td>Subroutine</td>
+                 <td><p>call unit_test(&lsquo;write_message_only&rsquo;, 0.eq.0, &lsquo;checking&rsquo;,100)</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/timer.html'>timer</a></td>
+                 <td><a href='../module/m_framework__timing.html'>M_framework__timing</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/two.html'>two</a></td>
+                 <td><a href='../module/m_framework__verify_demo.html'>M_framework__verify_demo</a></td>
+                 <td>Subroutine</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_check.html'>unit_check</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_check_bad.html'>unit_check_bad</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_check_done.html'>unit_check_done</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_check_good.html'>unit_check_good</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_check_mode.html'>unit_check_mode</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_check_msg.html'>unit_check_msg</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_check_start.html'>unit_check_start</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_check_stop.html'>unit_check_stop</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unit_test.html'>unit_test</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/unit_test.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unit_test_bad.html'>unit_test_bad</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/unit_test_bad.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_test_done.html'>unit_test_done</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unit_test_end.html'>unit_test_end</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td><p>unit_test_end(3f) - [M_framework__verify] end test of procedure started
+ by unit_test_start(3f)
+    (LICENSE:PD)</p><a href="../proc/unit_test_end.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/unit_test_expected.html'>unit_test_expected</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unit_test_good.html'>unit_test_good</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/unit_test_good.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unit_test_mode.html'>unit_test_mode</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/unit_test_mode.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unit_test_msg.html'>unit_test_msg</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/unit_test_msg.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unit_test_start.html'>unit_test_start</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/unit_test_start.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unit_test_stop.html'>unit_test_stop</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/unit_test_stop.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unit_test_system.html'>unit_test_system</a></td>
+                 <td><a href='../module/m_framework__verify.html'>M_framework__verify</a></td>
+                 <td>Function</td>
+                 <td><p>Sample program:</p><a href="../proc/unit_test_system.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/unitexists.html'>unitexists</a></td>
+                 <td><a href='../program/bookkeeper.html'>bookkeeper</a></td>
+                 <td>Function</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/wrt.html'>wrt</a></td>
+                 <td><a href='../module/m_framework__msg.html'>M_framework__msg</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sample program:</p><a href="../proc/wrt.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			 </tbody></table>
+             
+        </div>
+      </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_framework
+ was developed by John S. Urban<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-07-11 00:19 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

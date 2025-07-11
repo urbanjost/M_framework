@@ -1,0 +1,1466 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="collection of modules for unit testing and logging and messaging">
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>M_framework__attr &ndash; M_framework</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">M_framework </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>M_framework__attr
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="18.4% of total for modules and submodules.">577 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/M_framework__attr.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/m_framework__attr.f90.html'>M_framework__attr.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">M_framework__attr</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#vars-0"
+         aria-expanded="false" aria-controls="vars-0">
+         <h4 class="card-header bg-primary text-white">Variables</h4>
+      </a>
+      <div id="vars-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_black">bg_black</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_blue">bg_blue</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_cyan">bg_cyan</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_default">bg_default</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_ebony">bg_ebony</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_green">bg_green</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_magenta">bg_magenta</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_red">bg_red</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_white">bg_white</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bg_yellow">bg_yellow</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-bold">bold</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-clear">clear</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_black">fg_black</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_blue">fg_blue</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_cyan">fg_cyan</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_default">fg_default</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_ebony">fg_ebony</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_green">fg_green</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_magenta">fg_magenta</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_red">fg_red</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_white">fg_white</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-fg_yellow">fg_yellow</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-inverse">inverse</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-italic">italic</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-reset">reset</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-unbold">unbold</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-underline">underline</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-uninverse">uninverse</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-unitalic">unitalic</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#variable-ununderline">ununderline</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#inters-0"
+         aria-expanded="false" aria-controls="inters-0">
+         <h4 class="card-header bg-primary text-white">Interfaces</h4>
+      </a>
+      <div id="inters-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/m_framework__attr.html#interface-attr">attr</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#subs-0"
+         aria-expanded="false" aria-controls="subs-0">
+         <h4 class="card-header bg-primary text-white">Subroutines</h4>
+      </a>
+      <div id="subs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/m_framework__attr.html#proc-attr_mode">attr_mode</a>
+            <a class="list-group-item" href="../module/m_framework__attr.html#proc-attr_update">attr_update</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code>M_framework__attr(3f) - [M_framework__attr::INTRO] control text attributes on terminals
+(LICENSE:MIT)
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<div class="codehilite"><pre><span></span><code>  use M_framework__attr, only : attr, attr_mode, attr_update
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code>M_framework__attr(3f) is a Fortran module that uses common ANSI escape sequences
+to control terminal text attributes.
+
+     use M_framework__attr
+     write(*,*)attr(&#39;<span class="nt">&lt;red&gt;</span>Red Text!<span class="nt">&lt;/red&gt;</span> <span class="nt">&lt;green&gt;</span>Green Text!<span class="nt">&lt;/green&gt;</span>&#39;)
+     end
+
+It is designed to use three simple procedures to
+
+ + Specify attributes using simple HTML-like syntax
+ + allow the sequences to be suppressed when desired
+ + permit the  user program to completely customize the keywords.
+   The user can add, delete and replace the sequences associated with
+   a keyword without changing the code.
+
+One advantage of the approach of using formatting directives which
+are replaced with in-band escape sequences is that it is easy to turn
+off when running batch.
+
+Another important capability is that programs can be run in &quot;raw&quot; mode
+and create a simple text file with the formatting directives in it
+that can then be read back in by a simple filter program that strips
+it back to plain text( see app/plain.f90), or displays it to a screen
+in color(see app/light.f90) or perhaps converts it to another format.
+
+So this approach makes it trivial to read specially-formatted data
+from a file like a message catalog (perhaps with various versions in
+different languages) and colorize it or display it as plain text
+
+By making each line self-contained (by default) lines can be filtered
+by external utilities and still display correctly.
+</code></pre></div>
+
+<h2 id="access">ACCESS</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">Via</span><span class="w"> </span><span class="n">git</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">git</span><span class="w"> </span><span class="n">clone</span><span class="w"> </span><span class="nl">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">urbanjost</span><span class="o">/</span><span class="n">M_framework__attr</span><span class="p">.</span><span class="n">git</span><span class="w"></span>
+<span class="w">    </span><span class="n">cd</span><span class="w"> </span><span class="n">M_framework__attr</span><span class="o">/</span><span class="n">src</span><span class="w"></span>
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="n">change</span><span class="w"> </span><span class="n">Makefile</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">listed</span><span class="w"> </span><span class="n">compilers</span><span class="w"></span>
+<span class="w">    </span><span class="n">make</span><span class="w"> </span><span class="n">clean</span><span class="p">;</span><span class="w"> </span><span class="n">make</span><span class="w"> </span><span class="n">gfortran</span><span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">gfortran</span><span class="w"></span>
+<span class="w">    </span><span class="n">make</span><span class="w"> </span><span class="n">clean</span><span class="p">;</span><span class="w"> </span><span class="n">make</span><span class="w"> </span><span class="n">ifort</span><span class="w">       </span><span class="err">#</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">ifort</span><span class="w"></span>
+<span class="w">    </span><span class="n">make</span><span class="w"> </span><span class="n">clean</span><span class="p">;</span><span class="w"> </span><span class="n">make</span><span class="w"> </span><span class="n">nvfortran</span><span class="w">   </span><span class="err">#</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">nvfortran</span><span class="w"></span>
+
+<span class="n">This</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">compile</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">M_framework__attr</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">example</span><span class="w"> </span><span class="n">programs</span><span class="p">.</span><span class="w"></span>
+
+<span class="n">Alternatively</span><span class="p">,</span><span class="w"> </span><span class="n">via</span><span class="w"> </span><span class="n">fpm</span><span class="w"> </span><span class="p">(</span><span class="n">see</span><span class="w"> </span><span class="nl">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="k">fortran</span><span class="o">-</span><span class="n">lang</span><span class="o">/</span><span class="n">fpm</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">     </span><span class="n">git</span><span class="w"> </span><span class="n">clone</span><span class="w"> </span><span class="nl">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">urbanjost</span><span class="o">/</span><span class="n">M_framework__attr</span><span class="p">.</span><span class="n">git</span><span class="w"></span>
+
+<span class="ow">or</span><span class="w"> </span><span class="n">just</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">dependency</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">fpm</span><span class="p">.</span><span class="n">toml</span><span class="w"> </span><span class="n">project</span><span class="w"> </span><span class="k">file</span><span class="p">.</span><span class="w"></span>
+
+<span class="w">     </span><span class="o">[</span><span class="n">dependencies</span><span class="o">]</span><span class="w"></span>
+<span class="w">     </span><span class="n">M_framework__attr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="n">git</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;https://github.com/urbanjost/M_framework__attr.git&quot;</span><span class="w"> </span><span class="err">}</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="limitations">LIMITATIONS</h2>
+<p>o colors are not nestable.
+   o keywords are case-sensitive,
+   o ANSI escape sequences are not universally supported by
+     all terminal emulators; and normally should be suppressed
+     when not going to a tty device. Therefore, you should use
+     M_system::system_istty(3f) or the common Fortran extension
+     ISATTY() to set the default to &ldquo;plain&rdquo; instead of &ldquo;color&rdquo;
+     when the output file is not a conforming terminal. On basic
+     MSWindows console windows, it is best to use Windows 10+ and/or
+     the Linux mode; you may have to enable ANSI escape sequence
+     mode on MSWindows. It does work as-is with CygWin and MinGW and
+     Putty windows and mintty(1) as tested.</p>
+<h2 id="examples">EXAMPLES</h2>
+<div class="codehilite"><pre><span></span><code>Sample program
+
+ program demo_M_framework__attr
+ use M_framework__attr, only : attr, attr_mode, attr_update
+ implicit none
+ character(len=256) :: line
+ character(len=*),parameter :: f=&#39;( <span class="err">&amp;</span>
+  <span class="err">&amp;</span>&quot;   <span class="nt">&lt;bo&gt;&lt;w&gt;&lt;G&gt;</span> GREAT: <span class="nt">&lt;/G&gt;&lt;/w&gt;</span><span class="err">&amp;</span>
+  <span class="err">&amp;</span>The new value <span class="nt">&lt;Y&gt;&lt;b&gt;</span>&quot;,f8.4,1x,&quot;<span class="nt">&lt;/b&gt;&lt;/Y&gt;</span> is in range&quot;<span class="err">&amp;</span>
+  <span class="err">&amp;</span>)&#39;
+ real :: value
+
+    write(*,&#39;(a)&#39;)<span class="err">&amp;</span>
+    <span class="err">&amp;</span>attr(&#39;   <span class="nt">&lt;r&gt;&lt;W&gt;&lt;bo&gt;</span> ERROR: <span class="nt">&lt;/W&gt;</span>red text on a white background<span class="nt">&lt;/y&gt;</span>&#39;)
+
+    value=3.4567
+    write(line,fmt=f) value
+    write(*,&#39;(a)&#39;)attr(trim(line))
+
+    ! write same string as plain text
+    write(*,*)
+    call attr_mode(manner=&#39;plain&#39;)
+    write(*,&#39;(a)&#39;)attr(trim(line))
+
+    call attr_mode(manner=&#39;color&#39;)
+    ! use pre-defined or user defined strings
+    write(*,*)
+    write(*,&#39;(a)&#39;)attr(&#39;<span class="nt">&lt;ERROR&gt;</span> Woe is nigh.&#39;)
+    write(*,&#39;(a)&#39;)attr(&#39;<span class="nt">&lt;WARNING&gt;</span> The night is young.&#39;)
+    write(*,&#39;(a)&#39;)attr(&#39;<span class="nt">&lt;INFO&gt;</span> It is Monday&#39;)
+
+    ! create a custom mnemonic
+    call attr_update(&#39;MYERROR&#39;,attr(<span class="err">&amp;</span>
+    &#39; <span class="nt">&lt;R&gt;&lt;e&gt;</span> E<span class="nt">&lt;w&gt;</span>-<span class="nt">&lt;e&gt;</span>R<span class="nt">&lt;w&gt;</span>-<span class="nt">&lt;e&gt;</span>R<span class="nt">&lt;w&gt;</span>-<span class="nt">&lt;e&gt;</span>O<span class="nt">&lt;w&gt;</span>-<span class="nt">&lt;e&gt;</span>R: <span class="nt">&lt;/e&gt;&lt;/R&gt;&lt;/bo&gt;</span>&#39;<span class="err">&amp;</span>
+    ))
+    write(*,*)
+    write(*,&#39;(a)&#39;)attr(&#39;<span class="nt">&lt;MYERROR&gt;</span> my custom message style&#39;)
+
+ end program demo_M_framework__attr
+</code></pre></div>
+
+<h2 id="author">AUTHOR</h2>
+<div class="codehilite"><pre><span></span><code>John S. Urban, 2021
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>MIT
+</code></pre></div>
+
+<h2 id="see-also">SEE ALSO</h2>
+<div class="codehilite"><pre><span></span><code>attr(3f), attr_mode(3f), attr_update(3f)
+
+Related information:
+
+ terminfo(3c), termlib(3c), tput(1), reset(1), clear(1),
+ console_codes(4), ECMA-48,
+ https://en.wikipedia.org/wiki/ANSI_escape_code
+</code></pre></div>
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='m_framework__msg.html'>M_framework__msg</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_c_binding'>iso_c_binding</a></li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      
+      <br>
+
+
+        <section>
+          <h2>Variables</h2>
+            <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_black"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_black</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//BLACK//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_blue"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_blue</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//BLUE//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_cyan"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_cyan</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//CYAN//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_default"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_default</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//DEFAULT//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_ebony"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_ebony</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//BLACK//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_green"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_green</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//GREEN//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_magenta"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_magenta</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//MAGENTA//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_red"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_red</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//RED//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_white"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_white</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//WHITE//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bg_yellow"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bg_yellow</strong></td>
+<td> =</td>
+                <td>CODE_START//BG//YELLOW//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bold"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>bold</strong></td>
+<td> =</td>
+                <td>CODE_START//ON//AT_BOLD//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-clear"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>clear</strong></td>
+<td> =</td>
+                <td>HOME_DISPLAY//CLEAR_DISPLAY</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_black"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_black</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//BLACK//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_blue"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_blue</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//BLUE//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_cyan"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_cyan</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//CYAN//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_default"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_default</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//DEFAULT//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_ebony"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_ebony</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//BLACK//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_green"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_green</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//GREEN//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_magenta"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_magenta</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//MAGENTA//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_red"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_red</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//RED//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_white"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_white</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//WHITE//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fg_yellow"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>fg_yellow</strong></td>
+<td> =</td>
+                <td>CODE_START//FG//YELLOW//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-inverse"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>inverse</strong></td>
+<td> =</td>
+                <td>CODE_START//ON//AT_INVERSE//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-italic"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>italic</strong></td>
+<td> =</td>
+                <td>CODE_START//ON//AT_ITALIC//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-reset"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>reset</strong></td>
+<td> =</td>
+                <td>CODE_RESET</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-unbold"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>unbold</strong></td>
+<td> =</td>
+                <td>CODE_START//&#39;22&#39;//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-underline"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>underline</strong></td>
+<td> =</td>
+                <td>CODE_START//ON//AT_UNDERLINE//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-uninverse"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>uninverse</strong></td>
+<td> =</td>
+                <td>CODE_START//OFF//AT_INVERSE//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-unitalic"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>unitalic</strong></td>
+<td> =</td>
+                <td>CODE_START//OFF//AT_ITALIC//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ununderline"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>ununderline</strong></td>
+<td> =</td>
+                <td>CODE_START//OFF//AT_UNDERLINE//CODE_END</td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+        </section>
+        <br>
+
+
+        <section>
+          <h2>Interfaces</h2>
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-attr"></span>
+      <h3>public        interface <a href='../interface/attr.html'>attr</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private  function attr_scalar(string, reset) result(expanded)  
+
+    </h3>
+  <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">attr</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_framework__attr</span><span class="o">]</span><span class="w"> </span><span class="n">substitute</span><span class="w"> </span><span class="k">escape</span><span class="w"> </span><span class="n">sequences</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">HTML</span><span class="o">-</span><span class="ow">like</span><span class="w"> </span><span class="n">syntax</span><span class="w"></span>
+<span class="w">           </span><span class="ow">in</span><span class="w"> </span><span class="n">strings</span><span class="w"></span>
+<span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">MIT</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<div class="codehilite"><pre><span></span><code><span class="w">  </span><span class="k">function</span><span class="w"> </span><span class="nf">attr(string,reset) result </span><span class="p">(</span>expanded<span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span>!<span class="w"> </span><span class="n">scalar</span><span class="w"></span>
+<span class="w">    </span><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="p">=</span><span class="o">*</span><span class="p">),</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="p">::</span><span class="w"> </span><span class="nb">string</span><span class="w"></span>
+<span class="w">    </span><span class="nb">logical</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="n">optional</span><span class="w">  </span><span class="p">::</span><span class="w"> </span><span class="nb">reset</span><span class="w"></span>
+<span class="w">    </span><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="p">=:),</span><span class="n">allocatable</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">expanded</span><span class="w"></span>
+<span class="w">    </span>!<span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">array</span><span class="w"></span>
+<span class="w">    </span><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="p">=</span><span class="o">*</span><span class="p">),</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="p">::</span><span class="w"> </span><span class="nb">string</span><span class="p">(:)</span><span class="w"></span>
+<span class="w">    </span><span class="nb">logical</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="n">optional</span><span class="w">  </span><span class="p">::</span><span class="w"> </span><span class="nb">reset</span><span class="w"></span>
+<span class="w">    </span><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="p">=:),</span><span class="n">allocatable</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">expanded</span><span class="p">(:)</span><span class="w"></span>
+<span class="w">    </span><span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="n">optional</span><span class="w">  </span><span class="p">::</span><span class="w"> </span><span class="n">chars</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code>Use HTML-like syntax to add attributes to terminal output such as
+color on devices that recognize ANSI escape sequences.
+</code></pre></div>
+
+<h2 id="options">OPTIONS</h2>
+<div class="codehilite"><pre><span></span><code>string        input string  of form
+
+                &quot;<span class="nt">&lt;attribute_name&gt;</span>string<span class="nt">&lt;/attribute_name&gt;</span> ...&quot;.
+
+               where the current attributes are color names,
+               bold, italic, underline, ...
+
+reset          By default, a sequence to clear all text attributes
+               is sent at the end of each returned line if an escape
+               character appears in the output string. This can be
+               turned off by setting RESET to .false. .
+
+               Note if turning off the reset attributes may be
+               continued across lines, but if each line is not
+               self-contained attributes may not display properly
+               when filtered with commands such as grep(1).
+
+chars          For arrays, a reset will be placed after the Nth
+               displayable column count in order to make it easier
+               to generate consistent right borders for non-default
+               background colors for a text block.
+</code></pre></div>
+
+<h2 id="keywords">KEYWORDS</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">primary</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="n">keywords</span><span class="w"></span>
+
+<span class="w">  </span><span class="nl">colors:</span><span class="w"></span>
+<span class="w">    </span><span class="n">r</span><span class="p">,</span><span class="w">         </span><span class="n">red</span><span class="p">,</span><span class="w">       </span><span class="n">R</span><span class="p">,</span><span class="w">  </span><span class="n">RED</span><span class="w"></span>
+<span class="w">    </span><span class="n">g</span><span class="p">,</span><span class="w">         </span><span class="n">green</span><span class="p">,</span><span class="w">     </span><span class="n">G</span><span class="p">,</span><span class="w">  </span><span class="n">GREEN</span><span class="w"></span>
+<span class="w">    </span><span class="n">b</span><span class="p">,</span><span class="w">         </span><span class="n">blue</span><span class="p">,</span><span class="w">      </span><span class="n">B</span><span class="p">,</span><span class="w">  </span><span class="n">BLUE</span><span class="w"></span>
+<span class="w">    </span><span class="n">m</span><span class="p">,</span><span class="w">         </span><span class="n">magenta</span><span class="p">,</span><span class="w">   </span><span class="n">M</span><span class="p">,</span><span class="w">  </span><span class="n">MAGENTA</span><span class="w"></span>
+<span class="w">    </span><span class="n">c</span><span class="p">,</span><span class="w">         </span><span class="n">cyan</span><span class="p">,</span><span class="w">      </span><span class="n">C</span><span class="p">,</span><span class="w">  </span><span class="n">CYAN</span><span class="w"></span>
+<span class="w">    </span><span class="n">y</span><span class="p">,</span><span class="w">         </span><span class="n">yellow</span><span class="p">,</span><span class="w">    </span><span class="n">Y</span><span class="p">,</span><span class="w">  </span><span class="n">YELLOW</span><span class="w"></span>
+<span class="w">    </span><span class="n">e</span><span class="p">,</span><span class="w">         </span><span class="n">ebony</span><span class="p">,</span><span class="w">     </span><span class="n">E</span><span class="p">,</span><span class="w">  </span><span class="n">EBONY</span><span class="w"></span>
+<span class="w">    </span><span class="n">w</span><span class="p">,</span><span class="w">         </span><span class="n">white</span><span class="p">,</span><span class="w">     </span><span class="n">W</span><span class="p">,</span><span class="w">  </span><span class="n">WHITE</span><span class="w"></span>
+
+<span class="w">  </span><span class="nl">attributes:</span><span class="w"></span>
+<span class="w">    </span><span class="n">it</span><span class="p">,</span><span class="w">        </span><span class="n">italic</span><span class="w"></span>
+<span class="w">    </span><span class="n">bo</span><span class="p">,</span><span class="w">        </span><span class="n">bold</span><span class="w"></span>
+<span class="w">    </span><span class="n">un</span><span class="p">,</span><span class="w">        </span><span class="n">underline</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">basic</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="nl">characters:</span><span class="w"></span>
+<span class="w">   </span><span class="n">nul</span><span class="w"></span>
+<span class="w">   </span><span class="n">bel</span><span class="w">  </span><span class="p">(</span><span class="mh">0</span><span class="n">x07</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">G</span><span class="p">)</span><span class="w"> </span><span class="n">beeps</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="n">bs</span><span class="w">   </span><span class="p">(</span><span class="mh">0</span><span class="n">x08</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">H</span><span class="p">)</span><span class="w"> </span><span class="n">backspaces</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="n">column</span><span class="w"> </span><span class="p">(</span><span class="n">but</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">past</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">beginning</span><span class="w"> </span><span class="n">of</span><span class="w"></span>
+<span class="w">                   </span><span class="n">the</span><span class="w"> </span><span class="n">line</span><span class="p">);</span><span class="w"></span>
+<span class="w">   </span><span class="n">ht</span><span class="w">   </span><span class="p">(</span><span class="mh">0</span><span class="n">x09</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">I</span><span class="p">)</span><span class="w"> </span><span class="n">goes</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="k">if</span><span class="w"></span>
+<span class="w">                   </span><span class="n">there</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">no</span><span class="w"> </span><span class="n">earlier</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="n">stop</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="n">lf</span><span class="w">   </span><span class="p">(</span><span class="mh">0</span><span class="n">x0A</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">J</span><span class="p">),</span><span class="w"></span>
+<span class="w">   </span><span class="n">vt</span><span class="w">   </span><span class="p">(</span><span class="mh">0</span><span class="n">x0B</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">K</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">ff</span><span class="w">   </span><span class="p">(</span><span class="mh">0</span><span class="n">x0C</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">L</span><span class="p">)</span><span class="w"> </span><span class="n">all</span><span class="w"> </span><span class="n">give</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">linefeed</span><span class="p">,</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">LF</span><span class="o">/</span><span class="n">NL</span><span class="w"> </span><span class="p">(</span><span class="n">new</span><span class="o">-</span><span class="n">line</span><span class="w"> </span><span class="n">mode</span><span class="p">)</span><span class="w"> </span><span class="n">is</span><span class="w"></span>
+<span class="w">                   </span><span class="n">set</span><span class="w"> </span><span class="n">also</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">carriage</span><span class="w"> </span><span class="k">return</span><span class="w"></span>
+<span class="w">   </span><span class="n">cr</span><span class="w">   </span><span class="p">(</span><span class="mh">0</span><span class="n">x0D</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">M</span><span class="p">)</span><span class="w"> </span><span class="n">gives</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">carriage</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="n">so</span><span class="w">   </span><span class="p">(</span><span class="mh">0</span><span class="n">x0E</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="n">activates</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">G1</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">set</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="n">si</span><span class="w">   </span><span class="p">(</span><span class="mh">0</span><span class="n">x0F</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">O</span><span class="p">)</span><span class="w"> </span><span class="n">activates</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">G0</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">set</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="n">can</span><span class="w">  </span><span class="p">(</span><span class="mh">0</span><span class="n">x18</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">SUB</span><span class="w"> </span><span class="p">(</span><span class="mh">0</span><span class="n">x1A</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="n">Z</span><span class="p">)</span><span class="w"> </span><span class="n">interrupt</span><span class="w"> </span><span class="n">escape</span><span class="w"> </span><span class="n">sequences</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="n">sub</span><span class="w"></span>
+<span class="w">   </span><span class="n">esc</span><span class="w">  </span><span class="p">(</span><span class="mh">0</span><span class="n">x1B</span><span class="p">,</span><span class="w"> </span><span class="o">^</span><span class="p">[)</span><span class="w"> </span><span class="n">starts</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">escape</span><span class="w"> </span><span class="n">sequence</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="n">del</span><span class="w">  </span><span class="p">(</span><span class="mh">0</span><span class="n">x7F</span><span class="p">)</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">ignored</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="nl">other:</span><span class="w"></span>
+<span class="w">    </span><span class="n">clear</span><span class="w"></span>
+<span class="w">    </span><span class="k">default</span><span class="w"></span>
+<span class="w">    </span><span class="n">reset</span><span class="w"></span>
+<span class="w">    </span><span class="n">gt</span><span class="w"></span>
+<span class="w">    </span><span class="n">lt</span><span class="w"></span>
+<span class="w">    </span><span class="n">save</span><span class="p">,</span><span class="n">DECSC</span><span class="w">     </span><span class="n">Save</span><span class="w">  </span><span class="n">current</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="p">(</span><span class="n">cursor</span><span class="w"> </span><span class="n">coordinates</span><span class="p">,</span><span class="w"> </span><span class="n">attributes</span><span class="p">,</span><span class="w"></span>
+<span class="w">                   </span><span class="n">character</span><span class="w"> </span><span class="n">sets</span><span class="w"> </span><span class="n">pointed</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">G0</span><span class="p">,</span><span class="w"> </span><span class="n">G1</span><span class="p">).</span><span class="w"></span>
+<span class="w">    </span><span class="n">restore</span><span class="p">,</span><span class="n">DECRC</span><span class="w">  </span><span class="n">Restore</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="n">most</span><span class="w"> </span><span class="n">recently</span><span class="w"> </span><span class="n">saved</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">ESC</span><span class="w"> </span><span class="mf">7.</span><span class="w"></span>
+<span class="w">    </span><span class="n">CSI</span><span class="w">            </span><span class="s">&quot;Control Sequence Introducer&quot;</span><span class="p">(</span><span class="mh">0</span><span class="n">x9B</span><span class="p">)</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">equivalent</span><span class="w"> </span><span class="n">to</span><span class="w"></span>
+<span class="w">                   </span><span class="s">&quot;ESC [&quot;</span><span class="p">.</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">dual</span><span class="o">-</span><span class="n">value</span><span class="w"> </span><span class="p">(</span><span class="n">one</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">color</span><span class="p">,</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">mono</span><span class="p">)</span><span class="o">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="n">attr</span><span class="p">(&#39;</span><span class="o">&lt;</span><span class="n">ERROR</span><span class="o">&gt;</span><span class="n">an</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">message</span><span class="p">&#39;)</span><span class="w"></span>
+<span class="w">    </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="n">attr</span><span class="p">(&#39;</span><span class="o">&lt;</span><span class="n">WARNING</span><span class="o">&gt;</span><span class="n">a</span><span class="w"> </span><span class="n">warning</span><span class="w"> </span><span class="n">message</span><span class="p">&#39;)</span><span class="w"></span>
+<span class="w">    </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="n">attr</span><span class="p">(&#39;</span><span class="o">&lt;</span><span class="n">INFO</span><span class="o">&gt;</span><span class="n">an</span><span class="w"> </span><span class="n">informational</span><span class="w"> </span><span class="n">message</span><span class="p">&#39;)</span><span class="w"></span>
+
+<span class="n">By</span><span class="w"> </span><span class="k">default</span><span class="p">,</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="n">mnemonics</span><span class="w"> </span><span class="p">(</span><span class="n">ie</span><span class="p">.</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">keywords</span><span class="p">)</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">uppercase</span><span class="w"></span>
+<span class="n">they</span><span class="w"> </span><span class="n">change</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">background</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="w"> </span><span class="n">If</span><span class="w"> </span><span class="n">lowercase</span><span class="p">,</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">foreground</span><span class="w"> </span><span class="n">color</span><span class="p">.</span><span class="w"></span>
+<span class="n">When</span><span class="w"> </span><span class="n">preceded</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">attribute</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">returned</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"></span>
+<span class="k">default</span><span class="p">.</span><span class="w"></span>
+
+<span class="n">The</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="w"> </span><span class="n">keyword</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">typically</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="n">explicitly</span><span class="w"> </span><span class="n">when</span><span class="w"> </span><span class="n">reset</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">,</span><span class="w"></span>
+<span class="k">and</span><span class="w"> </span><span class="n">sets</span><span class="w"> </span><span class="n">all</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="n">attributes</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">their</span><span class="w"> </span><span class="k">initial</span><span class="w"> </span><span class="n">defaults</span><span class="p">.</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="limitations">LIMITATIONS</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">o</span> <span class="nv">colors</span> <span class="nv">are</span> <span class="nv">not</span> <span class="nv">nestable</span>, <span class="nv">keywords</span> <span class="nv">are</span> <span class="nv">case</span><span class="o">-</span><span class="nv">sensitive</span>,
+<span class="nv">o</span> <span class="nv">not</span> <span class="nv">all</span> <span class="nv">terminals</span> <span class="nv">obey</span> <span class="nv">the</span> <span class="nv">sequences</span>. <span class="nv">On</span> <span class="nv">Windows</span>, <span class="nv">it</span> <span class="nv">is</span> <span class="nv">best</span> <span class="k">if</span>
+  <span class="nv">you</span> <span class="nv">use</span> <span class="nv">Windows</span> <span class="mi">10</span><span class="o">+</span> <span class="nv">and</span><span class="o">/</span><span class="nv">or</span> <span class="nv">the</span> <span class="nv">Linux</span> <span class="nv">mode</span><span class="c1">; although it has worked</span>
+  <span class="nv">with</span> <span class="nv">all</span> <span class="nv">CygWin</span> <span class="nv">and</span> <span class="nv">MinGW</span> <span class="nv">and</span> <span class="nv">Putty</span> <span class="nv">windows</span> <span class="nv">and</span> <span class="nv">mintty</span>.
+<span class="nv">o</span> <span class="nv">you</span> <span class="nv">should</span> <span class="nv">use</span> <span class="s2">&quot;</span><span class="s">&lt;gt&gt;</span><span class="s2">&quot;</span> <span class="nv">and</span> <span class="s2">&quot;</span><span class="s">&lt;lt&gt;</span><span class="s2">&quot;</span> <span class="nv">instead</span> <span class="nv">of</span> <span class="s2">&quot;</span><span class="s">&gt;</span><span class="s2">&quot;</span> <span class="nv">and</span> <span class="s2">&quot;</span><span class="s">&lt;</span><span class="s2">&quot;</span> <span class="nv">in</span> <span class="nv">a</span> <span class="nv">string</span>
+  <span class="nv">processed</span> <span class="nv">by</span> <span class="nv">attr</span><span class="ss">(</span><span class="mi">3</span><span class="nv">f</span><span class="ss">)</span> <span class="nv">instead</span> <span class="nv">of</span> <span class="nv">in</span> <span class="nv">any</span> <span class="nv">plain</span> <span class="nv">text</span> <span class="nv">output</span> <span class="nv">so</span> <span class="nv">that</span>
+  <span class="nv">the</span> <span class="nv">raw</span> <span class="nv">mode</span> <span class="nv">will</span> <span class="nv">create</span> <span class="nv">correct</span> <span class="nv">input</span> <span class="k">for</span> <span class="nv">the</span> <span class="nv">attr</span><span class="ss">(</span><span class="mi">3</span><span class="nv">f</span><span class="ss">)</span> <span class="nv">function</span>
+  <span class="k">if</span> <span class="nv">read</span> <span class="nv">back</span> <span class="nv">in</span>.
+</code></pre></div>
+
+<h2 id="examples">EXAMPLES</h2>
+<div class="codehilite"><pre><span></span><code>Sample program
+
+ program demo_attr
+ use M_framework__attr, only : attr, attr_mode, attr_update
+    call printstuff(&#39;defaults&#39;)
+
+    call attr_mode(manner=&#39;plain&#39;)
+    call printstuff(&#39;plain:&#39;)
+
+    call printstuff(&#39;raw&#39;)
+
+    call attr_mode(manner=&#39;color&#39;)
+    call printstuff(&#39;&#39;)
+
+    write(*,&#39;(a)&#39;) attr(&#39;TEST ADDING A CUSTOM SEQUENCE:&#39;)
+    call attr_update(&#39;blink&#39;,char(27)//&#39;[5m&#39;)
+    call attr_update(&#39;/blink&#39;,char(27)//&#39;[25m&#39;)
+    write(*,&#39;(a)&#39;) attr(&#39;<span class="nt">&lt;blink&gt;</span>Items for Friday<span class="nt">&lt;/blink&gt;</span>&#39;)
+
+ contains
+ subroutine printstuff(label)
+ character(len=*),intent(in)  :: label
+ character(len=:),allocatable :: array(:)
+   call attr_mode(manner=label)
+
+   array=[character(len=60) ::    <span class="err">&amp;</span>
+    &#39;TEST MANNER=&#39;//label,                      <span class="err">&amp;</span>
+    &#39;<span class="nt">&lt;r&gt;</span>RED<span class="nt">&lt;/r&gt;</span>,<span class="nt">&lt;g&gt;</span>GREEN<span class="nt">&lt;/g&gt;</span>,<span class="nt">&lt;b&gt;</span>BLUE<span class="nt">&lt;/b&gt;</span>&#39;,      <span class="err">&amp;</span>
+    &#39;<span class="nt">&lt;c&gt;</span>CYAN<span class="nt">&lt;/c&gt;</span>,<span class="nt">&lt;m&gt;</span>MAGENTA<span class="nt">&lt;/g&gt;</span>,<span class="nt">&lt;y&gt;</span>YELLOW<span class="nt">&lt;/y&gt;</span>&#39;, <span class="err">&amp;</span>
+    &#39;<span class="nt">&lt;w&gt;</span>WHITE<span class="nt">&lt;/w&gt;</span> and <span class="nt">&lt;e&gt;</span>EBONY<span class="nt">&lt;/e&gt;</span>&#39;]
+   write(*,&#39;(a)&#39;) attr(array)
+
+   write(*,&#39;(a)&#39;) attr(&#39;Adding <span class="nt">&lt;bo&gt;</span>bold<span class="nt">&lt;/bo&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(&#39;<span class="nt">&lt;bo&gt;&lt;r&gt;</span>RED<span class="nt">&lt;/r&gt;</span>,<span class="nt">&lt;g&gt;</span>GREEN<span class="nt">&lt;/g&gt;</span>,<span class="nt">&lt;b&gt;</span>BLUE<span class="nt">&lt;/b&gt;&lt;/bo&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(&#39;<span class="nt">&lt;bo&gt;&lt;c&gt;</span>CYAN<span class="nt">&lt;/c&gt;</span>,<span class="nt">&lt;m&gt;</span>MAGENTA<span class="nt">&lt;/g&gt;</span>,<span class="nt">&lt;y&gt;</span>YELLOW<span class="nt">&lt;/y&gt;&lt;/bo&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(&#39;<span class="nt">&lt;bo&gt;&lt;w&gt;</span>WHITE<span class="nt">&lt;/w&gt;</span> and <span class="nt">&lt;e&gt;</span>EBONY<span class="nt">&lt;/e&gt;&lt;/bo&gt;</span>&#39;)
+
+   write(*,&#39;(a)&#39;) attr(&#39;Adding <span class="nt">&lt;ul&gt;</span>underline<span class="nt">&lt;/ul&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(<span class="err">&amp;</span>
+    <span class="err">&amp;</span>&#39;<span class="nt">&lt;bo&gt;&lt;ul&gt;&lt;r&gt;</span>RED<span class="nt">&lt;/r&gt;</span>,<span class="nt">&lt;g&gt;</span>GREEN<span class="nt">&lt;/g&gt;</span>,<span class="nt">&lt;b&gt;</span>BLUE<span class="nt">&lt;/b&gt;&lt;/ul&gt;&lt;/bo&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(<span class="err">&amp;</span>
+    <span class="err">&amp;</span>&#39;<span class="nt">&lt;bo&gt;&lt;ul&gt;&lt;c&gt;</span>CYAN<span class="nt">&lt;/c&gt;</span>,<span class="nt">&lt;m&gt;</span>MAGENTA<span class="nt">&lt;/g&gt;</span>,<span class="nt">&lt;y&gt;</span>YELLOW<span class="nt">&lt;/y&gt;&lt;/ul&gt;&lt;/bo&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(&#39;<span class="nt">&lt;bo&gt;&lt;ul&gt;&lt;w&gt;</span>WHITE<span class="nt">&lt;/w&gt;</span> and <span class="nt">&lt;e&gt;</span>EBONY<span class="nt">&lt;/e&gt;&lt;/ul&gt;&lt;/bo&gt;</span>&#39;)
+
+   write(*,&#39;(a)&#39;) attr(&#39;Adding <span class="nt">&lt;ul&gt;</span>italic<span class="nt">&lt;/ul&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(<span class="err">&amp;</span>
+    <span class="err">&amp;</span>&#39;<span class="nt">&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;r&gt;</span>RED<span class="nt">&lt;/r&gt;</span>,<span class="nt">&lt;g&gt;</span>GREEN<span class="nt">&lt;/g&gt;</span>,<span class="nt">&lt;b&gt;</span>BLUE<span class="nt">&lt;/b&gt;&lt;/it&gt;&lt;/ul&gt;&lt;/bo&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(<span class="err">&amp;</span>
+    <span class="err">&amp;</span>&#39;<span class="nt">&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;c&gt;</span>CYAN<span class="nt">&lt;/c&gt;</span>,<span class="nt">&lt;m&gt;</span>MAGENTA<span class="nt">&lt;/g&gt;</span>,<span class="nt">&lt;y&gt;</span>YELLOW<span class="nt">&lt;/it&gt;&lt;/y&gt;&lt;/ul&gt;&lt;/bo&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(&#39;<span class="nt">&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;w&gt;</span>WHITE<span class="nt">&lt;/w&gt;</span> and <span class="nt">&lt;e&gt;</span>EBONY<span class="nt">&lt;/e&gt;&lt;/ul&gt;&lt;/bo&gt;</span>&#39;)
+
+   write(*,&#39;(a)&#39;) attr(&#39;Adding <span class="nt">&lt;in&gt;</span>inverse<span class="nt">&lt;/in&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(&#39;<span class="nt">&lt;in&gt;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;r&gt;</span>RED<span class="nt">&lt;/r&gt;</span>,<span class="nt">&lt;g&gt;</span>GREEN<span class="nt">&lt;/g&gt;</span>,<span class="err">&amp;</span>
+    <span class="err">&amp;</span><span class="nt">&lt;b&gt;</span>BLUE<span class="nt">&lt;/b&gt;&lt;/it&gt;&lt;/ul&gt;&lt;/bo&gt;&lt;/in&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(&#39;<span class="nt">&lt;in&gt;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;c&gt;</span>CYAN<span class="nt">&lt;/c&gt;</span>,<span class="nt">&lt;m&gt;</span>MAGENTA<span class="nt">&lt;/g&gt;</span>,<span class="err">&amp;</span>
+    <span class="err">&amp;</span><span class="nt">&lt;y&gt;</span>YELLOW<span class="nt">&lt;/it&gt;&lt;/y&gt;&lt;/ul&gt;&lt;/bo&gt;&lt;/in&gt;</span>&#39;)
+   write(*,&#39;(a)&#39;) attr(<span class="err">&amp;</span>
+    <span class="err">&amp;</span>&#39;<span class="nt">&lt;in&gt;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;w&gt;</span>WHITE<span class="nt">&lt;/w&gt;</span> and <span class="nt">&lt;e&gt;</span>EBONY<span class="nt">&lt;/e&gt;&lt;/ul&gt;&lt;/bo&gt;&lt;/in&gt;</span>&#39;)
+ end subroutine printstuff
+ end program demo_attr
+</code></pre></div>
+
+<h2 id="author">AUTHOR</h2>
+<div class="codehilite"><pre><span></span><code>John S. Urban, 2021
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>MIT
+</code></pre></div>
+
+<h2 id="see-also">SEE ALSO</h2>
+<div class="codehilite"><pre><span></span><code>attr_mode(3f), attr_update(3f)
+</code></pre></div>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-string~3"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>string</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-reset~2"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>reset</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>character(len=:), allocatable</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private  function attr_matrix(strings, reset, chars) result(expanded)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-strings"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>strings</strong>(:)</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-reset~3"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>reset</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-chars"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>chars</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>character(len=:), allocatable, (:)</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private  function attr_scalar_width(string, reset, chars) result(expanded)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-string~4"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>string</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-reset~5"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>reset</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-chars~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>chars</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>character(len=:), allocatable</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
+
+
+
+
+        <section>
+          <h2>Subroutines</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-attr_mode"></span> <h3>public  subroutine <a href='../proc/attr_mode.html'>attr_mode</a>(manner)  
+</h3></div>
+    <div class="card-body">
+          
+  <a href="../proc/attr_mode.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-manner"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>manner</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-attr_update"></span> <h3>public  subroutine <a href='../proc/attr_update.html'>attr_update</a>(key, valin, mono_valin)  
+</h3></div>
+    <div class="card-body">
+          
+  <a href="../proc/attr_update.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-key"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>key</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-valin"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>valin</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-mono_valin"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>mono_valin</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_framework
+ was developed by John S. Urban<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-07-11 00:19 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

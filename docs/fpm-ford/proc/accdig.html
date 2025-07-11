@@ -1,0 +1,505 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="collection of modules for unit testing and logging and messaging">
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>accdig &ndash; M_framework</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">M_framework </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>accdig
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 2.3% of total for procedures.">38 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/M_framework__approx.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/m_framework__approx.f90.html'>M_framework__approx.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/m_framework__approx.html'>M_framework__approx</a></li>
+            <li class="breadcrumb-item active" aria-current="page">accdig</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/accdig.html#src">accdig</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>public impure elemental subroutine accdig(x, y, digi0, acurcy, ind)  
+</h2>
+        <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='../module/m_framework__journal.html'>M_framework__journal</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+
+    <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code><span class="w">  </span><span class="n">accdig</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_framework__approx</span><span class="o">]</span><span class="w"> </span><span class="n">compare</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="n">numbers</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="k">to</span><span class="w"></span>
+<span class="w">  </span><span class="n">a</span><span class="w"> </span><span class="n">specified</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">digits</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<div class="codehilite"><pre><span></span><code>   elemental impure subroutine accdig(x,y,digio,acurcy,ind)
+
+    class(*),intent(in)  :: X
+    class(*),intent(in)  :: Y
+    class(*),intent(in)  :: DIGI0
+    real,intent(out)     :: acurcy
+    integer,intent(out)  :: ind
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">This</span> <span class="nv">procedure</span> <span class="nv">is</span> <span class="nv">used</span> <span class="nv">to</span> <span class="nv">check</span> <span class="nv">how</span> <span class="nv">closely</span> <span class="nv">two</span> <span class="nv">numbers</span> <span class="nv">agree</span>.
+
+   <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="nv">X</span>,<span class="nv">Y</span>,<span class="nv">DIGI0</span>,<span class="nv">ACURCY</span>,<span class="nv">IND</span><span class="ss">)</span>
+
+<span class="nv">The</span> <span class="nv">values</span> <span class="nv">X</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="nv">are</span> <span class="nv">the</span> <span class="nv">numbers</span> <span class="nv">to</span> <span class="nv">compare</span>, <span class="nv">and</span> <span class="nv">DIGI0</span> <span class="nv">is</span> <span class="nv">the</span>
+<span class="nv">threshold</span> <span class="nv">number</span> <span class="nv">of</span> <span class="nv">digits</span> <span class="nv">to</span> <span class="nv">consider</span> <span class="nv">significant</span> <span class="nv">in</span> <span class="nv">returning</span> <span class="nv">IND</span>.
+
+<span class="k">If</span> <span class="nv">X</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="nv">are</span> <span class="nv">considered</span> <span class="nv">equal</span> <span class="nv">within</span> <span class="nv">DIGI0</span> <span class="nv">relative</span> <span class="nv">tolerance</span>,
+
+    <span class="nv">IND</span>    <span class="o">=</span> <span class="mi">0</span>, <span class="k">if</span> <span class="nv">tolerance</span> <span class="nv">is</span>     <span class="nv">satisfied</span>.
+           <span class="o">=</span> <span class="mi">1</span>, <span class="k">if</span> <span class="nv">tolerance</span> <span class="nv">is</span> <span class="nv">not</span> <span class="nv">satisfied</span>.
+
+<span class="nv">The</span> <span class="nb">result</span> <span class="nv">ACURCY</span> <span class="nv">gives</span> <span class="nv">a</span> <span class="nv">measure</span> <span class="nv">of</span> <span class="nv">the</span> <span class="nv">number</span> <span class="nv">of</span> <span class="nv">leading</span> <span class="nv">digits</span> <span class="nv">in</span> <span class="nv">X</span>
+<span class="nv">which</span> <span class="nv">are</span> <span class="nv">the</span> <span class="nv">same</span> <span class="nv">as</span> <span class="nv">the</span> <span class="nv">number</span> <span class="nv">of</span> <span class="nv">leading</span> <span class="nv">digits</span> <span class="nv">in</span> <span class="nv">Y</span>.
+
+     <span class="nv">ACURCY</span><span class="o">=-</span><span class="nv">log10</span><span class="ss">((</span><span class="nv">X</span><span class="o">-</span><span class="nv">Y</span><span class="ss">)</span><span class="o">/</span><span class="nv">Y</span><span class="ss">)</span>   <span class="k">if</span> <span class="nv">X</span> <span class="o">!=</span> <span class="nv">Y</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="o">!=</span> <span class="mi">0</span>
+     <span class="nv">ACURCY</span><span class="o">=-</span><span class="nv">log10</span><span class="ss">(</span><span class="nv">X</span><span class="o">-</span><span class="nv">Y</span><span class="ss">)</span>       <span class="k">if</span> <span class="nv">X</span> <span class="o">!=</span> <span class="nv">Y</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="o">=</span> <span class="mi">0</span>
+     <span class="nv">ACURCY</span><span class="o">=</span><span class="mi">8</span>                 <span class="k">if</span> <span class="nv">X</span><span class="o">=</span><span class="nv">Y</span>
+
+     <span class="nv">ACURCY</span> <span class="nv">is</span> <span class="nv">never</span> <span class="nv">less</span> <span class="nv">than</span> <span class="o">-</span><span class="mi">8</span> <span class="nv">or</span> <span class="nv">greater</span> <span class="nv">than</span> <span class="mi">8</span> <span class="k">for</span> <span class="mi">32</span><span class="o">-</span><span class="nv">bit</span> <span class="nv">REAL</span> <span class="nv">values</span>
+
+<span class="nv">TOLERANCE</span> ...
+     <span class="nv">X</span> <span class="nv">and</span> <span class="nv">Y</span> <span class="nv">are</span> <span class="nv">considered</span> <span class="nv">equal</span> <span class="nv">within</span> <span class="nv">DIGI0</span> <span class="nv">relative</span> <span class="nv">tolerance</span>,
+     <span class="k">if</span> <span class="nv">ACURCY</span> <span class="nv">is</span> <span class="nv">greater</span> <span class="nv">than</span> <span class="nv">DIGI0</span>.
+
+<span class="k">For</span> <span class="nv">example</span>, <span class="nv">Take</span> <span class="nv">some</span> <span class="nv">numbers</span> <span class="nv">and</span> <span class="nv">compare</span> <span class="nv">them</span>  <span class="nv">to</span> <span class="mi">1</span>.<span class="mi">2345678</span> ...
+
+   <span class="o">&gt;</span>  <span class="o">================================================</span>
+   <span class="o">&gt;</span>  <span class="nv">A</span> <span class="nv">number</span>     <span class="o">|</span>    <span class="nv">ACURCY</span>       <span class="o">|</span>   <span class="nv">ACURCY</span>
+   <span class="o">&gt;</span>               <span class="o">|</span>    <span class="mi">1</span>.<span class="mi">2345678</span><span class="o">=</span><span class="nv">Y</span>  <span class="o">|</span>   <span class="mi">1</span>.<span class="mi">2345678</span><span class="o">=</span><span class="nv">X</span>
+   <span class="o">&gt;</span>  <span class="o">================================================</span>
+   <span class="o">&gt;</span>   <span class="mi">1</span>.<span class="mi">234680</span>    <span class="o">|</span>    <span class="mi">3</span>.<span class="mi">7900571</span>    <span class="o">|</span>   <span class="mi">3</span>.<span class="mi">7901275</span>
+   <span class="o">&gt;</span>   <span class="mi">1</span>.<span class="mi">2345378</span>   <span class="o">|</span>    <span class="mi">4</span>.<span class="mi">6144510</span>    <span class="o">|</span>   <span class="mi">4</span>.<span class="mi">6144404</span>
+   <span class="o">&gt;</span>   <span class="mi">2</span>.<span class="mi">2234568</span>   <span class="o">|</span>    <span class="mi">0</span>.<span class="mi">096367393</span>  <span class="o">|</span>   <span class="mi">0</span>.<span class="mi">35188114</span>
+   <span class="o">&gt;</span>   <span class="mi">1</span>.<span class="mi">2345678</span>   <span class="o">|</span>    <span class="mi">8</span>.<span class="mi">0000000</span>    <span class="o">|</span>   <span class="mi">8</span>.<span class="mi">0000000</span>
+   <span class="o">&gt;</span>   <span class="mi">1</span>.<span class="mi">2345679</span>   <span class="o">|</span>    <span class="mi">7</span>.<span class="mi">0732967</span>    <span class="o">|</span>   <span class="mi">7</span>.<span class="mi">0731968</span>
+   <span class="o">&gt;</span>  <span class="o">-</span><span class="mi">1</span>.<span class="mi">2345678</span>   <span class="o">|</span>   <span class="o">-</span><span class="mi">0</span>.<span class="mi">30103000</span>   <span class="o">|</span>  <span class="o">-</span><span class="mi">0</span>.<span class="mi">30103000</span>
+   <span class="o">&gt;</span>  <span class="mi">76</span>.<span class="mi">234567</span>    <span class="o">|</span>   <span class="o">-</span><span class="mi">1</span>.<span class="mi">7835463</span>    <span class="o">|</span>   <span class="mi">0</span>.<span class="mi">0070906729</span>
+   <span class="o">&gt;</span>   <span class="mi">2</span>.<span class="mi">4691356</span>   <span class="o">|</span>    <span class="mi">0</span>.<span class="mi">0</span>          <span class="o">|</span>   <span class="mi">0</span>.<span class="mi">3010300</span>
+   <span class="o">&gt;</span>   <span class="mi">0</span>.<span class="mi">0</span>         <span class="o">|</span>    <span class="mi">0</span>.<span class="mi">0</span>          <span class="o">|</span>  <span class="o">-</span><span class="mi">0</span>.<span class="mi">91514942</span>.
+
+<span class="nv">Due</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">typical</span> <span class="nv">limits</span> <span class="nv">of</span> <span class="nv">the</span> <span class="nv">log</span> <span class="nv">function</span>, <span class="nv">the</span> <span class="nv">number</span> <span class="nv">of</span>
+<span class="nv">significant</span> <span class="nv">digits</span> <span class="nv">in</span> <span class="nv">the</span> <span class="nb">result</span> <span class="nv">is</span> <span class="nv">best</span> <span class="nv">considered</span> <span class="nv">to</span> <span class="nv">be</span> <span class="nv">three</span>.
+
+<span class="nv">Notice</span> <span class="nv">that</span> <span class="mi">1</span>.<span class="mi">2345678</span><span class="o">=</span><span class="nv">Y</span> <span class="nv">produces</span> <span class="nv">different</span> <span class="nv">values</span> <span class="nv">than</span> <span class="mi">1</span>.<span class="mi">2345678</span><span class="o">=</span><span class="nv">X</span>
+
+<span class="nv">A</span> <span class="nv">negative</span> <span class="nb">result</span> <span class="nv">indicates</span> <span class="nv">the</span> <span class="nv">two</span> <span class="nv">values</span> <span class="nv">being</span> <span class="nv">compared</span> <span class="nv">either</span> <span class="k">do</span>
+<span class="nv">not</span> <span class="nv">agree</span> <span class="nv">in</span> <span class="nv">the</span> <span class="nv">first</span> <span class="nv">digit</span> <span class="nv">or</span> <span class="nv">they</span> <span class="nv">differ</span> <span class="nv">with</span> <span class="nv">respect</span> <span class="nv">to</span> <span class="nv">sign</span>. <span class="nv">An</span>
+<span class="nv">example</span> <span class="nv">of</span> <span class="nv">two</span> <span class="nv">numbers</span> <span class="nv">which</span> <span class="k">do</span> <span class="nv">not</span> <span class="nv">agree</span> <span class="nv">in</span> <span class="nv">their</span> <span class="nv">leading</span> <span class="nv">digit</span> <span class="ss">(</span><span class="nv">and</span>
+<span class="nv">actually</span> <span class="nv">differ</span> <span class="nv">in</span> <span class="nv">order</span> <span class="nv">of</span> <span class="nv">magnitude</span><span class="ss">)</span> <span class="nv">is</span> <span class="nv">given</span> <span class="nv">above</span> <span class="nv">by</span> <span class="nv">X</span><span class="o">=</span><span class="mi">76</span>.<span class="mi">234567</span>
+<span class="nv">and</span> <span class="nv">Y</span><span class="o">=</span><span class="mi">1</span>.<span class="mi">2345678</span><span class="c1">; the accuracy reported is -1.7835463. An example of</span>
+<span class="nv">two</span> <span class="nv">numbers</span> <span class="nv">which</span> <span class="k">do</span> <span class="nv">not</span> <span class="nv">agree</span> <span class="nv">in</span> <span class="nv">sign</span> <span class="nv">in</span> <span class="nv">X</span><span class="o">=-</span><span class="mi">1</span>.<span class="mi">2345678</span> <span class="nv">and</span> <span class="nv">Y</span><span class="o">=</span><span class="mi">1</span>.<span class="mi">2345678</span><span class="c1">;</span>
+<span class="nv">here</span> <span class="nv">the</span> <span class="nv">accuracy</span> <span class="nv">reported</span> <span class="nv">is</span> <span class="o">-</span><span class="mi">0</span>.<span class="mi">30103000</span>.
+</code></pre></div>
+
+<h2 id="examples">EXAMPLES</h2>
+<p>Example program:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">program</span> <span class="nv">demo_accdig</span> <span class="o">!</span> <span class="nv">fortran</span> <span class="mi">90</span> <span class="nv">example</span>
+<span class="nv">use</span> <span class="nv">M_framework__approx</span>, <span class="nv">only</span> : <span class="nv">accdig</span>
+<span class="nv">implicit</span> <span class="nv">none</span>
+<span class="nv">integer</span>         :: <span class="nv">digi</span>
+<span class="nv">doubleprecision</span> :: <span class="nv">a</span>, <span class="nv">b</span>
+<span class="nv">integer</span>         :: <span class="nv">i10</span>, <span class="nv">i20</span>, <span class="nv">i30</span>
+<span class="nv">integer</span>         :: <span class="nv">ind</span>, <span class="nv">ind1</span>, <span class="nv">ind2</span>
+<span class="nv">real</span>            :: <span class="nv">acurcy</span>, <span class="nv">acurcy1</span>, <span class="nv">acurcy2</span>
+<span class="nv">doubleprecision</span> :: <span class="nv">vals</span><span class="ss">(</span><span class="mi">9</span><span class="ss">)</span>
+<span class="nv">data</span> <span class="nv">vals</span><span class="o">/</span> <span class="o">&amp;</span>
+  <span class="o">&amp;</span><span class="mi">1</span>.<span class="mi">234680</span><span class="nv">d0</span>,   <span class="mi">1</span>.<span class="mi">2345378</span><span class="nv">d0</span>,  <span class="mi">2</span>.<span class="mi">2234568</span><span class="nv">d0</span>, <span class="mi">1</span>.<span class="mi">2345678</span><span class="nv">d0</span>, <span class="o">&amp;</span>
+  <span class="o">&amp;</span><span class="mi">1</span>.<span class="mi">2345679</span><span class="nv">d0</span>, <span class="o">-</span><span class="mi">1</span>.<span class="mi">2345678</span><span class="nv">d0</span>, <span class="mi">76</span>.<span class="mi">234567</span><span class="nv">d0</span>,  <span class="mi">2</span>.<span class="mi">4691356</span><span class="nv">d0</span>, <span class="o">&amp;</span>
+  <span class="o">&amp;</span><span class="mi">0</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">/</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">=========================</span><span class="s1">&#39;</span>
+   <span class="k">do</span> <span class="nv">i10</span><span class="o">=</span><span class="mi">0</span>,<span class="mi">16</span>
+      <span class="nv">a</span><span class="o">=</span><span class="mi">1</span>.<span class="mi">0</span><span class="nv">d0</span>
+      <span class="nv">b</span><span class="o">=</span><span class="nv">a</span><span class="o">+</span><span class="mi">1</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">/</span><span class="ss">(</span><span class="mi">10</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">**</span><span class="nv">i10</span><span class="ss">)</span>
+      <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="nv">a</span>,<span class="nv">b</span>,<span class="mi">8</span>.<span class="mi">0</span>,<span class="nv">acurcy</span>,<span class="nv">ind</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="nv">i10</span>,<span class="nv">a</span>,<span class="nv">b</span>,<span class="nv">acurcy</span>,<span class="nv">ind</span>
+   <span class="nv">enddo</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">=========================</span><span class="s1">&#39;</span>
+   <span class="nv">digi</span><span class="o">=</span><span class="mi">16</span>
+   <span class="k">do</span> <span class="nv">i20</span><span class="o">=</span><span class="mi">0</span>,<span class="nv">digi</span>
+      <span class="nv">a</span><span class="o">=</span><span class="mi">1</span>.<span class="mi">0</span><span class="nv">d0</span>
+      <span class="nv">b</span><span class="o">=</span><span class="nv">a</span><span class="o">+</span><span class="mi">1</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">/</span><span class="ss">(</span><span class="mi">10</span>.<span class="mi">0</span><span class="nv">d0</span><span class="o">**</span><span class="nv">i20</span><span class="ss">)</span>
+      <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="nv">a</span>,<span class="nv">b</span>,<span class="nv">dble</span><span class="ss">(</span><span class="nv">digi</span><span class="ss">)</span>,<span class="nv">acurcy</span>,<span class="nv">ind</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="nv">i20</span>,<span class="nv">a</span>,<span class="nv">b</span>,<span class="nv">acurcy</span>,<span class="nv">ind</span>
+   <span class="nv">enddo</span>
+   <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">=========================</span><span class="s1">&#39;</span>
+   <span class="k">do</span> <span class="nv">i30</span><span class="o">=</span><span class="mi">1</span>,<span class="mi">9</span>
+      <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="mi">1</span>.<span class="mi">2345678</span><span class="nv">d0</span>,<span class="nv">vals</span><span class="ss">(</span><span class="nv">i30</span><span class="ss">)</span>,<span class="mi">8</span>.<span class="mi">0</span>,<span class="nv">acurcy1</span>,<span class="nv">ind1</span><span class="ss">)</span>
+      <span class="k">call</span> <span class="nl">accdig</span><span class="ss">(</span><span class="nv">vals</span><span class="ss">(</span><span class="nv">i30</span><span class="ss">)</span>,<span class="mi">1</span>.<span class="mi">2345678</span><span class="nv">d0</span>,<span class="mi">8</span>.<span class="mi">0</span>,<span class="nv">acurcy2</span>,<span class="nv">ind2</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="nv">i30</span>,<span class="nv">vals</span><span class="ss">(</span><span class="nv">i30</span><span class="ss">)</span>,<span class="nv">acurcy1</span>,<span class="nv">acurcy2</span>,<span class="nv">ind1</span>,<span class="nv">ind2</span>
+   <span class="nv">enddo</span>
+<span class="k">end</span> <span class="nv">program</span> <span class="nv">demo_accdig</span>
+</code></pre></div>
+
+<h2 id="notes">NOTES</h2>
+<h2 id="references">REFERENCES</h2>
+<p>based on &hellip;</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">NBS</span> <span class="nv">OMNITAB</span> <span class="mi">1980</span> <span class="nv">VERSION</span> <span class="mi">6</span>.<span class="mi">01</span>  <span class="mi">1</span><span class="o">/</span> <span class="mi">1</span><span class="o">/</span><span class="mi">81</span>. <span class="nv">dp_accdig</span> <span class="nv">V</span> <span class="mi">7</span>.<span class="mi">00</span>  <span class="mi">2</span><span class="o">/</span><span class="mi">14</span><span class="o">/</span><span class="mi">90</span>. <span class="o">**</span>
+   <span class="nv">David</span> <span class="nv">Hogben</span>,
+   <span class="nv">Statistical</span> <span class="nv">Engineering</span> <span class="nv">Division</span>,
+   <span class="nv">Center</span> <span class="k">for</span> <span class="nv">Computing</span> <span class="nv">and</span> <span class="nv">Applied</span> <span class="nv">Mathematics</span>,
+   <span class="nv">A337</span> <span class="nv">Administration</span> <span class="nv">Building</span>,
+   <span class="nv">National</span> <span class="nv">Institute</span> <span class="nv">of</span> <span class="nv">Standards</span> <span class="nv">and</span> <span class="nv">Technology</span>,
+   <span class="nv">Gaithersburg</span>, <span class="nv">MD</span> <span class="mi">20899</span>
+                  <span class="nv">TELEPHONE</span> <span class="mi">301</span><span class="o">-</span><span class="mi">975</span><span class="o">-</span><span class="mi">2845</span>
+       <span class="nv">ORIGINAL</span> <span class="nv">VERSION</span> <span class="o">-</span>  <span class="nv">October</span>, <span class="mi">1969</span>.
+        <span class="nv">CURRENT</span> <span class="nv">VERSION</span> <span class="o">-</span> <span class="nv">February</span>, <span class="mi">1990</span>.
+        <span class="nv">JSU</span>     <span class="nv">VERSION</span> <span class="o">-</span> <span class="nv">February</span>, <span class="mi">1991</span>.
+</code></pre></div>
+
+<h2 id="dependencies">DEPENDENCIES</h2>
+<div class="codehilite"><pre><span></span><code>     o M_framework__journal(), log10(), abs(1)
+</code></pre></div>
+
+<h2 id="authors">AUTHORS</h2>
+<div class="codehilite"><pre><span></span><code>  David Hogben, John S. Urban
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>  Public Domain
+</code></pre></div>
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~7"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~4"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-digi0~2"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>digi0</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-acurcy~3"></span>
+              real,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>acurcy</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ind~3"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ind</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="k">elemental impure SUBROUTINE </span><span class="n">accdig</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">digi0</span><span class="p">,</span><span class="n">ACURCY</span><span class="p">,</span><span class="n">IND</span><span class="p">)</span><span class="w"></span>
+<span class="cp">#ifdef FLOAT128</span>
+<span class="k">use</span><span class="p">,</span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">wp</span><span class="o">=&gt;</span><span class="n">real128</span><span class="w"></span>
+<span class="cp">#else</span>
+<span class="k">use</span><span class="p">,</span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">wp</span><span class="o">=&gt;</span><span class="n">real64</span><span class="w"></span>
+<span class="cp">#endif</span>
+<span class="k">use </span><span class="n">M_framework__journal</span><span class="p">,</span><span class="w">  </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">journal</span><span class="w"></span>
+<span class="k">implicit none</span><span class="w"></span>
+
+<span class="c">! ident_3=&quot;@(#) M_framework__approx accdig(3f) compare two values only up to a specified number of digits&quot;</span>
+
+<span class="c">!  INPUT ...</span>
+<span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w">           </span><span class="c">! FIRST  OF TWO NUMBERS TO BE COMPARED.</span>
+<span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span><span class="w">           </span><span class="c">! SECOND OF TWO NUMBERS TO BE COMPARED.</span>
+<span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">digi0</span><span class="w">       </span><span class="c">! NUMBER OF DIGITS TO BE SATISFIED IN RELATIVE TOLERANCE.</span>
+<span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">wp</span><span class="p">)</span><span class="w">        </span><span class="kd">::</span><span class="w"> </span><span class="n">x_local</span><span class="w"></span>
+<span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">wp</span><span class="p">)</span><span class="w">        </span><span class="kd">::</span><span class="w"> </span><span class="n">y_local</span><span class="w"></span>
+<span class="c">!  OUTPUT ...</span>
+<span class="kt">real</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">     </span><span class="kd">::</span><span class="w"> </span><span class="n">acurcy</span><span class="w">      </span><span class="c">! = -LOG10(ABS((x_local-y_local)/y_local)))</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">ind</span><span class="w">         </span><span class="c">! = 0, IF TOLERANCE IS     SATISFIED.</span>
+<span class="w">                                    </span><span class="c">! = 1, IF TOLERANCE IS NOT SATISFIED.</span>
+<span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">wp</span><span class="p">)</span><span class="w">        </span><span class="kd">::</span><span class="w"> </span><span class="n">diff</span><span class="w"></span>
+<span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">wp</span><span class="p">)</span><span class="w">        </span><span class="kd">::</span><span class="w"> </span><span class="n">digi</span><span class="w"></span>
+<span class="w">                        </span><span class="c">! Maximum number of significant digits in a number of biggest real kind.</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">parameter</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">idble_significant_digits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="n">log10</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">**</span><span class="nb">digits</span><span class="p">(</span><span class="mf">0.0_wp</span><span class="p">)))</span><span class="w"></span>
+
+<span class="w">   </span><span class="n">x_local</span><span class="o">=</span><span class="n">anyscalar_to_realbig_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">y_local</span><span class="o">=</span><span class="n">anyscalar_to_realbig_</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">digi</span><span class="o">=</span><span class="n">anyscalar_to_realbig_</span><span class="p">(</span><span class="n">digi0</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">digi</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k">      call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;sc&#39;</span><span class="p">,</span><span class="s1">&#39;*accdig* bad number of significant digits=&#39;</span><span class="p">,</span><span class="kt">real</span><span class="p">(</span><span class="n">digi</span><span class="p">,</span><span class="nb">kind</span><span class="o">=</span><span class="n">wp</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">digi</span><span class="o">=</span><span class="n">idble_significant_digits</span><span class="w"></span>
+<span class="w">   </span><span class="n">elseif</span><span class="p">(</span><span class="n">digi</span><span class="w">  </span><span class="o">&gt;</span><span class="w">  </span><span class="n">idble_significant_digits</span><span class="p">)</span><span class="k">then</span>
+<span class="k">      call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;sc&#39;</span><span class="p">,</span><span class="s1">&#39;*accdig* significant digit request too high=&#39;</span><span class="p">,</span><span class="kt">real</span><span class="p">(</span><span class="n">digi</span><span class="p">,</span><span class="nb">kind</span><span class="o">=</span><span class="n">wp</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">digi</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">digi</span><span class="p">,</span><span class="kt">real</span><span class="p">(</span><span class="n">idble_significant_digits</span><span class="p">,</span><span class="nb">kind</span><span class="o">=</span><span class="n">wp</span><span class="p">))</span><span class="w"></span>
+<span class="w">   </span><span class="k">endif</span>
+<span class="k">   </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x_local</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y_local</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">diff</span><span class="w">  </span><span class="o">==</span><span class="w">  </span><span class="mf">0.0_wp</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">acurcy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idble_significant_digits</span><span class="w"></span>
+<span class="w">   </span><span class="n">elseif</span><span class="p">(</span><span class="n">y_local</span><span class="w">  </span><span class="o">==</span><span class="w">  </span><span class="mf">0.0_wp</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">acurcy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x_local</span><span class="p">))</span><span class="w"></span>
+<span class="w">   </span><span class="k">else</span>
+<span class="k">      </span><span class="n">acurcy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">y_local</span><span class="p">))</span><span class="w"></span>
+<span class="w">   </span><span class="k">endif</span>
+<span class="k">   if</span><span class="p">(</span><span class="n">acurcy</span><span class="w">  </span><span class="o">&lt;</span><span class="w">  </span><span class="n">digi</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">   </span><span class="k">else</span>
+<span class="k">      </span><span class="n">ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">   </span><span class="k">endif</span>
+<span class="k">end subroutine </span><span class="n">accdig</span><span class="w"></span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_framework
+ was developed by John S. Urban<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-07-11 00:19 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,479 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="collection of modules for unit testing and logging and messaging">
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>fstop &ndash; M_framework</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">M_framework </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>fstop
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 5.4% of total for procedures.">88 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/M_framework__utility.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/m_framework__utility.f90.html'>M_framework__utility.f90</a></li>
+                <li class="breadcrumb-item"><a href='../module/m_framework__utility.html'>M_framework__utility</a></li>
+            <li class="breadcrumb-item active" aria-current="page">fstop</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/fstop.html#src">fstop</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>public  subroutine fstop(ierr, stdout, stderr)  
+</h2>
+    
+
+    <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">fstop</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_framework__utility</span><span class="o">]</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="k">both</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="ow">and</span><span class="w"></span>
+<span class="n">a</span><span class="w"> </span><span class="n">message</span><span class="w"></span>
+<span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<div class="codehilite"><pre><span></span><code>subroutine fstop(ierr,stdout,stderr)
+
+ integer,intent(in)                   :: ierr
+ character(len=*),intent(in),optional :: stdout
+ character(len=*),intent(in),optional :: stderr
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">FSTOP</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="n">STOP</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="w"> </span><span class="n">What</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">STOP</span><span class="w"> </span><span class="n">does</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">very</span><span class="w"> </span><span class="n">system</span><span class="w"></span>
+<span class="n">dependent</span><span class="p">,</span><span class="w"> </span><span class="n">so</span><span class="w"> </span><span class="n">using</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">abstraction</span><span class="w"> </span><span class="n">layer</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">useful</span><span class="p">,</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="n">allows</span><span class="w"> </span><span class="n">just</span><span class="w"></span>
+<span class="n">the</span><span class="w"> </span><span class="n">fstop</span><span class="p">()</span><span class="w"> </span><span class="n">routine</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">changed</span><span class="p">;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">STOP</span><span class="w"> </span><span class="n">does</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">allow</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">variable</span><span class="w"></span>
+<span class="n">to</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">numeric</span><span class="w"> </span><span class="n">access</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="p">(</span><span class="n">this</span><span class="w"> </span><span class="n">has</span><span class="w"> </span><span class="n">changed</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">f2015</span><span class="p">)</span><span class="o">.</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="options">OPTIONS</h2>
+<div class="codehilite"><pre><span></span><code>ierr    - value in range 0 to 32
+stdout  - description to be printed to standard output
+stderr  - description to be printed to standard error
+</code></pre></div>
+
+<h2 id="examples">EXAMPLES</h2>
+<p>Sample program:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">program</span><span class="w"> </span><span class="nt">demo_fstop</span><span class="w"></span>
+<span class="nt">use</span><span class="w"> </span><span class="nt">M_framework__utility</span><span class="o">,</span><span class="w"> </span><span class="nt">only</span><span class="o">:</span><span class="w"> </span><span class="nt">fstop</span><span class="w"></span>
+<span class="nt">implicit</span><span class="w"> </span><span class="nt">none</span><span class="w"></span>
+<span class="nt">integer</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="nt">int</span><span class="w"></span>
+<span class="o">!*!</span><span class="nt">write</span><span class="o">(*,*)</span><span class="s1">&#39;Enter stop value&#39;</span><span class="w"></span>
+<span class="o">!*!</span><span class="nt">read</span><span class="o">(*,*)</span><span class="w"> </span><span class="nt">int</span><span class="w"></span>
+<span class="nt">int</span><span class="o">=</span><span class="nt">25</span><span class="w"></span>
+<span class="nt">select</span><span class="w"> </span><span class="nt">case</span><span class="o">(</span><span class="nt">int</span><span class="o">)</span><span class="w"></span>
+<span class="nt">case</span><span class="o">(</span><span class="nt">10</span><span class="o">)</span><span class="w"> </span><span class="o">;</span><span class="w"> </span><span class="nt">call</span><span class="w"> </span><span class="nt">fstop</span><span class="o">(</span><span class="nt">int</span><span class="o">)</span><span class="w"></span>
+<span class="nt">case</span><span class="o">(</span><span class="nt">20</span><span class="o">)</span><span class="w"> </span><span class="o">;</span><span class="w"> </span><span class="nt">call</span><span class="w"> </span><span class="nt">fstop</span><span class="o">(</span><span class="nt">int</span><span class="o">,</span><span class="nt">stderr</span><span class="o">=</span><span class="s1">&#39;error: program will now stop&#39;</span><span class="o">)</span><span class="w"></span>
+<span class="nt">case</span><span class="o">(</span><span class="nt">25</span><span class="o">)</span><span class="w"> </span><span class="o">;</span><span class="w"> </span><span class="nt">call</span><span class="w"> </span><span class="nt">fstop</span><span class="o">(</span><span class="nt">int</span><span class="o">,</span><span class="nt">stdout</span><span class="o">=</span><span class="s1">&#39;stdout message&#39;</span><span class="o">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">                </span><span class="o">&amp;</span><span class="w"> </span><span class="nt">stderr</span><span class="o">=</span><span class="s1">&#39;stderr message&#39;</span><span class="o">)</span><span class="w"></span>
+<span class="nt">case</span><span class="o">(</span><span class="nt">30</span><span class="o">)</span><span class="w"> </span><span class="o">;</span><span class="w"> </span><span class="nt">call</span><span class="w"> </span><span class="nt">fstop</span><span class="o">(</span><span class="nt">int</span><span class="o">,</span><span class="nt">stdout</span><span class="o">=</span><span class="s1">&#39;error: program will now stop&#39;</span><span class="o">)</span><span class="w"></span>
+<span class="nt">case</span><span class="w"> </span><span class="nt">default</span><span class="w"></span>
+<span class="w">           </span><span class="nt">call</span><span class="w"> </span><span class="nt">fstop</span><span class="o">(</span><span class="nt">int</span><span class="o">)</span><span class="w"></span>
+<span class="nt">endselect</span><span class="w"></span>
+
+<span class="nt">end</span><span class="w"> </span><span class="nt">program</span><span class="w"> </span><span class="nt">demo_fstop</span><span class="w"></span>
+</code></pre></div>
+
+<p>Results:</p>
+<h2 id="see-also">SEE ALSO</h2>
+<p>Look for common extensions, such as abort(3f), backtrace(3f)</p>
+<h2 id="author">AUTHOR</h2>
+<div class="codehilite"><pre><span></span><code>John S. Urban
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>Public Domain
+</code></pre></div>
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ierr"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ierr</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-stdout"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>stdout</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-stderr"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>stderr</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="k">subroutine </span><span class="n">fstop</span><span class="p">(</span><span class="n">ierr</span><span class="p">,</span><span class="n">stdout</span><span class="p">,</span><span class="n">stderr</span><span class="p">)</span><span class="w"></span>
+
+<span class="c">! ident_1=&quot;@(#) M_framework__utility fstop(3f) calls &#39;STOP VALUE&#39; passing in a value (1-32) with optional message&quot;</span>
+
+<span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">ierr</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">optional</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">stdout</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">optional</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">stderr</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">132</span><span class="p">)</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">message</span><span class="w"></span>
+<span class="c">! The standard states:</span>
+<span class="c">!   If the stop-code is an integer, it is recommended that the value also be used as the process exit status, if the</span>
+<span class="c">!   processor supports that concept. If the integer stop-code is used as the process exit status, the processor</span>
+<span class="c">!   might be able to interpret only values within a limited range, or only a limited portion of the integer value</span>
+<span class="c">!   (for example, only the least-significant 8 bits).</span>
+
+<span class="c">!   If the stop-code is of type character or does not appear, or if an END PROGRAM statement is executed,</span>
+<span class="c">!   it is recommended that the value zero be supplied as the process exit status, if the processor supports that</span>
+<span class="c">!   concept.</span>
+<span class="c">!   A STOP statement or ALL STOP statement shall not be executed during execution of an input/output statement.</span>
+<span class="c">!</span>
+<span class="c">! Conforming variants I have encountered include</span>
+<span class="c">!    o printing a message such as &#39;STOP nnn&#39; when the integer value is called</span>
+<span class="c">!    o having a limit on the length of the message string passed</span>
+<span class="c">!    o prefixing the message with the string &#39;STOP &#39;</span>
+<span class="c">!    o different ranges on allowed integer values, and/or not having a one-to-one correspondence between the argument</span>
+<span class="c">!      value and what the system is given (usually encountered with large values, which are masked or run thru modulo math, ...)</span>
+<span class="c">!    o whether messages appear on stdout or stderr.</span>
+<span class="c">!    o no value being returned to the system at all.</span>
+<span class="c">!</span>
+<span class="c">!  So it is best to test (csh/tcsh sets $status, sh/ksh/bash/... sets $?) to verify what exit codes are supported.</span>
+<span class="c">!  What happens with negative values, values above 256; how long of a message is supported? Are messages line-terminated?</span>
+<span class="c">!</span>
+<span class="c">!  And for some reason STOP only takes constant values. I sometimes want to be able to pass a variable value.</span>
+<span class="c">!  Only allowing constants would have the advantage of letting the compiler detect values invalid for a particular system,</span>
+<span class="c">!  but I sometimes want to return variables.</span>
+<span class="c">!</span>
+<span class="c">!  So, using STOP with an argument is not as straight-forward as one might guess, especially if you do not want a message</span>
+<span class="c">!  to appear when using integer values</span>
+<span class="c">!</span>
+<span class="c">!  In practice the C exit(int signal) routine seems to work successfully when called from Fortran but I consider it risky</span>
+<span class="c">!  as it seems reasonable to assume Fortran cleanup operations such as removing scratch files and closing and flushing Fortran</span>
+<span class="c">!  files may not be properly performed. So it is tempting to call the C function, especially on systems where C returns a</span>
+<span class="c">!  value to the system and Fortran does not, but I do not recommend it.</span>
+<span class="c">!</span>
+<span class="c">!  Note that the C function &quot;exit(int signal)&quot; not only works more consistently but that the global values EXIT_SUCCESS and</span>
+<span class="c">!  EXIT_FAILURE are defined for portability, and that the signal value can be a variable instead of a constant.</span>
+<span class="c">!</span>
+<span class="c">!  If the system supports calls to produce a traceback on demand, that is a useful option to add to this procedure.</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c">!STOP       &#39;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&amp;</span>
+<span class="c">!&amp;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&amp;</span>
+<span class="c">!&amp;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&amp;</span>
+<span class="c">!&amp;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&amp;</span>
+<span class="c">!&amp;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&amp;</span>
+<span class="c">!&amp;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&amp;</span>
+<span class="c">!&amp;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&amp;</span>
+<span class="c">!&amp;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&amp;</span>
+<span class="c">!&amp;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab&#39;</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">stderr</span><span class="p">))</span><span class="k">then</span><span class="w">       </span><span class="c">! write message to stderr, assuming string length is allowed</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">stderr</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="k">then</span>
+<span class="k">      write</span><span class="p">(</span><span class="n">error_unit</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="nb">trim</span><span class="p">(</span><span class="n">stderr</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">endif</span><span class="w"></span>
+<span class="c">!f2015!   select case(ierr)             ! have executable return an exit status to the system (IF SUPPORTED)</span>
+<span class="c">!f2015!      case(0); allstop 0</span>
+<span class="c">!f2015!      case(1); allstop 1</span>
+<span class="c">!f2015!      case(2); allstop 2</span>
+<span class="c">!f2015!      case(3); allstop 3</span>
+<span class="c">!f2015!      case(4); allstop 4</span>
+<span class="c">!f2015!      case(5); allstop 5</span>
+<span class="c">!f2015!      case(6); allstop 6</span>
+<span class="c">!f2015!      case(7); allstop 7</span>
+<span class="c">!f2015!      case(8); allstop 8</span>
+<span class="c">!f2015!      case(9); allstop 8</span>
+<span class="c">!f2015!      case(10); allstop 10</span>
+<span class="c">!f2015!      case(11); allstop 11</span>
+<span class="c">!f2015!      case(12); allstop 12</span>
+<span class="c">!f2015!      case(13); allstop 13</span>
+<span class="c">!f2015!      case(14); allstop 14</span>
+<span class="c">!f2015!      case(15); allstop 15</span>
+<span class="c">!f2015!      case(16); allstop 16</span>
+<span class="c">!f2015!      case(17); allstop 17</span>
+<span class="c">!f2015!      case(18); allstop 18</span>
+<span class="c">!f2015!      case(19); allstop 19</span>
+<span class="c">!f2015!      case(20); allstop 20</span>
+<span class="c">!f2015!      case(21); allstop 21</span>
+<span class="c">!f2015!      case(22); allstop 22</span>
+<span class="c">!f2015!      case(23); allstop 23</span>
+<span class="c">!f2015!      case(24); allstop 24</span>
+<span class="c">!f2015!      case(25); allstop 25</span>
+<span class="c">!f2015!      case(26); allstop 26</span>
+<span class="c">!f2015!      case(27); allstop 27</span>
+<span class="c">!f2015!      case(28); allstop 28</span>
+<span class="c">!f2015!      case(29); allstop 29</span>
+<span class="c">!f2015!      case(30); allstop 30</span>
+<span class="c">!f2015!      case(31); allstop 31</span>
+<span class="c">!f2015!      case(32); allstop 32</span>
+<span class="c">!f2015!   case default</span>
+<span class="c">!f2015!      write(message,&#39;(a,i0,a)&#39;)&#39;*fstop*: stop value of &#39;,ierr,&#39; returning 1 to system&#39;</span>
+<span class="c">!f2015!      write(error_unit,&#39;(a)&#39;)trim(message) ! write message to standard error</span>
+<span class="c">!f2015!      allstop 1</span>
+<span class="c">!f2015!   end select</span>
+<span class="k">endif</span>
+<span class="k">if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">stdout</span><span class="p">))</span><span class="k">then</span><span class="w">       </span><span class="c">! write message to stdout, assuming string length is allowed</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">stdout</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="k">then</span>
+<span class="k">      write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="nb">trim</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">endif</span>
+<span class="k">endif</span>
+<span class="k">select case</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span><span class="w">             </span><span class="c">! have executable return an exit status to the system (IF SUPPORTED)</span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">0</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">1</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">2</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">3</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">4</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">5</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">6</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">7</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">8</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">8</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">10</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">11</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">11</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">12</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">13</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">13</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">14</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">14</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">15</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">16</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">17</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">17</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">18</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">18</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">19</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">19</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">20</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">21</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">21</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">22</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">22</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">23</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">23</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">24</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">24</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">25</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">25</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">26</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">26</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">27</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">27</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">28</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">28</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">29</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">29</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">30</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">31</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">31</span><span class="w"></span>
+<span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="mi">32</span><span class="p">);</span><span class="w"> </span><span class="k">stop </span><span class="mi">32</span><span class="w"></span>
+<span class="k">case </span><span class="n">default</span><span class="w"></span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="s1">&#39;(a,i0,a)&#39;</span><span class="p">)</span><span class="s1">&#39;*fstop*: stop value of &#39;</span><span class="p">,</span><span class="n">ierr</span><span class="p">,</span><span class="s1">&#39; returning 1 to system&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="n">error_unit</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="c">! write message to standard error</span>
+<span class="w">   </span><span class="k">stop </span><span class="mi">1</span><span class="w"></span>
+<span class="k">end select</span>
+<span class="k">end subroutine </span><span class="n">fstop</span><span class="w"></span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_framework
+ was developed by John S. Urban<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-07-11 00:19 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
